@@ -8,7 +8,6 @@ import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 import MultiFileUpload from '@/app/components/MultiFileUpload'
 import FormattedTextarea from '@/app/components/FormattedTextarea'
 import { categories } from '@/app/data/categories'
-import WhatsAppNotifyButton from '@/app/components/WhatsAppNotifyButton'
 import Link from 'next/link'
 
 function SubmitButton({ isPending }: { isPending: boolean }) {
@@ -75,44 +74,28 @@ export default function HireCreatorForm({ creatorId, creatorPhone, creatorName, 
                 </div>
 
                 <div className="space-y-4">
-                    {((state as any).creatorPhone || creatorPhone) ? (
-                        <>
-                            <p className="text-sm font-bold text-[#3E4C37] uppercase tracking-widest">Speed up the process:</p>
-                            <WhatsAppNotifyButton
-                                type="hire"
-                                data={{
-                                    phone: (state as any).creatorPhone || creatorPhone,
-                                    studentName: (state as any).studentName,
-                                    projectTitle: (state as any).projectTitle,
-                                    projectId: (state as any).projectId
-                                }}
-                                className="w-full"
-                            />
-                            <p className="text-xs text-gray-400 italic">This will open WhatsApp with a pre-filled message for {(state as any).creatorName || creatorName}.</p>
-                        </>
-                    ) : (
-                        <div className="bg-[#F3F0E9] p-4 rounded-2xl border border-[#E6E2D6]/50">
-                            <p className="text-sm text-gray-600">
-                                💡 <strong>Pro-tip:</strong> This creator hasn't enabled WhatsApp alerts yet. They'll still get a dashboard notification!
-                            </p>
-                        </div>
-                    )}
+                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 text-center">
+                        <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                            The creator has been notified. They will review your proposal and get back to you shortly. You can track this project in your requests dashboard.
+                        </p>
 
-                    <div className="pt-4 border-t border-gray-50 flex flex-col gap-3">
-                        <Link
-                            href={`/student/projects/${(state as any).projectId}`}
-                            className="text-[#3E4C37] font-bold hover:underline py-2"
-                        >
-                            View Project Details
-                        </Link>
-                        <Link
-                            href="/student/requests"
-                            className="bg-[#F3F0E9] text-gray-600 font-bold py-3 rounded-xl hover:bg-[#E6E2D6] transition-all"
-                        >
-                            Back to Dashboard
-                        </Link>
+                        <div className="flex flex-col gap-3">
+                            <Link
+                                href={`/student/projects/${(state as any).projectId}`}
+                                className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] transition-all shadow-md"
+                            >
+                                View Project Details
+                            </Link>
+                            <Link
+                                href="/student/requests"
+                                className="w-full bg-gray-100 text-gray-600 font-bold py-4 rounded-xl hover:bg-gray-200 transition-all"
+                            >
+                                Back to Requests
+                            </Link>
+                        </div>
                     </div>
                 </div>
+                破
             </div>
         )
     }
@@ -120,8 +103,6 @@ export default function HireCreatorForm({ creatorId, creatorPhone, creatorName, 
     return (
         <form action={formAction} className="space-y-6">
             <input type="hidden" name="creatorId" value={creatorId} />
-            <input type="hidden" name="creatorPhone" value={creatorPhone || ''} />
-            <input type="hidden" name="creatorName" value={creatorName || ''} />
             <input type="hidden" name="categorySlug" value={selectedCategory} />
             <input type="hidden" name="pricingType" value={selectedService?.pricing_mode || 'negotiable'} />
             <input type="hidden" name="selectedPackageTier" value={selectedPackage || ''} />

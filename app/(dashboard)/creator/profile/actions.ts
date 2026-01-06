@@ -24,6 +24,8 @@ export async function updateCreatorIdentity(formData: FormData) {
         return { error: 'Bio or Tagline contains prohibited contact information.' }
     }
 
+    console.log('[WHATSAPP DEBUG] Updating profile for user:', user.id, { whatsappPhone })
+
     const { error } = await supabase
         .from('profiles')
         .update({
@@ -34,9 +36,16 @@ export async function updateCreatorIdentity(formData: FormData) {
         })
         .eq('id', user.id)
 
-    if (error) return { error: error.message }
+    if (error) {
+        console.error('[WHATSAPP DEBUG] Update error:', error)
+        return { error: error.message }
+    }
+
+    console.log('[WHATSAPP DEBUG] Successfully updated profile')
 
     revalidatePath('/creator/profile')
+    revalidatePath('/student/creator/[creatorId]', 'layout')
+    revalidatePath('/student/hire/[creatorId]', 'layout')
     return { success: true }
 }
 

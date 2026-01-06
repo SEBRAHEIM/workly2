@@ -23,6 +23,11 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
         .eq('id', creatorId)
         .single()
 
+    console.log('[WHATSAPP DEBUG] Hire Page Fetching Creator:', creatorId, {
+        found: !!creator,
+        phone: creator?.whatsapp_phone,
+        name: creator?.full_name
+    })
     const { data: services } = await supabase
         .from('creator_services')
         .select('*')

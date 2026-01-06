@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { updateCreatorIdentity } from './actions'
-import { Save } from 'lucide-react'
+import { Save, Check } from 'lucide-react'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
+import { toast } from 'sonner'
 
 // Helper to check for content policy violations locally too
 const contactRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/
@@ -42,7 +43,11 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
 
                 if (result?.error) {
                     setError(result.error)
+                    toast.error(result.error)
                 } else {
+                    toast.success('Identity saved successfully!', {
+                        description: phone ? `WhatsApp notifications enabled for ${phone}` : 'Identity details updated.'
+                    })
                     if (onSuccess) onSuccess()
                 }
             }}

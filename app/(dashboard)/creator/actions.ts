@@ -205,10 +205,14 @@ export async function submitWork(formData: FormData) {
         return { error: `Notes validation failed: ${notesCheck.reason}. Sharing contact info is strictly prohibited.` }
     }
 
-    // Verify ownership and get student info
+    const studentPhone = formData.get('studentPhone') as string
+    const studentName = formData.get('studentName') as string
+    const projectTitle = formData.get('projectTitle') as string
+
+    // Verify ownership
     const { data: project } = await supabase
         .from('projects')
-        .select('creator_id, student_id, title, profiles!projects_student_id_fkey(whatsapp_phone, full_name)')
+        .select('creator_id, student_id, title')
         .eq('id', projectId)
         .single()
 

@@ -89,23 +89,26 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                             className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#3E4C37] focus-within:border-transparent transition-all h-[58px]"
                         />
                     </div>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            if (!phone) {
-                                alert('Please enter a phone number first')
-                                return
-                            }
-                            const cleanPhone = phone.replace(/\D/g, '')
-                            const message = `Testing Workly WhatsApp Alerts! 🚀 If you can see this, students can now notify you directly via WhatsApp when you get hired.`
-                            window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank')
-                        }}
-                        className="bg-green-500 text-white px-6 rounded-xl font-bold hover:bg-green-600 transition-colors text-sm shadow-sm"
-                    >
-                        Test
-                    </button>
+                    {phone ? (
+                        <a
+                            href={`https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent("Testing Workly WhatsApp Alerts! 🚀 If you can see this, students can now notify you directly via WhatsApp when you get hired.")}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-green-500 text-white px-6 rounded-xl font-bold hover:bg-green-600 transition-colors text-sm shadow-sm flex items-center justify-center h-[58px]"
+                        >
+                            Test
+                        </a>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => alert('Please enter a phone number first')}
+                            className="bg-gray-100 text-gray-400 px-6 rounded-xl font-bold text-sm h-[58px] cursor-not-allowed"
+                        >
+                            Test
+                        </button>
+                    )}
                 </div>
-                <p className="text-xs text-gray-400 mt-2">Pick your country and enter your number. This allows students to notify you instantly via WhatsApp.</p>
+                <p className="text-xs text-gray-400 mt-2">Pick your country and enter your number. <strong>Important:</strong> Click "Save Identity" below to enable this for students.</p>
 
                 <style jsx global>{`
                     .whatsapp-phone-wrapper .PhoneInputInput {

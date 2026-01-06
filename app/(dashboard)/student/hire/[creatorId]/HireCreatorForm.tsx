@@ -73,7 +73,7 @@ export default function HireCreatorForm({ creatorId, specializations, services }
                 </div>
 
                 <div className="space-y-4">
-                    {(state as any).creatorPhone && (
+                    {(state as any).creatorPhone ? (
                         <>
                             <p className="text-sm font-bold text-[#3E4C37] uppercase tracking-widest">Speed up the process:</p>
                             <WhatsAppNotifyButton
@@ -88,6 +88,12 @@ export default function HireCreatorForm({ creatorId, specializations, services }
                             />
                             <p className="text-xs text-gray-400 italic">This will open WhatsApp with a pre-filled message for {(state as any).creatorName}.</p>
                         </>
+                    ) : (
+                        <div className="bg-[#F3F0E9] p-4 rounded-2xl border border-[#E6E2D6]/50">
+                            <p className="text-sm text-gray-600">
+                                💡 <strong>Pro-tip:</strong> This creator hasn't enabled WhatsApp alerts yet. They'll still get a dashboard notification!
+                            </p>
+                        </div>
                     )}
 
                     <div className="pt-4 border-t border-gray-50 flex flex-col gap-3">

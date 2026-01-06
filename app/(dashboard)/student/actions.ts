@@ -29,7 +29,7 @@ export async function createProject(prevState: any, formData: FormData) {
         (pricingType === 'fixed' || pricingType === 'packages')
             ? supabase.from('creator_services').select('*').eq('creator_id', creatorId).eq('category_slug', categorySlug).single()
             : Promise.resolve({ data: null, error: null }),
-        createAdminClient().from('profiles').select('whatsapp_phone, full_name, email').eq('id', creatorId).single()
+        supabase.from('profiles').select('whatsapp_phone, full_name, email').eq('id', creatorId).single()
     ])
 
     const { data: { user } } = userResponse
@@ -37,8 +37,19 @@ export async function createProject(prevState: any, formData: FormData) {
         return redirect('/login')
     }
 
-    const { data: service } = serviceResponse
-    const { data: creatorProfile } = creatorResponse
+    const { data: service, error: serviceError } = serviceResponse
+    const { data: creatorProfile, error: creatorError } = creatorResponse
+
+    if (creatorError) {
+        console.error('[DATABASE DEBUG] Error fetching creator profile:', creatorError)
+    } else {
+        console.log('[DATABASE DEBUG] Fetched creator profile:', {
+            id: creatorId,
+            hasPhone: !!creatorProfile?.whatsapp_phone,
+            phone: creatorProfile?.whatsapp_phone,
+            fullName: creatorProfile?.full_name
+        })
+    }
 
     // 3. Content Safety Check (Synchronous)
     const titleCheck = containsContactInfo(title)

@@ -4,7 +4,6 @@ import { submitWork } from '../actions'
 import { useState, useActionState } from 'react'
 import MultiFileUpload from '@/app/components/MultiFileUpload'
 import { Check, AlertTriangle } from 'lucide-react'
-import WhatsAppNotifyButton from '@/app/components/WhatsAppNotifyButton'
 
 function SubmitButton({ isPending }: { isPending: boolean }) {
     return (
@@ -25,14 +24,10 @@ const initialState = {
 
 export default function SubmitWorkForm({
     projectId,
-    projectTitle,
-    studentPhone,
-    studentName
+    projectTitle
 }: {
     projectId: string;
     projectTitle: string;
-    studentPhone?: string | null;
-    studentName?: string | null;
 }) {
     const [state, formAction, isPending] = useActionState(submitWork, initialState)
     const [files, setFiles] = useState<string[]>([])
@@ -50,25 +45,9 @@ export default function SubmitWorkForm({
                 </div>
 
                 <div className="space-y-4">
-                    {((state as any).studentPhone || studentPhone) && (
-                        <>
-                            <p className="text-xs font-bold text-[#3E4C37] uppercase tracking-widest">Get feedback faster:</p>
-                            <WhatsAppNotifyButton
-                                type="work_submitted"
-                                data={{
-                                    phone: (state as any).studentPhone || studentPhone,
-                                    projectTitle: (state as any).projectTitle || projectTitle,
-                                    projectId: (state as any).projectId || projectId
-                                }}
-                                label="Notify Student on WhatsApp"
-                                className="w-full"
-                            />
-                        </>
-                    )}
-
                     <button
                         onClick={() => window.location.reload()}
-                        className="text-gray-400 text-xs hover:underline"
+                        className="w-full py-3 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-colors"
                     >
                         Done
                     </button>
@@ -80,8 +59,6 @@ export default function SubmitWorkForm({
     return (
         <form action={formAction} className="space-y-4">
             <input type="hidden" name="projectId" value={projectId} />
-            <input type="hidden" name="studentPhone" value={studentPhone || ''} />
-            <input type="hidden" name="studentName" value={studentName || ''} />
             <input type="hidden" name="projectTitle" value={projectTitle || ''} />
             {state?.error && (
                 <div className="bg-red-50 text-red-600 p-3 rounded-xl flex items-center text-sm">

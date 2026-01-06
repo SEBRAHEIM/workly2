@@ -209,6 +209,26 @@ export async function submitWork(formData: FormData) {
     const studentName = formData.get('studentName') as string
     const projectTitle = formData.get('projectTitle') as string
 
+    // 1.5 Fallback: If form data had stale (empty) phone, try to fetch it now
+    let finalStudentPhone = studentPhone
+    let finalStudentName = studentName
+
+    if (!finalStudentPhone) {
+        console.log('[WHATSAPP DEBUG] Submission form data phone was empty, fetching student from DB fallback...')
+        // We need to get the student_id first if we don't have it
+        const { data: projectCheck } = await supabase
+            .from('projects')
+            .select('student_id, profiles!projects_student_id_fkey(whatsapp_phone, full_name)')
+            .eq('id', projectId)
+            .single()
+
+        if (projectCheck?.profiles) {
+            finalStudentPhone = (projectCheck.profiles as any).whatsapp_phone
+            finalStudentName = (projectCheck.profiles as any).full_name || 'Student'
+            console.log('[WHATSAPP DEBUG] Student fallback successful:', finalStudentPhone)
+        }
+    }
+
     // Verify ownership
     const { data: project } = await supabase
         .from('projects')
@@ -258,9 +278,9 @@ export async function submitWork(formData: FormData) {
     return {
         success: true,
         projectId,
-        studentPhone: studentPhone || null,
-        studentName: studentName || 'Student',
-        projectTitle: project.title
+        studentPhone: finalStudentPhone || null,
+        studentName: finalStudentName || 'Student',
+        projectTitle: projectTitle
     }
 }
 

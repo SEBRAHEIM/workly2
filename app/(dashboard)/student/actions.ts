@@ -40,6 +40,27 @@ export async function createProject(prevState: any, formData: FormData) {
 
     const { data: service } = serviceResponse
 
+    // 2.5 Fallback: If form data had stale (empty) phone, try to fetch it now
+    let finalCreatorPhone = creatorPhone
+    let finalCreatorName = creatorName
+
+    if (!finalCreatorPhone) {
+        console.log('[WHATSAPP DEBUG] Form data phone was empty, fetching from DB fallback...')
+        const { data: freshProfile } = await supabase
+            .from('profiles')
+            .select('whatsapp_phone, full_name, display_name')
+            .eq('id', creatorId)
+            .single()
+
+        if (freshProfile?.whatsapp_phone) {
+            finalCreatorPhone = freshProfile.whatsapp_phone
+            finalCreatorName = freshProfile.display_name || freshProfile.full_name || 'Creator'
+            console.log('[WHATSAPP DEBUG] Fallback successful:', finalCreatorPhone)
+        } else {
+            console.log('[WHATSAPP DEBUG] Fallback also empty.')
+        }
+    }
+
     // 3. Content Safety Check (Synchronous)
     const titleCheck = containsContactInfo(title)
     const descCheck = containsContactInfo(description)
@@ -177,8 +198,8 @@ export async function createProject(prevState: any, formData: FormData) {
     return {
         success: true,
         projectId: data.id,
-        creatorPhone: creatorPhone || null,
-        creatorName: creatorName || 'Creator',
+        creatorPhone: finalCreatorPhone || null,
+        creatorName: finalCreatorName || 'Creator',
         studentName: (user as any).user_metadata?.full_name || 'A Student',
         projectTitle: title,
         price: initialPrice

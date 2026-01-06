@@ -254,8 +254,8 @@ export async function submitWork(formData: FormData) {
     return {
         success: true,
         projectId,
-        studentPhone: (project.profiles as any)?.whatsapp_phone || null,
-        studentName: (project.profiles as any)?.full_name || 'Student',
+        studentPhone: studentPhone || null,
+        studentName: studentName || 'Student',
         projectTitle: project.title
     }
 }

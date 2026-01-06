@@ -21,15 +21,16 @@ export async function createProject(prevState: any, formData: FormData) {
     const packageTier = formData.get('selectedPackageTier') as string
     const title = formData.get('title') as string
     const description = formData.get('description') as string
+    const creatorPhone = formData.get('creatorPhone') as string
+    const creatorName = formData.get('creatorName') as string
 
     // 2. Parallel Data Fetching
-    // We fetch user, service config, and creator profile in parallel
-    const [userResponse, serviceResponse, creatorResponse] = await Promise.all([
+    // We fetch user and service config in parallel
+    const [userResponse, serviceResponse] = await Promise.all([
         supabase.auth.getUser(),
         (pricingType === 'fixed' || pricingType === 'packages')
             ? supabase.from('creator_services').select('*').eq('creator_id', creatorId).eq('category_slug', categorySlug).single()
-            : Promise.resolve({ data: null, error: null }),
-        supabase.from('profiles').select('whatsapp_phone, full_name, email').eq('id', creatorId).single()
+            : Promise.resolve({ data: null, error: null })
     ])
 
     const { data: { user } } = userResponse
@@ -37,19 +38,7 @@ export async function createProject(prevState: any, formData: FormData) {
         return redirect('/login')
     }
 
-    const { data: service, error: serviceError } = serviceResponse
-    const { data: creatorProfile, error: creatorError } = creatorResponse
-
-    if (creatorError) {
-        console.error('[DATABASE DEBUG] Error fetching creator profile:', creatorError)
-    } else {
-        console.log('[DATABASE DEBUG] Fetched creator profile:', {
-            id: creatorId,
-            hasPhone: !!creatorProfile?.whatsapp_phone,
-            phone: creatorProfile?.whatsapp_phone,
-            fullName: creatorProfile?.full_name
-        })
-    }
+    const { data: service } = serviceResponse
 
     // 3. Content Safety Check (Synchronous)
     const titleCheck = containsContactInfo(title)
@@ -141,7 +130,8 @@ export async function createProject(prevState: any, formData: FormData) {
                 })
             ])
 
-            // Email Fallback (Background)
+            // Email Fallback (Removed redundant profile fetch for now, can add back if needed)
+            /*
             if (creatorProfile?.email) {
                 const { sendEmail } = await import('@/utils/send-email')
                 await sendEmail({
@@ -187,8 +177,8 @@ export async function createProject(prevState: any, formData: FormData) {
     return {
         success: true,
         projectId: data.id,
-        creatorPhone: creatorProfile?.whatsapp_phone || null,
-        creatorName: creatorProfile?.full_name || 'Creator',
+        creatorPhone: creatorPhone || null,
+        creatorName: creatorName || 'Creator',
         studentName: (user as any).user_metadata?.full_name || 'A Student',
         projectTitle: title,
         price: initialPrice

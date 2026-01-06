@@ -23,7 +23,17 @@ const initialState = {
     success: false
 }
 
-export default function SubmitWorkForm({ projectId, projectTitle }: { projectId: string; projectTitle: string }) {
+export default function SubmitWorkForm({
+    projectId,
+    projectTitle,
+    studentPhone,
+    studentName
+}: {
+    projectId: string;
+    projectTitle: string;
+    studentPhone?: string | null;
+    studentName?: string | null;
+}) {
     const [state, formAction, isPending] = useActionState(submitWork, initialState)
     const [files, setFiles] = useState<string[]>([])
 
@@ -40,15 +50,15 @@ export default function SubmitWorkForm({ projectId, projectTitle }: { projectId:
                 </div>
 
                 <div className="space-y-4">
-                    {(state as any).studentPhone && (
+                    {((state as any).studentPhone || studentPhone) && (
                         <>
                             <p className="text-xs font-bold text-[#3E4C37] uppercase tracking-widest">Get feedback faster:</p>
                             <WhatsAppNotifyButton
                                 type="work_submitted"
                                 data={{
-                                    phone: (state as any).studentPhone,
-                                    projectTitle: (state as any).projectTitle,
-                                    projectId: (state as any).projectId
+                                    phone: (state as any).studentPhone || studentPhone,
+                                    projectTitle: (state as any).projectTitle || projectTitle,
+                                    projectId: (state as any).projectId || projectId
                                 }}
                                 label="Notify Student on WhatsApp"
                                 className="w-full"
@@ -70,7 +80,9 @@ export default function SubmitWorkForm({ projectId, projectTitle }: { projectId:
     return (
         <form action={formAction} className="space-y-4">
             <input type="hidden" name="projectId" value={projectId} />
-
+            <input type="hidden" name="studentPhone" value={studentPhone || ''} />
+            <input type="hidden" name="studentName" value={studentName || ''} />
+            <input type="hidden" name="projectTitle" value={projectTitle || ''} />
             {state?.error && (
                 <div className="bg-red-50 text-red-600 p-3 rounded-xl flex items-center text-sm">
                     <AlertTriangle className="w-4 h-4 mr-2" />

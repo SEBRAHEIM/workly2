@@ -38,11 +38,13 @@ const initialState = {
 
 interface HireCreatorFormProps {
     creatorId: string
+    creatorPhone?: string | null
+    creatorName?: string | null
     specializations: string[]
     services: any[]
 }
 
-export default function HireCreatorForm({ creatorId, specializations, services }: HireCreatorFormProps) {
+export default function HireCreatorForm({ creatorId, creatorPhone, creatorName, specializations, services }: HireCreatorFormProps) {
     const [state, formAction, isPending] = useActionState(createProject, initialState)
     const [files, setFiles] = useState<string[]>([])
     const [description, setDescription] = useState('')
@@ -73,20 +75,20 @@ export default function HireCreatorForm({ creatorId, specializations, services }
                 </div>
 
                 <div className="space-y-4">
-                    {(state as any).creatorPhone ? (
+                    {((state as any).creatorPhone || creatorPhone) ? (
                         <>
                             <p className="text-sm font-bold text-[#3E4C37] uppercase tracking-widest">Speed up the process:</p>
                             <WhatsAppNotifyButton
                                 type="hire"
                                 data={{
-                                    phone: (state as any).creatorPhone,
+                                    phone: (state as any).creatorPhone || creatorPhone,
                                     studentName: (state as any).studentName,
                                     projectTitle: (state as any).projectTitle,
                                     projectId: (state as any).projectId
                                 }}
                                 className="w-full"
                             />
-                            <p className="text-xs text-gray-400 italic">This will open WhatsApp with a pre-filled message for {(state as any).creatorName}.</p>
+                            <p className="text-xs text-gray-400 italic">This will open WhatsApp with a pre-filled message for {(state as any).creatorName || creatorName}.</p>
                         </>
                     ) : (
                         <div className="bg-[#F3F0E9] p-4 rounded-2xl border border-[#E6E2D6]/50">
@@ -118,6 +120,8 @@ export default function HireCreatorForm({ creatorId, specializations, services }
     return (
         <form action={formAction} className="space-y-6">
             <input type="hidden" name="creatorId" value={creatorId} />
+            <input type="hidden" name="creatorPhone" value={creatorPhone || ''} />
+            <input type="hidden" name="creatorName" value={creatorName || ''} />
             <input type="hidden" name="categorySlug" value={selectedCategory} />
             <input type="hidden" name="pricingType" value={selectedService?.pricing_mode || 'negotiable'} />
             <input type="hidden" name="selectedPackageTier" value={selectedPackage || ''} />

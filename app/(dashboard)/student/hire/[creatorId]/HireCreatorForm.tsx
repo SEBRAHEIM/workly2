@@ -93,7 +93,6 @@ export default function HireCreatorForm({ creatorId, specializations, services }
                         </div>
                     </div>
                 </div>
-                破
             </div>
         )
     }

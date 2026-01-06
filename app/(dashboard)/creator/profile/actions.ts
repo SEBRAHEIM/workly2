@@ -13,7 +13,7 @@ export async function updateCreatorIdentity(formData: FormData) {
     const bio = formData.get('bio') as string
     const displayName = formData.get('displayName') as string
     const tagline = formData.get('tagline') as string
-    const whatsappPhone = formData.get('whatsappPhone') as string
+    const smsPhone = formData.get('smsPhone') as string
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
@@ -24,7 +24,7 @@ export async function updateCreatorIdentity(formData: FormData) {
         return { error: 'Bio or Tagline contains prohibited contact information.' }
     }
 
-    console.log('[WHATSAPP DEBUG] Updating profile for user:', user.id, { whatsappPhone })
+    console.log('[SMS DEBUG] Updating profile for user:', user.id, { smsPhone })
 
     const { error } = await supabase
         .from('profiles')
@@ -32,17 +32,17 @@ export async function updateCreatorIdentity(formData: FormData) {
             bio,
             display_name: displayName,
             tagline,
-            whatsapp_phone: whatsappPhone
+            whatsapp_phone: smsPhone
         })
         .eq('id', user.id)
 
     if (error) {
-        console.error('[WHATSAPP DEBUG] Update error:', error)
+        console.error('[SMS DEBUG] Update error:', error)
         return { error: error.message }
     }
 
-    console.log('[WHATSAPP DEBUG] Successfully updated profile')
-    console.log('[WHATSAPP DEBUG] Service Role Key present:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+    console.log('[SMS DEBUG] Successfully updated profile')
+    console.log('[SMS DEBUG] Service Role Key present:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     revalidatePath('/creator/profile')
     // Specifically revalidate the paths where this creator's details are shown

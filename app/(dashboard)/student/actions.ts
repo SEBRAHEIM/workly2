@@ -8,6 +8,7 @@ import { createNotification } from '@/utils/notifications'
 // import { sendEmail } from '@/utils/send-email' // Keep disabled for now/static
 
 import { containsContactInfo } from '@/utils/content-safety'
+import { notifyCreatorOfNewHire } from '@/utils/sms'
 
 import { after } from 'next/server'
 
@@ -128,10 +129,16 @@ export async function createProject(prevState: any, formData: FormData) {
                 })
             ])
 
-            // WhatsApp Notification (Centralized Service Placeholder)
+            // WhatsApp Notification (Centralized Background Alert)
             if (creatorProfile?.whatsapp_phone) {
-                // TODO: Call centralized whatsapp-service here
-                console.log('[WHATSAPP] Background notification queued for creator:', creatorProfile.whatsapp_phone)
+                await notifyCreatorOfNewHire({
+                    to: creatorProfile.whatsapp_phone,
+                    studentName: (user as any).user_metadata?.full_name || 'A Student',
+                    projectTitle: title,
+                    tier: packageTier || 'Custom',
+                    price: initialPrice,
+                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests`
+                }).catch(e => console.error('[SMS] Background alert failed:', e))
             }
         } catch (postError) {
             console.error('Error in background tasks:', postError)

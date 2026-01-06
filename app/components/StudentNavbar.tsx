@@ -158,7 +158,7 @@ export default function StudentNavbar() {
                                     </div>
                                 </div>
 
-                                <div className="px-6">
+                                <div className="px-6 mb-8">
                                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Finance</h3>
                                     <div className="space-y-4">
                                         <Link
@@ -190,6 +190,22 @@ export default function StudentNavbar() {
                                                 <CreditCard className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Payment History</span>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                <div className="px-6">
+                                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Account</h3>
+                                    <div className="space-y-4">
+                                        <Link
+                                            href="/student/profile"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
+                                        >
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                                <User className="w-4 h-4" />
+                                            </div>
+                                            <span className="font-medium">Profile Settings</span>
                                         </Link>
                                     </div>
                                 </div>

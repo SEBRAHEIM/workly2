@@ -36,7 +36,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 }
 
                 // Add phone from state
-                if (phone) formData.set('whatsappPhone', phone)
+                if (phone) formData.set('smsPhone', phone)
 
                 const result = await updateCreatorIdentity(formData)
                 setIsSaving(false)
@@ -46,7 +46,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     toast.error(result.error)
                 } else {
                     toast.success('Identity saved successfully!', {
-                        description: phone ? `WhatsApp notifications enabled for ${phone}` : 'Identity details updated.'
+                        description: phone ? `SMS notifications enabled for ${phone}` : 'Identity details updated.'
                     })
                     if (onSuccess) onSuccess()
                 }
@@ -80,11 +80,11 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 <p className="text-xs text-gray-400 mt-2">One line describing what you do.</p>
             </div>
 
-            {/* WhatsApp Phone */}
+            {/* SMS Phone */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">WhatsApp Phone Number</label>
+                <label className="block text-sm font-bold text-[#333333] mb-2">SMS Phone Number</label>
                 <div className="flex gap-2 isolate">
-                    <div className="flex-1 whatsapp-phone-wrapper">
+                    <div className="flex-1 sms-phone-wrapper">
                         <PhoneInput
                             international
                             defaultCountry="AE"
@@ -94,40 +94,22 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                             className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#3E4C37] focus-within:border-transparent transition-all h-[58px]"
                         />
                     </div>
-                    {phone ? (
-                        <a
-                            href={`https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent("Testing Workly WhatsApp Alerts! 🚀 If you can see this, students can now notify you directly via WhatsApp when you get hired.")}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-green-500 text-white px-6 rounded-xl font-bold hover:bg-green-600 transition-colors text-sm shadow-sm flex items-center justify-center h-[58px]"
-                        >
-                            Test
-                        </a>
-                    ) : (
-                        <button
-                            type="button"
-                            onClick={() => alert('Please enter a phone number first')}
-                            className="bg-gray-100 text-gray-400 px-6 rounded-xl font-bold text-sm h-[58px] cursor-not-allowed"
-                        >
-                            Test
-                        </button>
-                    )}
                 </div>
-                <p className="text-xs text-gray-400 mt-2">Pick your country and enter your number. <strong>Important:</strong> Click "Save Identity" below to enable this for students.</p>
+                <p className="text-xs text-gray-400 mt-2">Pick your country and enter your number. <strong>Important:</strong> Click "Save Identity" to enable SMS alerts for your projects.</p>
 
                 <style jsx global>{`
-                    .whatsapp-phone-wrapper .PhoneInputInput {
+                    .sms-phone-wrapper .PhoneInputInput {
                         background: transparent;
                         border: none !important;
                         outline: none !important;
                         padding: 0 10px;
                         font-size: 1rem;
                     }
-                    .whatsapp-phone-wrapper .PhoneInputCountry {
+                    .sms-phone-wrapper .PhoneInputCountry {
                         margin-right: 10px;
                         padding-left: 5px;
                     }
-                    .whatsapp-phone-wrapper .PhoneInputCountrySelect {
+                    .sms-phone-wrapper .PhoneInputCountrySelect {
                         cursor: pointer;
                     }
                 `}</style>

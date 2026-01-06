@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
+import { notifyStudentOfWorkSubmitted } from '@/utils/sms'
 
 export async function declineProject(projectId: string) {
     // ...
@@ -261,6 +262,19 @@ export async function submitWork(formData: FormData) {
             message: `Work Submitted: ${project.title}`,
             link: `/student/projects/${projectId}`
         })
+
+        // Background WhatsApp Alert
+        if (finalStudentPhone) {
+            supabase.from('profiles').select('display_name, full_name').eq('id', user.id).single().then(creatorProfile => {
+                const creatorDisplayName = creatorProfile.data?.display_name || creatorProfile.data?.full_name || 'Your Creator';
+                notifyStudentOfWorkSubmitted({
+                    to: finalStudentPhone,
+                    creatorName: creatorDisplayName,
+                    projectTitle: project.title,
+                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${projectId}`
+                }).catch(e => console.error('[WHATSAPP] Student notification failed:', e));
+            });
+        }
     }
 
     revalidatePath('/creator/requests')

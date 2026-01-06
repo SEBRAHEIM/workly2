@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
 
@@ -205,29 +206,17 @@ export async function submitWork(formData: FormData) {
         return { error: `Notes validation failed: ${notesCheck.reason}. Sharing contact info is strictly prohibited.` }
     }
 
-    const studentPhone = formData.get('studentPhone') as string
-    const studentName = formData.get('studentName') as string
     const projectTitle = formData.get('projectTitle') as string
 
-    // 1.5 Fallback: If form data had stale (empty) phone, try to fetch it now
-    let finalStudentPhone = studentPhone
-    let finalStudentName = studentName
+    // 2. Fetch Student Info for internal use (notifications)
+    const { data: projectCheck } = await createAdminClient()
+        .from('projects')
+        .select('student_id, profiles!projects_student_id_fkey(whatsapp_phone, full_name, display_name)')
+        .eq('id', projectId)
+        .single()
 
-    if (!finalStudentPhone) {
-        console.log('[WHATSAPP DEBUG] Submission form data phone was empty, fetching student from DB fallback...')
-        // We need to get the student_id first if we don't have it
-        const { data: projectCheck } = await supabase
-            .from('projects')
-            .select('student_id, profiles!projects_student_id_fkey(whatsapp_phone, full_name)')
-            .eq('id', projectId)
-            .single()
-
-        if (projectCheck?.profiles) {
-            finalStudentPhone = (projectCheck.profiles as any).whatsapp_phone
-            finalStudentName = (projectCheck.profiles as any).full_name || 'Student'
-            console.log('[WHATSAPP DEBUG] Student fallback successful:', finalStudentPhone)
-        }
-    }
+    const finalStudentPhone = projectCheck?.profiles ? (projectCheck.profiles as any).whatsapp_phone : null
+    const finalStudentName = projectCheck?.profiles ? ((projectCheck.profiles as any).display_name || (projectCheck.profiles as any).full_name || 'Student') : 'Student'
 
     // Verify ownership
     const { data: project } = await supabase
@@ -277,10 +266,7 @@ export async function submitWork(formData: FormData) {
     revalidatePath('/creator/requests')
     return {
         success: true,
-        projectId,
-        studentPhone: finalStudentPhone || null,
-        studentName: finalStudentName || 'Student',
-        projectTitle: projectTitle
+        projectId
     }
 }
 

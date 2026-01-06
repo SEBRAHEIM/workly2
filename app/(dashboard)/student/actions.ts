@@ -21,16 +21,14 @@ export async function createProject(prevState: any, formData: FormData) {
     const packageTier = formData.get('selectedPackageTier') as string
     const title = formData.get('title') as string
     const description = formData.get('description') as string
-    const creatorPhone = formData.get('creatorPhone') as string
-    const creatorName = formData.get('creatorName') as string
 
     // 2. Parallel Data Fetching
-    // We fetch user and service config in parallel
-    const [userResponse, serviceResponse] = await Promise.all([
+    const [userResponse, serviceResponse, creatorResponse] = await Promise.all([
         supabase.auth.getUser(),
         (pricingType === 'fixed' || pricingType === 'packages')
             ? supabase.from('creator_services').select('*').eq('creator_id', creatorId).eq('category_slug', categorySlug).single()
-            : Promise.resolve({ data: null, error: null })
+            : Promise.resolve({ data: null, error: null }),
+        createAdminClient().from('profiles').select('whatsapp_phone, display_name, full_name').eq('id', creatorId).single()
     ])
 
     const { data: { user } } = userResponse
@@ -39,27 +37,7 @@ export async function createProject(prevState: any, formData: FormData) {
     }
 
     const { data: service } = serviceResponse
-
-    // 2.5 Fallback: If form data had stale (empty) phone, try to fetch it now
-    let finalCreatorPhone = creatorPhone
-    let finalCreatorName = creatorName
-
-    if (!finalCreatorPhone) {
-        console.log('[WHATSAPP DEBUG] Form data phone was empty, fetching from DB fallback...')
-        const { data: freshProfile } = await supabase
-            .from('profiles')
-            .select('whatsapp_phone, full_name, display_name')
-            .eq('id', creatorId)
-            .single()
-
-        if (freshProfile?.whatsapp_phone) {
-            finalCreatorPhone = freshProfile.whatsapp_phone
-            finalCreatorName = freshProfile.display_name || freshProfile.full_name || 'Creator'
-            console.log('[WHATSAPP DEBUG] Fallback successful:', finalCreatorPhone)
-        } else {
-            console.log('[WHATSAPP DEBUG] Fallback also empty.')
-        }
-    }
+    const { data: creatorProfile } = creatorResponse
 
     // 3. Content Safety Check (Synchronous)
     const titleCheck = containsContactInfo(title)
@@ -132,7 +110,6 @@ export async function createProject(prevState: any, formData: FormData) {
     }
 
     // 7. Non-Blocking Post-creation Tasks (Instant response)
-    // We use 'after' to ensure the user is redirected IMMEDIATELY
     after(async () => {
         try {
             // Notifications & Events
@@ -151,56 +128,19 @@ export async function createProject(prevState: any, formData: FormData) {
                 })
             ])
 
-            // Email Fallback (Removed redundant profile fetch for now, can add back if needed)
-            /*
-            if (creatorProfile?.email) {
-                const { sendEmail } = await import('@/utils/send-email')
-                await sendEmail({
-                    to: creatorProfile.email,
-                    subject: `New Project Request: ${title}`,
-                    html: `
-                        <div style="font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; border: 1px solid #efefef; border-radius: 12px;">
-                            <h2 style="color: #3E4C37;">New Project Request</h2>
-                            <p>You have received a new project request from a student on Workly.</p>
-                            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-                            <p><strong>Title:</strong> ${title}</p>
-                            <p><strong>Initial Price:</strong> AED ${initialPrice}</p>
-                            <br/>
-                            <a href="${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests" 
-                               style="display: inline-block; background-color: #3E4C37; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
-                               View Request
-                            </a>
-                        </div>
-                    `
-                }).catch(e => console.error('Background email failed:', e))
-            }
-
-            // WhatsApp Notification (Removed in favor of Direct Link Option A)
-            /* 
+            // WhatsApp Notification (Centralized Service Placeholder)
             if (creatorProfile?.whatsapp_phone) {
-                const { sendWhatsAppNotification } = await import('@/utils/whatsapp')
-                await sendWhatsAppNotification({
-                    to: creatorProfile.whatsapp_phone,
-                    studentName: (user as any).user_metadata?.full_name || 'A Student',
-                    projectTitle: title,
-                    tier: packageTier || 'Custom',
-                    price: initialPrice,
-                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests`
-                }).catch(e => console.error('WhatsApp background failed:', e))
+                // TODO: Call centralized whatsapp-service here
+                console.log('[WHATSAPP] Background notification queued for creator:', creatorProfile.whatsapp_phone)
             }
-            */
         } catch (postError) {
             console.error('Error in background tasks:', postError)
         }
     })
 
-    // 8. Return Success Data (For Option A WhatsApp Link)
     return {
         success: true,
         projectId: data.id,
-        creatorPhone: finalCreatorPhone || null,
-        creatorName: finalCreatorName || 'Creator',
-        studentName: (user as any).user_metadata?.full_name || 'A Student',
         projectTitle: title,
         price: initialPrice
     }

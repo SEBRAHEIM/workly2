@@ -37,13 +37,11 @@ const initialState = {
 
 interface HireCreatorFormProps {
     creatorId: string
-    creatorPhone?: string | null
-    creatorName?: string | null
     specializations: string[]
     services: any[]
 }
 
-export default function HireCreatorForm({ creatorId, creatorPhone, creatorName, specializations, services }: HireCreatorFormProps) {
+export default function HireCreatorForm({ creatorId, specializations, services }: HireCreatorFormProps) {
     const [state, formAction, isPending] = useActionState(createProject, initialState)
     const [files, setFiles] = useState<string[]>([])
     const [description, setDescription] = useState('')

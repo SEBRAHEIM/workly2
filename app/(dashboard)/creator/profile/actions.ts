@@ -54,151 +54,151 @@ export async function updateCreatorIdentity(formData: FormData) {
     revalidatePath('/student/hire/[creatorId]', 'layout')
 
     return { success: true }
+}
 
+export async function updateCreatorSpecializations(formData: FormData) {
+    const supabase = await createClient()
+    const specializations = formData.getAll('specializations') as string[]
 
-    export async function updateCreatorSpecializations(formData: FormData) {
-        const supabase = await createClient()
-        const specializations = formData.getAll('specializations') as string[]
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
 
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) throw new Error('Unauthorized')
+    const { error } = await supabase
+        .from('profiles')
+        .update({ specializations })
+        .eq('id', user.id)
 
-        const { error } = await supabase
-            .from('profiles')
-            .update({ specializations })
-            .eq('id', user.id)
+    if (error) return { error: error.message }
 
-        if (error) return { error: error.message }
+    revalidatePath('/creator/profile')
+    return { success: true }
+}
 
-        revalidatePath('/creator/profile')
-        return { success: true }
+// Upload Portfolio Item
+export async function uploadPortfolioItem(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+
+    const title = formData.get('title') as string
+    const description = formData.get('description') as string
+    const categorySlug = formData.get('categorySlug') as string
+    const file = formData.get('image') as File
+
+    if (!file || file.size === 0) {
+        return { error: 'Please select an image to upload.' }
     }
 
-    // Upload Portfolio Item
-    export async function uploadPortfolioItem(prevState: any, formData: FormData) {
-        const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
 
-        const title = formData.get('title') as string
-        const description = formData.get('description') as string
-        const categorySlug = formData.get('categorySlug') as string
-        const file = formData.get('image') as File
+    // 1. Upload File to Supabase Storage
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
-        if (!file || file.size === 0) {
-            return { error: 'Please select an image to upload.' }
-        }
+    // Convert File to ArrayBuffer for upload
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = new Uint8Array(arrayBuffer)
 
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) throw new Error('Unauthorized')
+    const { error: uploadError } = await supabase
+        .storage
+        .from('portfolio')
+        .upload(fileName, buffer, {
+            contentType: file.type,
+            upsert: false
+        })
 
-        // 1. Upload File to Supabase Storage
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+    if (uploadError) {
+        console.error('Upload error:', uploadError)
+        return { error: 'Failed to upload image. Please try again.' }
+    }
 
-        // Convert File to ArrayBuffer for upload
-        const arrayBuffer = await file.arrayBuffer()
-        const buffer = new Uint8Array(arrayBuffer)
+    // 2. Get Public URL
+    const { data: { publicUrl } } = supabase
+        .storage
+        .from('portfolio')
+        .getPublicUrl(fileName)
 
-        const { error: uploadError } = await supabase
-            .storage
-            .from('portfolio')
-            .upload(fileName, buffer, {
-                contentType: file.type,
-                upsert: false
-            })
+    // 3. Insert Record
+    const { error } = await supabase
+        .from('portfolio_items')
+        .insert({
+            creator_id: user.id,
+            category_slug: categorySlug,
+            title,
+            description,
+            image_url: publicUrl
+        })
 
-        if (uploadError) {
-            console.error('Upload error:', uploadError)
-            return { error: 'Failed to upload image. Please try again.' }
-        }
+    if (error) {
+        console.error('Database error:', error)
+        return { error: 'Failed to save portfolio item details.' }
+    }
 
-        // 2. Get Public URL
-        const { data: { publicUrl } } = supabase
-            .storage
-            .from('portfolio')
-            .getPublicUrl(fileName)
+    revalidatePath('/creator/profile')
+    return { success: true }
+}
 
-        // 3. Insert Record
+// Update Creator Pricing
+export async function updateCreatorPricing(formData: FormData) {
+    const supabase = await createClient()
+
+    // Extract Data
+    const categorySlug = formData.get('categorySlug') as string
+    const pricingMode = formData.get('pricingMode') as string
+    const basePrice = parseInt(formData.get('basePrice') as string) || 0
+    const servicePackagesStr = formData.get('servicePackages') as string
+
+    // Validate Mode
+    if (!['fixed', 'negotiable', 'packages'].includes(pricingMode)) {
+        return { error: 'Invalid pricing mode.' }
+    }
+
+    let servicePackages = []
+    try {
+        servicePackages = JSON.parse(servicePackagesStr)
+    } catch (e) {
+        return { error: 'Invalid packages data.' }
+    }
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    if (categorySlug) {
+        // PER-CATEGORY UPDATE
         const { error } = await supabase
-            .from('portfolio_items')
-            .insert({
+            .from('creator_services')
+            .upsert({
                 creator_id: user.id,
                 category_slug: categorySlug,
-                title,
-                description,
-                image_url: publicUrl
+                pricing_mode: pricingMode,
+                base_price: basePrice,
+                service_packages: servicePackages,
+                currency: 'AED',
+                updated_at: new Date().toISOString()
+            }, {
+                onConflict: 'creator_id, category_slug'
             })
 
         if (error) {
-            console.error('Database error:', error)
-            return { error: 'Failed to save portfolio item details.' }
+            console.error('Update Service Error:', error)
+            return { error: error.message }
         }
+    } else {
+        // LEGACY / DEFAULT UPDATE (Fallback to Profile)
+        const { error } = await supabase
+            .from('profiles')
+            .update({
+                pricing_mode: pricingMode,
+                base_price: basePrice,
+                service_packages: servicePackages
+            })
+            .eq('id', user.id)
 
-        revalidatePath('/creator/profile')
-        return { success: true }
+        if (error) {
+            console.error('Update Pricing Error:', error)
+            return { error: error.message }
+        }
     }
 
-    // Update Creator Pricing
-    export async function updateCreatorPricing(formData: FormData) {
-        const supabase = await createClient()
-
-        // Extract Data
-        const categorySlug = formData.get('categorySlug') as string
-        const pricingMode = formData.get('pricingMode') as string
-        const basePrice = parseInt(formData.get('basePrice') as string) || 0
-        const servicePackagesStr = formData.get('servicePackages') as string
-
-        // Validate Mode
-        if (!['fixed', 'negotiable', 'packages'].includes(pricingMode)) {
-            return { error: 'Invalid pricing mode.' }
-        }
-
-        let servicePackages = []
-        try {
-            servicePackages = JSON.parse(servicePackagesStr)
-        } catch (e) {
-            return { error: 'Invalid packages data.' }
-        }
-
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) throw new Error('Unauthorized')
-
-        if (categorySlug) {
-            // PER-CATEGORY UPDATE
-            const { error } = await supabase
-                .from('creator_services')
-                .upsert({
-                    creator_id: user.id,
-                    category_slug: categorySlug,
-                    pricing_mode: pricingMode,
-                    base_price: basePrice,
-                    service_packages: servicePackages,
-                    currency: 'AED',
-                    updated_at: new Date().toISOString()
-                }, {
-                    onConflict: 'creator_id, category_slug'
-                })
-
-            if (error) {
-                console.error('Update Service Error:', error)
-                return { error: error.message }
-            }
-        } else {
-            // LEGACY / DEFAULT UPDATE (Fallback to Profile)
-            const { error } = await supabase
-                .from('profiles')
-                .update({
-                    pricing_mode: pricingMode,
-                    base_price: basePrice,
-                    service_packages: servicePackages
-                })
-                .eq('id', user.id)
-
-            if (error) {
-                console.error('Update Pricing Error:', error)
-                return { error: error.message }
-            }
-        }
-
-        revalidatePath('/creator/profile')
-        return { success: true }
-    }
+    revalidatePath('/creator/profile')
+    return { success: true }
+}

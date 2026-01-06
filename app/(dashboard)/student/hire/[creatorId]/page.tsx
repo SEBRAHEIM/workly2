@@ -82,8 +82,6 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                 </div>
                 <HireCreatorForm
                     creatorId={creatorId}
-                    creatorPhone={creator.whatsapp_phone}
-                    creatorName={creator.display_name || creator.full_name || 'Creator'}
                     specializations={specializations}
                     services={services || []}
                 />

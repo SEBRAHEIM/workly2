@@ -24,8 +24,7 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
             student:student_id (
                 full_name,
                 username,
-                avatar_url,
-                whatsapp_phone
+                avatar_url
             )
         `)
         .eq('id', id)
@@ -160,8 +159,6 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                             <SubmitWorkForm
                                 projectId={project.id}
                                 projectTitle={project.title}
-                                studentPhone={project.student.whatsapp_phone}
-                                studentName={project.student.full_name || project.student.username}
                             />
                         </div>
                     )}

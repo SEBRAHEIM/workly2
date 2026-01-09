@@ -115,6 +115,33 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 `}</style>
             </div>
 
+            {/* Working Languages */}
+            <div>
+                <label className="block text-sm font-bold text-[#333333] mb-3">Working Languages</label>
+                <div className="flex gap-4">
+                    {[
+                        { label: 'English', value: 'English' },
+                        { label: 'العربية', value: 'العربية' }
+                    ].map((lang) => (
+                        <label key={lang.value} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-5 py-4 cursor-pointer hover:border-[#3E4C37] transition-all flex-1">
+                            <input
+                                type="checkbox"
+                                name="languages"
+                                value={lang.value}
+                                defaultChecked={
+                                    profile?.languages?.includes(lang.value) ||
+                                    (lang.value === 'العربية' && profile?.languages?.includes('Arabic')) ||
+                                    (lang.value === 'English' && !profile?.languages)
+                                }
+                                className="w-5 h-5 rounded border-gray-300 text-[#3E4C37] focus:ring-[#3E4C37]"
+                            />
+                            <span className="text-base font-medium text-gray-700">{lang.label}</span>
+                        </label>
+                    ))}
+                </div>
+                <p className="text-xs text-gray-400 mt-2">Select the languages you can provide services in.</p>
+            </div>
+
             {/* Bio */}
             <div>
                 <label className="block text-sm font-bold text-[#333333] mb-2">About Me</label>

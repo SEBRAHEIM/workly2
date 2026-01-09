@@ -57,9 +57,19 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                     {creator.username && (
                         <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
                     )}
-                    <p className="text-base text-[#3E4C37] font-medium mb-3">
+                    <p className="text-base text-[#3E4C37] font-medium mb-1">
                         {creator.tagline || 'Student Creator'}
                     </p>
+
+                    {creator.languages && creator.languages.length > 0 && (
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mb-4">
+                            {creator.languages.map((lang: string) => (
+                                <span key={lang} className="text-[10px] font-bold uppercase px-2 py-0.5 bg-[#3E4C37]/10 text-[#3E4C37] rounded-md border border-[#3E4C37]/20">
+                                    {lang}
+                                </span>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-xs font-medium text-gray-500">
                         <span className="bg-[#F3F0E9] px-2 py-1 rounded-md text-[#333]">
@@ -111,7 +121,21 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                     {/* Pricing Header for Category */}
                                     <div className="flex items-center justify-between mb-2 px-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{category.title}</span>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{category.title}</span>
+                                                {creator.languages && creator.languages.length > 0 && (
+                                                    <div className="flex gap-1 items-center">
+                                                        {creator.languages.map((lang: string) => {
+                                                            const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'AR' : lang.substring(0, 2).toUpperCase()
+                                                            return (
+                                                                <span key={lang} className="text-[8px] font-black uppercase px-1.5 py-0.5 bg-gray-100 text-gray-400 rounded-sm border border-gray-200">
+                                                                    {displayAbbr}
+                                                                </span>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                )}
+                                            </div>
                                             {service?.pricing_mode === 'fixed' && (
                                                 <span className="px-2 py-0.5 bg-green-50 text-green-700 border border-green-100 rounded text-[10px] font-bold uppercase">Fixed Rate: AED {service.base_price}</span>
                                             )}

@@ -1,6 +1,14 @@
-import { Resend } from 'resend';
+import type { Resend as ResendType } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendInstance: ResendType | null = null;
+
+const getResend = async () => {
+    if (!resendInstance) {
+        const { Resend } = await import('resend');
+        resendInstance = new Resend(process.env.RESEND_API_KEY || 're_123');
+    }
+    return resendInstance;
+};
 
 export const sendEmail = async ({
     to,
@@ -17,8 +25,9 @@ export const sendEmail = async ({
     }
 
     try {
+        const resend = await getResend();
         const data = await resend.emails.send({
-            from: 'Workly <notifications@workly.day>', // Ensure verified domain or use onboarding@resend.dev/user's email for testing
+            from: 'Workly <notifications@workly.day>',
             to: [to],
             subject: subject,
             html: html,

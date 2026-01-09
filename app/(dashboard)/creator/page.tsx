@@ -1,5 +1,7 @@
 import { Briefcase, TrendingUp, Users, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
+
+export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import DashboardHeader from './DashboardHeader'
 

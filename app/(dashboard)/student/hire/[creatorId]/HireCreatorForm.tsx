@@ -39,9 +39,10 @@ interface HireCreatorFormProps {
     creatorId: string
     specializations: string[]
     services: any[]
+    languages: string[]
 }
 
-export default function HireCreatorForm({ creatorId, specializations, services }: HireCreatorFormProps) {
+export default function HireCreatorForm({ creatorId, specializations, services, languages }: HireCreatorFormProps) {
     const [state, formAction, isPending] = useActionState(createProject, initialState)
     const [files, setFiles] = useState<string[]>([])
     const [description, setDescription] = useState('')
@@ -126,6 +127,11 @@ export default function HireCreatorForm({ creatorId, specializations, services }
                         </button>
                     ))}
                 </div>
+                {languages && languages.length > 0 && (
+                    <p className="mt-2 text-[10px] text-gray-400 font-medium tracking-wide">
+                        Available in: <span className="text-[#3E4C37] font-bold">{languages.join(', ')}</span>
+                    </p>
+                )}
             </div>
 
             {/* Pricing Info Display */}

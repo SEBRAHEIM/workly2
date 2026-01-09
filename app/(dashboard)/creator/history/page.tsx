@@ -1,5 +1,7 @@
 import { CreditCard, Download } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function CreatorHistory() {
     return (
         <div className="p-8 max-w-6xl mx-auto">

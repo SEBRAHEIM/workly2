@@ -60,9 +60,18 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                 {creator.username && (
                     <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
                 )}
-                <p className="text-gray-500 text-sm mb-4">
+                <p className="text-gray-500 text-sm mb-3">
                     {creator.tagline}
                 </p>
+                {creator.languages && creator.languages.length > 0 && (
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
+                        {creator.languages.map((lang: string) => (
+                            <span key={lang} className="text-[9px] font-bold uppercase px-2 py-0.5 bg-[#3E4C37]/5 text-[#3E4C37] rounded-md border border-[#3E4C37]/10">
+                                {lang}
+                            </span>
+                        ))}
+                    </div>
+                )}
 
                 <Link
                     href={`/student/creator/${creatorId}`}
@@ -84,6 +93,7 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                     creatorId={creatorId}
                     specializations={specializations}
                     services={services || []}
+                    languages={creator.languages || []}
                 />
             </div>
 

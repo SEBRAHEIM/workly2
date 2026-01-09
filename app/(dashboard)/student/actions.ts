@@ -112,8 +112,10 @@ export async function createProject(prevState: any, formData: FormData) {
 
     // 7. Non-Blocking Post-creation Tasks (Instant response)
     after(async () => {
+        console.log('[DEBUG] Entering after() hook for project:', data.id)
         try {
             // Notifications & Events
+            console.log('[DEBUG] Creating notifications and events...')
             await Promise.all([
                 createNotification({
                     userId: creatorId,
@@ -131,6 +133,7 @@ export async function createProject(prevState: any, formData: FormData) {
 
             // WhatsApp Notification (Centralized Background Alert)
             if (creatorProfile?.whatsapp_phone) {
+                console.log('[DEBUG] Triggering SMS to:', creatorProfile.whatsapp_phone)
                 await notifyCreatorOfNewHire({
                     to: creatorProfile.whatsapp_phone,
                     studentName: (user as any).user_metadata?.full_name || 'A Student',
@@ -138,7 +141,11 @@ export async function createProject(prevState: any, formData: FormData) {
                     tier: packageTier || 'Custom',
                     price: initialPrice,
                     link: `${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests`
+                }).then(res => {
+                    console.log('[DEBUG] SMS Result:', res)
                 }).catch(e => console.error('[SMS] Background alert failed:', e))
+            } else {
+                console.log('[DEBUG] No whatsapp_phone for creator profile')
             }
         } catch (postError) {
             console.error('Error in background tasks:', postError)

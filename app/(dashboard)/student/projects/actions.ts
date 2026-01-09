@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 // Mock Payment: Moves project to 'escrow'
-import { stripe } from '@/utils/stripe'
+import { getStripe } from '@/utils/stripe'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
 
@@ -32,7 +32,7 @@ export async function createCheckoutSession(formData: FormData) {
     }
 
     // Create Checkout Session
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
         customer_email: user.email, // Enables auto-email receipt from Stripe
         payment_method_types: ['card'],
         line_items: [
@@ -109,7 +109,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
                     // Must convert to cents for Stripe
                     const amountInCents = Math.round(creatorEarnings * 100)
 
-                    await stripe.transfers.create({
+                    await getStripe().transfers.create({
                         amount: amountInCents,
                         currency: 'aed',
                         destination: creator.stripe_account_id,

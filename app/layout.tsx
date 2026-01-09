@@ -1,7 +1,10 @@
-import type { Metadata } from "next";
+'use client'
+
+import { useEffect } from 'react'
+import Lenis from 'lenis'
+import { Toaster } from "sonner";
 import { Inter, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,20 +22,26 @@ const fraunces = Fraunces({
   axes: ["SOFT", "WONK", "opsz"],
 });
 
-export const metadata: Metadata = {
-  title: "Student Creator Platform",
-  description: "University projects, done for you.",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    const lenis = new Lenis()
+
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+  }, [])
+
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-[#F3F0E9] text-[#333333]`}
+        className={`${inter.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-[#F8F7F2] text-[#333333] selection:bg-[#3E4C37] selection:text-white`}
       >
         {children}
         <Toaster position="top-center" richColors />

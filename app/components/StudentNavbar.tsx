@@ -2,27 +2,30 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Briefcase, LayoutDashboard } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Menu, X, Bell, User, LogOut, ChevronRight, Search, Filter, LayoutDashboard, Briefcase, Upload, Star, Wallet, Clock, CreditCard } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 import NotificationBell from './NotificationBell'
 
-type Profile = {
-    username: string
-    full_name: string | null
-    avatar_url: string | null
-    role: string
-}
-
 export default function StudentNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [profile, setProfile] = useState<Profile | null>(null)
-    const [user, setUser] = useState<any>(null) // Added user state based on the provided snippet
+    const [isScrolled, setIsScrolled] = useState(false)
+    const [profile, setProfile] = useState<any>(null)
+    const [user, setUser] = useState<any>(null)
     const router = useRouter()
     const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50)
+        }
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     useEffect(() => {
         const getUser = async () => { // Renamed fetchProfile to getUser as per snippet
@@ -52,24 +55,73 @@ export default function StudentNavbar() {
 
     return (
         <>
-            <nav className="flex items-center justify-between px-6 py-4 sticky top-0 bg-[#F3F0E9]/80 backdrop-blur-md z-50">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => setIsMenuOpen(true)}
-                        className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition-colors"
-                    >
-                        <Menu className="w-5 h-5 text-[#333333]" />
-                    </button>
-                </div>
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/80 backdrop-blur-xl border-[#EBE7DE] py-4' : 'bg-transparent border-transparent py-8'
+                }`}>
+                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                    <div className="flex items-center space-x-12">
+                        <Link href="/student" className="group flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-[#3E4C37] flex items-center justify-center group-hover:bg-[#C6A87C] transition-colors">
+                                <span className="text-white font-serif font-black text-xl">W</span>
+                            </div>
+                            <span className="text-2xl tracking-[0.4em] text-[#3E4C37] font-serif font-black uppercase hidden sm:block">
+                                Workly
+                            </span>
+                        </Link>
 
-                <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <Link href="/student" className="text-2xl tracking-[0.2em] text-[#3E4C37] font-serif font-black uppercase">
-                        Workly
-                    </Link>
-                </div>
+                        {/* Desktop Menu */}
+                        <div className="hidden lg:flex items-center space-x-10">
+                            {[
+                                { name: 'Directory', href: '/student' },
+                                { name: 'My Projects', href: '/student/projects' },
+                                { name: 'Messages', href: '/student/messages' },
+                            ].map((link) => (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className="text-[10px] font-black uppercase tracking-[0.3em] text-[#333333]/50 hover:text-[#3E4C37] transition-colors relative group py-2"
+                                >
+                                    {link.name}
+                                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#C6A87C] group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
 
-                <div className="flex items-center justify-end min-w-[40px] gap-4">
-                    {user && <NotificationBell userId={user.id} />}
+                    <div className="flex items-center space-x-8">
+                        {/* Notification Icons */}
+                        <div className="hidden md:flex items-center space-x-6 border-r border-[#EBE7DE] pr-8">
+                            <motion.button
+                                whileHover={{ y: -2 }}
+                                className="text-[#3E4C37] hover:text-[#C6A87C] transition-colors p-2"
+                            >
+                                <Bell size={20} />
+                            </motion.button>
+                            {user && <NotificationBell userId={user.id} />}
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/student/profile"
+                                className="w-10 h-10 rounded-none border border-[#EBE7DE] overflow-hidden hover:border-[#3E4C37] transition-colors"
+                            >
+                                <img
+                                    src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=3E4C37&color=fff`}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
+                                />
+                            </Link>
+
+                            <button
+                                className="bg-[#3E4C37] text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-[4px_4px_0px_0px_#C6A87C]"
+                                onClick={async () => {
+                                    await supabase.auth.signOut()
+                                    window.location.href = '/'
+                                }}
+                            >
+                                Terminal
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </nav>
 

@@ -1,125 +1,134 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { Users, Target, ShieldCheck, ArrowRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Users, Target, ShieldCheck, ArrowRight, Zap } from 'lucide-react'
+import { useRef } from 'react'
 
 interface FeaturesProps {
     hideCta?: boolean
 }
 
 export default function Features({ hideCta = false }: FeaturesProps) {
+    const sectionRef = useRef<HTMLElement>(null)
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"]
+    })
+
+    const xMove = useTransform(scrollYProgress, [0, 1], [0, 100])
+
     const features = [
         {
             title: "Rigorous Vetting",
             desc: "Every creator undergoes a multi-stage review of their academic and professional portfolio.",
-            details: ["Portfolio Verified", "Top Grades", "Fast Response"],
-            icon: <Users size={24} />,
-            color: "#3E4C37"
+            details: ["Portfolio Verified", "Top Grades"],
+            icon: <Users size={20} />,
+            size: "col-span-1 md:col-span-2",
+            image: "https://images.unsplash.com/photo-1523050335102-c32c7503122b?auto=format&fit=crop&q=80&w=800"
         },
         {
             title: "Strategic Matching",
-            desc: "We analyze project requirements to match you with the precise expertise your task demands.",
-            details: ["Niche Experts", "Tool-Specific", "Budget Friendly"],
-            icon: <Target size={24} />,
-            color: "#C6A87C"
+            desc: "Precision algorithms for precise tasks.",
+            details: ["Niche Experts"],
+            icon: <Target size={20} />,
+            size: "col-span-1",
+            bg: "bg-[#3E4C37] text-white"
+        },
+        {
+            title: "Global Standards",
+            desc: "Projects delivered with institutional excellence.",
+            details: ["24/7 Support"],
+            icon: <ShieldCheck size={20} />,
+            size: "col-span-1",
+            bg: "bg-[#C6A87C] text-[#333333]"
         },
         {
             title: "Institutional Trust",
             desc: "Secure escrow and satisfaction guarantees ensure every project meets the highest standards.",
-            details: ["Secure Escrow", "Unlimited Edits", "24/7 Support"],
-            icon: <ShieldCheck size={24} />,
-            color: "#333333"
+            details: ["Secure Escrow", "Unlimited Edits"],
+            icon: <Zap size={20} />,
+            size: "col-span-1 md:col-span-2",
+            bg: "bg-white"
         }
     ];
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15
-            }
-        }
-    };
-
-    const cardVariants = {
-        hidden: { y: 30, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.5 }
-        }
-    };
-
     return (
-        <section className="px-6 py-32 max-w-7xl mx-auto relative overflow-hidden bg-white">
-            {/* Background Texture */}
-            <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
-
+        <section ref={sectionRef} className="px-6 py-40 max-w-7xl mx-auto relative overflow-hidden">
+            {/* Parallax Background Text */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 relative z-10"
+                style={{ x: xMove }}
+                className="absolute top-0 left-0 text-[20rem] font-black text-[#3E4C37]/5 whitespace-nowrap pointer-events-none select-none uppercase tracking-tighter"
             >
-                <div className="max-w-4xl">
-                    <h2 className="font-serif font-black text-5xl md:text-7xl text-[#3E4C37] mb-8 leading-[0.9] uppercase tracking-tighter">
-                        The Standard for <br /> <span className="text-[#C6A87C]">Academic creators.</span>
-                    </h2>
-                    <p className="text-[#333333]/70 text-xl md:text-2xl font-medium max-w-2xl leading-relaxed border-l-4 border-[#3E4C37] pl-6">
-                        We don't just facilitate tasks; we curate brilliance.
-                        Partner with creators who share your commitment to excellence.
-                    </p>
-                </div>
-                {!hideCta && (
-                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                        <Link
-                            href="/join"
-                            className="bg-[#3E4C37] text-white px-10 py-5 rounded-none text-xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-[6px_6px_0px_0px_#C6A87C] flex items-center group"
-                        >
-                            Enroll Now
-                            <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </motion.div>
-                )}
+                Precision Quality Trust Brilliance
             </motion.div>
 
-            <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10"
-            >
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Intro Card */}
+                <div className="col-span-1 md:col-span-3 mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="max-w-4xl"
+                    >
+                        <h2 className="font-serif font-black text-6xl md:text-9xl text-[#3E4C37] leading-[0.8] tracking-tighter uppercase mb-10">
+                            The New <br /> <span className="text-[#C6A87C]">Standard.</span>
+                        </h2>
+                        <div className="h-[2px] w-full bg-[#EBE7DE] mb-10 overflow-hidden">
+                            <motion.div
+                                initial={{ x: "-100%" }}
+                                whileInView={{ x: "0%" }}
+                                transition={{ duration: 1.5, ease: "circOut" }}
+                                className="h-full w-full bg-[#3E4C37]"
+                            />
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Bento Grid */}
                 {features.map((feature, idx) => (
                     <motion.div
                         key={idx}
-                        variants={cardVariants}
-                        whileHover={{ y: -10 }}
-                        className="bg-white p-12 rounded-none border-2 border-[#EBE7DE] shadow-sm hover:shadow-[12px_12px_0px_0px_#F3F0E9] hover:border-[#3E4C37] transition-all duration-300 group relative"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: idx * 0.1 }}
+                        viewport={{ once: true }}
+                        className={`group relative p-10 overflow-hidden border border-[#EBE7DE] shadow-sm hover:shadow-2xl transition-all duration-500 rounded-none ${feature.size} ${feature.bg || 'bg-white'}`}
                     >
-                        <div className="w-16 h-16 bg-[#F3F0E9] flex items-center justify-center mb-10 group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-300 border border-[#EBE7DE]">
-                            {feature.icon}
-                        </div>
+                        {feature.image && (
+                            <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                                <img src={feature.image} alt="" className="w-full h-full object-cover grayscale" />
+                            </div>
+                        )}
 
-                        <h3 className="text-2xl font-black font-serif text-[#3E4C37] mb-6 uppercase tracking-tight">{feature.title}</h3>
-                        <p className="text-gray-500 text-lg leading-relaxed font-medium mb-10">
-                            {feature.desc}
-                        </p>
-
-                        <div className="flex flex-col gap-3">
-                            {feature.details.map((detail, i) => (
-                                <div key={i} className="flex items-center text-[#333333]/50 text-xs font-black uppercase tracking-[0.2em]">
-                                    <div className="w-1.5 h-1.5 bg-[#C6A87C] mr-3" />
-                                    {detail}
+                        <div className="relative z-10 h-full flex flex-col">
+                            <div className="flex items-center justify-between mb-10">
+                                <div className={`w-12 h-12 flex items-center justify-center border ${feature.bg ? 'border-white/20' : 'border-[#3E4C37]/10'} group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-500`}>
+                                    {feature.icon}
                                 </div>
-                            ))}
+                                <ArrowRight className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />
+                            </div>
+
+                            <h3 className="text-3xl font-black font-serif uppercase tracking-tighter mb-4">{feature.title}</h3>
+                            <p className={`text-lg font-medium mb-10 transition-colors ${feature.bg ? 'text-white/70' : 'text-[#333333]/60'}`}>
+                                {feature.desc}
+                            </p>
+
+                            <div className="mt-auto flex flex-wrap gap-3">
+                                {feature.details.map((detail, i) => (
+                                    <span key={i} className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] border ${feature.bg ? 'border-white/20 bg-white/5' : 'border-[#3E4C37]/10 bg-[#F3F0E9]'}`}>
+                                        {detail}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
+
+                        {/* Scanner Effect */}
+                        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C6A87C] to-transparent -translate-y-full group-hover:translate-y-full transition-all duration-[2000ms] ease-linear" />
                     </motion.div>
                 ))}
-            </motion.div>
+            </div>
         </section>
     )
 }

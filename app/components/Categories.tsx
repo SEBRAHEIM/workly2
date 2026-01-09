@@ -2,29 +2,26 @@
 
 import { categories } from '../data/categories'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react' // Assuming lucide-react is installed for the ArrowRight icon
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Users, Target, ShieldCheck, ArrowRight, Zap } from 'lucide-react' // Assuming lucide-react is installed for the ArrowRight icon
+import { useRef } from 'react'
 
 export default function Categories() {
     const cardVariants = {
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 30 },
         visible: { opacity: 1, y: 0 }
     };
 
     return (
-        <section className="px-6 py-32 max-w-7xl mx-auto bg-[#F8F7F2]">
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="mb-20 text-center"
-            >
-                <h2 className="text-4xl md:text-6xl font-serif font-black text-[#3E4C37] mb-6 uppercase tracking-tighter">Academic Disciplines</h2>
-                <div className="w-24 h-1 bg-[#C6A87C] mx-auto mb-6" />
-                <p className="text-[#333333]/60 text-xl md:text-2xl font-medium max-w-2xl mx-auto">
-                    Select a field of study to collaborate with specialized campus experts.
+        <section className="px-6 py-40 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
+            <div className="flex flex-col md:flex-row items-baseline justify-between mb-32 gap-6">
+                <h2 className="text-6xl md:text-9xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
+                    Dossiers <span className="text-[#C6A87C]">&</span> <br /> Domains.
+                </h2>
+                <p className="text-[#333333]/40 text-sm font-black uppercase tracking-[0.5em] vertical-text">
+                    Selection Protocol v4.0
                 </p>
-            </motion.div>
+            </div>
 
             <motion.div
                 initial="hidden"
@@ -33,33 +30,46 @@ export default function Categories() {
                 variants={{
                     visible: { transition: { staggerChildren: 0.1 } }
                 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-[#EBE7DE] border border-[#EBE7DE]"
             >
                 {categories.map((cat, idx) => (
                     <motion.div
                         key={idx}
                         variants={cardVariants}
-                        whileHover={{
-                            y: -8,
-                            boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
-                        }}
+                        className="bg-white group relative overflow-hidden"
                     >
                         <Link
                             href={`/category/${cat.slug}`}
-                            className="block group touch-manipulation transition-all duration-300 h-full border-t-4 border-[#3E4C37]"
+                            className="block p-12 h-full transition-all duration-500 hover:bg-[#3E4C37] group"
                         >
-                            <div className="bg-white p-12 rounded-none border border-[#EBE7DE] border-t-0 shadow-sm transition-all duration-500 h-full flex flex-col items-center text-center cursor-pointer relative overflow-hidden">
-                                <div className="w-20 h-20 bg-[#F3F0E9] rounded-none flex items-center justify-center mb-8 text-[#3E4C37] group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-500 border border-[#EBE7DE]">
-                                    <cat.icon className="w-10 h-10 transition-transform group-hover:scale-110" />
-                                </div>
+                            <div className="flex flex-col h-full relative z-10">
+                                <span className="text-[#C6A87C] font-black text-xs mb-10 tracking-widest group-hover:text-white transition-colors">
+                                    0{idx + 1} / SECTOR
+                                </span>
 
-                                <h3 className="text-2xl font-black font-serif text-[#333333] mb-4 uppercase tracking-tight group-hover:text-[#3E4C37] transition-colors">{cat.title}</h3>
-                                <p className="text-gray-500 text-lg leading-relaxed font-medium mb-8">{cat.desc}</p>
+                                <cat.icon className="w-12 h-12 text-[#3E4C37] mb-8 group-hover:text-white transition-colors group-hover:scale-110 duration-500" />
 
-                                <div className="mt-auto pt-6 border-t border-[#F3F0E9] w-full flex items-center justify-center text-[#3E4C37] font-black text-sm uppercase tracking-[0.3em] group-hover:bg-[#F3F0E9] py-3 transition-all duration-300">
-                                    Explore Expertise
-                                    <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                <h3 className="text-2xl font-black font-serif text-[#333333] mb-4 uppercase tracking-tight group-hover:text-white transition-colors">
+                                    {cat.title}
+                                </h3>
+
+                                <p className="text-gray-400 text-sm leading-relaxed font-medium mb-12 group-hover:text-white/60 transition-colors">
+                                    {cat.desc}
+                                </p>
+
+                                <div className="mt-auto flex items-center justify-between">
+                                    <div className="flex gap-1">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="w-1.5 h-1.5 bg-[#C6A87C] group-hover:bg-white transition-colors" />
+                                        ))}
+                                    </div>
+                                    <ArrowRight className="w-5 h-5 text-[#3E4C37] group-hover:text-white transition-all -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100" />
                                 </div>
+                            </div>
+
+                            {/* Decorative Background Mask */}
+                            <div className="absolute bottom-0 right-0 text-[10rem] font-black text-[#F3F0E9] translate-x-1/3 translate-y-1/3 pointer-events-none group-hover:text-white/5 transition-colors uppercase">
+                                {cat?.title?.[0]}
                             </div>
                         </Link>
                     </motion.div>

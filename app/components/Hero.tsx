@@ -59,16 +59,16 @@ function KineticSculpture() {
                 </Float>
             ))}
 
-            {/* Data Fragments */}
-            {Array.from({ length: 20 }).map((_, i) => (
+            {/* Data Fragments - REDUCED COUNT for cleaner look */}
+            {Array.from({ length: 8 }).map((_, i) => (
                 <Float key={i} speed={Math.random() * 2} position={[
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 5
+                    (Math.random() - 0.5) * 8,
+                    (Math.random() - 0.5) * 8,
+                    (Math.random() - 0.5) * 4
                 ]}>
                     <mesh rotation={[Math.random(), Math.random(), 0]}>
-                        <boxGeometry args={[0.1, 0.1, 0.1]} />
-                        <meshStandardMaterial color="#3E4C37" />
+                        <boxGeometry args={[0.08, 0.08, 0.08]} />
+                        <meshStandardMaterial color="#3E4C37" transparent opacity={0.6} />
                     </mesh>
                 </Float>
             ))}
@@ -134,38 +134,35 @@ export default function Hero({ hideCta = false }: HeroProps) {
                     </Suspense>                    </Canvas>
             </div>
 
-            {/* Static Background Accents */}
+            {/* Static Background Accents REMOVED for clean minimal feel */}
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-20 left-20 border-l-[1px] border-t-[1px] border-[#3E4C37]/30 w-40 h-40" />
-                <div className="absolute bottom-20 right-20 border-r-[1px] border-b-[1px] border-[#3E4C37]/30 w-40 h-40" />
-                <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#3E4C37 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+                <div className="absolute inset-0 opacity-[0.01]" style={{ backgroundImage: 'radial-gradient(#3E4C37 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
             </div>
 
             <motion.div
                 style={{ y, opacity }}
                 className="relative z-10 container mx-auto px-6 flex flex-col items-center text-center"
             >
-                {/* Headline: WORKLY. CREATIVE. */}
-                <h1 ref={titleRef} className="perspective-1000 mb-12">
-                    <span className="block font-serif font-black text-7xl md:text-[12rem] text-[#3E4C37] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
+                {/* Headline: WORKLY. CREATIVE. - SCALED DOWN */}
+                <h1 ref={titleRef} className="perspective-1000 mb-16">
+                    <span className="block font-serif font-black text-6xl md:text-[9rem] text-[#3E4C37] leading-[0.8] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
                         Workly.
                     </span>
-                    <span className="block font-serif font-black text-7xl md:text-[12rem] text-[#333333] leading-[0.75] tracking-tighter uppercase mt-4">
+                    <span className="block font-serif font-black text-6xl md:text-[9rem] text-[#333333] leading-[0.8] tracking-tighter uppercase mt-4">
                         Creative.
                     </span>
                 </h1>
 
-                {/* Subtext with Group Vision */}
+                {/* Subtext with Group Vision - CLEANER WEIGHT */}
                 <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.8, duration: 1 }}
-                    className="flex flex-col md:flex-row items-center gap-8 mb-16 max-w-4xl"
+                    className="flex flex-col items-center mb-20 max-w-3xl border-t border-[#EBE7DE] pt-12"
                 >
-                    <div className="h-[1px] w-24 bg-[#C6A87C] hidden md:block" />
-                    <p className="text-[#333333]/70 text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1">
-                        The definitive ecosystem for <span className="text-[#3E4C37] font-black underline decoration-4 underline-offset-8">independent talent</span> and creative visionaries. Linking elite freelancers with the projects that matter.
+                    <p className="text-[#333333]/60 text-lg md:text-xl font-medium leading-relaxed max-w-2xl">
+                        The definitive ecosystem for <span className="text-[#3E4C37] font-bold">independent talent</span> and creative visionaries. Linking world-class creators with projects that matter.
                     </p>
                 </motion.div>
 
@@ -180,7 +177,7 @@ export default function Hero({ hideCta = false }: HeroProps) {
                             onClick={handleJoinClick}
                             whileHover={{ scale: 1.05, y: -5 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-[#3E4C37] text-white px-16 py-8 rounded-none text-xl font-black uppercase tracking-[0.2em] shadow-[12px_12px_0px_0px_#C6A87C] hover:shadow-[4px_4px_0px_0px_#C6A87C] transition-all relative overflow-hidden group"
+                            className="bg-[#3E4C37] text-white px-12 py-6 rounded-none text-lg font-black uppercase tracking-[0.2em] shadow-[8px_8px_0px_0px_#C6A87C] hover:shadow-[4px_4px_0px_0px_#C6A87C] transition-all relative overflow-hidden group"
                         >
                             <span className="relative z-10 flex items-center">
                                 Initialize Enrollment

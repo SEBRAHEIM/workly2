@@ -126,7 +126,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                                 {creator.languages && creator.languages.length > 0 && (
                                                     <div className="flex gap-1 items-center">
                                                         {creator.languages.map((lang: string) => {
-                                                            const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ض' : lang.substring(0, 2).toUpperCase()
+                                                            const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ع' : lang.substring(0, 2).toUpperCase()
                                                             return (
                                                                 <span key={lang} className="text-[8px] font-black uppercase px-1.5 py-0.5 bg-gray-100 text-gray-400 rounded-sm border border-gray-200">
                                                                     {displayAbbr}

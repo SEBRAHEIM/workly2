@@ -169,34 +169,7 @@ export default function Hero({ hideCta = false }: HeroProps) {
                     </p>
                 </motion.div>
 
-                {!hideCta && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1, duration: 0.8 }}
-                        className="flex flex-col sm:flex-row gap-8 items-center"
-                    >
-                        <motion.button
-                            onClick={handleJoinClick}
-                            whileHover={{ scale: 1.05, y: -5 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-[#3E4C37] text-white px-8 sm:px-12 md:px-16 py-4 sm:py-6 md:py-8 rounded-none text-base sm:text-lg md:text-xl font-black uppercase tracking-[0.2em] shadow-[8px_8px_0px_0px_#C6A87C] md:shadow-[12px_12px_0px_0px_#C6A87C] hover:shadow-[4px_4px_0px_0px_#C6A87C] transition-all relative overflow-hidden group"
-                        >
-                            <span className="relative z-10 flex items-center">
-                                Initialize Enrollment
-                                <ArrowRight className="ml-4 group-hover:translate-x-2 transition-transform" />
-                            </span>
-                            <div className="absolute inset-0 bg-[#C6A87C] translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        </motion.button>
-
-                        <Link
-                            href="/how-it-works"
-                            className="text-[#3E4C37] font-black uppercase tracking-widest text-sm border-b-2 border-[#C6A87C] pb-2 hover:text-[#C6A87C] transition-colors"
-                        >
-                            Technical Methodology
-                        </Link>
-                    </motion.div>
-                )}
+                {/* CTAs REMOVED */}
             </motion.div>
 
             {/* Scroll Indicator */}

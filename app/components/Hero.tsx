@@ -118,17 +118,17 @@ export default function Hero({ hideCta = false }: HeroProps) {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C6A87C]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </motion.div>
 
-                {/* GSAP Animated Headline */}
+                {/* Headline: WORKLY. GLOBAL. */}
                 <h1 ref={titleRef} className="perspective-1000 mb-12">
                     <span className="block font-serif font-black text-7xl md:text-[12rem] text-[#3E4C37] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
-                        Brilliance
+                        Workly.
                     </span>
                     <span className="block font-serif font-black text-7xl md:text-[12rem] text-[#333333] leading-[0.75] tracking-tighter uppercase mt-4">
-                        Codified.
+                        Global.
                     </span>
                 </h1>
 
-                {/* Subtext with High-End Layout */}
+                {/* Subtext with Global Vision */}
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -138,7 +138,7 @@ export default function Hero({ hideCta = false }: HeroProps) {
                 >
                     <div className="h-[1px] w-24 bg-[#C6A87C] hidden md:block" />
                     <p className="text-[#333333]/70 text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1">
-                        We are engineering the premier network for <span className="text-[#3E4C37] font-black underline decoration-4 underline-offset-8">intellectual synergy.</span> Linking ambitious minds with university-vetted specialists.
+                        The definitive ecosystem for <span className="text-[#3E4C37] font-black underline decoration-4 underline-offset-8">elite freelancers</span> and student visionaries. Linking world-class creators with the projects that define the future.
                     </p>
                 </motion.div>
 

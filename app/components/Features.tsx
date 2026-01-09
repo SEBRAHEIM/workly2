@@ -11,24 +11,24 @@ interface FeaturesProps {
 export default function Features({ hideCta = false }: FeaturesProps) {
     const features = [
         {
-            title: "The Campus Elite",
-            desc: "We manually vet every creator to ensure you work with the top 1% of student talent.",
+            title: "Rigorous Vetting",
+            desc: "Every creator undergoes a multi-stage review of their academic and professional portfolio.",
             details: ["Portfolio Verified", "Top Grades", "Fast Response"],
-            icon: <Users size={28} />,
+            icon: <Users size={24} />,
             color: "#3E4C37"
         },
         {
-            title: "Precision Matching",
-            desc: "Our smart algorithms find the perfect specialist for your unique requirements.",
+            title: "Strategic Matching",
+            desc: "We analyze project requirements to match you with the precise expertise your task demands.",
             details: ["Niche Experts", "Tool-Specific", "Budget Friendly"],
-            icon: <Target size={28} />,
+            icon: <Target size={24} />,
             color: "#C6A87C"
         },
         {
-            title: "Guaranteed Quality",
-            desc: "Payment is held in escrow and only released when you're 100% satisfied.",
+            title: "Institutional Trust",
+            desc: "Secure escrow and satisfaction guarantees ensure every project meets the highest standards.",
             details: ["Secure Escrow", "Unlimited Edits", "24/7 Support"],
-            icon: <ShieldCheck size={28} />,
+            icon: <ShieldCheck size={24} />,
             color: "#333333"
         }
     ];
@@ -38,46 +38,49 @@ export default function Features({ hideCta = false }: FeaturesProps) {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2
+                staggerChildren: 0.15
             }
         }
     };
 
     const cardVariants = {
-        hidden: { y: 50, opacity: 0 },
+        hidden: { y: 30, opacity: 0 },
         visible: {
             y: 0,
             opacity: 1,
-            transition: { duration: 0.6 }
+            transition: { duration: 0.5 }
         }
     };
 
     return (
-        <section className="px-6 py-32 max-w-7xl mx-auto overflow-hidden">
+        <section className="px-6 py-32 max-w-7xl mx-auto relative overflow-hidden bg-white">
+            {/* Background Texture */}
+            <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
+
             <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12"
+                className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 relative z-10"
             >
-                <div className="max-w-3xl">
-                    <h2 className="font-serif font-black text-5xl md:text-7xl text-[#3E4C37] mb-8 leading-[0.9]">
-                        Elevate your academic <br /> standards.
+                <div className="max-w-4xl">
+                    <h2 className="font-serif font-black text-5xl md:text-7xl text-[#3E4C37] mb-8 leading-[0.9] uppercase tracking-tighter">
+                        The Standard for <br /> <span className="text-[#C6A87C]">Academic creators.</span>
                     </h2>
-                    <p className="text-[#333333]/60 text-xl md:text-2xl font-medium max-w-xl leading-relaxed">
-                        Don't just get it done. Get it done by the best creators
-                        on campus who understand your vision.
+                    <p className="text-[#333333]/70 text-xl md:text-2xl font-medium max-w-2xl leading-relaxed border-l-4 border-[#3E4C37] pl-6">
+                        We don't just facilitate tasks; we curate brilliance.
+                        Partner with creators who share your commitment to excellence.
                     </p>
                 </div>
                 {!hideCta && (
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
                         <Link
                             href="/join"
-                            className="bg-[#3E4C37] text-white px-10 py-5 rounded-2xl text-xl font-bold hover:bg-black transition-all shadow-xl flex items-center group"
+                            className="bg-[#3E4C37] text-white px-10 py-5 rounded-none text-xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-[6px_6px_0px_0px_#C6A87C] flex items-center group"
                         >
-                            Become a Student
-                            <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            Enroll Now
+                            <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </motion.div>
                 )}
@@ -88,32 +91,30 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-10"
+                className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10"
             >
                 {features.map((feature, idx) => (
                     <motion.div
                         key={idx}
                         variants={cardVariants}
-                        whileHover={{ y: -15 }}
-                        className="bg-white p-10 rounded-[3rem] border border-[#EBE7DE] shadow-sm hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
+                        whileHover={{ y: -10 }}
+                        className="bg-white p-12 rounded-none border-2 border-[#EBE7DE] shadow-sm hover:shadow-[12px_12px_0px_0px_#F3F0E9] hover:border-[#3E4C37] transition-all duration-300 group relative"
                     >
-                        {/* Interactive Background Shape */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#F3F0E9] rounded-bl-[5rem] -mr-10 -mt-10 group-hover:bg-[#3E4C37] transition-colors duration-500" />
-
-                        <div className="w-20 h-20 rounded-[2rem] bg-[#F3F0E9] flex items-center justify-center mb-10 group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-500 relative z-10">
+                        <div className="w-16 h-16 bg-[#F3F0E9] flex items-center justify-center mb-10 group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-300 border border-[#EBE7DE]">
                             {feature.icon}
                         </div>
 
-                        <h3 className="text-2xl font-black font-serif text-[#3E4C37] mb-4 relative z-10">{feature.title}</h3>
-                        <p className="text-gray-500 text-lg leading-relaxed font-medium mb-8 relative z-10">
+                        <h3 className="text-2xl font-black font-serif text-[#3E4C37] mb-6 uppercase tracking-tight">{feature.title}</h3>
+                        <p className="text-gray-500 text-lg leading-relaxed font-medium mb-10">
                             {feature.desc}
                         </p>
 
-                        <div className="flex flex-wrap gap-2 relative z-10">
+                        <div className="flex flex-col gap-3">
                             {feature.details.map((detail, i) => (
-                                <span key={i} className="px-3 py-1 bg-[#F3F0E9] text-[#333333]/60 text-xs font-black uppercase tracking-wider rounded-lg group-hover:bg-white/50 transition-colors">
+                                <div key={i} className="flex items-center text-[#333333]/50 text-xs font-black uppercase tracking-[0.2em]">
+                                    <div className="w-1.5 h-1.5 bg-[#C6A87C] mr-3" />
                                     {detail}
-                                </span>
+                                </div>
                             ))}
                         </div>
                     </motion.div>

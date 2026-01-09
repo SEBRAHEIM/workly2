@@ -21,110 +21,67 @@ export default function Hero({ hideCta = false }: HeroProps) {
     }, []);
 
     return (
-        <section className="flex flex-col items-center justify-center text-center px-4 py-24 md:py-48 relative overflow-hidden bg-[#F3F0E9]">
-            {/* Interactive Mouse Follower */}
+        <section className="flex flex-col items-center justify-center text-center px-4 py-24 md:py-48 relative overflow-hidden bg-[#F8F7F2] border-b border-[#EBE7DE]">
+            {/* Structured Academic Background */}
+            <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
+                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#3E4C37 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+            </div>
+
+            {/* Interactive Focal Point */}
             <motion.div
-                className="fixed pointer-events-none z-0 w-[600px] h-[600px] bg-[#3E4C37]/5 rounded-full blur-[100px]"
+                className="fixed pointer-events-none z-0 w-[500px] h-[500px] bg-[#3E4C37]/5 rounded-full blur-[100px]"
                 animate={{
-                    x: mousePosition.x - 300,
-                    y: mousePosition.y - 300,
+                    x: mousePosition.x - 250,
+                    y: mousePosition.y - 250,
                 }}
-                transition={{ type: "spring", damping: 30, stiffness: 200 }}
+                transition={{ type: "spring", damping: 40, stiffness: 150 }}
             />
 
-            {/* Animated Background Blobs */}
+            {/* Sharp Geometric Accents */}
             <motion.div
-                className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-white opacity-60 blur-[130px]"
-                animate={{
-                    x: [0, 50, 0],
-                    y: [0, 30, 0],
-                }}
-                transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-            />
-            <motion.div
-                className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#E6E2D6] opacity-50 blur-[150px]"
-                animate={{
-                    x: [0, -40, 0],
-                    y: [0, -60, 0],
-                }}
-                transition={{
-                    duration: 12,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-            />
-
-            {/* Floating Decorative Icons */}
-            <motion.div
-                className="absolute top-[20%] left-[10%] text-[#C6A87C]/20 hidden md:block"
-                animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[10%] left-[5%] text-[#3E4C37]/10 hidden lg:block"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
             >
-                <Star size={48} />
-            </motion.div>
-            <motion.div
-                className="absolute bottom-[20%] right-[15%] text-[#3E4C37]/10 hidden md:block"
-                animate={{ y: [0, 20, 0], rotate: [0, -15, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-                <Zap size={64} fill="currentColor" />
-            </motion.div>
-            <motion.div
-                className="absolute top-[15%] right-[20%] text-[#3E4C37]/15 hidden md:block"
-                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-                <GraduationCap size={40} />
+                <div className="w-64 h-64 border border-current rounded-full" />
             </motion.div>
 
-            <div className="relative z-10 flex flex-col items-center max-w-5xl">
-                {/* Floating Badge */}
+            <div className="relative z-10 flex flex-col items-center max-w-6xl">
+                {/* Academic Badge */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="inline-flex items-center space-x-2 bg-white/40 backdrop-blur-xl px-4 py-2 rounded-full border border-white/40 mb-10 shadow-sm"
+                    className="inline-flex items-center space-x-3 bg-[#3E4C37] px-5 py-2 rounded-lg mb-12 shadow-xl"
                 >
-                    <motion.span
-                        animate={{ scale: [1, 1.3, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="flex h-2 w-2 rounded-full bg-[#3E4C37]"
-                    />
-                    <span className="text-[#3E4C37] text-xs md:text-sm font-black tracking-[0.2em] uppercase">
-                        The Future of University Help
+                    <GraduationCap size={16} className="text-[#C6A87C]" />
+                    <span className="text-white text-xs md:text-sm font-black tracking-[0.3em] uppercase">
+                        University Excellence
                     </span>
                     <Sparkles size={14} className="text-[#C6A87C]" />
                 </motion.div>
 
-                {/* Main Headline with Split Text Effect */}
+                {/* Serious Headline */}
                 <motion.h1
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="font-serif font-black text-6xl md:text-8xl lg:text-9xl text-[#3E4C37] leading-[0.85] mb-10 tracking-tighter"
+                    className="font-serif font-black text-6xl md:text-8xl lg:text-[10rem] text-[#3E4C37] leading-[0.8] mb-12 tracking-tight uppercase"
+                    style={{ fontFeatureSettings: '"kern" 1, "liga" 1' }}
                 >
-                    University projects. <br />
-                    <motion.span
-                        animate={{ color: ["#33333333", "#3E4C37", "#33333333"] }}
-                        transition={{ duration: 4, repeat: Infinity }}
-                    >
-                        Perfected for you.
-                    </motion.span>
+                    University <br />
+                    <span className="text-[#333333]">Elevated.</span>
                 </motion.h1>
 
-                {/* Descriptive Text */}
+                {/* Structured Body Text */}
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.6 }}
-                    className="text-[#333333]/70 text-lg md:text-2xl font-medium mb-14 max-w-2xl leading-relaxed"
+                    className="text-[#333333]/80 text-xl md:text-3xl font-medium mb-16 max-w-3xl leading-snug border-l-4 border-[#C6A87C] pl-8 italic"
                 >
-                    Partner with elite campus creators to transform your ideas
-                    into <span className="text-[#3E4C37] font-bold">top-tier work.</span> Zero stress, 100% excellence.
+                    The premier destination for academic collaboration.
+                    Connecting visionary students with <span className="text-[#3E4C37] font-black not-italic underline decoration-[#C6A87C] decoration-4 underline-offset-8">elite campus creators.</span>
                 </motion.p>
 
                 {!hideCta && (
@@ -132,32 +89,29 @@ export default function Hero({ hideCta = false }: HeroProps) {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.8 }}
-                        className="flex flex-col sm:flex-row gap-6"
+                        className="flex flex-col sm:flex-row gap-8"
                     >
                         <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                         >
                             <Link
                                 href="/join"
-                                className="inline-block bg-[#3E4C37] text-white px-12 py-6 rounded-3xl text-xl font-bold hover:bg-black transition-colors shadow-2xl relative overflow-hidden group"
+                                className="inline-block bg-[#3E4C37] text-white px-14 py-7 rounded-xl text-xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-[8px_8px_0px_0px_#C6A87C]"
                             >
-                                <motion.div
-                                    className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 pointer-events-none"
-                                />
-                                Get Started Now
+                                Get Started
                             </Link>
                         </motion.div>
 
                         <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                         >
                             <Link
                                 href="/how-it-works"
-                                className="inline-block bg-white/40 backdrop-blur-md text-[#3E4C37] px-12 py-6 rounded-3xl text-xl font-bold hover:bg-white transition-all border border-[#EBE7DE] shadow-lg"
+                                className="inline-block bg-white text-[#3E4C37] px-14 py-7 rounded-xl text-xl font-black uppercase tracking-widest border-2 border-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-lg"
                             >
-                                Explore Workly
+                                Our Methodology
                             </Link>
                         </motion.div>
                     </motion.div>

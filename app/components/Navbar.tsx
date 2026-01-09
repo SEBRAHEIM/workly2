@@ -34,13 +34,13 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="flex items-center justify-between px-6 py-6 sticky top-0 bg-[#F3F0E9]/90 backdrop-blur-xl z-50 border-b border-[#E6E2D6]">
+            <nav className="flex items-center justify-between px-4 md:px-6 py-4 md:py-6 sticky top-0 bg-[#F3F0E9]/90 backdrop-blur-xl z-50 border-b border-[#E6E2D6]">
                 <div className="flex items-center">
                     <motion.button
                         whileHover="hover"
                         whileTap="tap"
                         onClick={() => setIsMenuOpen(true)}
-                        className="w-12 h-12 bg-white border border-[#E6E2D6] flex flex-col items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm group"
+                        className="w-10 h-10 md:w-12 md:h-12 bg-white border border-[#E6E2D6] flex flex-col items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm group"
                     >
                         <motion.div className="flex flex-col gap-1.5 items-center justify-center">
                             <motion.span
@@ -66,7 +66,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <Link href="/" className="text-2xl tracking-[0.4em] text-[#3E4C37] font-serif font-black uppercase">
+                    <Link href="/" className="text-lg md:text-2xl tracking-[0.2em] md:tracking-[0.4em] text-[#3E4C37] font-serif font-black uppercase">
                         Workly
                     </Link>
                 </div>
@@ -76,11 +76,11 @@ export default function Navbar() {
                         <Link href="/join">
                             <motion.button
                                 whileHover="hover"
-                                className="bg-[#3E4C37] text-white px-8 py-3 text-[10px] font-black uppercase tracking-[0.2em] relative overflow-hidden transition-colors shadow-[4px_4px_0px_0px_#C6A87C]"
+                                className="bg-[#3E4C37] text-white px-4 md:px-8 py-2 md:py-3 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] relative overflow-hidden transition-colors shadow-[2px_2px_0px_0px_#C6A87C] md:shadow-[4px_4px_0px_0px_#C6A87C]"
                             >
                                 <span className="relative z-10 flex items-center">
                                     Join
-                                    <ArrowRight size={14} className="ml-2" />
+                                    <ArrowRight size={12} className="ml-1 md:ml-2" />
                                 </span>
                                 <motion.div
                                     variants={{

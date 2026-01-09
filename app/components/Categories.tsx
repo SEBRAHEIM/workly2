@@ -15,10 +15,10 @@ export default function Categories() {
     return (
         <section className="px-6 py-40 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
             <div className="flex flex-col md:flex-row items-baseline justify-between mb-32 gap-6">
-                <h2 className="text-6xl md:text-9xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
+                <h2 className="text-5xl md:text-9xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
                     Explore <span className="text-[#C6A87C]">Categories.</span>
                 </h2>
-                <p className="text-[#333333]/40 text-sm font-black uppercase tracking-[0.5em] vertical-text">
+                <p className="text-[#333333]/40 text-[10px] md:text-sm font-black uppercase tracking-[0.5em] md:vertical-text">
                     Worldwide Expertise v4.1
                 </p>
             </div>
@@ -40,7 +40,7 @@ export default function Categories() {
                     >
                         <Link
                             href={`/category/${cat.slug}`}
-                            className="block p-12 h-full transition-all duration-500 hover:bg-[#3E4C37] group"
+                            className="block p-8 md:p-12 h-full transition-all duration-500 hover:bg-[#3E4C37] group"
                         >
                             <div className="flex flex-col h-full relative z-10">
                                 <span className="text-[#C6A87C] font-black text-xs mb-10 tracking-widest group-hover:text-white transition-colors">

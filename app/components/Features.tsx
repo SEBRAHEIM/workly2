@@ -55,10 +55,10 @@ export default function Features({ hideCta = false }: FeaturesProps) {
 
     return (
         <section ref={sectionRef} className="px-6 py-40 max-w-7xl mx-auto relative overflow-hidden">
-            {/* Parallax Background Text */}
+            {/* Parallax Background Text - RESPONSIVE SIZE */}
             <motion.div
                 style={{ x: xMove }}
-                className="absolute top-0 left-0 text-[20rem] font-black text-[#3E4C37]/5 whitespace-nowrap pointer-events-none select-none uppercase tracking-tighter"
+                className="absolute top-0 left-0 text-[10rem] md:text-[20rem] font-black text-[#3E4C37]/5 whitespace-nowrap pointer-events-none select-none uppercase tracking-tighter"
             >
                 Precision Quality Trust Brilliance
             </motion.div>
@@ -72,7 +72,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         viewport={{ once: true }}
                         className="max-w-4xl"
                     >
-                        <h2 className="font-serif font-black text-6xl md:text-9xl text-[#3E4C37] leading-[0.8] tracking-tighter uppercase mb-10">
+                        <h2 className="font-serif font-black text-5xl md:text-9xl text-[#3E4C37] leading-[0.8] tracking-tighter uppercase mb-10">
                             The New <br /> <span className="text-[#C6A87C]">Standard.</span>
                         </h2>
                         <div className="h-[2px] w-full bg-[#EBE7DE] mb-10 overflow-hidden">
@@ -94,7 +94,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ delay: idx * 0.1 }}
                         viewport={{ once: true }}
-                        className={`group relative p-10 overflow-hidden border border-[#EBE7DE] shadow-sm hover:shadow-2xl transition-all duration-500 rounded-none ${feature.size} ${feature.bg || 'bg-white'}`}
+                        className={`group relative p-8 md:p-10 overflow-hidden border border-[#EBE7DE] shadow-sm hover:shadow-2xl transition-all duration-500 rounded-none ${feature.size} ${feature.bg || 'bg-white'}`}
                     >
                         {feature.image && (
                             <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500">

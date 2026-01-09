@@ -59,16 +59,16 @@ function KineticSculpture() {
                 </Float>
             ))}
 
-            {/* Data Fragments - REDUCED COUNT for cleaner look */}
-            {Array.from({ length: 8 }).map((_, i) => (
+            {/* Data Fragments - RESTORED RICH COUNT */}
+            {Array.from({ length: 24 }).map((_, i) => (
                 <Float key={i} speed={Math.random() * 2} position={[
-                    (Math.random() - 0.5) * 8,
-                    (Math.random() - 0.5) * 8,
-                    (Math.random() - 0.5) * 4
+                    (Math.random() - 0.5) * 12,
+                    (Math.random() - 0.5) * 12,
+                    (Math.random() - 0.5) * 6
                 ]}>
                     <mesh rotation={[Math.random(), Math.random(), 0]}>
-                        <boxGeometry args={[0.08, 0.08, 0.08]} />
-                        <meshStandardMaterial color="#3E4C37" transparent opacity={0.6} />
+                        <boxGeometry args={[0.12, 0.12, 0.12]} />
+                        <meshStandardMaterial color="#3E4C37" transparent opacity={0.4} />
                     </mesh>
                 </Float>
             ))}
@@ -127,42 +127,45 @@ export default function Hero({ hideCta = false }: HeroProps) {
             {/* 3D Canvas Layer */}
             <div className="absolute inset-0 z-0 opacity-40">
                 <Canvas>
-                    <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
+                    <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
                     <Suspense fallback={null}>
                         <Scene />
                         <Environment preset="city" />
-                    </Suspense>                    </Canvas>
+                    </Suspense>                </Canvas>
             </div>
 
-            {/* Static Background Accents REMOVED for clean minimal feel */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-0 opacity-[0.01]" style={{ backgroundImage: 'radial-gradient(#3E4C37 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+            {/* Static Background Accents - RESTORED & MOBILE TUNED */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-10 md:top-20 left-10 md:left-20 border-l-[1px] border-t-[1px] border-[#3E4C37]/20 w-20 h-20 md:w-40 md:h-40" />
+                <div className="absolute bottom-10 md:bottom-20 right-10 md:right-20 border-r-[1px] border-b-[1px] border-[#3E4C37]/20 w-20 h-20 md:w-40 md:h-40" />
+                <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#3E4C37 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
             </div>
 
             <motion.div
                 style={{ y, opacity }}
                 className="relative z-10 container mx-auto px-6 flex flex-col items-center text-center"
             >
-                {/* Headline: WORKLY. CREATIVE. - SCALED DOWN */}
-                <h1 ref={titleRef} className="perspective-1000 mb-16">
-                    <span className="block font-serif font-black text-6xl md:text-[9rem] text-[#3E4C37] leading-[0.8] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
+                {/* Headline: WORKLY. CREATIVE. - RESTORED & RESPONSIVE */}
+                <h1 ref={titleRef} className="perspective-1000 mb-12">
+                    <span className="block font-serif font-black text-6xl sm:text-7xl md:text-[12rem] text-[#3E4C37] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
                         Workly.
                     </span>
-                    <span className="block font-serif font-black text-6xl md:text-[9rem] text-[#333333] leading-[0.8] tracking-tighter uppercase mt-4">
+                    <span className="block font-serif font-black text-6xl sm:text-7xl md:text-[12rem] text-[#333333] leading-[0.75] tracking-tighter uppercase mt-2 md:mt-4">
                         Creative.
                     </span>
                 </h1>
 
-                {/* Subtext with Group Vision - CLEANER WEIGHT */}
+                {/* Subtext with Group Vision - RESTORED WEIGHT & MOBILE TUNED */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.8, duration: 1 }}
-                    className="flex flex-col items-center mb-20 max-w-3xl border-t border-[#EBE7DE] pt-12"
+                    className="flex flex-col md:flex-row items-center gap-6 md:gap-8 mb-12 md:mb-16 max-w-4xl"
                 >
-                    <p className="text-[#333333]/60 text-lg md:text-xl font-medium leading-relaxed max-w-2xl">
-                        The definitive ecosystem for <span className="text-[#3E4C37] font-bold">independent talent</span> and creative visionaries. Linking world-class creators with projects that matter.
+                    <div className="h-[1px] w-12 md:w-24 bg-[#C6A87C] hidden sm:block" />
+                    <p className="text-[#333333]/70 text-base sm:text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1 px-4 md:px-0">
+                        The definitive ecosystem for <span className="text-[#3E4C37] font-black underline decoration-2 md:decoration-4 underline-offset-4 md:underline-offset-8 transition-all hover:text-[#C6A87C]">independent talent</span> and creative visionaries. Linking elite freelancers with projects that matter.
                     </p>
                 </motion.div>
 
@@ -177,7 +180,7 @@ export default function Hero({ hideCta = false }: HeroProps) {
                             onClick={handleJoinClick}
                             whileHover={{ scale: 1.05, y: -5 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-[#3E4C37] text-white px-12 py-6 rounded-none text-lg font-black uppercase tracking-[0.2em] shadow-[8px_8px_0px_0px_#C6A87C] hover:shadow-[4px_4px_0px_0px_#C6A87C] transition-all relative overflow-hidden group"
+                            className="bg-[#3E4C37] text-white px-8 sm:px-12 md:px-16 py-4 sm:py-6 md:py-8 rounded-none text-base sm:text-lg md:text-xl font-black uppercase tracking-[0.2em] shadow-[8px_8px_0px_0px_#C6A87C] md:shadow-[12px_12px_0px_0px_#C6A87C] hover:shadow-[4px_4px_0px_0px_#C6A87C] transition-all relative overflow-hidden group"
                         >
                             <span className="relative z-10 flex items-center">
                                 Initialize Enrollment

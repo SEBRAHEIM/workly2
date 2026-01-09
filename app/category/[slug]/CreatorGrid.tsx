@@ -104,6 +104,18 @@ export default async function CreatorGrid({
                             <span className="bg-[#F3F0E9] text-[#555] px-2 py-0.5 rounded-md whitespace-nowrap">
                                 Level {creator.level || 1}
                             </span>
+                            {creator.languages && creator.languages.length > 0 && (
+                                <div className="flex gap-1 items-center">
+                                    {creator.languages.map((lang: string) => {
+                                        const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'AR' : lang.substring(0, 2).toUpperCase()
+                                        return (
+                                            <span key={lang} className="text-[9px] font-black uppercase px-1.5 py-0.5 bg-[#3E4C37]/5 text-[#3E4C37] rounded-md border border-[#3E4C37]/10">
+                                                {displayAbbr}
+                                            </span>
+                                        )
+                                    })}
+                                </div>
+                            )}
                         </div>
 
                         {/* Actions */}

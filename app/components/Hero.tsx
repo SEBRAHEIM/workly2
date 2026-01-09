@@ -145,21 +145,6 @@ export default function Hero({ hideCta = false }: HeroProps) {
                 style={{ y, opacity }}
                 className="relative z-10 container mx-auto px-6 flex flex-col items-center text-center"
             >
-                {/* Brand Badge */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                    className="inline-flex items-center space-x-3 bg-white/50 backdrop-blur-2xl border border-[#3E4C37]/10 px-6 py-2.5 rounded-full mb-12 cursor-default group overflow-hidden"
-                >
-                    <Layers size={18} className="text-[#3E4C37] group-hover:rotate-12 transition-transform" />
-                    <span className="text-[#3E4C37] text-xs md:text-sm font-black tracking-[0.4em] uppercase">
-                        Premier Creation Network
-                    </span>
-                    <Zap size={16} className="text-[#C6A87C] group-hover:scale-125 transition-transform" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C6A87C]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                </motion.div>
-
                 {/* Headline: WORKLY. CREATIVE. */}
                 <h1 ref={titleRef} className="perspective-1000 mb-12">
                     <span className="block font-serif font-black text-7xl md:text-[12rem] text-[#3E4C37] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">

@@ -101,7 +101,7 @@ export default function SubmissionReview({
                     {submissionNotes && (
                         <div className="pl-2 border-l-2 border-purple-200">
                             <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Creator Notes</p>
-                            <p className="text-sm text-gray-600 italic">"{submissionNotes}"</p>
+                            <p className="text-sm text-gray-600 italic" dir="auto">"{submissionNotes}"</p>
                         </div>
                     )}
                 </div>
@@ -139,6 +139,7 @@ export default function SubmissionReview({
 
                         <textarea
                             placeholder="Describe what changes you need..."
+                            dir="auto"
                             className="w-full p-3 rounded-lg border border-orange-200 text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none h-24 mb-3 bg-white"
                             value={revisionNotes}
                             onChange={(e) => setRevisionNotes(e.target.value)}

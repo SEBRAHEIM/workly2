@@ -10,7 +10,7 @@ interface MarkdownRendererProps {
 
 export default function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
     return (
-        <div className={`prose prose-sm max-w-none ${className}`}>
+        <div className={`prose prose-sm max-w-none ${className}`} dir="auto">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {content}
             </ReactMarkdown>

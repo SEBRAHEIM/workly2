@@ -109,7 +109,7 @@ export default async function StudentProjectsPage(props: {
                             <div className="flex justify-between items-center">
                                 <div>
                                     <div className="flex items-center mb-2">
-                                        <h3 className="text-xl font-bold text-[#333333] group-hover:text-[#3E4C37] transition-colors">
+                                        <h3 className="text-xl font-bold text-[#333333] group-hover:text-[#3E4C37] transition-colors" dir="auto">
                                             {project.title}
                                         </h3>
                                         <span className={`ml-4 px-3 py-1 rounded-full text-xs font-bold uppercase 

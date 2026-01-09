@@ -126,8 +126,8 @@ export default async function CreatorDashboard() {
                             >
                                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                                     <div>
-                                        <h3 className="text-lg font-bold text-[#333333] mb-1 group-hover:text-[#3E4C37] transition-colors">{project.title}</h3>
-                                        <p className="text-gray-500 text-sm line-clamp-1 max-w-md">{project.description}</p>
+                                        <h3 className="text-lg font-bold text-[#333333] mb-1 group-hover:text-[#3E4C37] transition-colors" dir="auto">{project.title}</h3>
+                                        <p className="text-gray-500 text-sm line-clamp-1 max-w-md" dir="auto">{project.description}</p>
                                     </div>
                                     <div className="flex items-center justify-center w-full md:w-auto text-[#3E4C37] font-bold text-sm bg-[#F3F0E9] px-4 py-3 md:py-2 rounded-xl">
                                         Review Request

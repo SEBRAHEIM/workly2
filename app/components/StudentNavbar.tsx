@@ -63,7 +63,7 @@ export default function StudentNavbar() {
                 </div>
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <Link href="/student" className="text-xl tracking-widest text-[#333333] font-sans uppercase">
+                    <Link href="/student" className="text-2xl tracking-[0.2em] text-[#3E4C37] font-serif font-black uppercase">
                         Workly
                     </Link>
                 </div>

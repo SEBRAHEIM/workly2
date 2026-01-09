@@ -62,6 +62,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     defaultValue={profile?.display_name || profile?.full_name || ''}
                     placeholder="e.g. Ahmed M."
                     required
+                    dir="auto"
                     className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all"
                 />
             </div>
@@ -75,6 +76,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     defaultValue={profile?.tagline || ''}
                     placeholder="e.g. Video Editor & Motion Graphics Artist"
                     required
+                    dir="auto"
                     className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all"
                 />
                 <p className="text-xs text-gray-400 mt-2">One line describing what you do.</p>
@@ -151,6 +153,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     placeholder="Share your experience, skills, and what makes you unique..."
                     rows={4}
                     required
+                    dir="auto"
                     className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all resize-none"
                 />
                 <p className="text-xs text-gray-400 mt-2">

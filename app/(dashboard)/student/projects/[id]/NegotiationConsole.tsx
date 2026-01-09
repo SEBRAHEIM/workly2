@@ -149,6 +149,7 @@ export default function NegotiationConsole({
                         <textarea
                             name="notes"
                             placeholder="Add notes (optional)..."
+                            dir="auto"
                             className="w-full p-3 rounded-xl border border-gray-100 focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] outline-none text-xs h-16 resize-none mb-2 bg-[#F3F0E9] font-medium"
                         ></textarea>
                         <div className="flex gap-2">

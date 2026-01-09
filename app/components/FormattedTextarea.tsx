@@ -56,6 +56,7 @@ export default function FormattedTextarea({
         editorProps: {
             attributes: {
                 class: 'prose prose-sm focus:outline-none max-w-none min-h-[150px] p-4 text-sm text-[#333] leading-relaxed',
+                dir: 'auto',
             },
         },
     })

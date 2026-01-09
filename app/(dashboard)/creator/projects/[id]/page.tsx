@@ -65,7 +65,7 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                         <span className="mx-2">/</span>
                         <span>Project Details</span>
                     </div>
-                    <h1 className="text-3xl font-serif font-bold text-[#333333] mb-2">{project.title}</h1>
+                    <h1 className="text-3xl font-serif font-bold text-[#333333] mb-2" dir="auto">{project.title}</h1>
                     <div className="flex items-center text-gray-500">
                         <div className="w-6 h-6 rounded-full bg-gray-200 overflow-hidden mr-2">
                             {project.student.avatar_url ? (

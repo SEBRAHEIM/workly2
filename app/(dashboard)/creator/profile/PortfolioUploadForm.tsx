@@ -83,6 +83,7 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                     name="description"
                     placeholder="Description"
                     rows={2}
+                    dir="auto"
                     className="w-full bg-white border-none rounded-xl p-4 text-base focus:ring-1 focus:ring-[#3E4C37] resize-none"
                 />
 

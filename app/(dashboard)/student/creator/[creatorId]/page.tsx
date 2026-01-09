@@ -51,13 +51,13 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                     )}
                 </div>
                 <div className="flex-1">
-                    <h1 className="text-2xl font-serif font-bold text-[#333333] mb-1">
+                    <h1 className="text-2xl font-serif font-bold text-[#333333] mb-1" dir="auto">
                         {creator.display_name || creator.full_name || 'Creator'}
                     </h1>
                     {creator.username && (
                         <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
                     )}
-                    <p className="text-base text-[#3E4C37] font-medium mb-1">
+                    <p className="text-base text-[#3E4C37] font-medium mb-1" dir="auto">
                         {creator.tagline || 'Student Creator'}
                     </p>
 
@@ -95,7 +95,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
             {creator.bio && (
                 <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm mb-8">
                     <h3 className="text-lg font-bold text-[#333333] mb-4">About Me</h3>
-                    <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">
+                    <p className="text-gray-600 leading-relaxed whitespace-pre-wrap" dir="auto">
                         {creator.bio}
                     </p>
                 </div>

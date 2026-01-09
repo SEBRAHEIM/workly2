@@ -221,6 +221,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                         type="text"
                         name="title"
                         required
+                        dir="auto"
                         placeholder="e.g. Physics Assignment Help"
                         className="w-full bg-[#F3F0E9] border-none rounded-xl p-4 text-[#333333] placeholder-gray-400 focus:ring-2 focus:ring-[#3E4C37] outline-none transition-all text-base"
                     />

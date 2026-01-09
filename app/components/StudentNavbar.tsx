@@ -55,72 +55,69 @@ export default function StudentNavbar() {
 
     return (
         <>
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/80 backdrop-blur-xl border-[#EBE7DE] py-4' : 'bg-transparent border-transparent py-8'
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-[#EBE7DE] py-4' : 'bg-transparent border-transparent py-8'
                 }`}>
-                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                    <div className="flex items-center space-x-12">
+                <div className="max-w-7xl mx-auto px-6 grid grid-cols-3 items-center">
+                    {/* Left: Menu Trigger */}
+                    <div className="flex items-center">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setIsMenuOpen(true)}
+                            className="w-12 h-12 bg-white border border-[#EBE7DE] flex items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm"
+                        >
+                            <Menu size={24} />
+                        </motion.button>
+
+                        {/* Hidden on mobile, shown on desktop */}
+                        <div className="hidden lg:flex items-center ml-8 space-x-6">
+                            {['Directory', 'Projects'].map((item) => (
+                                <Link
+                                    key={item}
+                                    href={`/student/${item.toLowerCase()}`}
+                                    className="text-[10px] font-black uppercase tracking-[0.3em] text-[#333333]/40 hover:text-[#3E4C37] transition-colors"
+                                >
+                                    {item}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Center: Logo */}
+                    <div className="flex justify-center">
                         <Link href="/student" className="group flex items-center space-x-4">
-                            <div className="w-10 h-10 bg-[#3E4C37] flex items-center justify-center group-hover:bg-[#C6A87C] transition-colors">
+                            <div className="w-10 h-10 bg-[#3E4C37] flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
                                 <span className="text-white font-serif font-black text-xl">W</span>
                             </div>
                             <span className="text-2xl tracking-[0.4em] text-[#3E4C37] font-serif font-black uppercase hidden sm:block">
                                 Workly
                             </span>
                         </Link>
-
-                        {/* Desktop Menu */}
-                        <div className="hidden lg:flex items-center space-x-10">
-                            {[
-                                { name: 'Directory', href: '/student' },
-                                { name: 'My Projects', href: '/student/projects' },
-                                { name: 'Messages', href: '/student/messages' },
-                            ].map((link) => (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    className="text-[10px] font-black uppercase tracking-[0.3em] text-[#333333]/50 hover:text-[#3E4C37] transition-colors relative group py-2"
-                                >
-                                    {link.name}
-                                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#C6A87C] group-hover:w-full transition-all duration-300" />
-                                </Link>
-                            ))}
-                        </div>
                     </div>
 
-                    <div className="flex items-center space-x-8">
-                        {/* Notification Icons */}
-                        <div className="hidden md:flex items-center space-x-6 border-r border-[#EBE7DE] pr-8">
-                            <motion.button
-                                whileHover={{ y: -2 }}
-                                className="text-[#3E4C37] hover:text-[#C6A87C] transition-colors p-2"
-                            >
-                                <Bell size={20} />
-                            </motion.button>
+                    {/* Right: Actions */}
+                    <div className="flex items-center justify-end space-x-6">
+                        <div className="hidden md:flex items-center space-x-4 border-r border-[#EBE7DE] pr-6">
                             {user && <NotificationBell userId={user.id} />}
                         </div>
 
-                        <div className="flex items-center space-x-4">
-                            <Link
-                                href="/student/profile"
-                                className="w-10 h-10 rounded-none border border-[#EBE7DE] overflow-hidden hover:border-[#3E4C37] transition-colors"
-                            >
-                                <img
-                                    src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=3E4C37&color=fff`}
-                                    alt="Profile"
-                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
-                                />
-                            </Link>
+                        <Link
+                            href="/student/profile"
+                            className="w-10 h-10 border border-[#EBE7DE] overflow-hidden hover:border-[#3E4C37] transition-colors group"
+                        >
+                            <img
+                                src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=3E4C37&color=fff`}
+                                alt="Profile"
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
+                            />
+                        </Link>
 
-                            <button
-                                className="bg-[#3E4C37] text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-[4px_4px_0px_0px_#C6A87C]"
-                                onClick={async () => {
-                                    await supabase.auth.signOut()
-                                    window.location.href = '/'
-                                }}
-                            >
-                                Terminal
-                            </button>
-                        </div>
+                        <button
+                            className="bg-[#3E4C37] text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-[4px_4px_0px_0px_#C6A87C] hidden sm:block"
+                            onClick={handleSignOut}
+                        >
+                            Terminal
+                        </button>
                     </div>
                 </div>
             </nav>

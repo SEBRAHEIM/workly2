@@ -58,34 +58,15 @@ export default function StudentNavbar() {
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-[#EBE7DE] py-4' : 'bg-transparent border-transparent py-8'
                 }`}>
                 <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-3 items-center">
-                    {/* Left: Animated Menu Trigger */}
+                    {/* Left: Menu Trigger (REVERTED) */}
                     <div className="flex items-center">
                         <motion.button
-                            whileHover="hover"
-                            whileTap="tap"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => setIsMenuOpen(true)}
-                            className="w-10 h-10 md:w-12 md:h-12 bg-white border border-[#EBE7DE] flex flex-col items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm group"
+                            className="w-10 h-10 md:w-12 md:h-12 bg-white border border-[#EBE7DE] flex items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm"
                         >
-                            <motion.div className="flex flex-col gap-1.5 items-center justify-center">
-                                <motion.span
-                                    variants={{
-                                        hover: { width: 24, x: 2 },
-                                        initial: { width: 18, x: 0 }
-                                    }}
-                                    className="h-[2px] bg-current rounded-full"
-                                />
-                                <motion.span
-                                    className="h-[2px] w-24 bg-current rounded-full"
-                                    style={{ width: 24 }}
-                                />
-                                <motion.span
-                                    variants={{
-                                        hover: { width: 14, x: -5 },
-                                        initial: { width: 24, x: 0 }
-                                    }}
-                                    className="h-[2px] bg-current rounded-full"
-                                />
-                            </motion.div>
+                            <Menu size={window?.innerWidth < 768 ? 20 : 24} />
                         </motion.button>
 
                         {/* Hidden on mobile, shown on desktop */}
@@ -132,18 +113,12 @@ export default function StudentNavbar() {
                         </Link>
 
                         <motion.button
-                            whileHover="hover"
-                            className="bg-[#3E4C37] text-white px-4 md:px-6 py-2 md:py-2.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] relative overflow-hidden transition-colors shadow-[2px_2px_0px_0px_#C6A87C] md:shadow-[4px_4px_0px_0px_#C6A87C] hidden xs:block"
+                            whileHover={{ y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-[#3E4C37] text-white px-4 md:px-6 py-2 md:py-2.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] transition-colors shadow-[2px_2px_0px_0px_#C6A87C] md:shadow-[4px_4px_0px_0px_#C6A87C] hover:bg-black hidden xs:block"
                             onClick={handleSignOut}
                         >
-                            <span className="relative z-10 text-[8px] md:text-[10px]">Terminal</span>
-                            <motion.div
-                                variants={{
-                                    hover: { y: 0 },
-                                    initial: { y: '100%' }
-                                }}
-                                className="absolute inset-0 bg-black transition-transform duration-300"
-                            />
+                            Terminal
                         </motion.button>
                     </div>
                 </div>

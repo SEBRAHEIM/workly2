@@ -1,47 +1,91 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense, useMemo } from 'react'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, MeshDistortMaterial, Sphere, PerspectiveCamera, Environment, OrbitControls } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Float, MeshDistortMaterial, Sphere, PerspectiveCamera, Environment, OrbitControls, MeshTransmissionMaterial, Torus } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import confetti from 'canvas-confetti'
 import { Sparkles, Globe, ArrowRight, Zap, Layers } from 'lucide-react'
 
+// NEW: Kinetic Sculpture Component
+function KineticSculpture() {
+    const meshRef = useRef<THREE.Group>(null)
+    const { mouse, viewport } = useThree()
+
+    useFrame((state) => {
+        if (!meshRef.current) return
+
+        // Complex multi-axis rotation
+        meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2
+        meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3
+
+        // Subtle mouse tilt
+        const targetX = (mouse.x * viewport.width) / 10
+        const targetY = (mouse.y * viewport.height) / 10
+        meshRef.current.position.x += (targetX - meshRef.current.position.x) * 0.05
+        meshRef.current.position.y += (targetY - meshRef.current.position.y) * 0.05
+    })
+
+    return (
+        <group ref={meshRef}>
+            {/* The Core */}
+            <Float speed={2} rotationIntensity={1} floatIntensity={2}>
+                <mesh>
+                    <icosahedronGeometry args={[1, 15]} />
+                    <MeshDistortMaterial
+                        color="#3E4C37"
+                        speed={2}
+                        distort={0.4}
+                        radius={1}
+                    />
+                </mesh>
+            </Float>
+
+            {/* Orbiting Rings */}
+            {[1.5, 2.2, 3].map((radius, i) => (
+                <Float key={i} speed={1 + i} rotationIntensity={2} floatIntensity={1}>
+                    <Torus args={[radius, 0.02, 16, 100]} rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}>
+                        <meshPhysicalMaterial
+                            color="#C6A87C"
+                            metalness={1}
+                            roughness={0.1}
+                            emissive="#C6A87C"
+                            emissiveIntensity={0.5}
+                        />
+                    </Torus>
+                </Float>
+            ))}
+
+            {/* Data Fragments */}
+            {Array.from({ length: 20 }).map((_, i) => (
+                <Float key={i} speed={Math.random() * 2} position={[
+                    (Math.random() - 0.5) * 10,
+                    (Math.random() - 0.5) * 10,
+                    (Math.random() - 0.5) * 5
+                ]}>
+                    <mesh rotation={[Math.random(), Math.random(), 0]}>
+                        <boxGeometry args={[0.1, 0.1, 0.1]} />
+                        <meshStandardMaterial color="#3E4C37" />
+                    </mesh>
+                </Float>
+            ))}
+        </group>
+    )
+}
+
 // 3D Scene Component
 function Scene() {
     return (
-        <group>
-            <Float speed={1.4} rotationIntensity={1.5} floatIntensity={2}>
-                <mesh position={[-2, 1, 0]} rotation={[0.4, 0.2, 0.5]}>
-                    <octahedronGeometry args={[1, 0]} />
-                    <meshStandardMaterial color="#3E4C37" wireframe />
-                </mesh>
-            </Float>
-            <Float speed={2} rotationIntensity={2} floatIntensity={1.5}>
-                <Sphere args={[1, 100, 100]} position={[2, -1, -2]}>
-                    <MeshDistortMaterial
-                        color="#C6A87C"
-                        attach="material"
-                        distort={0.4}
-                        speed={1.5}
-                        roughness={0.1}
-                        metalness={0.8}
-                    />
-                </Sphere>
-            </Float>
-            <Float speed={1} rotationIntensity={3} floatIntensity={2}>
-                <mesh position={[0, -2, 2]} rotation={[Math.PI / 4, 0, 0]}>
-                    <boxGeometry args={[0.5, 0.5, 0.5]} />
-                    <meshStandardMaterial color="#333333" />
-                </mesh>
-            </Float>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} />
-            <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} />
-        </group>
+        <>
+            <KineticSculpture />
+            <ambientLight intensity={0.4} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#C6A87C" />
+            <spotLight position={[-10, 20, 10]} angle={0.2} penumbra={1} intensity={2} castShadow />
+            <pointLight position={[-5, -5, -5]} intensity={0.5} color="#3E4C37" />
+        </>
     )
 }
 
@@ -83,13 +127,11 @@ export default function Hero({ hideCta = false }: HeroProps) {
             {/* 3D Canvas Layer */}
             <div className="absolute inset-0 z-0 opacity-40">
                 <Canvas>
-                    <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+                    <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
                     <Suspense fallback={null}>
                         <Scene />
                         <Environment preset="city" />
-                    </Suspense>
-                    <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
-                </Canvas>
+                    </Suspense>                    </Canvas>
             </div>
 
             {/* Static Background Accents */}

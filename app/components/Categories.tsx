@@ -16,10 +16,10 @@ export default function Categories() {
         <section className="px-6 py-40 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
             <div className="flex flex-col md:flex-row items-baseline justify-between mb-32 gap-6">
                 <h2 className="text-6xl md:text-9xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
-                    Dossiers <span className="text-[#C6A87C]">&</span> <br /> Domains.
+                    Explore <span className="text-[#C6A87C]">Categories.</span>
                 </h2>
                 <p className="text-[#333333]/40 text-sm font-black uppercase tracking-[0.5em] vertical-text">
-                    Selection Protocol v4.0
+                    Worldwide Expertise v4.1
                 </p>
             </div>
 

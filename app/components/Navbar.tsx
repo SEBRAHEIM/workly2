@@ -34,7 +34,7 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="flex items-center justify-between px-4 md:px-6 py-4 md:py-6 sticky top-0 bg-[#F3F0E9]/90 backdrop-blur-xl z-50 border-b border-[#E6E2D6]">
+            <nav className="flex items-center justify-between px-4 md:px-6 py-4 md:py-6 sticky top-0 bg-[#F8F7F2]/90 backdrop-blur-xl z-50 border-b border-[#E6E2D6]">
                 <div className="flex items-center">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
@@ -91,7 +91,7 @@ export default function Navbar() {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="absolute top-0 left-0 h-full w-[85%] max-w-sm bg-[#F3F0E9] shadow-2xl flex flex-col border-r border-[#E6E2D6] rounded-r-3xl"
+                            className="absolute top-0 left-0 h-full w-[85%] max-w-sm bg-[#F8F7F2] shadow-2xl flex flex-col border-r border-[#E6E2D6] rounded-r-3xl"
                         >
                             {/* Close Button */}
                             <motion.button

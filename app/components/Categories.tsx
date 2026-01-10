@@ -13,7 +13,7 @@ export default function Categories() {
     };
 
     return (
-        <section className="px-6 py-20 md:py-24 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
+        <section className="px-6 py-20 md:py-24 max-w-7xl mx-auto bg-[#F8F7F2] border-y border-[#E6E2D6]">
             <div className="flex flex-col md:flex-row items-baseline justify-between mb-12 md:mb-16 gap-4">
                 <h2 className="text-4xl md:text-6xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
                     Explore <span className="text-[#C6A87C]">Categories.</span>
@@ -33,7 +33,7 @@ export default function Categories() {
                     <motion.div
                         key={idx}
                         variants={cardVariants}
-                        className="bg-white group relative overflow-hidden h-[400px] md:h-[450px] border-[#EBE7DE]"
+                        className="bg-[#F8F7F2] group relative overflow-hidden h-[400px] md:h-[450px] border-[#E6E2D6]"
                     >
                         <Link
                             href={`/category/${cat.slug}`}
@@ -45,8 +45,8 @@ export default function Categories() {
                                     className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 scale-110 group-hover:scale-100 transition-all duration-1000 opacity-0 group-hover:opacity-40"
                                     style={{ backgroundImage: `url(${cat.image})` }}
                                 />
-                                <div className="absolute inset-0 bg-white group-hover:bg-transparent transition-colors duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                                <div className="absolute inset-0 bg-[#F8F7F2] group-hover:bg-transparent transition-colors duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#F8F7F2] via-[#F8F7F2]/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
                             </div>
 
                             <div className="flex flex-col h-full relative z-20 p-8 md:p-10">

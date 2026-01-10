@@ -55,7 +55,7 @@ export default function StudentNavbar() {
 
     return (
         <>
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-[#EBE7DE] py-4' : 'bg-transparent border-transparent py-8'
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-[#F8F7F2]/90 backdrop-blur-xl border-[#E6E2D6] py-4' : 'bg-transparent border-transparent py-8'
                 }`}>
                 <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-3 items-center">
                     {/* Left: Menu Trigger (REVERTED) */}
@@ -64,7 +64,7 @@ export default function StudentNavbar() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setIsMenuOpen(true)}
-                            className="w-10 h-10 md:w-12 md:h-12 bg-white border border-[#EBE7DE] flex items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm"
+                            className="w-10 h-10 md:w-12 md:h-12 bg-[#F8F7F2] border border-[#E6E2D6] flex items-center justify-center text-[#3E4C37] hover:bg-[#3E4C37] hover:text-white transition-all shadow-sm"
                         >
                             <Menu size={24} className="w-5 h-5 md:w-6 md:h-6" />
                         </motion.button>
@@ -135,7 +135,7 @@ export default function StudentNavbar() {
                         />
 
                         {/* Menu Panel */}
-                        <div className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-[#F3F0E9] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out">
+                        <div className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-[#F8F7F2] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-r border-[#E6E2D6]">
                             {/* Close Button */}
                             <button
                                 onClick={() => setIsMenuOpen(false)}
@@ -171,7 +171,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <LayoutDashboard className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Dashboard</span>
@@ -181,7 +181,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <Briefcase className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">My Projects</span>
@@ -191,7 +191,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <Upload className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Compress Files</span>
@@ -201,7 +201,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <Star className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Favorite Creator</span>
@@ -217,7 +217,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <Wallet className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Wallet</span>
@@ -227,7 +227,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <Clock className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Pending Transaction</span>
@@ -237,7 +237,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <CreditCard className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Payment History</span>
@@ -253,7 +253,7 @@ export default function StudentNavbar() {
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-2 rounded-xl text-[#333333] hover:text-[#3E4C37] active:bg-[#E6E2D6]/50 active:scale-98 transition-all touch-manipulation"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm">
+                                            <div className="w-8 h-8 rounded-full bg-[#F8F7F2] flex items-center justify-center mr-3 shadow-sm border border-[#E6E2D6]">
                                                 <User className="w-4 h-4" />
                                             </div>
                                             <span className="font-medium">Profile Settings</span>

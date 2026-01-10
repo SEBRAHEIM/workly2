@@ -13,12 +13,12 @@ export default function Categories() {
     };
 
     return (
-        <section className="px-6 py-40 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
-            <div className="flex flex-col md:flex-row items-baseline justify-between mb-32 gap-6">
-                <h2 className="text-5xl md:text-9xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
+        <section className="px-6 py-20 md:py-24 max-w-7xl mx-auto bg-white border-y border-[#EBE7DE]">
+            <div className="flex flex-col md:flex-row items-baseline justify-between mb-12 md:mb-16 gap-4">
+                <h2 className="text-4xl md:text-6xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
                     Explore <span className="text-[#C6A87C]">Categories.</span>
                 </h2>
-                <p className="text-[#333333]/40 text-[10px] md:text-sm font-black uppercase tracking-[0.5em] md:vertical-text">
+                <p className="text-[#333333]/40 text-[10px] md:text-xs font-black uppercase tracking-[0.5em] md:vertical-text">
                     Worldwide Expertise v4.1
                 </p>
             </div>
@@ -40,20 +40,20 @@ export default function Categories() {
                     >
                         <Link
                             href={`/category/${cat.slug}`}
-                            className="block p-8 md:p-12 h-full transition-all duration-500 hover:bg-[#3E4C37] group"
+                            className="block p-6 md:p-8 h-full transition-all duration-500 hover:bg-[#3E4C37] group"
                         >
                             <div className="flex flex-col h-full relative z-10">
-                                <span className="text-[#C6A87C] font-black text-xs mb-10 tracking-widest group-hover:text-white transition-colors">
+                                <span className="text-[#C6A87C] font-black text-[10px] mb-6 tracking-widest group-hover:text-white transition-colors">
                                     0{idx + 1} / SECTOR
                                 </span>
 
-                                <cat.icon className="w-12 h-12 text-[#3E4C37] mb-8 group-hover:text-white transition-colors group-hover:scale-110 duration-500" />
+                                <cat.icon className="w-10 h-10 text-[#3E4C37] mb-6 group-hover:text-white transition-colors group-hover:scale-110 duration-500" />
 
-                                <h3 className="text-2xl font-black font-serif text-[#333333] mb-4 uppercase tracking-tight group-hover:text-white transition-colors">
+                                <h3 className="text-xl font-black font-serif text-[#333333] mb-3 uppercase tracking-tight group-hover:text-white transition-colors">
                                     {cat.title}
                                 </h3>
 
-                                <p className="text-gray-400 text-sm leading-relaxed font-medium mb-12 group-hover:text-white/60 transition-colors">
+                                <p className="text-gray-400 text-xs leading-relaxed font-medium mb-8 group-hover:text-white/60 transition-colors">
                                     {cat.desc}
                                 </p>
 

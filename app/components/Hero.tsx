@@ -1,14 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense, useMemo } from 'react'
-import Link from 'next/link'
+import { useEffect, useRef, Suspense } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Float, MeshDistortMaterial, Sphere, PerspectiveCamera, Environment, OrbitControls, MeshTransmissionMaterial, Torus } from '@react-three/drei'
+import { Float, MeshDistortMaterial, PerspectiveCamera, Environment, Torus } from '@react-three/drei'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import confetti from 'canvas-confetti'
-import { Sparkles, Globe, ArrowRight, Zap, Layers } from 'lucide-react'
 
 // NEW: Kinetic Sculpture Component
 function KineticSculpture() {

@@ -89,9 +89,15 @@ function Scene() {
 
 interface HeroProps {
     hideCta?: boolean
+    title?: string
+    subtitle?: string
 }
 
-export default function Hero({ hideCta = false }: HeroProps) {
+export default function Hero({
+    hideCta = false,
+    title = "Workly.",
+    subtitle = "Creative."
+}: HeroProps) {
     const sectionRef = useRef<HTMLElement>(null)
     const titleRef = useRef<HTMLHeadingElement>(null)
     const { scrollYProgress } = useScroll({
@@ -146,10 +152,10 @@ export default function Hero({ hideCta = false }: HeroProps) {
                 {/* Headline: WORKLY. CREATIVE. - RESTORED & RESPONSIVE */}
                 <h1 ref={titleRef} className="perspective-1000 mb-12">
                     <span className="block font-serif font-black text-6xl sm:text-7xl md:text-[12rem] text-[#3E4C37] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#C6A87C]">
-                        Workly.
+                        {title}
                     </span>
                     <span className="block font-serif font-black text-6xl sm:text-7xl md:text-[12rem] text-[#333333] leading-[0.75] tracking-tighter uppercase mt-2 md:mt-4">
-                        Creative.
+                        {subtitle}
                     </span>
                 </h1>
 

@@ -18,9 +18,6 @@ export default function Categories() {
                 <h2 className="text-4xl md:text-6xl font-serif font-black text-[#3E4C37] uppercase tracking-tighter">
                     Explore <span className="text-[#C6A87C]">Categories.</span>
                 </h2>
-                <p className="text-[#333333]/40 text-[10px] md:text-xs font-black uppercase tracking-[0.5em] md:vertical-text">
-                    Worldwide Expertise v4.1
-                </p>
             </div>
 
             <motion.div
@@ -53,9 +50,6 @@ export default function Categories() {
                             </div>
 
                             <div className="flex flex-col h-full relative z-20 p-8 md:p-10">
-                                <span className="text-[#C6A87C] font-black text-[10px] mb-6 tracking-widest group-hover:text-[#3E4C37] transition-colors">
-                                    0{idx + 1} / SECTOR
-                                </span>
 
                                 <cat.icon className="w-12 h-12 text-[#3E4C37] mb-8 group-hover:scale-110 transition-transform duration-500" />
 

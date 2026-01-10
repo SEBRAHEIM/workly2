@@ -11,6 +11,7 @@ export type Category = {
     desc: string
     fullDesc: string
     icon: any
+    image: string
 }
 
 export const categories = [
@@ -19,41 +20,47 @@ export const categories = [
         title: 'Reports & Essays',
         slug: 'reports-essays',
         desc: 'Help with writing assignments and Word documents.',
-        fullDesc: 'Turn rough rubrics and notes into clear, structured academic writing.',
+        fullDesc: 'Precision academic writing from the world\'s top student talent.',
+        image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Monitor,
         title: 'Presentations & PPT',
         slug: 'presentations-ppt',
         desc: 'Slides, templates, and class presentations.',
-        fullDesc: 'Captivating slides and structured presentations that get your point across.',
+        fullDesc: 'Captivating visual storytelling that secures high-tier marks.',
+        image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Users,
         title: 'Group Projects',
         slug: 'group-projects',
         desc: 'Case studies and team assignments.',
-        fullDesc: 'Coordinate and complete group assignments without the stress.',
+        fullDesc: 'Institutional collaboration handled with professional integrity.',
+        image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Grid,
         title: 'Excel & Data',
         slug: 'excel-data',
         desc: 'Sheets, tables, dashboards, simple calculations.',
-        fullDesc: 'Clean data, accurate formulas, and clear insights.',
+        fullDesc: 'Robust analytics and data modeling for complex requirements.',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Code,
         title: 'Programming & Tech',
         slug: 'programming-tech',
         desc: 'Basic coding tasks and small tech work.',
-        fullDesc: 'Bug fixes, scripts, and small application development.',
+        fullDesc: 'Technical implementation across the modern stack.',
+        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: User,
         title: 'Other Tasks',
         slug: 'other-tasks',
         desc: 'Anything else required for your course.',
-        fullDesc: 'Any other academic or creative task you need support with.',
+        fullDesc: 'Universal support for any unique academic or creative initiative.',
+        image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800'
     },
 ]

@@ -1,15 +1,23 @@
 export default function Footer() {
     return (
-        <footer className="bg-[#EBE7DE] py-16 px-6">
-            <div className="max-w-4xl mx-auto text-center">
+        <footer className="bg-[#EBE7DE] py-24 px-6 overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col items-center">
+                <div className="flex flex-col items-center max-w-2xl">
+                    <div className="w-12 h-[1px] bg-[#3E4C37]/20 mb-12" />
 
-
-                <div className="border-t border-gray-300 pt-8 text-sm text-gray-500">
-                    <p className="mb-2">workly.day</p>
-                    <p className="mb-8 px-4">
-                        Workly is not affiliated with any university. Users are responsible for following their institution's academic rules.
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[#333333]/40 mb-6">
+                        Institutional Protocol // v6.3
                     </p>
-                    <p>© 2024 workly.day</p>
+
+                    <p className="text-[#333333]/60 text-xs md:text-sm font-medium leading-relaxed tracking-tight text-center px-4 mb-12 uppercase italic">
+                        Workly operates as an independent creative substrate. We maintain no official affiliation with academic institutions. Integrity and compliance with local university regulations remain the primary responsibility of the individual operator.
+                    </p>
+
+                    <div className="flex items-center gap-8 text-[9px] font-black uppercase tracking-widest text-[#333333]/40">
+                        <span>workly.day</span>
+                        <div className="w-1 h-1 bg-[#C6A87C] rounded-full" />
+                        <span>© 2024 Global Creative Network</span>
+                    </div>
                 </div>
             </div>
         </footer>

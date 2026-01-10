@@ -1,7 +1,6 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Categories from './components/Categories'
-import Features from './components/Features'
 import Footer from './components/Footer'
 import { createClient } from '@/utils/supabase/server'
 
@@ -14,7 +13,6 @@ export default async function Home() {
       <Navbar />
       <Hero />
       <Categories />
-      <Features />
       <Footer />
     </main>
   )

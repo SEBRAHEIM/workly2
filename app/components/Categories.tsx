@@ -65,9 +65,14 @@ export default function Categories() {
                                     <motion.div
                                         initial={{ opacity: 0, x: -20 }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        className="bg-[#3E4C37] text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 shadow-xl"
+                                        className="bg-[#3E4C37] text-white text-[10px] font-black uppercase tracking-widest px-8 py-4 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 shadow-xl flex items-center gap-3"
                                     >
-                                        Select Domain
+                                        Start Project
+                                        <motion.div
+                                            animate={{ scale: [1, 1.2, 1] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                            className="w-1.5 h-1.5 bg-[#C6A87C] rounded-full"
+                                        />
                                     </motion.div>
                                     <ArrowRight className="w-6 h-6 text-[#3E4C37] -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500" />
                                 </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase } from 'lucide-react'
+import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 
@@ -26,6 +26,17 @@ export default function CreatorNavbar() {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
+
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+        return () => {
+            document.body.style.overflow = 'unset'
+        }
+    }, [isMenuOpen])
 
     useEffect(() => {
         const getUser = async () => {
@@ -135,6 +146,18 @@ export default function CreatorNavbar() {
 
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Workspace</h3>
                                 <div className="space-y-4">
+                                    {profile?.role === 'admin' && (
+                                        <Link
+                                            href="/admin"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-2 rounded-xl text-red-600 hover:text-red-700 active:bg-red-50 active:scale-98 transition-all touch-manipulation"
+                                        >
+                                            <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center mr-3 shadow-sm border border-red-100">
+                                                <Shield className="w-4 h-4" />
+                                            </div>
+                                            <span className="font-bold">God Mode</span>
+                                        </Link>
+                                    )}
                                     <Link
                                         href="/creator"
                                         onClick={() => setIsMenuOpen(false)}

@@ -17,6 +17,17 @@ export default function Navbar() {
     )
 
     useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+        return () => {
+            document.body.style.overflow = 'unset'
+        }
+    }, [isMenuOpen])
+
+    useEffect(() => {
         const checkUser = async () => {
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
@@ -63,7 +74,7 @@ export default function Navbar() {
                     )}
                     {!loading && role && (
                         <Link
-                            href={role === 'creator' ? '/creator' : '/student'}
+                            href={role === 'admin' ? '/admin' : role === 'creator' ? '/creator' : '/student'}
                             className="bg-[#3E4C37] text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-xs md:text-sm hover:bg-[#2e3b29] transition-all font-bold shadow-md hover:shadow-lg active:scale-95"
                         >
                             Dashboard
@@ -131,7 +142,7 @@ export default function Navbar() {
 
                                 {!loading && role && (
                                     <Link
-                                        href={role === 'creator' ? '/creator' : '/student'}
+                                        href={role === 'admin' ? '/admin' : role === 'creator' ? '/creator' : '/student'}
                                         onClick={() => setIsMenuOpen(false)}
                                         className="block w-full text-center py-4 rounded-2xl bg-[#3E4C37] text-white font-bold hover:bg-[#2e3b29] transition-all shadow-lg active:scale-95"
                                     >

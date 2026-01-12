@@ -16,12 +16,18 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     const fullName = formData.get('fullName') as string
 
     // Validate inputs
-    if (!role || !['student', 'creator'].includes(role)) {
+    const isAdmin = user.email === 'workly.day@outlook.com'
+
+    if (!isAdmin && (!role || !['student', 'creator'].includes(role))) {
         return { error: 'Invalid role selected.' }
     }
     if (!username || username.length < 3) {
         return { error: 'Username must be at least 3 characters.' }
     }
+
+    // Role for database
+    const finalRole = isAdmin ? 'admin' : role
+
 
     // Check if username is taken
     // Note: We should rely on DB constraint, but a check is nice.
@@ -31,7 +37,7 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
         .from('profiles')
         .insert({
             id: user.id,
-            role,
+            role: finalRole,
             username,
             full_name: fullName,
         })
@@ -44,7 +50,9 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     }
 
     // Redirect based on role
-    if (role === 'student') {
+    if (finalRole === 'admin') {
+        redirect('/admin')
+    } else if (finalRole === 'student') {
         redirect('/student')
     } else {
         redirect('/creator')

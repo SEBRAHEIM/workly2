@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Menu, X, Bell, User, LogOut, ChevronRight, Search, Filter, LayoutDashboard, Briefcase, Upload, Star, Wallet, Clock, CreditCard } from 'lucide-react'
+import { Menu, X, Bell, User, LogOut, ChevronRight, Search, Filter, LayoutDashboard, Briefcase, Upload, Star, Wallet, Clock, CreditCard, Shield } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 import NotificationBell from './NotificationBell'
@@ -26,6 +26,17 @@ export default function StudentNavbar() {
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
+
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+        return () => {
+            document.body.style.overflow = 'unset'
+        }
+    }, [isMenuOpen])
 
     useEffect(() => {
         const getUser = async () => { // Renamed fetchProfile to getUser as per snippet
@@ -166,6 +177,18 @@ export default function StudentNavbar() {
                                 <div className="px-6 mb-8">
                                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Workspace</h3>
                                     <div className="space-y-4">
+                                        {profile?.role === 'admin' && (
+                                            <Link
+                                                href="/admin"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="w-full flex items-center p-2 rounded-xl text-red-600 hover:text-red-700 active:bg-red-50 active:scale-98 transition-all touch-manipulation"
+                                            >
+                                                <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center mr-3 shadow-sm border border-red-100">
+                                                    <Shield className="w-4 h-4" />
+                                                </div>
+                                                <span className="font-bold">God Mode</span>
+                                            </Link>
+                                        )}
                                         <Link
                                             href="/student"
                                             onClick={() => setIsMenuOpen(false)}

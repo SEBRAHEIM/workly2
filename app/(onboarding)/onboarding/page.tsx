@@ -2,8 +2,9 @@
 
 import { completeOnboarding } from '../actions'
 import { useFormState } from 'react-dom'
-import { useState } from 'react'
-import { User, PenTool } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { User, PenTool, Shield } from 'lucide-react'
+import { createClient } from '@/utils/supabase/client'
 
 const initialState = {
     error: '',
@@ -12,6 +13,25 @@ const initialState = {
 export default function Onboarding() {
     const [state, formAction] = useFormState(completeOnboarding, initialState)
     const [role, setRole] = useState<'student' | 'creator' | ''>('')
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    const supabase = createClient()
+
+    useEffect(() => {
+        const checkAdmin = async () => {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user?.email === 'workly.day@outlook.com') {
+                setIsAdmin(true)
+                setRole('student') // Doesn't matter, will be 'admin' in action
+            }
+            setLoading(false)
+        }
+        checkAdmin()
+    }, [])
+
+    if (loading) return null
+
 
     return (
         <main className="min-h-screen bg-[#F3F0E9] flex flex-col items-center justify-center p-6">
@@ -28,38 +48,49 @@ export default function Onboarding() {
                     </div>
 
                     <form action={formAction} className="flex flex-col space-y-8">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-4 text-center">I am a...</label>
-                            <div className="grid grid-cols-2 gap-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setRole('student')}
-                                    className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'student'
-                                        ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
-                                        : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
-                                        }`}
-                                >
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'student' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                        <User className="w-6 h-6" />
-                                    </div>
-                                    <span className="font-semibold">Student</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setRole('creator')}
-                                    className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'creator'
-                                        ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
-                                        : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
-                                        }`}
-                                >
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'creator' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                        <PenTool className="w-6 h-6" />
-                                    </div>
-                                    <span className="font-semibold">Creator</span>
-                                </button>
+                        {!isAdmin ? (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-4 text-center">I am a...</label>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setRole('student')}
+                                        className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'student'
+                                            ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
+                                            : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
+                                            }`}
+                                    >
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'student' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                            <User className="w-6 h-6" />
+                                        </div>
+                                        <span className="font-semibold">Student</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setRole('creator')}
+                                        className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'creator'
+                                            ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
+                                            : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
+                                            }`}
+                                    >
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'creator' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                            <PenTool className="w-6 h-6" />
+                                        </div>
+                                        <span className="font-semibold">Creator</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="role" value={role} />
                             </div>
-                            <input type="hidden" name="role" value={role} />
-                        </div>
+                        ) : (
+                            <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center">
+                                <div className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                    <Shield className="w-6 h-6" />
+                                </div>
+                                <h3 className="font-bold text-red-900 mb-1">Admin Access Detected</h3>
+                                <p className="text-red-600 text-sm">You will be granted full administrative privileges.</p>
+                                <input type="hidden" name="role" value="admin" />
+                            </div>
+                        )}
 
                         <div className="space-y-4">
                             <div>
@@ -96,10 +127,11 @@ export default function Onboarding() {
 
                         <button
                             type="submit"
-                            className="w-full rounded-xl bg-[#3E4C37] px-4 py-4 text-white font-medium hover:bg-[#2e3b29] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-                            disabled={!role}
+                            className={`w-full rounded-xl px-4 py-4 text-white font-medium transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-4 ${isAdmin ? 'bg-red-600 hover:bg-red-700' : 'bg-[#3E4C37] hover:bg-[#2e3b29]'
+                                }`}
+                            disabled={!role && !isAdmin}
                         >
-                            Complete Setup
+                            {isAdmin ? 'Initialize Admin Profile' : 'Complete Setup'}
                         </button>
                     </form>
                 </div>

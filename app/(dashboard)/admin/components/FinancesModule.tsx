@@ -77,7 +77,7 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                     </h3>
 
                     <div className="flex-1 space-y-4">
-                        <p className="text-[10px] text-gray-500 italic mb-6">Pending bank transfers for creators with >AED 200 balance.</p>
+                        <p className="text-[10px] text-gray-500 italic mb-6">Pending bank transfers for creators with {'>'}AED 200 balance.</p>
 
                         <div className="py-12 text-center text-gray-600 border-2 border-dashed border-white/5 rounded-3xl">
                             <Wallet className="w-8 h-8 mx-auto mb-4 opacity-10" />

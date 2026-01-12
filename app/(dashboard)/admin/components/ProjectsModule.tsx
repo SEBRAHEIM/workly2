@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { Search, Briefcase, ChevronRight, Shield, MessageSquare, FileText, Ban, CheckCircle2 } from 'lucide-react'
 import { cancelProject, forceReleaseFunds } from '../actions'
 import { toast } from 'sonner'
@@ -8,6 +8,11 @@ import { toast } from 'sonner'
 export default function ProjectsModule({ projects }: { projects: any[] }) {
     const [statusFilter, setStatusFilter] = useState('all')
     const [isPending, startTransition] = useTransition()
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
 
     const filteredProjects = projects.filter(p => statusFilter === 'all' || p.status === statusFilter)
 
@@ -50,8 +55,8 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
                         key={status}
                         onClick={() => setStatusFilter(status)}
                         className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all whitespace-nowrap ${statusFilter === status
-                                ? 'bg-red-600 text-white border-red-600 shadow-[0_0_15px_rgba(220,38,38,0.3)]'
-                                : 'bg-transparent text-gray-500 border-white/10 hover:border-white/20'
+                            ? 'bg-red-600 text-white border-red-600 shadow-[0_0_15px_rgba(220,38,38,0.3)]'
+                            : 'bg-transparent text-gray-500 border-white/10 hover:border-white/20'
                             }`}
                     >
                         {status}
@@ -65,8 +70,8 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
                     <div key={p.id} className="bg-[#111111] border border-white/5 p-6 rounded-[2rem] hover:border-white/20 transition-all group relative overflow-hidden">
                         {/* Background subtle indicator */}
                         <div className={`absolute left-0 top-0 bottom-0 w-1 ${p.status === 'completed' ? 'bg-green-500' :
-                                p.status === 'negotiating' ? 'bg-yellow-500' :
-                                    p.status === 'cancelled' ? 'bg-red-500' : 'bg-blue-500'
+                            p.status === 'negotiating' ? 'bg-yellow-500' :
+                                p.status === 'cancelled' ? 'bg-red-500' : 'bg-blue-500'
                             } opacity-30`} />
 
                         <div className="flex flex-col lg:flex-row justify-between gap-8">
@@ -74,8 +79,8 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
                             <div className="flex-1 space-y-4">
                                 <div className="flex items-center gap-3">
                                     <span className={`text-[8px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded ${p.status === 'completed' ? 'bg-green-500/10 text-green-500' :
-                                            p.status === 'negotiating' ? 'bg-yellow-500/10 text-yellow-500' :
-                                                'bg-blue-500/10 text-blue-400'
+                                        p.status === 'negotiating' ? 'bg-yellow-500/10 text-yellow-500' :
+                                            'bg-blue-500/10 text-blue-400'
                                         }`}>
                                         {p.status}
                                     </span>
@@ -87,11 +92,11 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
                                 <div className="flex items-center gap-6 text-[11px] font-medium tracking-wide">
                                     <div className="flex items-center gap-2 text-gray-400">
                                         <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10" />
-                                        Buyer: <span className="text-gray-200">{p.student?.email?.split('@')[0]}</span>
+                                        Buyer: <span className="text-gray-200">{p.student?.email ? p.student.email.split('@')[0] : 'Unknown'}</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-gray-400">
                                         <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10" />
-                                        Seller: <span className="text-gray-200">{p.creator?.email?.split('@')[0]}</span>
+                                        Seller: <span className="text-gray-200">{p.creator?.email ? p.creator.email.split('@')[0] : 'Unknown'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -104,8 +109,8 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
                                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1.5 ${p.funds_status === 'escrow' ? 'bg-blue-500/10 text-blue-400' :
-                                            p.funds_status === 'released' ? 'bg-green-500/10 text-green-500' :
-                                                'bg-gray-500/10 text-gray-500'
+                                        p.funds_status === 'released' ? 'bg-green-500/10 text-green-500' :
+                                            'bg-gray-500/10 text-gray-500'
                                         }`}>
                                         {p.funds_status === 'escrow' && <Shield className="w-2.5 h-2.5" />}
                                         {p.funds_status}

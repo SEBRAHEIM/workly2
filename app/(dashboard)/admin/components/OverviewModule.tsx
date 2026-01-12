@@ -1,8 +1,15 @@
 'use client'
 
 import { Shield, TrendingUp, Users, Briefcase, Activity, AlertTriangle } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export default function OverviewModule({ projects, profiles, stats }: { projects: any[], profiles: any[], stats: any }) {
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
@@ -107,7 +114,7 @@ export default function OverviewModule({ projects, profiles, stats }: { projects
                                             <span className="text-gray-500 truncate block max-w-[200px]">{project.title}</span>
                                         </td>
                                         <td className="px-6 py-4 text-right font-mono text-gray-600 text-[10px]">
-                                            {new Date(project.created_at).toLocaleTimeString()}
+                                            {isMounted ? new Date(project.created_at).toLocaleTimeString() : '...'}
                                         </td>
                                     </tr>
                                 ))}

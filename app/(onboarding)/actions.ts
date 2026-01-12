@@ -33,17 +33,18 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     // Note: We should rely on DB constraint, but a check is nice.
     // Actually, let's just try to insert and handle error.
 
+    // Use upsert to handle existing profiles (especially for admins retrying onboarding)
     const { error } = await supabase
         .from('profiles')
-        .insert({
+        .upsert({
             id: user.id,
             role: finalRole,
             username,
             full_name: fullName,
-        })
+        }, { onConflict: 'id' })
 
     if (error) {
-        if (error.code === '23505') { // unique violation
+        if (error.code === '23505') { // unique violation for username
             return { error: 'Username is already taken.' }
         }
         return { error: error.message }

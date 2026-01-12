@@ -1,12 +1,19 @@
 'use client'
 
 import { Wallet, ArrowDownCircle, ArrowUpCircle, Shield, TrendingUp, Download, ExternalLink } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export default function FinancesModule({ projects, stats }: { projects: any[], stats: any }) {
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
     const revenueDistribution = [
-        { label: 'Marketplace Fees', percentage: 17, value: stats.totalRevenue },
-        { label: 'Creator Earnings', percentage: 80, value: projects.filter(p => p.status === 'completed').reduce((acc, p) => acc + (p.current_price * 0.83), 0) },
-        { label: 'Processing Fees', percentage: 3, value: stats.totalRevenue * 0.15 }
+        { label: 'Marketplace Fees', percentage: 17, value: stats.totalRevenue || 0 },
+        { label: 'Creator Earnings', percentage: 80, value: projects?.filter(p => p.status === 'completed').reduce((acc, p) => acc + ((p.current_price || 0) * 0.83), 0) || 0 },
+        { label: 'Processing Fees', percentage: 3, value: (stats.totalRevenue || 0) * 0.15 }
     ]
 
     return (
@@ -37,7 +44,7 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                             <div className="flex items-center gap-2 text-[10px] font-black text-blue-500 uppercase tracking-widest mb-2">
                                 <ArrowDownCircle className="w-4 h-4" /> Funds in Escrow
                             </div>
-                            <div className="text-5xl font-black text-white tracking-tighter">AED {stats.escrowHeld.toFixed(2)}</div>
+                            <div className="text-5xl font-black text-white tracking-tighter">AED {(stats.escrowHeld || 0).toFixed(2)}</div>
                             <p className="text-[10px] text-gray-600 mt-4 leading-relaxed max-w-[200px]">
                                 Secured capital currently held for active project fulfillment.
                             </p>
@@ -46,7 +53,7 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                             <div className="flex items-center gap-2 text-[10px] font-black text-green-500 uppercase tracking-widest mb-2">
                                 <TrendingUp className="w-4 h-4" /> Total Platform Fee
                             </div>
-                            <div className="text-5xl font-black text-green-500 tracking-tighter">AED {stats.totalRevenue.toFixed(2)}</div>
+                            <div className="text-5xl font-black text-green-500 tracking-tighter">AED {(stats.totalRevenue || 0).toFixed(2)}</div>
                             <p className="text-[10px] text-gray-600 mt-4 leading-relaxed max-w-[200px]">
                                 Realized net revenue across all completed marketplace transactions.
                             </p>
@@ -57,7 +64,7 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                         {revenueDistribution.map((item) => (
                             <div key={item.label}>
                                 <div className="text-[8px] font-black uppercase tracking-widest text-gray-600 mb-1">{item.label} ({item.percentage}%)</div>
-                                <div className="text-lg font-bold text-gray-300">AED {item.value.toFixed(2)}</div>
+                                <div className="text-lg font-bold text-gray-300">AED {(item.value || 0).toFixed(2)}</div>
                             </div>
                         ))}
                     </div>
@@ -70,7 +77,7 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                     </h3>
 
                     <div className="flex-1 space-y-4">
-                        <p className="text-[10px] text-gray-500 italic mb-6">Pending bank transfers for creators with {'>'}AED 200 balance.</p>
+                        <p className="text-[10px] text-gray-500 italic mb-6">Pending bank transfers for creators with >AED 200 balance.</p>
 
                         <div className="py-12 text-center text-gray-600 border-2 border-dashed border-white/5 rounded-3xl">
                             <Wallet className="w-8 h-8 mx-auto mb-4 opacity-10" />
@@ -91,19 +98,19 @@ export default function FinancesModule({ projects, stats }: { projects: any[], s
                     <span className="text-[10px] text-gray-500 font-mono">Real-time settlement data</span>
                 </div>
                 <div className="divide-y divide-white/5">
-                    {projects.filter(p => p.status === 'completed').slice(0, 5).map(p => (
+                    {projects?.filter(p => p.status === 'completed').slice(0, 5).map(p => (
                         <div key={p.id} className="px-8 py-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
                                     <TrendingUp className="w-5 h-5 text-green-500" />
                                 </div>
                                 <div>
-                                    <div className="font-bold text-sm tracking-wide">Project Completion Settlement</div>
+                                    <div className="font-bold text-sm tracking-wide">Project Settlement</div>
                                     <div className="text-[9px] text-gray-500 font-mono mt-1 uppercase tracking-tighter">PID: {p.id.slice(0, 12)}</div>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <div className="text-sm font-black text-white">+AED {(p.current_price * 0.17).toFixed(2)}</div>
+                                <div className="text-sm font-black text-white">+AED {((p.current_price || 0) * 0.17).toFixed(2)}</div>
                                 <div className="text-[8px] text-gray-600 font-black uppercase tracking-widest mt-1">Platform Fee (17%)</div>
                             </div>
                         </div>

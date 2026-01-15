@@ -1,3 +1,5 @@
+'use client'
+
 import { Shield, Loader2, AlertTriangle } from 'lucide-react'
 import { createCheckoutSession } from '../actions'
 import { useActionState } from 'react'

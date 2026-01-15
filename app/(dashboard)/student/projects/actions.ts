@@ -32,8 +32,10 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
     }
 
     // Create Checkout Session
-    // IMPORTANT: Stripe requires absolute URLs. Use definitive production fallback.
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+    // IMPORTANT: Stripe requires absolute URLs. Ensure protocol is present.
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+    if (!baseUrl.startsWith('http')) baseUrl = `https://${baseUrl}`
+    baseUrl = baseUrl.replace(/\/$/, '') // Clean trailing slash
     let stripeSessionUrl = ''
 
     try {

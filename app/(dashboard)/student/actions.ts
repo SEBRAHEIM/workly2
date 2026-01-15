@@ -150,7 +150,7 @@ export async function createProject(prevState: any, formData: FormData) {
                     projectTitle: title,
                     tier: packageTier || 'Fixed',
                     price: initialPrice,
-                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests`
+                    link: `${baseUrl}/creator/requests`
                 }).catch(e => console.error('[SMS] Background alert failed:', e))
             }
         } catch (postError) {
@@ -159,8 +159,10 @@ export async function createProject(prevState: any, formData: FormData) {
     })
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
-    // IMPORTANT: Stripe requires absolute URLs. Use definitive production fallback.
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+    // IMPORTANT: Stripe requires absolute URLs. Ensure protocol is present.
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+    if (!baseUrl.startsWith('http')) baseUrl = `https://${baseUrl}`
+    baseUrl = baseUrl.replace(/\/$/, '') // Clean trailing slash
 
     if (initialPrice <= 0) {
         console.warn('[CREATE PROJECT] Price is 0 or less, skipping Stripe. Price:', initialPrice)

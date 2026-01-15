@@ -10,7 +10,7 @@ import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
 
 // Create Stripe Checkout Session
-export async function createCheckoutSession(formData: FormData) {
+export async function createCheckoutSession(prevState: any, formData: FormData) {
     const projectId = formData.get('projectId') as string
     const supabase = await createClient()
 

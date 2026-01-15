@@ -167,8 +167,15 @@ export async function createProject(prevState: any, formData: FormData) {
         return redirect(`/student/projects/${data.id}`)
     }
 
+    let stripeSessionUrl = ''
     try {
         console.log('[CREATE PROJECT] Initiating Stripe Session for project:', data.id)
+
+        if (!process.env.STRIPE_SECRET_KEY) {
+            console.error('[CREATE PROJECT] CRITICAL: STRIPE_SECRET_KEY is not set.')
+            throw new Error('Payment configuration missing (API Key)')
+        }
+
         const session = await getStripe().checkout.sessions.create({
             customer_email: user.email,
             payment_method_types: ['card'],
@@ -198,15 +205,23 @@ export async function createProject(prevState: any, formData: FormData) {
             return { message: 'Created project but failed to initiate payment. Please go to your projects to pay.' }
         }
 
-        console.log('[CREATE PROJECT] Redirecting to Stripe:', session.url)
-        return redirect(session.url)
+        stripeSessionUrl = session.url
     } catch (stripeError: any) {
-        console.error('[CREATE PROJECT] Stripe Exception:', stripeError)
-        // Check if it's a redirect error (which we should let bubble up)
-        if (stripeError.digest?.startsWith('NEXT_REDIRECT')) {
-            throw stripeError
+        console.error('[CREATE PROJECT] Stripe Exception FULL:', stripeError)
+
+        // IMPORTANT: Never catch NEXT_REDIRECT errors in Next.js try/catch blocks
+        // But since we moved redirect outside, we don't need to worry about it here anymore
+        // unless some other internal redirect is happening.
+
+        const errorMessage = stripeError instanceof Error ? stripeError.message : String(stripeError)
+        return {
+            message: `Project created, but payment failed: ${errorMessage}. Please visit your projects list to pay manually.`
         }
-        return { message: 'Project created, but we encountered an error with the payment system. Please visit your projects list to pay manually.' }
+    }
+
+    if (stripeSessionUrl) {
+        console.log('[CREATE PROJECT] Redirecting to Stripe:', stripeSessionUrl)
+        redirect(stripeSessionUrl)
     }
 }
 

@@ -159,40 +159,55 @@ export async function createProject(prevState: any, formData: FormData) {
     })
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
+    // IMPORTANT: Stripe requires absolute URLs.
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+
     if (initialPrice <= 0) {
-        // Fallback if price is 0 (shouldn't happen with validation)
+        console.warn('[CREATE PROJECT] Price is 0 or less, skipping Stripe. Price:', initialPrice)
         return redirect(`/student/projects/${data.id}`)
     }
 
-    const session = await getStripe().checkout.sessions.create({
-        customer_email: user.email,
-        payment_method_types: ['card'],
-        line_items: [
-            {
-                price_data: {
-                    currency: 'aed',
-                    product_data: {
-                        name: title,
-                        description: `Immediate payment to start project: ${title}`,
+    try {
+        console.log('[CREATE PROJECT] Initiating Stripe Session for project:', data.id)
+        const session = await getStripe().checkout.sessions.create({
+            customer_email: user.email,
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'aed',
+                        product_data: {
+                            name: title,
+                            description: `Immediate payment to start project: ${title}`,
+                        },
+                        unit_amount: Math.round(initialPrice * 100),
                     },
-                    unit_amount: Math.round(initialPrice * 100),
+                    quantity: 1,
                 },
-                quantity: 1,
+            ],
+            metadata: {
+                projectId: data.id,
             },
-        ],
-        metadata: {
-            projectId: data.id,
-        },
-        mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${data.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${data.id}?payment=cancelled`,
-    })
+            mode: 'payment',
+            success_url: `${baseUrl}/student/projects/${data.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${baseUrl}/student/projects/${data.id}?payment=cancelled`,
+        })
 
-    if (!session.url) {
-        return { message: 'Created project but failed to initiate payment. Please go to your projects to pay.' }
+        if (!session.url) {
+            console.error('[CREATE PROJECT] Stripe session created but no URL returned.')
+            return { message: 'Created project but failed to initiate payment. Please go to your projects to pay.' }
+        }
+
+        console.log('[CREATE PROJECT] Redirecting to Stripe:', session.url)
+        return redirect(session.url)
+    } catch (stripeError: any) {
+        console.error('[CREATE PROJECT] Stripe Exception:', stripeError)
+        // Check if it's a redirect error (which we should let bubble up)
+        if (stripeError.digest?.startsWith('NEXT_REDIRECT')) {
+            throw stripeError
+        }
+        return { message: 'Project created, but we encountered an error with the payment system. Please visit your projects list to pay manually.' }
     }
-
-    redirect(session.url)
 }
 
 // Negotiation response removed.

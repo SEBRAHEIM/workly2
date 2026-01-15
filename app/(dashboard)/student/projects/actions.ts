@@ -32,36 +32,50 @@ export async function createCheckoutSession(formData: FormData) {
     }
 
     // Create Checkout Session
-    const session = await getStripe().checkout.sessions.create({
-        customer_email: user.email, // Enables auto-email receipt from Stripe
-        payment_method_types: ['card'],
-        line_items: [
-            {
-                price_data: {
-                    currency: 'aed',
-                    product_data: {
-                        name: project.title,
-                        description: `Escrow payment for project: ${project.title}`,
-                    },
-                    unit_amount: Math.round(project.current_price * 100), // Stripe expects cents
-                },
-                quantity: 1,
-            },
-        ],
-        metadata: {
-            projectId: project.id,
-        },
-        mode: 'payment',
-        // Pass a receipt flag to trigger the UI
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${project.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${project.id}?payment=cancelled`,
-    })
+    // IMPORTANT: Stripe requires absolute URLs.
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
+    let stripeSessionUrl = ''
 
-    if (!session.url) {
-        return { error: 'Failed to create checkout session' }
+    try {
+        const session = await getStripe().checkout.sessions.create({
+            customer_email: user.email, // Enables auto-email receipt from Stripe
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'aed',
+                        product_data: {
+                            name: project.title,
+                            description: `Escrow payment for project: ${project.title}`,
+                        },
+                        unit_amount: Math.round(project.current_price * 100), // Stripe expects cents
+                    },
+                    quantity: 1,
+                },
+            ],
+            metadata: {
+                projectId: project.id,
+            },
+            mode: 'payment',
+            // Pass a receipt flag to trigger the UI
+            success_url: `${baseUrl}/student/projects/${project.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${baseUrl}/student/projects/${project.id}?payment=cancelled`,
+        })
+
+        if (!session.url) {
+            console.error('[CHECKOUT] Stripe session created but no URL returned.')
+            return { error: 'Failed to create checkout session' }
+        }
+
+        stripeSessionUrl = session.url
+    } catch (stripeError: any) {
+        console.error('[CHECKOUT] Stripe Exception:', stripeError)
+        return { error: `Payment system error: ${stripeError instanceof Error ? stripeError.message : String(stripeError)}` }
     }
 
-    redirect(session.url)
+    if (stripeSessionUrl) {
+        redirect(stripeSessionUrl)
+    }
 }
 
 // Release Funds: Moves funds from Escrow to Creator Wallet (and triggers Payout)

@@ -32,8 +32,7 @@ export async function POST(req: Request) {
             .from('projects')
             .update({
                 funds_status: 'escrow',
-                status: 'in_progress',
-                due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // +7 Days
+                status: 'in_progress'
             })
             .eq('id', projectId)
 

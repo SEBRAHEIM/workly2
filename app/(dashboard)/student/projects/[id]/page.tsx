@@ -163,6 +163,12 @@ export default async function ProjectPage({
                                     <span className="text-[10px] font-bold text-[#333] uppercase">
                                         {project.pricing_type} {project.current_terms?.tier ? `(${project.current_terms.tier})` : ''}
                                     </span>
+                                    {project.due_date && (
+                                        <span className="text-[10px] font-bold text-red-500 uppercase flex items-center gap-1 border-l border-gray-200 pl-2">
+                                            <Clock className="w-2.5 h-2.5" />
+                                            Due {new Date(project.due_date).toLocaleDateString()}
+                                        </span>
+                                    )}
                                 </div>
                             )}
                         </div>

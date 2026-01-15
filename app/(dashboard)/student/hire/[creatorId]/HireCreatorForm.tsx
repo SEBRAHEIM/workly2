@@ -24,7 +24,7 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
                 </span>
             ) : (
                 <>
-                    Send Request
+                    Confirm & Pay
                 </>
             )}
         </button>
@@ -58,45 +58,6 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
         setSelectedPackage(null) // Reset package on category change
     }, [selectedCategory, services])
 
-    const isSuccess = (state as any)?.success
-
-    if (isSuccess) {
-        return (
-            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-2xl text-center space-y-8 animate-in fade-in zoom-in duration-500">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-10 h-10 text-green-600" />
-                </div>
-
-                <div>
-                    <h2 className="text-2xl font-serif font-bold text-[#333] mb-2">Request Sent Successfully!</h2>
-                    <p className="text-gray-500">Your proposal for <strong>{(state as any).projectTitle}</strong> has been shared with the creator.</p>
-                </div>
-
-                <div className="space-y-4">
-                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 text-center">
-                        <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                            The creator has been notified. They will review your proposal and get back to you shortly. You can track this project in your requests dashboard.
-                        </p>
-
-                        <div className="flex flex-col gap-3">
-                            <Link
-                                href={`/student/projects/${(state as any).projectId}`}
-                                className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] transition-all shadow-md"
-                            >
-                                View Project Details
-                            </Link>
-                            <Link
-                                href="/student/requests"
-                                className="w-full bg-gray-100 text-gray-600 font-bold py-4 rounded-xl hover:bg-gray-200 transition-all"
-                            >
-                                Back to Requests
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
 
     return (
         <form action={formAction} className="space-y-6">
@@ -231,6 +192,18 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                         rows={8}
                     />
                     <input type="hidden" name="description" value={description} />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">When do you need this by?</label>
+                    <input
+                        type="date"
+                        name="dueDate"
+                        required
+                        min={new Date().toISOString().split('T')[0]}
+                        className="w-full bg-[#F3F0E9] border-none rounded-xl p-4 text-[#333333] focus:ring-2 focus:ring-[#3E4C37] outline-none transition-all text-base"
+                    />
+                    <p className="mt-1 text-[10px] text-gray-400 font-medium">Please select a realistic due date for the creator.</p>
                 </div>
             </div>
 

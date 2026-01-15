@@ -129,6 +129,12 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 {req.current_terms.tier} Package
                             </span>
                         )}
+                        {req.due_date && (
+                            <span className="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] font-bold rounded-md uppercase tracking-wider flex items-center gap-1 border border-red-100">
+                                <Clock className="w-2.5 h-2.5" />
+                                Due {new Date(req.due_date).toLocaleDateString()}
+                            </span>
+                        )}
                     </div>
 
                     <div
@@ -183,10 +189,15 @@ export default function RequestCard({ req }: RequestCardProps) {
                     {req.status === 'requested' || req.status === 'accepted' ? (
                         <>
                             <div className="flex items-center mb-4 text-[#3E4C37]">
-                                <Clock className="w-5 h-5 mr-2" />
-                                <span className="font-bold">
-                                    Awaiting Payment
-                                </span>
+                                <Clock className="w-5 h-5 mr-3" />
+                                <div className="flex flex-col">
+                                    <span className="font-bold">Awaiting Payment</span>
+                                    {req.due_date && (
+                                        <span className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter -mt-0.5">
+                                            Requested Due Date: {new Date(req.due_date).toLocaleDateString()}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="bg-white p-4 rounded-xl border border-[#E6E2D6] mb-4 text-center">

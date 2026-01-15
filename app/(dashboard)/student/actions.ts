@@ -9,6 +9,7 @@ import { createNotification } from '@/utils/notifications'
 
 import { containsContactInfo } from '@/utils/content-safety'
 import { notifyCreatorOfNewHire } from '@/utils/sms'
+import { getStripe } from '@/utils/stripe'
 
 import { after } from 'next/server'
 
@@ -22,6 +23,16 @@ export async function createProject(prevState: any, formData: FormData) {
     const packageTier = formData.get('selectedPackageTier') as string
     const title = formData.get('title') as string
     const description = formData.get('description') as string
+    const dueDateStr = formData.get('dueDate') as string
+
+    if (!dueDateStr) {
+        return { message: 'A due date is required.' }
+    }
+
+    const dueDate = new Date(dueDateStr)
+    if (isNaN(dueDate.getTime()) || dueDate < new Date()) {
+        return { message: 'Invalid or past due date.' }
+    }
 
     // 2. Parallel Data Fetching
     const [userResponse, serviceResponse, creatorResponse] = await Promise.all([
@@ -101,7 +112,8 @@ export async function createProject(prevState: any, formData: FormData) {
             },
             file_url: mainFileUrl,
             file_urls: finalFileUrls,
-            waiting_on: null // No negotiation waiting state
+            waiting_on: null, // No negotiation waiting state
+            due_date: dueDate.toISOString()
         })
         .select()
         .single()
@@ -119,14 +131,14 @@ export async function createProject(prevState: any, formData: FormData) {
                 createNotification({
                     userId: creatorId,
                     type: 'info',
-                    message: `New Order: ${title}`,
+                    message: `New Order (Due: ${dueDate.toLocaleDateString()}): ${title}`,
                     link: `/creator/requests`
                 }),
                 supabase.from('project_events').insert({
                     project_id: data.id,
                     type: 'accepted', // Event is acceptance
                     actor_id: user.id,
-                    payload: { price: initialPrice, notes: 'Project created at fixed price' }
+                    payload: { price: initialPrice, notes: `Project created at fixed price. Due: ${dueDate.toISOString()}` }
                 })
             ])
 
@@ -146,12 +158,41 @@ export async function createProject(prevState: any, formData: FormData) {
         }
     })
 
-    return {
-        success: true,
-        projectId: data.id,
-        projectTitle: title,
-        price: initialPrice
+    // 8. Create Stripe Checkout Session (Immediate Redirect)
+    if (initialPrice <= 0) {
+        // Fallback if price is 0 (shouldn't happen with validation)
+        return redirect(`/student/projects/${data.id}`)
     }
+
+    const session = await getStripe().checkout.sessions.create({
+        customer_email: user.email,
+        payment_method_types: ['card'],
+        line_items: [
+            {
+                price_data: {
+                    currency: 'aed',
+                    product_data: {
+                        name: title,
+                        description: `Immediate payment to start project: ${title}`,
+                    },
+                    unit_amount: Math.round(initialPrice * 100),
+                },
+                quantity: 1,
+            },
+        ],
+        metadata: {
+            projectId: data.id,
+        },
+        mode: 'payment',
+        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${data.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${data.id}?payment=cancelled`,
+    })
+
+    if (!session.url) {
+        return { message: 'Created project but failed to initiate payment. Please go to your projects to pay.' }
+    }
+
+    redirect(session.url)
 }
 
 // Negotiation response removed.

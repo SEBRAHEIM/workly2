@@ -36,29 +36,28 @@ export default async function StudentProjectsPage(props: {
 
     if (!projects) return <div>Failed to load projects</div>
 
+    // Filter out unpaid projects entirely for students
+    const confirmedProjects = projects.filter(p => p.funds_status === 'escrow' || p.funds_status === 'released')
+
     // Categorization
-    const activeProjects = projects.filter(p =>
-        ['pending', 'countered', 'negotiating', 'requested'].includes(p.status)
+    // 1. Active: Paid and currently in progress
+    const activeProjects = confirmedProjects.filter(p =>
+        ['accepted', 'agreed', 'in_progress', 'submitted'].includes(p.status)
     )
 
-    const acceptedProjects = projects.filter(p =>
-        ['accepted', 'agreed', 'in_progress', 'submitted', 'completed'].includes(p.status)
+    // 2. Recent: Completed, cancelled, or declined within 48 hours
+    const recentProjects = confirmedProjects.filter(p =>
+        ['completed', 'cancelled', 'declined'].includes(p.status) && isRecent(p.closed_at || p.updated_at)
     )
 
-    const closedProjects = projects.filter(p =>
-        ['declined', 'cancelled', 'expired'].includes(p.status) && isRecent(p.closed_at)
+    // 3. Archive: Everything else that was paid but is now old or closed
+    const archivedProjects = confirmedProjects.filter(p =>
+        !activeProjects.includes(p) && !recentProjects.includes(p)
     )
-
-    const archivedProjects = projects.filter(p =>
-        p.status === 'archived' ||
-        (['declined', 'cancelled', 'expired'].includes(p.status) && !isRecent(p.closed_at))
-    )
-
 
     let currentList = activeProjects
-    if (tab === 'accepted') currentList = acceptedProjects
-    if (tab === 'closed') currentList = closedProjects
-    if (tab === 'archived') currentList = archivedProjects
+    if (tab === 'recent') currentList = recentProjects
+    if (tab === 'archive') currentList = archivedProjects
 
     return (
         <div className="p-8 max-w-6xl mx-auto min-h-screen">
@@ -70,16 +69,12 @@ export default async function StudentProjectsPage(props: {
                     className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     Active ({activeProjects.length})
                 </Link>
-                <Link href="/student/projects?tab=accepted"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'accepted' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Accepted ({acceptedProjects.length})
+                <Link href="/student/projects?tab=recent"
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'recent' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    Recent ({recentProjects.length})
                 </Link>
-                <Link href="/student/projects?tab=closed"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'closed' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Recent ({closedProjects.length})
-                </Link>
-                <Link href="/student/projects?tab=archived"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'archived' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                <Link href="/student/projects?tab=archive"
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'archive' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     Archive ({archivedProjects.length})
                 </Link>
             </div>

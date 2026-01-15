@@ -204,7 +204,7 @@ export async function createProject(prevState: any, formData: FormData) {
 
         if (!session.url) {
             console.error('[CREATE PROJECT] Stripe session created but no URL returned.')
-            return { message: 'Created project but failed to initiate payment. Please go to your projects to pay.' }
+            return { message: 'Project created, but we couldn\'t start the payment process. Please refresh and try again.' }
         }
 
         stripeSessionUrl = session.url
@@ -217,7 +217,7 @@ export async function createProject(prevState: any, formData: FormData) {
 
         const errorMessage = stripeError instanceof Error ? stripeError.message : String(stripeError)
         return {
-            message: `Project created, but payment failed: ${errorMessage}. Please visit your projects list to pay manually.`
+            message: `Payment initialization failed: ${errorMessage}. Your request was saved, but it's hidden until paid. Please try again soon.`
         }
     }
 

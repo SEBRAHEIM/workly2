@@ -155,7 +155,7 @@ export default async function ProjectPage({
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-gray-400 font-bold uppercase tracking-widest text-sm">
-                                {project.pricing_type === 'negotiable' ? 'Price Negotiation' : 'Agreed Terms'}
+                                Order Details
                             </h3>
                             {project.pricing_type && (
                                 <div className="px-2 py-1 bg-[#F3F0E9] rounded-lg border border-[#E6E2D6] flex items-center gap-1.5 transition-all hover:border-[#C6A87C] group">

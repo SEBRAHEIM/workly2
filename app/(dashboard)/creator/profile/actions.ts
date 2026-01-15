@@ -150,7 +150,7 @@ export async function updateCreatorPricing(formData: FormData) {
     const servicePackagesStr = formData.get('servicePackages') as string
 
     // Validate Mode
-    if (!['fixed', 'negotiable', 'packages'].includes(pricingMode)) {
+    if (!['fixed', 'packages'].includes(pricingMode)) {
         return { error: 'Invalid pricing mode.' }
     }
 

@@ -79,9 +79,7 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
 
     const pricingSummary = profile?.pricing_mode === 'packages'
         ? 'Service Packages'
-        : profile?.pricing_mode === 'negotiable'
-            ? `Negotiable (Starts at $${profile?.base_price || 0})`
-            : `Fixed Rate ($${profile?.base_price || 0})`
+        : `Fixed Rate (AED ${profile?.base_price || 0})`
 
     const savedSpecializations = profile?.specializations || []
 

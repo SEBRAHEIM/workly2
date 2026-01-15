@@ -152,11 +152,6 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                             </div>
                         )}
 
-                        {selectedService.pricing_mode === 'negotiable' && (
-                            <div className="bg-white p-3 rounded-xl border border-blue-100 text-sm text-gray-600">
-                                Starting at <span className="font-bold text-[#333]">AED {selectedService.base_price}</span>.
-                            </div>
-                        )}
 
                         {selectedService.pricing_mode === 'packages' && (
                             <div className="space-y-4">

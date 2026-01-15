@@ -139,9 +139,6 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                             {service?.pricing_mode === 'fixed' && (
                                                 <span className="px-2 py-0.5 bg-green-50 text-green-700 border border-green-100 rounded text-[10px] font-bold uppercase">Fixed Rate: AED {service.base_price}</span>
                                             )}
-                                            {service?.pricing_mode === 'negotiable' && (
-                                                <span className="px-2 py-0.5 bg-orange-50 text-orange-700 border border-orange-100 rounded text-[10px] font-bold uppercase">Starting at AED {service.base_price} • Negotiable</span>
-                                            )}
                                             {service?.pricing_mode === 'packages' && (
                                                 <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded text-[10px] font-bold uppercase">Tiered Packages</span>
                                             )}

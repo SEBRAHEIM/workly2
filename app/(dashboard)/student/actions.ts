@@ -159,10 +159,8 @@ export async function createProject(prevState: any, formData: FormData) {
     })
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
-    // IMPORTANT: Stripe requires absolute URLs. Ensure protocol is present.
-    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
-    if (!baseUrl.startsWith('http')) baseUrl = `https://${baseUrl}`
-    baseUrl = baseUrl.replace(/\/$/, '') // Clean trailing slash
+    // FORCE PRODUCTION URL to prevent environment variable issues
+    const baseUrl = 'https://workly.day'
 
     if (initialPrice <= 0) {
         console.warn('[CREATE PROJECT] Price is 0 or less, skipping Stripe. Price:', initialPrice)

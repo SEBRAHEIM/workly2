@@ -159,7 +159,7 @@ export async function createProject(prevState: any, formData: FormData) {
     })
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
-    // IMPORTANT: Stripe requires absolute URLs.
+    // IMPORTANT: Stripe requires absolute URLs. Use definitive production fallback.
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
 
     if (initialPrice <= 0) {

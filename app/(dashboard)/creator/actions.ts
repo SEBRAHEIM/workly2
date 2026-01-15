@@ -378,7 +378,8 @@ export async function submitWork(prevState: any, formData: FormData) {
             submission_url: finalUrl,
             submission_notes: notes || '',
             submission_file_urls: submissionFileUrls,
-            waiting_on: project.student_id // Now waiting on student to review
+            waiting_on: project.student_id, // Now waiting on student to review
+            submitted_at: new Date().toISOString()
         })
         .eq('id', projectId)
 

@@ -2,12 +2,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { releaseFunds } from '../actions'
-import { User, FileText, Check, MessageSquare, Clock, Shield, Briefcase, Download } from 'lucide-react'
+import { User, FileText, Check, MessageSquare, Clock, Shield, Briefcase, Download, AlertTriangle } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 
 import PaymentReceiptModal from './PaymentReceiptModal'
 import PaymentButton from './PaymentButton'
 import SubmissionReview from './SubmissionReview'
+import ReportIssueForm from './ReportIssueForm'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 
 export default async function ProjectPage({
@@ -84,6 +85,17 @@ export default async function ProjectPage({
                 const pkg = service.service_packages?.[project.current_terms.tier]
                 if (pkg) displayPrice = pkg.price || 0
             }
+        }
+    }
+
+    // Lazy Auto-Release for Submitted projects (3-day rule)
+    if (project.status === 'submitted' && project.submitted_at) {
+        const submissionDate = new Date(project.submitted_at)
+        const diffInDays = (Date.now() - submissionDate.getTime()) / (1000 * 60 * 60 * 24)
+        if (diffInDays >= 3) {
+            console.log(`[AUTO-RELEASE] Triggering release for project ${project.id}. Submission age: ${diffInDays.toFixed(1)} days.`)
+            await releaseFunds(project.id, displayPrice, project.creator_id)
+            // redirect or refresh state will happen via server action
         }
     }
 
@@ -234,6 +246,27 @@ export default async function ProjectPage({
                         {project.status === 'accepted' && project.funds_status === 'pending' && (
                             <div className="text-center">
                                 <p className="text-xs text-gray-500 mb-6 px-4">This project is fixed at the price above. Pay now to secure the deal and allow the creator to start working.</p>
+                                <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider mb-2">No refunds accepted after project starts</p>
+                            </div>
+                        )}
+
+                        {/* Payment Policy & Reporting for Active/Submitted Projects */}
+                        {['in_progress', 'submitted'].includes(project.status) && (
+                            <div className="mt-8 border-t border-[#E6E2D6] pt-6 flex flex-col items-center gap-4">
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
+                                    Project Policy
+                                </p>
+                                <p className="text-[10px] text-red-500/60 font-medium text-center px-4">
+                                    No refunds are accepted once work has begun. If you have concerns, please report the issue below.
+                                </p>
+
+                                <ReportIssueForm projectId={project.id} />
+
+                                {project.status === 'submitted' && (
+                                    <p className="text-[10px] text-orange-500/80 font-bold text-center italic mt-2">
+                                        Note: Funds automatically release to the creator 3 days after submission if no action is taken.
+                                    </p>
+                                )}
                             </div>
                         )}
 

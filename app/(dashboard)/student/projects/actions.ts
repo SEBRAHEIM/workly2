@@ -32,7 +32,7 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
     }
 
     // Create Checkout Session
-    // IMPORTANT: Stripe requires absolute URLs.
+    // IMPORTANT: Stripe requires absolute URLs. Use definitive production fallback.
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workly.day'
     let stripeSessionUrl = ''
 
@@ -240,6 +240,43 @@ export async function requestRevision(projectId: string, notes: string) {
         message: `Revision Requested: ${project.title}`,
         link: `/creator/requests` // Or project view
     })
+
+    revalidatePath(`/student/projects/${projectId}`)
+    return { success: true }
+}
+
+export async function reportProject(projectId: string, reason: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    // 1. Content Safety
+    const reasonCheck = containsContactInfo(reason)
+    if (reasonCheck.hasContactInfo) {
+        return { error: `Validation failed: ${reasonCheck.reason}` }
+    }
+
+    // 2. Update Project with report
+    const { error } = await supabase
+        .from('projects')
+        .update({
+            reported_issue: reason
+        })
+        .eq('id', projectId)
+        .eq('student_id', user.id)
+
+    if (error) return { error: 'Failed to submit report' }
+
+    // 3. Log Event
+    await supabase.from('project_events').insert({
+        project_id: projectId,
+        type: 'message_sent', // Generic for now
+        actor_id: user.id,
+        payload: { report: reason, note: 'PROJECT REPORTED BY STUDENT' }
+    })
+
+    // 4. Notification for admin could be added here
+    // For now, it's just in the DB as requested
 
     revalidatePath(`/student/projects/${projectId}`)
     return { success: true }

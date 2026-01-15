@@ -3,13 +3,14 @@
 import { useState, useCallback } from 'react'
 import { User, Clock, Download, ChevronDown, ChevronUp, XCircle, Trash2, Upload, File, Loader2 } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
-import { submitOffer, declineProject, deleteProject, submitWork, acceptOffer } from '../actions'
+import { declineProject, deleteProject, submitWork } from '../actions'
 import { toast } from 'sonner'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 import { useDropzone } from 'react-dropzone'
 import { createClient } from '@/utils/supabase/client'
 
 import { categories } from '@/app/data/categories'
+import EarningsBreakdown from '@/app/components/EarningsBreakdown'
 
 interface RequestCardProps {
     req: any
@@ -19,6 +20,7 @@ export default function RequestCard({ req }: RequestCardProps) {
     const [isExpanded, setIsExpanded] = useState(false)
     const [isDeclining, setIsDeclining] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
+    const [offerPrice, setOfferPrice] = useState<number>(req.current_price || 0)
 
     // File Upload State
     const [uploading, setUploading] = useState(false)
@@ -178,134 +180,50 @@ export default function RequestCard({ req }: RequestCardProps) {
 
                 {/* Right: Action / Pricing */}
                 <div className="w-full md:w-80 bg-[#F3F0E9] rounded-2xl p-6 flex flex-col justify-center">
-                    {req.status === 'requested' ? (
+                    {req.status === 'requested' || req.status === 'accepted' ? (
                         <>
                             <div className="flex items-center mb-4 text-[#3E4C37]">
                                 <Clock className="w-5 h-5 mr-2" />
                                 <span className="font-bold">
-                                    {req.pricing_type === 'negotiable' ? 'Awaiting Your Offer' : 'Confirm Terms'}
+                                    Awaiting Payment
                                 </span>
                             </div>
 
-                            {req.pricing_type === 'negotiable' ? (
-                                <>
-                                    <p className="text-sm text-gray-500 mb-4">
-                                        Review the work and set your price. This will start the negotiation.
-                                    </p>
-                                    <form action={async (formData) => {
-                                        await submitOffer(formData)
-                                    }} className="space-y-3">
-                                        <input type="hidden" name="projectId" value={req.id} />
-                                        <div className="relative">
-                                            <AEDIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                            <input
-                                                type="number"
-                                                name="price"
-                                                placeholder="0.00"
-                                                min="1"
-                                                step="0.01"
-                                                required
-                                                className="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#3E4C37] outline-none mb-3"
-                                            />
-                                        </div>
-                                        <textarea
-                                            name="notes"
-                                            placeholder="Add notes for the student (optional)..."
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#3E4C37] outline-none text-sm h-20 resize-none mb-1"
-                                        ></textarea>
-                                        <button type="submit" className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2e3b29] transition-colors">
-                                            Send Offer
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={handleDecline}
-                                            disabled={isDeclining}
-                                            className="w-full text-red-500 font-bold py-3 text-sm hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center gap-2"
-                                        >
-                                            {isDeclining ? 'Declining...' : <><XCircle className="w-4 h-4" /> Decline Request</>}
-                                        </button>
-                                    </form>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="bg-white p-4 rounded-xl border border-[#E6E2D6] mb-4 text-center">
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Agreed Price</p>
-                                        <p className="text-3xl font-serif font-bold text-[#3E4C37]">
-                                            AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
-                                        </p>
-                                        <p className="text-[10px] text-gray-500 mt-1 uppercase font-medium">{req.pricing_type} {req.current_terms?.tier ? `(${req.current_terms.tier})` : ''}</p>
-                                    </div>
-                                    <form action={async (formData) => {
-                                        await submitOffer(formData)
-                                    }} className="space-y-3">
-                                        <input type="hidden" name="projectId" value={req.id} />
-                                        <input type="hidden" name="price" value={req.current_price} />
-                                        <button type="submit" className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2e3b29] transition-colors">
-                                            Accept & Confirm
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={handleDecline}
-                                            disabled={isDeclining}
-                                            className="w-full text-red-500 font-bold py-3 text-sm hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center gap-2"
-                                        >
-                                            {isDeclining ? 'Declining...' : <><XCircle className="w-4 h-4" /> Decline Request</>}
-                                        </button>
-                                    </form>
-                                </>
-                            )}
+                            <div className="bg-white p-4 rounded-xl border border-[#E6E2D6] mb-4 text-center">
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Total Order Price</p>
+                                <p className="text-3xl font-serif font-bold text-[#3E4C37]">
+                                    AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
+                                </p>
+                                <p className="text-[10px] text-gray-500 mt-1 uppercase font-medium">
+                                    {req.pricing_type} {req.current_terms?.tier ? `(${req.current_terms.tier})` : ''}
+                                </p>
+                                <EarningsBreakdown price={Number(req.current_price)} compact showLabel={false} />
+                            </div>
+
+                            <div className="space-y-3">
+                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-xl text-center">
+                                    <p className="text-xs text-orange-700 font-bold">Waiting for student payment</p>
+                                    <p className="text-[10px] text-orange-600/70 mt-1 uppercase tracking-wider">Project will start once paid</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={handleDecline}
+                                    disabled={isDeclining}
+                                    className="w-full text-red-500 font-bold py-3 text-sm hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                >
+                                    {isDeclining ? 'Declining...' : <><XCircle className="w-4 h-4" /> Decline Order</>}
+                                </button>
+                            </div>
                         </>
                     ) : ['negotiating', 'pending', 'countered'].includes(req.status) ? (
                         <div className="text-center">
-                            <p className="text-sm text-gray-500 mb-2">Current Price</p>
+                            <p className="text-sm text-gray-500 mb-2">Order Price</p>
                             <p className="text-3xl font-bold text-[#3E4C37] mb-4">
                                 AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                             </p>
-
-                            {req.status === 'countered' ? (
-                                <div className="space-y-3">
-                                    <button
-                                        onClick={async () => {
-                                            if (!confirm(`Accept counter-offer for AED ${req.current_price}?`)) return;
-                                            const res = await acceptOffer(req.id);
-                                            if (res.error) toast.error(res.error);
-                                            else toast.success('Offer accepted!');
-                                        }}
-                                        className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2e3b29] transition-colors"
-                                    >
-                                        Accept Counter
-                                    </button>
-                                    <p className="text-[10px] text-gray-400 uppercase font-bold">or send new offer below</p>
-
-                                    <form action={async (formData) => {
-                                        await submitOffer(formData)
-                                    }} className="space-y-3">
-                                        <input type="hidden" name="projectId" value={req.id} />
-                                        <div className="relative">
-                                            <AEDIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                            <input
-                                                type="number"
-                                                name="price"
-                                                placeholder="New Price"
-                                                min="1"
-                                                step="0.01"
-                                                required
-                                                className="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#3E4C37] outline-none text-sm"
-                                            />
-                                        </div>
-                                        <button type="submit" className="w-full bg-white border border-[#3E4C37] text-[#3E4C37] font-bold py-2 rounded-xl hover:bg-gray-50 transition-colors text-sm">
-                                            Update Price
-                                        </button>
-                                    </form>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-xl text-sm font-bold inline-block">
-                                        Waiting for Student...
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-4 italic">They are reviewing your offer</p>
-                                </>
-                            )}
+                            <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-xl text-sm font-bold inline-block">
+                                Waiting for Student Payment...
+                            </div>
                         </div>
                     ) : ['accepted', 'agreed', 'in_progress'].includes(req.status) ? (
                         <div className="text-center">
@@ -326,7 +244,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                             )}
 
                             <form action={async (formData) => {
-                                await submitWork(formData)
+                                await submitWork(null, formData)
                             }} className="text-left space-y-3 bg-white p-4 rounded-xl border border-gray-100">
                                 <p className="text-xs font-bold text-[#3E4C37] uppercase tracking-wider mb-2">Submit Work</p>
                                 <input type="hidden" name="projectId" value={req.id} />

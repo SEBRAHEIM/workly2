@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/server'
 import { Suspense } from 'react'
 import CreatorGrid from './CreatorGrid'
 import GridSkeleton from './GridSkeleton'
+import DynamicBackLink from './DynamicBackLink'
 
 // Generate static params for all categories (optional but good for SEO/Performance)
 export async function generateStaticParams() {
@@ -16,37 +17,6 @@ export async function generateStaticParams() {
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
     const category = categories.find((c) => c.slug === slug)
-    const supabase = await createClient()
-
-    // We can fetch user session here quickly (lightweight) OR inside the grid.
-    // However, the Back button needs to know where to go.
-    // Since getUser is fast (often cached or lightweight reading jwt), we can keep it for the header logic
-    // But ideally we don't block the HEADER render on it if possible.
-    // For now, let's keep user fetch here as it's usually < 10ms if cached, but let's separate the creator fetch.
-
-    // Allow the page to stream:
-    // 1. Resolve User (fast)
-    // 2. Render Header (instant)
-    // 3. Stream Grid (slow DB query)
-
-    const { data: { user } } = await supabase.auth.getUser()
-
-    // We need role for the back button
-    let backLink = '/'
-    let backText = 'Back to Home'
-
-    if (user) {
-        // Optimistic back link or quick fetch role?
-        // Role fetch might add latency. Let's do a quick fetch, it's indexed usually.
-        const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-        if (data?.role === 'creator') {
-            backLink = '/creator'
-            backText = 'Back to Dashboard'
-        } else {
-            backLink = '/student'
-            backText = 'Back to Dashboard'
-        }
-    }
 
     if (!category) {
         return <div className="p-10 text-center">Category not found</div>
@@ -57,14 +27,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             {/* Header - Renders Instantly */}
             <div className="bg-[#3E4C37] text-white pt-32 pb-16 px-6 relative overflow-hidden">
                 <div className="max-w-6xl mx-auto relative z-10">
-                    <Link
-                        href={backLink}
-                        prefetch={true}
-                        className="inline-flex items-center text-white/60 hover:text-white mb-6 transition-colors touch-manipulation"
-                    >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        {backText}
-                    </Link>
+                    <Suspense fallback={<div className="h-6 w-32 bg-white/10 rounded mb-6 animate-pulse" />}>
+                        <DynamicBackLink />
+                    </Suspense>
                     <div className="flex items-center mb-4">
                         <category.icon className="w-8 h-8 mr-3 text-[#C6A87C]" />
                         <h1 className="font-serif text-4xl md:text-5xl font-bold">{category.title}</h1>

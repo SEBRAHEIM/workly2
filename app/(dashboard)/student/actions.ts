@@ -84,7 +84,7 @@ export async function createProject(prevState: any, formData: FormData) {
         }
     }
 
-    // 6. Project Creation (The only critical blocking task)
+    // 6. Project Creation (Immediate Accepted Status)
     const { data, error } = await supabase
         .from('projects')
         .insert({
@@ -92,7 +92,7 @@ export async function createProject(prevState: any, formData: FormData) {
             creator_id: creatorId,
             title: title || 'Untitled Project',
             description: description || '',
-            status: 'requested',
+            status: 'accepted', // Immediately accepted for payment
             pricing_type: pricingType,
             current_price: initialPrice,
             current_terms: {
@@ -100,7 +100,8 @@ export async function createProject(prevState: any, formData: FormData) {
                 tier: packageTier || null
             },
             file_url: mainFileUrl,
-            file_urls: finalFileUrls
+            file_urls: finalFileUrls,
+            waiting_on: null // No negotiation waiting state
         })
         .select()
         .single()
@@ -110,42 +111,35 @@ export async function createProject(prevState: any, formData: FormData) {
         return { message: 'Failed to create project: ' + error.message }
     }
 
-    // 7. Non-Blocking Post-creation Tasks (Instant response)
+    // 7. Non-Blocking Post-creation Tasks
     after(async () => {
-        console.log('[DEBUG] Entering after() hook for project:', data.id)
         try {
             // Notifications & Events
-            console.log('[DEBUG] Creating notifications and events...')
             await Promise.all([
                 createNotification({
                     userId: creatorId,
                     type: 'info',
-                    message: `New Request: ${title}`,
+                    message: `New Order: ${title}`,
                     link: `/creator/requests`
                 }),
                 supabase.from('project_events').insert({
                     project_id: data.id,
-                    type: 'offer_sent',
+                    type: 'accepted', // Event is acceptance
                     actor_id: user.id,
-                    payload: { price: initialPrice, notes: 'Initial Request' }
+                    payload: { price: initialPrice, notes: 'Project created at fixed price' }
                 })
             ])
 
-            // WhatsApp Notification (Centralized Background Alert)
+            // WhatsApp Notification
             if (creatorProfile?.whatsapp_phone) {
-                console.log('[DEBUG] Triggering SMS to:', creatorProfile.whatsapp_phone)
                 await notifyCreatorOfNewHire({
                     to: creatorProfile.whatsapp_phone,
                     studentName: (user as any).user_metadata?.full_name || 'A Student',
                     projectTitle: title,
-                    tier: packageTier || 'Custom',
+                    tier: packageTier || 'Fixed',
                     price: initialPrice,
                     link: `${process.env.NEXT_PUBLIC_BASE_URL}/creator/requests`
-                }).then(res => {
-                    console.log('[DEBUG] SMS Result:', res)
                 }).catch(e => console.error('[SMS] Background alert failed:', e))
-            } else {
-                console.log('[DEBUG] No whatsapp_phone for creator profile')
             }
         } catch (postError) {
             console.error('Error in background tasks:', postError)
@@ -160,156 +154,7 @@ export async function createProject(prevState: any, formData: FormData) {
     }
 }
 
-export async function respondToOffer(formData: FormData) {
-    try {
-        const supabase = await createClient()
-        const projectId = formData.get('projectId') as string
-        const action = formData.get('action') as string // 'accept', 'counter', or 'decline'
-
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) throw new Error('Unauthorized')
-
-        // Fetch project
-        const { data: project } = await supabase.from('projects').select('title, creator_id, student_id').eq('id', projectId).single()
-        if (!project) return { success: false, message: 'Project not found' }
-
-        // SECURITY: Only the Student can respond to offers
-        if (project.student_id !== user.id) {
-            return { success: false, message: 'Unauthorized' }
-        }
-
-        if (action === 'accept') {
-            const { error } = await supabase
-                .from('projects')
-                .update({
-                    status: 'accepted', // or 'agreed'
-                    waiting_on: null // Deal done
-                })
-                .eq('id', projectId)
-
-            if (error) {
-                console.error('Error accepting project:', error)
-                return { success: false, message: 'Database update failed: ' + error.message }
-            }
-
-            // EVENT: Log Acceptance
-            await supabase.from('project_events').insert({
-                project_id: projectId,
-                type: 'accepted',
-                actor_id: user.id,
-                payload: { notes: 'Offer accepted by Student' }
-            })
-
-            // Notify Creator
-            await createNotification({
-                userId: project.creator_id,
-                type: 'success',
-                message: `Offer Accepted: ${project.title}`,
-                link: `/creator/projects/${projectId}`
-            })
-
-            revalidatePath(`/student/projects/${projectId}`)
-            return { success: true }
-        }
-        else if (action === 'counter') {
-            const priceRaw = formData.get('price')
-            const notes = formData.get('notes') as string || ''
-            const price = priceRaw ? parseFloat(priceRaw.toString()) : 0
-
-            if (!price || isNaN(price) || price < 0) {
-                return { success: false, message: "Invalid price" }
-            }
-
-            // 1. Content Safety Check for Counter Notes
-            const notesCheck = containsContactInfo(notes)
-            if (notesCheck.hasContactInfo) {
-                return { success: false, message: `Notes validation failed: ${notesCheck.reason}` }
-            }
-
-            // Create counter offer 
-            const { error: offerError } = await supabase.from('offers').insert({
-                project_id: projectId,
-                sender_id: user.id,
-                price: price,
-                status: 'pending'
-            })
-            if (offerError) console.error("Offer insert error:", offerError)
-
-
-            // Update project
-            const { error: projError } = await supabase.from('projects')
-                .update({
-                    status: 'countered', // New status
-                    current_price: price,
-                    waiting_on: project.creator_id // Now waiting on Creator
-                })
-                .eq('id', projectId)
-
-            if (projError) {
-                console.error('Project update error:', projError)
-                return { success: false, message: 'Project update failed: ' + projError.message }
-            }
-
-            // EVENT: Log Counter
-            await supabase.from('project_events').insert({
-                project_id: projectId,
-                type: 'counter_sent',
-                actor_id: user.id,
-                payload: { price: price, notes: notes || 'Counter offer from Student' }
-            })
-
-            // Notify Creator
-            await createNotification({
-                userId: project.creator_id,
-                type: 'warning',
-                message: `Counter Offer: AED ${price} for ${project.title}`,
-                link: `/creator/projects/${projectId}`
-            })
-
-            revalidatePath(`/student/projects/${projectId}`)
-            return { success: true }
-        } else if (action === 'decline') {
-            // Soft Close Logic
-            const { error } = await supabase
-                .from('projects')
-                .update({
-                    status: 'declined',
-                    closed_at: new Date().toISOString(),
-                    waiting_on: null
-                })
-                .eq('id', projectId)
-
-            if (error) {
-                console.error('Error declining project:', error)
-                return { success: false, message: 'Database update failed: ' + error.message }
-            }
-
-            // EVENT: Log Decline
-            await supabase.from('project_events').insert({
-                project_id: projectId,
-                type: 'declined',
-                actor_id: user.id,
-                payload: { notes: 'Offer declined by Student' }
-            })
-
-            // Notify Creator
-            await createNotification({
-                userId: project.creator_id,
-                type: 'error',
-                message: `Offer Declined: ${project.title}`,
-                link: `/creator/requests`
-            })
-
-            revalidatePath(`/student/projects/${projectId}`)
-            return { success: true }
-        }
-
-        return { success: false, message: "Unknown action" }
-    } catch (e: any) {
-        console.error('Server Action Failed:', e)
-        return { success: false, message: e.message || 'Server error occurred' }
-    }
-}
+// Negotiation response removed.
 
 export async function toggleFavorite(creatorId: string, isFavorite: boolean) {
     const supabase = await createClient()

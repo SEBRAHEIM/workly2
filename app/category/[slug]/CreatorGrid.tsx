@@ -12,23 +12,18 @@ export default async function CreatorGrid({
 }) {
     const supabase = await createClient()
 
-    // 1. Fetch User (for favorites)
-    const { data: { user } } = await supabase.auth.getUser()
+    // 1. Parallel Fetch: User (for favorites) and Creators (with only required fields)
+    const [userResponse, creatorsResponse] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase
+            .from('profiles')
+            .select('id, display_name, full_name, avatar_url, tagline, level, languages')
+            .not('display_name', 'is', null)
+            .contains('specializations', categorySlug ? [categorySlug] : [])
+    ])
 
-    // 2. Build Query
-    let query = supabase
-        .from('profiles') // Assuming creators are just profiles for now, or filtered by role check if needed
-        .select('*')
-        .not('display_name', 'is', null) // Only show completed profiles
-
-    // Filter by Specialization/Category
-    if (categorySlug) {
-        // Since specializations is an array/text, we use 'cs' (contains) for array or ilike for text
-        // Based on previous code, it seems specializations is an array of slugs
-        query = query.contains('specializations', [categorySlug])
-    }
-
-    const { data: creators, error } = await query
+    const user = userResponse.data.user
+    const creators = creatorsResponse.data
 
     if (!creators || creators.length === 0) {
         return (
@@ -38,7 +33,7 @@ export default async function CreatorGrid({
         )
     }
 
-    // 3. Fetch Favorites for this user
+    // 2. Fetch Favorites in parallel with the rest of the render if user exists
     let favoriteIds = new Set<string>()
     if (user) {
         const { data: favorites } = await supabase

@@ -29,12 +29,23 @@ export default function StudentNavbar() {
 
     useEffect(() => {
         if (isMenuOpen) {
-            document.body.style.overflow = 'hidden'
+            const scrollY = window.scrollY
+            document.body.style.position = 'fixed'
+            document.body.style.top = `-${scrollY}px`
+            document.body.style.width = '100%'
         } else {
-            document.body.style.overflow = 'unset'
+            const scrollY = document.body.style.top
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1)
+            }
         }
         return () => {
-            document.body.style.overflow = 'unset'
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
         }
     }, [isMenuOpen])
 
@@ -146,7 +157,7 @@ export default function StudentNavbar() {
                         />
 
                         {/* Menu Panel */}
-                        <div className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-[#F8F7F2] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-r border-[#E6E2D6]">
+                        <div className="fixed top-0 left-0 h-[100dvh] w-[85%] max-w-sm bg-[#F8F7F2] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-r border-[#E6E2D6]">
                             {/* Close Button */}
                             <button
                                 onClick={() => setIsMenuOpen(false)}
@@ -173,7 +184,7 @@ export default function StudentNavbar() {
                             </div>
 
                             {/* Menu Items */}
-                            <div className="flex-1 overflow-y-auto py-8">
+                            <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                                 <div className="px-6 mb-8">
                                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Workspace</h3>
                                     <div className="space-y-4">

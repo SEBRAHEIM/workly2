@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield } from 'lucide-react'
+import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield, Download } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 
@@ -29,12 +29,23 @@ export default function CreatorNavbar() {
 
     useEffect(() => {
         if (isMenuOpen) {
-            document.body.style.overflow = 'hidden'
+            const scrollY = window.scrollY
+            document.body.style.position = 'fixed'
+            document.body.style.top = `-${scrollY}px`
+            document.body.style.width = '100%'
         } else {
-            document.body.style.overflow = 'unset'
+            const scrollY = document.body.style.top
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1)
+            }
         }
         return () => {
-            document.body.style.overflow = 'unset'
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
         }
     }, [isMenuOpen])
 
@@ -97,7 +108,7 @@ export default function CreatorNavbar() {
                     />
 
                     {/* Menu Panel */}
-                    <div className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-[#F3F0E9] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out">
+                    <div className="fixed top-0 left-0 h-[100dvh] w-[85%] max-w-sm bg-[#F3F0E9] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-r border-[#E6E2D6]">
                         {/* Close Button */}
                         <button
                             onClick={() => setIsMenuOpen(false)}
@@ -131,7 +142,7 @@ export default function CreatorNavbar() {
                         </div>
 
                         {/* Menu Items */}
-                        <div className="flex-1 overflow-y-auto py-8">
+                        <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                             <div className="px-6 mb-6">
                                 <Link
                                     href="/creator/profile"
@@ -181,7 +192,7 @@ export default function CreatorNavbar() {
                                 </div>
                             </div>
 
-                            <div className="px-6">
+                            <div className="px-6 mb-6">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Finance</h3>
                                 <div className="space-y-4">
                                     <Link
@@ -194,6 +205,46 @@ export default function CreatorNavbar() {
                                         </div>
                                         <span className="font-medium">Earnings & Wallet</span>
                                     </Link>
+
+                                    <div className="space-y-2">
+                                        <div className="w-full flex items-center p-2 text-gray-400">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm opacity-50">
+                                                <Download className="w-4 h-4" />
+                                            </div>
+                                            <span className="text-[10px] font-bold uppercase tracking-wider">Withdrawals</span>
+                                        </div>
+                                        <div className="pl-11 space-y-3">
+                                            <Link
+                                                href="/creator/withdrawals/bank"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
+                                            >
+                                                Bank/Local Bank Transfer
+                                            </Link>
+                                            <Link
+                                                href="/creator/withdrawals/skrill"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
+                                            >
+                                                Skrill
+                                            </Link>
+                                            <Link
+                                                href="/creator/withdrawals/neteller"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
+                                            >
+                                                Neteller
+                                            </Link>
+                                            <Link
+                                                href="/creator/withdrawals/card"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
+                                            >
+                                                Card
+                                            </Link>
+                                        </div>
+                                    </div>
+
                                     <Link
                                         href="/creator/history"
                                         onClick={() => setIsMenuOpen(false)}

@@ -12,17 +12,28 @@ export async function signup(prevState: any, formData: FormData) {
     const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-            // We don't need emailRedirectTo because we are using OTP
-            // But good to set it just in case
-        },
     })
 
     if (error) {
         return { error: error.message }
     }
 
-    redirect(`/verify?email=${encodeURIComponent(email)}`)
+    redirect(`/verify?email=${encodeURIComponent(email)}&type=signup`)
+}
+
+export async function resendOtp(email: string, type: 'signup' | 'email_change' = 'signup') {
+    const supabase = await createClient()
+
+    const { error } = await supabase.auth.resend({
+        type: type as any,
+        email,
+    })
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    return { success: true }
 }
 
 export async function verifyOtp(prevState: any, formData: FormData) {

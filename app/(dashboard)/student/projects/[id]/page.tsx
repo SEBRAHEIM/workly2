@@ -1,14 +1,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { redirect, notFound } from 'next/navigation'
-import { respondToOffer } from '../../actions'
 import { releaseFunds } from '../actions'
 import { User, FileText, Check, MessageSquare, Clock, Shield, Briefcase, Download } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 
 import PaymentReceiptModal from './PaymentReceiptModal'
 import PaymentButton from './PaymentButton'
-import NegotiationConsole from './NegotiationConsole'
 import SubmissionReview from './SubmissionReview'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 
@@ -218,21 +216,20 @@ export default async function ProjectPage({
                         )}
 
 
-                        {/* NEGOTIATION CONSOLE (Client Component) */}
-                        {/* Always show console unless we are in a pure success/payment state handled above, 
-                            BUT console handles "Declined" and "Closed" states internally now too for history. */}
-                        <NegotiationConsole
-                            projectId={project.id}
-                            projectStatus={project.status}
-                            currentPrice={displayPrice}
-                            latestOffer={latestOffer ? {
-                                sender_id: latestOffer.sender_id,
-                                price: latestOffer.price
-                            } : undefined}
-                            isActionRequired={isActionRequired}
-                            iAmSender={iAmSender}
-                            events={events || []}
-                        />
+                        {/* CONSOLE REMOVED - Fixed Price Only */}
+                        <div className="bg-[#F3F0E9] rounded-2xl p-6 border border-[#E6E2D6] mb-6">
+                            <div className="flex flex-col items-center">
+                                <AEDIcon className="w-12 h-12 text-[#3E4C37] mb-4 opacity-20" />
+                                <p className="text-3xl font-serif font-bold text-[#3E4C37]">AED {displayPrice}</p>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Current Price</p>
+                            </div>
+                        </div>
+
+                        {project.status === 'accepted' && project.funds_status === 'pending' && (
+                            <div className="text-center">
+                                <p className="text-xs text-gray-500 mb-6 px-4">This project is fixed at the price above. Pay now to secure the deal and allow the creator to start working.</p>
+                            </div>
+                        )}
 
                     </div>
                     {/* Background decoration */}

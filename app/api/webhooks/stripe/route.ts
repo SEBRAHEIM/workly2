@@ -27,8 +27,6 @@ export async function POST(req: Request) {
         const supabase = await createClient()
         const projectId = session.metadata.projectId
 
-        console.log(`Payment successful for project: ${projectId}`)
-
         // Update Project Status
         const { error } = await supabase
             .from('projects')
@@ -63,6 +61,32 @@ export async function POST(req: Request) {
                 message: `Escrow secured for "${project.title}". You can start working now.`,
                 link: `/creator/projects/${project.id}`
             })
+        }
+    } else if (event.type === 'account.updated') {
+        const account = event.data.object as any
+        const supabase = await createClient()
+
+        // Track verification status if needed
+        // For now, let's just log if they are verified
+        const isVerified = account.details_submitted && account.charges_enabled && account.payouts_enabled
+
+        if (isVerified) {
+            // Update profile with verification flag (if we add one)
+            // or just notify the user their account is ready
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('id')
+                .eq('stripe_account_id', account.id)
+                .single()
+
+            if (profile) {
+                await supabase.from('notifications').insert({
+                    user_id: profile.id,
+                    type: 'success',
+                    message: "Congratulations! Your Stripe account is fully verified and ready for payouts.",
+                    link: "/creator/profile"
+                })
+            }
         }
     }
 

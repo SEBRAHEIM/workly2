@@ -6,6 +6,7 @@ import AEDIcon from '@/app/components/AEDIcon'
 import Link from 'next/link'
 import SubmitWorkForm from './SubmitWorkForm'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
+import EarningsBreakdown from '@/app/components/EarningsBreakdown'
 
 export default async function CreatorProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const { id: rawId } = await params
@@ -51,9 +52,9 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
         }
     }
 
-    // Calculate time remaining (Mock logic)
+    // Calculate time remaining
     const dueDate = project.due_date ? new Date(project.due_date) : null
-    const daysLeft = dueDate ? Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 7
+    const daysLeft = dueDate ? Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0
 
     return (
         <div className="max-w-5xl mx-auto p-8">
@@ -129,6 +130,8 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                                     </span>
                                 )}
                             </div>
+
+                            <EarningsBreakdown price={Number(project.current_price)} dark compact />
 
                             {project.funds_status === 'escrow' ? (
                                 <p className="text-sm text-white/70">

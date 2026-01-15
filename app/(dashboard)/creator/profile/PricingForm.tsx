@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { updateCreatorPricing } from './actions'
 import FormattedTextarea from '@/app/components/FormattedTextarea'
 import { categories } from '@/app/data/categories'
+import EarningsBreakdown from '@/app/components/EarningsBreakdown'
 
 interface PricingFormProps {
     profile: any
@@ -16,7 +17,6 @@ interface PricingFormProps {
 
 type PricingMode = 'fixed' | 'negotiable' | 'packages'
 
-// Default Packages Template
 const DEFAULT_PACKAGES = {
     basic: { title: 'Basic', price: 50, description: '', delivery_days: 3, revisions: 1 },
     standard: { title: 'Standard', price: 100, description: '', delivery_days: 5, revisions: 2 },
@@ -44,7 +44,9 @@ export default function PricingForm({ profile, services, specializations }: Pric
         const savedService = services.find(s => s.category_slug === selectedCategory)
 
         if (savedService) {
-            setMode(savedService.pricing_mode as PricingMode)
+            // Force 'fixed' if it was previously 'negotiable'
+            const initialMode = savedService.pricing_mode === 'negotiable' ? 'fixed' : savedService.pricing_mode
+            setMode(initialMode as PricingMode)
             setBasePrice(savedService.base_price || 0)
             setPackages(savedService.service_packages || DEFAULT_PACKAGES)
         } else {
@@ -125,7 +127,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                 </h3>
 
                 {/* Mode Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
                         type="button"
                         onClick={() => setMode('fixed')}
@@ -136,18 +138,6 @@ export default function PricingForm({ profile, services, specializations }: Pric
                         </div>
                         <h3 className="font-bold text-[#333]">Fixed Price</h3>
                         <p className="text-xs text-gray-500 mt-1">Single rate per project.</p>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setMode('negotiable')}
-                        className={`p-4 rounded-xl border-2 text-left transition-all ${mode === 'negotiable' ? 'border-[#3E4C37] bg-[#F3F0E9]' : 'border-gray-100 hover:border-gray-200'}`}
-                    >
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-3 text-[#3E4C37] shadow-sm">
-                            <MessageSquare className="w-5 h-5" />
-                        </div>
-                        <h3 className="font-bold text-[#333]">Negotiable</h3>
-                        <p className="text-xs text-gray-500 mt-1">Open to offers.</p>
                     </button>
 
                     <button
@@ -179,26 +169,11 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                     placeholder="500"
                                 />
                             </div>
+                            <EarningsBreakdown price={basePrice} />
                             <p className="text-xs text-gray-400 mt-2">Projects will be charged at this rate.</p>
                         </div>
                     )}
 
-                    {mode === 'negotiable' && (
-                        <div className="max-w-md">
-                            <label className="block text-sm font-bold text-[#333] mb-2">Starting At (Minimum)</label>
-                            <div className="relative">
-                                <span className="absolute left-3 top-3 text-xs font-bold text-gray-400 mt-0.5">AED</span>
-                                <input
-                                    type="number"
-                                    value={basePrice}
-                                    onChange={(e) => setBasePrice(Number(e.target.value))}
-                                    className="w-full pl-12 p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3E4C37]"
-                                    placeholder="50"
-                                />
-                            </div>
-                            <p className="text-xs text-gray-400 mt-2">Visible as "Starting at AED X". Allows negotiation.</p>
-                        </div>
-                    )}
 
                     {mode === 'packages' && (
                         <div>
@@ -235,6 +210,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                             onChange={(e) => updatePackage(activeTab, 'price', Number(e.target.value))}
                                             className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
                                         />
+                                        <EarningsBreakdown price={packages[activeTab].price} compact />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
@@ -284,7 +260,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                         Save {getCategoryTitle(selectedCategory)} Pricing
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     )
 }

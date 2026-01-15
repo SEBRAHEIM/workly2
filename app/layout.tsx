@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import Lenis from 'lenis'
 import { Toaster } from "sonner";
 import { Inter, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
@@ -27,17 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    const lenis = new Lenis()
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-  }, [])
-
   return (
     <html lang="en" className="scroll-smooth">
       <body

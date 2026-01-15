@@ -102,7 +102,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
         <form action={formAction} className="space-y-6">
             <input type="hidden" name="creatorId" value={creatorId} />
             <input type="hidden" name="categorySlug" value={selectedCategory} />
-            <input type="hidden" name="pricingType" value={selectedService?.pricing_mode || 'negotiable'} />
+            <input type="hidden" name="pricingType" value={selectedService?.pricing_mode || 'fixed'} />
             <input type="hidden" name="selectedPackageTier" value={selectedPackage || ''} />
 
             {state?.message && (
@@ -153,8 +153,8 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                         )}
 
                         {selectedService.pricing_mode === 'negotiable' && (
-                            <div className="bg-white p-3 rounded-xl border border-orange-100 italic text-sm text-gray-600">
-                                This creator is open to negotiation. Starting at <span className="font-bold text-[#333]">AED {selectedService.base_price}</span>.
+                            <div className="bg-white p-3 rounded-xl border border-blue-100 text-sm text-gray-600">
+                                Starting at <span className="font-bold text-[#333]">AED {selectedService.base_price}</span>.
                             </div>
                         )}
 
@@ -255,9 +255,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
             <div className="pt-6">
                 <SubmitButton isPending={isPending} />
                 <p className="text-center text-xs text-gray-400 mt-4">
-                    {selectedService?.pricing_mode === 'negotiable'
-                        ? "The creator will review this and send you a customized price offer."
-                        : "You are requesting a deal based on the creator's defined pricing."}
+                    Secure your order now. Funds are held safely in escrow until you approve the work.
                 </p>
             </div>
         </form>

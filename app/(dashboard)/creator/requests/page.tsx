@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Briefcase, User, Clock, Download } from 'lucide-react'
-import { submitOffer } from '../actions'
 import RequestCard from './RequestCard'
 
 export default async function CreatorRequests(props: {
@@ -44,11 +43,11 @@ export default async function CreatorRequests(props: {
 
     // Categorization
     const activeRequests = requests.filter(p =>
-        ['requested', 'negotiating', 'pending', 'countered'].includes(p.status)
+        ['requested', 'accepted', 'agreed', 'negotiating', 'pending', 'countered'].includes(p.status) && p.funds_status === 'pending'
     )
 
-    const acceptedRequests = requests.filter(p =>
-        ['accepted', 'agreed', 'in_progress', 'submitted', 'completed'].includes(p.status)
+    const ongoingRequests = requests.filter(p =>
+        ['accepted', 'agreed', 'in_progress', 'submitted'].includes(p.status) && p.funds_status === 'escrow'
     )
 
     const closedRequests = requests.filter(p =>
@@ -62,33 +61,34 @@ export default async function CreatorRequests(props: {
 
 
     let currentList = activeRequests
-    if (tab === 'accepted') currentList = acceptedRequests
+    if (tab === 'ongoing') currentList = ongoingRequests
+    if (tab === 'completed') currentList = requests.filter(p => p.status === 'completed')
     if (tab === 'closed') currentList = closedRequests
     if (tab === 'archived') currentList = archivedRequests
 
     return (
         <div className="p-8 max-w-6xl mx-auto min-h-screen">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-4xl font-serif font-bold text-[#3E4C37]">Project Requests</h1>
+                <h1 className="text-4xl font-serif font-bold text-[#3E4C37]">Project Orders</h1>
             </div>
 
             {/* TABS */}
             <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
                 <Link href="/creator/requests"
                     className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Active ({activeRequests.length})
+                    New Orders ({activeRequests.length})
                 </Link>
-                <Link href="/creator/requests?tab=accepted"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'accepted' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Accepted ({acceptedRequests.length})
+                <Link href="/creator/requests?tab=ongoing"
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'ongoing' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    Active Work ({ongoingRequests.length})
+                </Link>
+                <Link href="/creator/requests?tab=completed"
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'completed' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    Completed ({requests.filter(p => p.status === 'completed').length})
                 </Link>
                 <Link href="/creator/requests?tab=closed"
                     className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'closed' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Closed History ({closedRequests.length})
-                </Link>
-                <Link href="/creator/requests?tab=archived"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'archived' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Archive ({archivedRequests.length})
+                    Cancelled ({closedRequests.length})
                 </Link>
             </div>
 

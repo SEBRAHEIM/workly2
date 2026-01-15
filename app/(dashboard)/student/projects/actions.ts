@@ -91,9 +91,13 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
 
     // Handle Escrow Release logic only if funds are actually in escrow
     if (project.funds_status === 'escrow') {
-        const commissionRate = 0.17
-        const platformFee = amount * commissionRate
-        const creatorEarnings = amount - platformFee
+        const platformFeePercent = 0.17
+        const stripePercent = 0.029
+        const stripeFixedFee = 1 // 1 AED
+
+        const platformFee = amount * platformFeePercent
+        const processingFee = (amount * stripePercent) + stripeFixedFee
+        const creatorEarnings = amount - platformFee - processingFee
 
         // 3. Fetch Creator Profile to determine payout method
         const { data: creator } = await supabase
@@ -115,7 +119,6 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
                         destination: creator.stripe_account_id,
                         description: `Payout for Project ${projectId}`,
                     })
-                    console.log('Stripe Transfer Successful')
                     transferSuccess = true
                 } catch (err) {
                     console.error('Stripe Transfer Failed:', err)

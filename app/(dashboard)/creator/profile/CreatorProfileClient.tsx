@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 import ProfileSection from './ProfileSection'
 import IdentityForm from './IdentityForm'
 import ExpertiseForm from './ExpertiseForm'
@@ -8,6 +10,8 @@ import PricingForm from './PricingForm'
 import PortfolioCategoryAccordion from './PortfolioCategoryAccordion'
 import { categories as allCategories } from '@/app/data/categories'
 import { Briefcase } from 'lucide-react'
+import StripeConnectBanner from '../StripeConnectBanner'
+import PayoutSettings from '../PayoutSettings'
 
 interface Props {
     profile: any
@@ -28,9 +32,19 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
     // But logically, Step 3 is just the next step.
     const hasPricing = true // It's always "ready" to be edited, but let's treat it as a step to pass through.
 
-    const [openSection, setOpenSection] = useState<'identity' | 'expertise' | 'pricing' | 'portfolio' | null>(null)
+    const [openSection, setOpenSection] = useState<'identity' | 'expertise' | 'pricing' | 'portfolio' | 'payouts' | null>(null)
+    const searchParams = useSearchParams()
 
     useEffect(() => {
+        // Check for Stripe success
+        if (searchParams.get('stripe_success')) {
+            toast.success('Stripe account connected successfully!', {
+                description: 'You are now ready to receive payouts.',
+                duration: 5000,
+            })
+            setOpenSection('payouts' as any)
+        }
+
         // Run once on mount to determine where to start
         if (!hasIdentity) {
             setOpenSection('identity')
@@ -173,6 +187,20 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                                 </div>
                             )}
                         </div>
+                    </ProfileSection>
+                </div>
+            )}
+            {/* 5. Payouts Section */}
+            {hasPortfolio && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <ProfileSection
+                        title="5. Payouts"
+                        summary={(profile?.stripe_account_id || profile?.bank_iban) ? 'Payouts Configured' : 'Set up how you get paid'}
+                        isOpen={openSection === 'payouts' as any}
+                        isCompleted={!!(profile?.stripe_account_id || profile?.bank_iban)}
+                        onToggle={() => setOpenSection(openSection === 'payouts' as any ? null : 'payouts' as any)}
+                    >
+                        <PayoutSettings profile={profile} />
                     </ProfileSection>
                 </div>
             )}

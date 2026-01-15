@@ -4,32 +4,33 @@ import { createClient } from '@/utils/supabase/server'
 export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import DashboardHeader from './DashboardHeader'
+import StripeConnectBanner from './StripeConnectBanner'
 
 export default async function CreatorDashboard() {
     const supabase = await createClient()
+    // Parallel fetch for user auth and base profile data
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) return <div>Please log in</div>
 
-    // Fetch Profile
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
+    // 2. Parallel fetch for all dashboard requirements
+    const [profileRes, portfolioRes, requestsRes] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', user.id).single(),
+        supabase.from('portfolio_items').select('id', { count: 'exact', head: true }).eq('creator_id', user.id),
+        supabase.from('projects').select('*').eq('creator_id', user.id).eq('status', 'requested').order('created_at', { ascending: false }).limit(5)
+    ])
 
-    // Fetch Portfolio Count
-    const { count: portfolioCount } = await supabase
-        .from('portfolio_items')
-        .select('*', { count: 'exact', head: true })
-        .eq('creator_id', user.id)
+    const profile = profileRes.data
+    const portfolioCount = portfolioRes.count || 0
+    const recentRequests = requestsRes.data
 
     // Check Completion
     const hasBio = profile?.bio && profile.bio.length > 10
     const hasSpecialization = profile?.specializations && profile.specializations.length > 0
-    const hasPortfolio = (portfolioCount || 0) > 0
+    const hasPortfolio = portfolioCount > 0
+    const hasStripe = !!profile?.stripe_account_id
 
-    const isProfileComplete = hasBio && hasSpecialization && hasPortfolio
+    const isProfileComplete = hasBio && hasSpecialization && hasPortfolio && hasStripe
 
     // ----------------------------------------------------------------------
     // 1. INCOMPLETE STATE: Show "Set Up Account" CTA
@@ -40,7 +41,7 @@ export default async function CreatorDashboard() {
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-serif font-bold text-[#3E4C37] mb-4">Welcome, Creator!</h1>
                     <p className="text-xl text-gray-500 max-w-xl mx-auto">
-                        To start receiving project requests from students, you need to complete your profile identity.
+                        To start receiving project requests from students and receive payouts, you need to complete your setup.
                     </p>
                 </div>
 
@@ -50,13 +51,13 @@ export default async function CreatorDashboard() {
 
                         <div className="space-y-4 mb-8">
                             <div className="flex items-center p-4 rounded-xl bg-[#F3F0E9] border border-[#E6E2D6]">
-                                {hasSpecialization && hasBio ? (
+                                {(hasSpecialization && hasBio) ? (
                                     <CheckCircle2 className="w-6 h-6 text-green-600 mr-4 flex-shrink-0" />
                                 ) : (
                                     <div className="w-6 h-6 rounded-full border-2 border-gray-300 mr-4 flex-shrink-0" />
                                 )}
                                 <div>
-                                    <h3 className={`font-bold ${hasSpecialization && hasBio ? 'text-[#333333]' : 'text-gray-500'}`}>
+                                    <h3 className={`font-bold ${(hasSpecialization && hasBio) ? 'text-[#333333]' : 'text-gray-500'}`}>
                                         Set Bio & Specializations
                                     </h3>
                                     <p className="text-sm text-gray-400">Tell students what you're good at.</p>
@@ -76,15 +77,35 @@ export default async function CreatorDashboard() {
                                     <p className="text-sm text-gray-400">Showcase at least 1 example of your work.</p>
                                 </div>
                             </div>
+
+                            <div className="flex items-center p-4 rounded-xl bg-[#F3F0E9] border border-[#E6E2D6]">
+                                {hasStripe ? (
+                                    <CheckCircle2 className="w-6 h-6 text-green-600 mr-4 flex-shrink-0" />
+                                ) : (
+                                    <div className="w-6 h-6 rounded-full border-2 border-gray-300 mr-4 flex-shrink-0" />
+                                )}
+                                <div>
+                                    <h3 className={`font-bold ${hasStripe ? 'text-[#333333]' : 'text-gray-500'}`}>
+                                        Connect Stripe Payouts
+                                    </h3>
+                                    <p className="text-sm text-gray-400">Securely link your bank account to receive payments.</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <Link
-                            href="/creator/profile"
-                            className="block w-full bg-[#3E4C37] text-white text-center font-bold py-4 rounded-xl hover:bg-[#2e3b29] transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
-                        >
-                            Complete My Profile
-                            <ArrowRight className="w-5 h-5 ml-2" />
-                        </Link>
+                        {(!hasBio || !hasSpecialization || !hasPortfolio) ? (
+                            <Link
+                                href="/creator/profile"
+                                className="block w-full bg-[#3E4C37] text-white text-center font-bold py-4 rounded-xl hover:bg-[#2e3b29] transition-all shadow-lg hover:shadow-xl flex items-center justify-center mb-4"
+                            >
+                                Complete My Profile
+                                <ArrowRight className="w-5 h-5 ml-2" />
+                            </Link>
+                        ) : !hasStripe ? (
+                            <div className="space-y-4">
+                                <StripeConnectBanner stripeAccountId={null} />
+                            </div>
+                        ) : null}
                     </div>
 
                     {/* Decorative Background */}
@@ -96,14 +117,7 @@ export default async function CreatorDashboard() {
         )
     }
 
-    // Fetch Recent Requests (Status = 'requested')
-    const { data: recentRequests } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('creator_id', user.id)
-        .eq('status', 'requested')
-        .order('created_at', { ascending: false })
-        .limit(5)
+    // Standard Dashboard...
 
     // ----------------------------------------------------------------------
     // 2. COMPLETE STATE: Show Standard Dashboard
@@ -111,6 +125,8 @@ export default async function CreatorDashboard() {
     return (
         <div className="p-8 max-w-6xl mx-auto">
             <DashboardHeader />
+
+            <StripeConnectBanner stripeAccountId={profile?.stripe_account_id} />
 
             {/* Recent Requests */}
             <div>

@@ -1,9 +1,10 @@
 'use client'
 
-import { Suspense } from 'react'
-import { verifyOtp } from '../actions'
+import { Suspense, useState, useEffect } from 'react'
+import { verifyOtp, resendOtp } from '../actions'
 import { useFormState } from 'react-dom'
 import { useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 const initialState = {
     error: '',
@@ -12,7 +13,33 @@ const initialState = {
 function VerifyContent() {
     const searchParams = useSearchParams()
     const email = searchParams.get('email') || ''
+    const type = (searchParams.get('type') as any) || 'signup'
     const [state, formAction] = useFormState(verifyOtp, initialState)
+
+    const [countdown, setCountdown] = useState(0)
+    const [isResending, setIsResending] = useState(false)
+
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+            return () => clearTimeout(timer)
+        }
+    }, [countdown])
+
+    const handleResend = async () => {
+        if (countdown > 0 || isResending) return
+
+        setIsResending(true)
+        const result = await resendOtp(email, type)
+        setIsResending(false)
+
+        if (result.error) {
+            toast.error(result.error)
+        } else {
+            toast.success('Verification code resent!')
+            setCountdown(60) // 1 minute delay
+        }
+    }
 
     return (
         <main className="min-h-screen bg-[#F3F0E9] flex flex-col items-center justify-center p-6">
@@ -55,8 +82,12 @@ function VerifyContent() {
                     <div className="mt-8 text-center bg-gray-50 -mx-8 -mb-8 sm:-mx-12 sm:-mb-12 p-6 rounded-b-3xl border-t border-gray-100">
                         <p className="text-sm text-gray-400">
                             Didn't receive code?{' '}
-                            <button className="text-[#3E4C37] font-semibold hover:underline">
-                                Resend
+                            <button
+                                onClick={handleResend}
+                                disabled={countdown > 0 || isResending}
+                                className="text-[#3E4C37] font-semibold hover:underline disabled:text-gray-400 disabled:no-underline"
+                            >
+                                {isResending ? 'Sending...' : countdown > 0 ? `Resend in ${countdown}s` : 'Resend'}
                             </button>
                         </p>
                     </div>

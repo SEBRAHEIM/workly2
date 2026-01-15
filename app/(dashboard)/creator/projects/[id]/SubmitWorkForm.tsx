@@ -1,6 +1,6 @@
 'use client'
 
-import { submitWork } from '../actions'
+import { submitWork } from '../../actions'
 import { useState, useActionState } from 'react'
 import MultiFileUpload from '@/app/components/MultiFileUpload'
 import { Check, AlertTriangle } from 'lucide-react'
@@ -17,7 +17,7 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
     )
 }
 
-const initialState = {
+const initialState: { error?: string; success?: boolean; projectId?: string } = {
     error: '',
     success: false
 }

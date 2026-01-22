@@ -56,17 +56,24 @@ export default function PaymentReceiptModal({
                                 <span className="text-gray-500">Amount Paid</span>
                                 <span className="font-bold text-[#333333]">AED {amount.toFixed(2)}</span>
                             </div>
-                            <div className="flex justify-between mb-3 text-sm">
+                            <div className="flex justify-between mb-1 text-sm">
                                 <span className="text-gray-500">Date</span>
                                 <span className="font-medium text-[#333333]">{date}</span>
+                            </div>
+                            <div className="flex justify-between mb-3 text-xs text-gray-400">
+                                <span>Status</span>
+                                <span className="font-bold text-green-600 uppercase tracking-widest flex items-center gap-1">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                    SUCCESSFUL
+                                </span>
                             </div>
                             <div className="flex justify-between mb-3 text-sm">
                                 <span className="text-gray-500">Project</span>
                                 <span className="font-medium text-[#333333] max-w-[200px] truncate text-right">{projectName}</span>
                             </div>
                             <div className="flex justify-between text-xs text-gray-400 mt-4 pt-4 border-t border-gray-100">
-                                <span>Transaction ID</span>
-                                <span className="font-mono">{transactionId.slice(-8).toUpperCase()}</span>
+                                <span>Transaction Reference</span>
+                                <span className="font-mono">{transactionId.slice(-12).toUpperCase()}</span>
                             </div>
                         </div>
 

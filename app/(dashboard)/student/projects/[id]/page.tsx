@@ -109,7 +109,7 @@ export default async function ProjectPage({
         <div className="max-w-5xl mx-auto p-8">
             <PaymentReceiptModal
                 amount={displayPrice}
-                date={new Date().toLocaleDateString()}
+                date={new Date().toLocaleString()}
                 projectName={project.title}
                 transactionId={session_id || 'UNKNOWN'}
                 showReceipt={payment === 'success'}
@@ -196,18 +196,30 @@ export default async function ProjectPage({
                                         </div>
                                         <div>
                                             <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Secure Escrow</p>
-                                            <p className="text-xl font-bold font-serif">Payment Required</p>
+                                            <p className="text-xl font-bold font-serif">
+                                                {payment === 'success' ? 'Verifying Payment...' : 'Payment Required'}
+                                            </p>
                                         </div>
                                     </div>
 
                                     <p className="text-sm text-white/70 mb-8 leading-relaxed">
-                                        Funds are held securely by Workly.day and only released to the creator once you approve the final delivery.
+                                        {payment === 'success'
+                                            ? "We've received confirmation from Stripe. We're just updating the project status—this usually takes a few seconds."
+                                            : "Funds are held securely by Workly.day and only released to the creator once you approve the final delivery."
+                                        }
                                     </p>
 
-                                    <PaymentButton
-                                        projectId={project.id}
-                                        amount={displayPrice}
-                                    />
+                                    {payment === 'success' ? (
+                                        <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl animate-pulse">
+                                            <Clock className="w-6 h-6 mr-3 animate-spin" />
+                                            <span className="font-bold uppercase tracking-widest text-sm">Processing Stripe Sync...</span>
+                                        </div>
+                                    ) : (
+                                        <PaymentButton
+                                            projectId={project.id}
+                                            amount={displayPrice}
+                                        />
+                                    )}
 
                                     <div className="mt-6 flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest justify-center">
                                         <div className="w-1 h-1 rounded-full bg-green-500" />

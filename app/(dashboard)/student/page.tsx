@@ -15,7 +15,7 @@ export default async function StudentDashboard() {
 
     // Parallel fetching for dashboard stats
     const [profileResponse, projectsResponse] = await Promise.all([
-        supabase.from('profiles').select('full_name, username').eq('id', user.id).single(),
+        supabase.from('profiles').select('full_name, username, wallet_balance').eq('id', user.id).single(),
         supabase.from('projects').select('id', { count: 'exact', head: true }).eq('student_id', user.id).in('status', ['pending', 'countered', 'negotiating', 'requested', 'accepted', 'in_progress'])
     ])
 
@@ -34,7 +34,7 @@ export default async function StudentDashboard() {
             <div className="relative -mt-32 z-20">
                 <StudentDashboardOverview
                     projectCount={projectCount}
-                    balance="AED 0.00" // Static for now as wallet system is being integrated
+                    balance={`AED ${profile?.wallet_balance?.toFixed(2) || '0.00'}`}
                 />
             </div>
 

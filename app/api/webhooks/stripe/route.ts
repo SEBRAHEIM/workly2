@@ -45,6 +45,20 @@ export async function POST(req: Request) {
         const { data: project } = await supabase.from('projects').select('*').eq('id', projectId).single()
 
         if (project) {
+            // Record Transaction
+            await supabase.from('transactions').insert({
+                student_id: project.student_id,
+                creator_id: project.creator_id,
+                project_id: projectId,
+                amount: session.amount_total / 100,
+                status: 'completed',
+                type: 'payment',
+                stripe_session_id: session.id,
+                metadata: {
+                    project_title: project.title
+                }
+            })
+
             // Notify Student
             await supabase.from('notifications').insert({
                 user_id: project.student_id,

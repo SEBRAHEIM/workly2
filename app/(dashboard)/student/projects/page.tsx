@@ -36,8 +36,8 @@ export default async function StudentProjectsPage(props: {
 
     if (!projects) return <div>Failed to load projects</div>
 
-    // Filter out unpaid projects entirely for students
-    const confirmedProjects = projects.filter(p => p.funds_status === 'escrow' || p.funds_status === 'released')
+    // List projects that are either paid (escrow/released) or awaiting payment verification (pending)
+    const confirmedProjects = projects.filter(p => ['escrow', 'released', 'pending'].includes(p.funds_status))
 
     // Categorization
     // 1. Active: Paid and currently in progress

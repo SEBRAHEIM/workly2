@@ -206,45 +206,6 @@ export default function CreatorNavbar() {
                                         <span className="font-medium">Earnings & Wallet</span>
                                     </Link>
 
-                                    <div className="space-y-2">
-                                        <div className="w-full flex items-center p-2 text-gray-400">
-                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm opacity-50">
-                                                <Download className="w-4 h-4" />
-                                            </div>
-                                            <span className="text-[10px] font-bold uppercase tracking-wider">Withdrawals</span>
-                                        </div>
-                                        <div className="pl-11 space-y-3">
-                                            <Link
-                                                href="/creator/withdrawals/bank"
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
-                                            >
-                                                Bank/Local Bank Transfer
-                                            </Link>
-                                            <Link
-                                                href="/creator/withdrawals/skrill"
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
-                                            >
-                                                Skrill
-                                            </Link>
-                                            <Link
-                                                href="/creator/withdrawals/neteller"
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
-                                            >
-                                                Neteller
-                                            </Link>
-                                            <Link
-                                                href="/creator/withdrawals/card"
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="block text-sm font-medium text-gray-500 hover:text-[#3E4C37] transition-colors"
-                                            >
-                                                Card
-                                            </Link>
-                                        </div>
-                                    </div>
-
                                     <Link
                                         href="/creator/history"
                                         onClick={() => setIsMenuOpen(false)}

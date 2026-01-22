@@ -126,6 +126,7 @@ export async function createProject(prevState: any, formData: FormData) {
     // 7. Non-Blocking Post-creation Tasks
     after(async () => {
         try {
+            const baseUrl = 'https://workly.day'
             // Notifications & Events
             await Promise.all([
                 createNotification({
@@ -159,69 +160,105 @@ export async function createProject(prevState: any, formData: FormData) {
     })
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
-    // FORCE PRODUCTION URL to prevent environment variable issues
-    const baseUrl = 'https://workly.day'
-
     if (initialPrice <= 0) {
-        console.warn('[CREATE PROJECT] Price is 0 or less, skipping Stripe. Price:', initialPrice)
         return redirect(`/student/projects/${data.id}`)
     }
 
-    let stripeSessionUrl = ''
     try {
-        console.log('[CREATE PROJECT] Initiating Stripe Session for project:', data.id)
+        const sessionUrl = await createProjectStripeSession(
+            data.id,
+            title,
+            initialPrice,
+            user.email!
+        )
 
-        if (!process.env.STRIPE_SECRET_KEY) {
-            console.error('[CREATE PROJECT] CRITICAL: STRIPE_SECRET_KEY is not set.')
-            throw new Error('Payment configuration missing (API Key)')
+        if (sessionUrl) {
+            redirect(sessionUrl)
         }
-
-        const session = await getStripe().checkout.sessions.create({
-            customer_email: user.email,
-            payment_method_types: ['card'],
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'aed',
-                        product_data: {
-                            name: title,
-                            description: `Immediate payment to start project: ${title}`,
-                        },
-                        unit_amount: Math.round(initialPrice * 100),
-                    },
-                    quantity: 1,
-                },
-            ],
-            metadata: {
-                projectId: data.id,
-            },
-            mode: 'payment',
-            success_url: `${baseUrl}/student/projects/${data.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${baseUrl}/student/projects/${data.id}?payment=cancelled`,
-        })
-
-        if (!session.url) {
-            console.error('[CREATE PROJECT] Stripe session created but no URL returned.')
-            return { message: 'Project created, but we couldn\'t start the payment process. Please refresh and try again.' }
-        }
-
-        stripeSessionUrl = session.url
     } catch (stripeError: any) {
-        console.error('[CREATE PROJECT] Stripe Exception FULL:', stripeError)
-
-        // IMPORTANT: Never catch NEXT_REDIRECT errors in Next.js try/catch blocks
-        // But since we moved redirect outside, we don't need to worry about it here anymore
-        // unless some other internal redirect is happening.
-
+        console.error('[CREATE PROJECT] Stripe Exception:', stripeError)
         const errorMessage = stripeError instanceof Error ? stripeError.message : String(stripeError)
         return {
-            message: `Payment initialization failed: ${errorMessage}. Your request was saved, but it's hidden until paid. Please try again soon.`
+            message: `Payment initialization failed: ${errorMessage}. Your request was saved, but it's hidden until paid. Please check your projects.`
         }
     }
+}
 
-    if (stripeSessionUrl) {
-        console.log('[CREATE PROJECT] Redirecting to Stripe:', stripeSessionUrl)
-        redirect(stripeSessionUrl)
+export async function createProjectStripeSession(projectId: string, title: string, price: number, customerEmail: string) {
+    const baseUrl = 'https://workly.day'
+
+    if (price <= 0) {
+        throw new Error('Invalid price for payment')
+    }
+
+    if (!process.env.STRIPE_SECRET_KEY) {
+        throw new Error('Payment configuration missing (API Key)')
+    }
+
+    const session = await getStripe().checkout.sessions.create({
+        customer_email: customerEmail,
+        payment_method_types: ['card'],
+        line_items: [
+            {
+                price_data: {
+                    currency: 'aed',
+                    product_data: {
+                        name: title,
+                        description: `Payment for project: ${title}`,
+                    },
+                    unit_amount: Math.round(price * 100),
+                },
+                quantity: 1,
+            },
+        ],
+        metadata: {
+            projectId: projectId,
+        },
+        mode: 'payment',
+        success_url: `${baseUrl}/student/projects/${projectId}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/student/projects/${projectId}?payment=cancelled`,
+    })
+
+    return session.url
+}
+
+export async function payProject(prevState: any, formData: FormData) {
+    const projectId = formData.get('projectId') as string
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return redirect('/login')
+
+    const { data: project, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', projectId)
+        .eq('student_id', user.id)
+        .single()
+
+    if (error || !project) {
+        return { message: 'Project not found' }
+    }
+
+    if (project.funds_status === 'escrow') {
+        return { message: 'Project is already paid' }
+    }
+
+    try {
+        const sessionUrl = await createProjectStripeSession(
+            project.id,
+            project.title,
+            project.current_price,
+            user.email!
+        )
+
+        if (sessionUrl) {
+            redirect(sessionUrl)
+        } else {
+            return { message: 'Failed to create payment session' }
+        }
+    } catch (err: any) {
+        console.error('Pay project error:', err)
+        return { message: err.message || 'Payment initialization failed' }
     }
 }
 

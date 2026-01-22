@@ -1,10 +1,10 @@
 'use client'
 
 import { Shield, Loader2, AlertTriangle } from 'lucide-react'
-import { createCheckoutSession } from '../actions'
+import { payProject } from '@/app/(dashboard)/student/actions'
 import { useActionState } from 'react'
 
-const initialState = { error: '' }
+const initialState = { message: '' }
 
 export default function PaymentButton({
     projectId,
@@ -13,7 +13,7 @@ export default function PaymentButton({
     projectId: string
     amount: number
 }) {
-    const [state, formAction, isPending] = useActionState(createCheckoutSession, initialState)
+    const [state, formAction, isPending] = useActionState(payProject, initialState)
 
     return (
         <div className="space-y-3">
@@ -37,10 +37,10 @@ export default function PaymentButton({
                 </button>
             </form>
 
-            {state?.error && (
+            {state?.message && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-start animate-in fade-in slide-in-from-top-2">
                     <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs font-medium leading-tight">{state.error}</span>
+                    <span className="text-xs font-medium leading-tight">{state.message}</span>
                 </div>
             )}
         </div>

@@ -10,7 +10,6 @@ import PricingForm from './PricingForm'
 import PortfolioCategoryAccordion from './PortfolioCategoryAccordion'
 import { categories as allCategories } from '@/app/data/categories'
 import { Briefcase } from 'lucide-react'
-import StripeConnectBanner from '../StripeConnectBanner'
 import PayoutSettings from '../PayoutSettings'
 
 interface Props {
@@ -193,9 +192,14 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <ProfileSection
                         title="5. Payouts"
-                        summary={(profile?.stripe_account_id || profile?.bank_iban) ? 'Payouts Configured' : 'Set up how you get paid'}
+                        summary={
+                            profile?.stripe_account_id ? 'Stripe Connected' :
+                                profile?.bank_iban ? 'Bank Details Set' :
+                                    profile?.paypal_email ? 'PayPal Details Set' :
+                                        'Set up how you get paid'
+                        }
                         isOpen={openSection === 'payouts' as any}
-                        isCompleted={!!(profile?.stripe_account_id || profile?.bank_iban)}
+                        isCompleted={!!(profile?.stripe_account_id || profile?.bank_iban || profile?.paypal_email)}
                         onToggle={() => setOpenSection(openSection === 'payouts' as any ? null : 'payouts' as any)}
                     >
                         <PayoutSettings profile={profile} />

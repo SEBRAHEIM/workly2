@@ -1,9 +1,9 @@
 'use client'
 
-import { Shield, LayoutDashboard, Users, Briefcase, Wallet, Scale, Settings, LogOut } from 'lucide-react'
+import { Shield, LayoutDashboard, Users, Briefcase, Wallet, Scale, Settings, LogOut, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 
-type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation'
+type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts'
 
 interface AdminSidebarProps {
     activeTab: Tab
@@ -17,6 +17,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminEmail }: Ad
         { id: 'users', label: 'User Management', icon: Users },
         { id: 'projects', label: 'Projects & Orders', icon: Briefcase },
         { id: 'finances', label: 'Financials', icon: Wallet },
+        { id: 'payouts', label: 'Payout Requests', icon: CreditCard },
         { id: 'moderation', label: 'Moderation', icon: Scale },
     ]
 
@@ -42,8 +43,8 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminEmail }: Ad
                         key={item.id}
                         onClick={() => setActiveTab(item.id as Tab)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${activeTab === item.id
-                                ? 'bg-white/10 text-white border border-white/10 shadow-lg'
-                                : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                            ? 'bg-white/10 text-white border border-white/10 shadow-lg'
+                            : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
                             }`}
                     >
                         <item.icon className={`w-5 h-5 ${activeTab === item.id ? 'text-red-500' : 'group-hover:text-red-500'}`} />

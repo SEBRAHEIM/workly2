@@ -1,6 +1,7 @@
 import { Wallet, TrendingUp, Download, ArrowUpRight, Settings, Check } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
+import WithdrawButton from './WithdrawButton'
 
 export default async function CreatorWallet() {
     const supabase = await createClient()
@@ -36,23 +37,11 @@ export default async function CreatorWallet() {
                         </div>
 
                         <div className="flex flex-wrap gap-4 mt-8">
-                            <Link
-                                href="/creator/withdrawals"
-                                className="flex items-center bg-[#C6A87C] text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-[#b0946a] transition-all shadow-lg active:scale-95"
-                            >
-                                <Download className="w-5 h-5 mr-3" />
-                                Withdraw Funds
-                            </Link>
-
-                            {!isConnected && (
-                                <Link
-                                    href="/creator/wallet/connect"
-                                    className="flex items-center bg-white text-[#333333] px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition-all shadow-lg active:scale-95"
-                                >
-                                    <ArrowUpRight className="w-5 h-5 mr-3" />
-                                    Set up Stripe
-                                </Link>
-                            )}
+                            <WithdrawButton
+                                isConnected={isConnected}
+                                balance={profile?.wallet_balance || 0}
+                                payoutPreference={profile?.payout_preference}
+                            />
                         </div>
                     </div>
                     <TrendingUp className="absolute -bottom-10 -right-10 w-64 h-64 text-white/5" />
@@ -84,10 +73,10 @@ export default async function CreatorWallet() {
                             <div key={w.id} className="flex items-center justify-between p-6 rounded-2xl bg-[#F3F0E9] border border-[#E6E2D6]">
                                 <div className="flex items-center gap-4">
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${w.status === 'pending' ? 'bg-amber-100' :
-                                            w.status === 'completed' ? 'bg-green-100' : 'bg-red-100'
+                                        w.status === 'completed' ? 'bg-green-100' : 'bg-red-100'
                                         }`}>
                                         <Download className={`w-6 h-6 ${w.status === 'pending' ? 'text-amber-600' :
-                                                w.status === 'completed' ? 'text-green-600' : 'text-red-600'
+                                            w.status === 'completed' ? 'text-green-600' : 'text-red-600'
                                             }`} />
                                     </div>
                                     <div>
@@ -98,7 +87,7 @@ export default async function CreatorWallet() {
                                 <div className="text-right">
                                     <p className="font-black text-[#333333]">- AED {w.amount.toFixed(2)}</p>
                                     <p className={`text-[10px] font-black uppercase tracking-widest ${w.status === 'pending' ? 'text-amber-600' :
-                                            w.status === 'completed' ? 'text-green-600' : 'text-red-600'
+                                        w.status === 'completed' ? 'text-green-600' : 'text-red-600'
                                         }`}>{w.status}</p>
                                 </div>
                             </div>

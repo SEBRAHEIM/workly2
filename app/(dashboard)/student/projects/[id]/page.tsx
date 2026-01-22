@@ -186,22 +186,35 @@ export default async function ProjectPage({
                         </div>
 
 
-                        {/* STATUS: AGREED/ACCEPTED -> PAY TO START */}
-                        {['accepted', 'agreed'].includes(project.status) && project.funds_status === 'pending' && (
-                            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6 text-center">
-                                <Check className="w-8 h-8 text-green-400 mx-auto mb-3" />
-                                <p className="font-bold text-green-400 text-lg mb-1">Deal Agreed!</p>
-                                <p className="text-white/60 text-sm mb-6">Pay to secure the deal and start the project.</p>
+                        {/* STATUS: UNPAID/ACCEPTED/AGREED -> PAY TO START */}
+                        {(project.funds_status === 'unpaid' || (['accepted', 'agreed'].includes(project.status) && project.funds_status === 'pending')) && (
+                            <div className="bg-[#3E4C37] rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-6">
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                                            <Shield className="w-5 h-5 text-[#C6A87C]" />
+                                        </div>
+                                        <div>
+                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Secure Escrow</p>
+                                            <p className="text-xl font-bold font-serif">Payment Required</p>
+                                        </div>
+                                    </div>
 
-                                <PaymentButton
-                                    projectId={project.id}
-                                    amount={displayPrice}
-                                />
+                                    <p className="text-sm text-white/70 mb-8 leading-relaxed">
+                                        Funds are held securely by Workly.day and only released to the creator once you approve the final delivery.
+                                    </p>
 
-                                <p className="text-[10px] text-white/30 mt-3 flex items-center justify-center">
-                                    <Shield className="w-3 h-3 mr-1" />
-                                    Funds held safely by Workly until approval.
-                                </p>
+                                    <PaymentButton
+                                        projectId={project.id}
+                                        amount={displayPrice}
+                                    />
+
+                                    <div className="mt-6 flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest justify-center">
+                                        <div className="w-1 h-1 rounded-full bg-green-500" />
+                                        Stripe Secured Payment
+                                    </div>
+                                </div>
+                                <AEDIcon className="absolute -bottom-10 -right-10 w-48 h-48 text-white/5" />
                             </div>
                         )}
 

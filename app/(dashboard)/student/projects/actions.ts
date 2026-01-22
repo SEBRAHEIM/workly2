@@ -38,8 +38,7 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
 
     try {
         const session = await getStripe().checkout.sessions.create({
-            customer_email: user.email, // Enables auto-email receipt from Stripe
-            payment_method_types: ['card'],
+            customer_email: user.email,
             line_items: [
                 {
                     price_data: {
@@ -48,7 +47,7 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
                             name: project.title,
                             description: `Escrow payment for project: ${project.title}`,
                         },
-                        unit_amount: Math.round(project.current_price * 100), // Stripe expects cents
+                        unit_amount: Math.round(project.current_price * 100),
                     },
                     quantity: 1,
                 },
@@ -57,10 +56,12 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
                 projectId: project.id,
             },
             mode: 'payment',
-            // Pass a receipt flag to trigger the UI
+            automatic_payment_methods: {
+                enabled: true,
+            },
             success_url: `${baseUrl}/student/projects/${project.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${baseUrl}/student/projects/${project.id}?payment=cancelled`,
-        })
+        } as any)
 
         if (!session.url) {
             console.error('[CHECKOUT] Stripe session created but no URL returned.')
@@ -103,7 +104,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
     const amount = project.current_price || 0
     let transferSuccess = false
 
-    // Handle Escrow Release logic only if funds are actually in escrow
+    // Handle Escrow Release logic: Internal Wallet Model
     if (project.funds_status === 'escrow') {
         const platformFeePercent = 0.17
         const stripePercent = 0.029
@@ -113,44 +114,23 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
         const processingFee = (amount * stripePercent) + stripeFixedFee
         const creatorEarnings = amount - platformFee - processingFee
 
-        // 3. Fetch Creator Profile to determine payout method
         const { data: creator } = await supabase
             .from('profiles')
-            .select('wallet_balance, completed_projects, stripe_account_id')
+            .select('wallet_balance, completed_projects')
             .eq('id', creatorId)
             .single()
 
         if (creator) {
-            // --- STRIPE CONNECT TRANSFER ---
-            if (creator.stripe_account_id) {
-                try {
-                    // Must convert to cents for Stripe
-                    const amountInCents = Math.round(creatorEarnings * 100)
-
-                    await getStripe().transfers.create({
-                        amount: amountInCents,
-                        currency: 'aed',
-                        destination: creator.stripe_account_id,
-                        description: `Payout for Project ${projectId}`,
-                    })
-                    transferSuccess = true
-                } catch (err) {
-                    console.error('Stripe Transfer Failed:', err)
-                }
-            }
-
-            // Update Statistics
+            // Update Statistics and Wallet Balance
             const newCompletedCount = (creator.completed_projects || 0) + 1
             let newLevel = 1
 
-            // Leveling Logic (Hardcoded Thresholds)
             if (newCompletedCount >= 50) newLevel = 5
             else if (newCompletedCount >= 32) newLevel = 4
             else if (newCompletedCount >= 20) newLevel = 3
             else if (newCompletedCount >= 3) newLevel = 2
-            else newLevel = 1
 
-            await supabase
+            const { error: balanceError } = await supabase
                 .from('profiles')
                 .update({
                     wallet_balance: (creator.wallet_balance || 0) + creatorEarnings,
@@ -158,6 +138,10 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
                     level: newLevel
                 })
                 .eq('id', creatorId)
+
+            if (!balanceError) {
+                transferSuccess = true
+            }
         }
     }
 

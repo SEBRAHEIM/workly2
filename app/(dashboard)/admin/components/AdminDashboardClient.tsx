@@ -7,14 +7,16 @@ import UsersModule from './UsersModule'
 import ProjectsModule from './ProjectsModule'
 import FinancesModule from './FinancesModule'
 import ModerationModule from './ModerationModule'
+import PayoutsModule from './PayoutsModule'
 
-type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation'
+type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts'
 
 interface AdminDashboardClientProps {
     user: any
     initialData: {
         projects: any[]
         profiles: any[]
+        withdrawals: any[]
         stats: {
             totalUsers: number
             totalRevenue: number
@@ -49,6 +51,9 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                     )}
                     {activeTab === 'projects' && (
                         <ProjectsModule projects={initialData.projects} />
+                    )}
+                    {activeTab === 'payouts' && (
+                        <PayoutsModule withdrawals={initialData.withdrawals} />
                     )}
                     {activeTab === 'finances' && (
                         <FinancesModule projects={initialData.projects} stats={initialData.stats} />

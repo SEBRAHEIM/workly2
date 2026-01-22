@@ -10,181 +10,113 @@ import { notifyStudentOfWorkSubmitted } from '@/utils/sms'
 import { getStripe } from '@/utils/stripe'
 import { headers } from 'next/headers'
 
-async function getBaseUrl() {
-    // 1. Production Hardcode (Safest for Stripe redirects on the live site)
-    if (process.env.NODE_ENV === 'production') {
-        return 'https://workly.day'
-    }
-
-    // 2. Environment Variable fallback
-    if (process.env.NEXT_PUBLIC_BASE_URL) {
-        let url = process.env.NEXT_PUBLIC_BASE_URL
-        if (!url.startsWith('http')) url = `https://${url}`
-        return url
-    }
-
-    // 3. Request Headers fallback (Dev/Preview)
-    try {
-        const headersList = await headers()
-        const host = headersList.get('host')
-        if (host) {
-            const protocol = host.includes('localhost') ? 'http' : 'https'
-            return `${protocol}://${host}`
-        }
-    } catch (e) {
-        // Ultimate fallback
-    }
-
-    return 'http://localhost:3000'
-}
-
-export async function createStripeAccount() {
+// Stripe Connect actions
+export async function createStripeOnboardingLink() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
     if (!user) throw new Error('Unauthorized')
 
-    // Check if account already exists
     const { data: profile } = await supabase
         .from('profiles')
-        .select('stripe_account_id, email, full_name')
-        .eq('id', user.id)
-        .single()
-
-    // If account exists, we try to use it. 
-    // If it's a V2 account that was causing errors, 
-    // getStripeOnboardingLink will handle the "migration" (deletion/recreation) if it fails.
-    if (profile?.stripe_account_id) {
-        return { accountId: profile.stripe_account_id }
-    }
-
-    const stripe = getStripe()
-
-    try {
-        // Use Stripe Standard Account Creation
-        // This is necessary for UAE-based platforms to allow self-serve onboarding.
-        const account = await stripe.accounts.create({
-            type: 'standard',
-            country: 'ae',
-            email: user.email!,
-            business_type: 'individual',
-        })
-
-        // Save to DB
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ stripe_account_id: account.id })
-            .eq('id', user.id)
-
-        if (updateError) {
-            console.error('Error saving stripe_account_id:', updateError)
-            return { error: 'Failed to save Stripe account ID' }
-        }
-
-        revalidatePath('/creator/profile')
-        revalidatePath('/creator')
-
-        return { accountId: account.id }
-    } catch (err: any) {
-        console.error('Stripe Express Account Creation Error:', err)
-        return { error: `Stripe error: ${err.message}` }
-    }
-}
-
-export async function getStripeOnboardingLink() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) throw new Error('Unauthorized')
-
-    let { data: profile } = await supabase
-        .from('profiles')
-        .select('stripe_account_id')
+        .select('stripe_account_id, email')
         .eq('id', user.id)
         .single()
 
     let accountId = profile?.stripe_account_id
 
-    // Create account if it doesn't exist
-    if (!accountId) {
-        const result = await createStripeAccount()
-        if (result.error) return { error: result.error }
-        accountId = result.accountId
-    }
-
-    const stripe = getStripe()
     try {
-        const baseUrl = await getBaseUrl()
-
-        // Before creating link, verify we aren't using an old Express account
-        // Express accounts often fail with "Not a valid URL" in the UAE if not manually approved.
-        const account = await stripe.accounts.retrieve(accountId!)
-        if (account.type === 'express') {
-            throw new Error('legacy_express_detected')
+        if (!accountId) {
+            // UAE (AE) specific requirements:
+            // 1. Only 'standard' accounts are supported for platforms.
+            // 2. 'individual' business type is NOT supported in AE. Must use 'company'.
+            const account = await getStripe().accounts.create({
+                type: 'standard',
+                country: 'AE',
+                email: user.email,
+                business_type: 'company', // Mandatory for UAE platforms
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true },
+                },
+                business_profile: {
+                    url: 'https://workly.day',
+                    mcc: '7392',
+                }
+            })
+            accountId = account.id
+            await supabase.from('profiles').update({ stripe_account_id: accountId }).eq('id', user.id)
         }
 
-        // Standard V1 Account Links API
-        const accountLink = await stripe.accountLinks.create({
-            account: accountId!,
-            refresh_url: `${baseUrl}/creator/profile`,
-            return_url: `${baseUrl}/creator/profile?stripe_success=true`,
+        const { url } = await getStripe().accountLinks.create({
+            account: accountId,
+            refresh_url: 'https://workly.day/creator/profile?stripe_refresh=true',
+            return_url: 'https://workly.day/creator/profile?stripe_success=true',
             type: 'account_onboarding',
         })
 
-        return { url: accountLink.url }
+        return redirect(url)
     } catch (err: any) {
-        console.error('Stripe Account Link Error:', err)
-
-        // SELF-HEALING: If we detect a legacy Express account or a configuration error,
-        // we clear the ID and try one more time to create a fresh Standard account.
-        if (err.message === 'legacy_express_detected' || err.message.includes('configuration') || err.message.includes('v2')) {
-            console.log('[STRIPE FIX] Migrating from Express to Standard for user:', user.id)
-
-            // 1. Clear the broken ID
-            await supabase.from('profiles').update({ stripe_account_id: null }).eq('id', user.id)
-
-            // 2. Create fresh Standard account
-            const freshAccount = await createStripeAccount()
-            if (freshAccount.error) return { error: `Migration failed: ${freshAccount.error}` }
-
-            const baseUrl = await getBaseUrl()
-            // 3. Try link again
-            const retryLink = await stripe.accountLinks.create({
-                account: freshAccount.accountId!,
-                refresh_url: `${baseUrl}/creator/profile`,
-                return_url: `${baseUrl}/creator/profile?stripe_success=true`,
-                type: 'account_onboarding',
-            })
-            return { url: retryLink.url }
-        }
-
-        return { error: `Stripe link error: ${err.message}` }
+        console.error('[STRIPE CONNECT ERROR]', err)
+        // If it's a redirect, we must re-throw it so Next.js handles it
+        if (err.message === 'NEXT_REDIRECT') throw err
+        return { error: `Stripe error: ${err.message}` }
     }
 }
 
-export async function getStripeDashboardLink() {
+export async function initiateStripeWithdrawal() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
     if (!user) throw new Error('Unauthorized')
 
     const { data: profile } = await supabase
         .from('profiles')
-        .select('stripe_account_id')
+        .select('id, wallet_balance, stripe_account_id')
         .eq('id', user.id)
         .single()
 
-    if (!profile?.stripe_account_id) {
-        return { error: 'No Stripe account connected' }
+    if (!profile || !profile.stripe_account_id) {
+        return { error: 'Stripe account not connected' }
     }
 
-    const stripe = getStripe()
+    const balance = profile.wallet_balance || 0
+    if (balance <= 0) {
+        return { error: 'No funds available to withdraw' }
+    }
+
     try {
-        const loginLink = await stripe.accounts.createLoginLink(profile.stripe_account_id)
-        return { url: loginLink.url }
+        // 1. Create a Transfer to the connected account
+        const transfer = await getStripe().transfers.create({
+            amount: Math.round(balance * 100),
+            currency: 'aed',
+            destination: profile.stripe_account_id,
+            description: `Workly payout for ${user.email}`,
+            metadata: {
+                creatorId: user.id
+            }
+        })
+
+        // 2. Deduct from local wallet
+        const { error: balanceError } = await supabase
+            .from('profiles')
+            .update({ wallet_balance: 0 })
+            .eq('id', user.id)
+
+        if (balanceError) throw balanceError
+
+        // 3. Log the withdrawal
+        await supabase.from('withdrawals').insert({
+            creator_id: user.id,
+            amount: balance,
+            method: 'stripe',
+            status: 'completed',
+            details: { transferId: transfer.id }
+        })
+
+        revalidatePath('/creator/wallet')
+        return { success: true }
     } catch (err: any) {
-        console.error('Stripe Dashboard Link Error:', err)
-        return { error: `Stripe error: ${err.message}. You might need to complete onboarding first.` }
+        console.error('Withdrawal error:', err)
+        return { error: err.message || 'Withdrawal failed' }
     }
 }
 
@@ -196,7 +128,6 @@ export async function updateBankDetails(formData: FormData) {
     const bank_account_name = formData.get('bank_account_name') as string
     const bank_iban = formData.get('bank_iban') as string
     const bank_name = formData.get('bank_name') as string
-    const payout_preference = formData.get('payout_preference') as string
 
     const { error } = await supabase
         .from('profiles')
@@ -204,7 +135,7 @@ export async function updateBankDetails(formData: FormData) {
             bank_account_name,
             bank_iban,
             bank_name,
-            payout_preference
+            payout_preference: 'bank'
         })
         .eq('id', user.id)
 
@@ -217,6 +148,135 @@ export async function updateBankDetails(formData: FormData) {
     return { success: true }
 }
 
+export async function updatePayPalDetails(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    const paypal_email = formData.get('paypal_email') as string
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({
+            paypal_email,
+            payout_preference: 'paypal'
+        })
+        .eq('id', user.id)
+
+    if (error) {
+        console.error('Error updating PayPal details:', error)
+        return { error: error.message }
+    }
+
+    revalidatePath('/creator/profile')
+    return { success: true }
+}
+
+export async function requestPayPalPayout() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, wallet_balance, paypal_email, payout_preference')
+        .eq('id', user.id)
+        .single()
+
+    if (!profile || profile.payout_preference !== 'paypal' || !profile.paypal_email) {
+        return { error: 'PayPal details not set or Payout method not set to PayPal' }
+    }
+
+    const balance = profile.wallet_balance || 0
+    if (balance <= 0) {
+        return { error: 'No funds available to withdraw' }
+    }
+
+    try {
+        // 1. Log the paypal withdrawal request as 'pending'
+        const { error: withdrawalError } = await supabase.from('withdrawals').insert({
+            creator_id: user.id,
+            amount: balance,
+            method: 'paypal',
+            status: 'pending',
+            details: {
+                payout_to: profile.paypal_email,
+                request_date: new Date().toISOString()
+            }
+        })
+
+        if (withdrawalError) throw withdrawalError
+
+        // 2. Deduct from local wallet
+        const { error: balanceError } = await supabase
+            .from('profiles')
+            .update({ wallet_balance: 0 })
+            .eq('id', user.id)
+
+        if (balanceError) throw balanceError
+
+        revalidatePath('/creator/wallet')
+        return { success: true }
+    } catch (err: any) {
+        console.error('PayPal payout error:', err)
+        return { error: err.message || 'Request failed' }
+    }
+}
+
+export async function requestManualPayout() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, wallet_balance, bank_iban, payout_preference')
+        .eq('id', user.id)
+        .single()
+
+    if (!profile || profile.payout_preference !== 'bank' || !profile.bank_iban) {
+        return { error: 'Bank details not set or Payout method not set to Manual Bank' }
+    }
+
+    const balance = profile.wallet_balance || 0
+    if (balance <= 0) {
+        return { error: 'No funds available to withdraw' }
+    }
+
+    try {
+        // 1. Log the manual withdrawal request as 'pending'
+        const { error: withdrawalError } = await supabase.from('withdrawals').insert({
+            creator_id: user.id,
+            amount: balance,
+            method: 'bank',
+            status: 'pending',
+            details: {
+                payout_to: profile.bank_iban,
+                bank_name: profile.bank_name,
+                account_name: profile.bank_account_name,
+                request_date: new Date().toISOString()
+            }
+        })
+
+        if (withdrawalError) throw withdrawalError
+
+        // 2. Deduct from local wallet
+        const { error: balanceError } = await supabase
+            .from('profiles')
+            .update({ wallet_balance: 0 })
+            .eq('id', user.id)
+
+        if (balanceError) throw balanceError
+
+        revalidatePath('/creator/wallet')
+        return { success: true }
+    } catch (err: any) {
+        console.error('Manual payout error:', err)
+        return { error: err.message || 'Request failed' }
+    }
+}
+
+// Decline project remains the same
 export async function declineProject(projectId: string) {
     // ...
     const supabase = await createClient()
@@ -428,116 +488,4 @@ export async function submitWork(prevState: any, formData: FormData) {
 
 // acceptOffer removed.
 
-export async function requestWithdrawal(amount: number, method: string, details: any) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        throw new Error('Unauthorized')
-    }
-
-    // 1. Get current profile and balance
-    const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, wallet_balance, bank_iban, bank_name')
-        .eq('id', user.id)
-        .single()
-
-    if (profileError || !profile) {
-        return { error: 'Profile not found' }
-    }
-
-    // 2. Validate amount
-    if (amount <= 0) {
-        return { error: 'Invalid amount' }
-    }
-
-    if (amount > (profile.wallet_balance || 0)) {
-        return { error: 'Insufficient balance' }
-    }
-
-    // 3. Method-specific validation
-    if (method === 'bank' && (!profile.bank_iban || !profile.bank_name)) {
-        return { error: 'Bank details not set up in profile' }
-    }
-
-    // 4. Create Withdrawal Request & Deduct Balance
-    // NOTE: In production, this should be wrapped in a database transaction or RPC
-    try {
-        const { error: withdrawError } = await supabase
-            .from('withdrawals')
-            .insert({
-                creator_id: user.id,
-                amount,
-                method,
-                details,
-                status: 'pending'
-            })
-
-        if (withdrawError) throw withdrawError
-
-        const { error: balanceError } = await supabase
-            .from('profiles')
-            .update({ wallet_balance: profile.wallet_balance - amount })
-            .eq('id', user.id)
-
-        if (balanceError) {
-            // Rollback withdrawal record if balance update fails (semi-atomic)
-            // Ideally use RPC for true atomicity
-            console.error('Failed to deduct balance, rolling back withdrawal record')
-            // This is a simplified rollback for demonstration; RPC is the correct production path.
-            throw balanceError
-        }
-
-        revalidatePath('/creator/wallet')
-        revalidatePath('/creator/withdrawals')
-
-        return { success: true }
-    } catch (err: any) {
-        console.error('Withdrawal error:', err)
-        return { error: err.message || 'Failed to process withdrawal' }
-    }
-}
-
-export async function getSavedCards() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('Unauthorized')
-
-    const { data, error } = await supabase
-        .from('saved_cards')
-        .select('*')
-        .eq('creator_id', user.id)
-        .order('created_at', { ascending: false })
-
-    if (error) {
-        console.error('Error fetching cards:', error)
-        return { error: error.message }
-    }
-
-    return { cards: data || [] }
-}
-
-export async function saveCard(cardData: { brand: string, last4: string, bin: string }) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('Unauthorized')
-
-    const { data, error } = await supabase
-        .from('saved_cards')
-        .insert({
-            creator_id: user.id,
-            ...cardData,
-            is_default: false // Simple version for now
-        })
-        .select()
-        .single()
-
-    if (error) {
-        console.error('Error saving card:', error)
-        return { error: error.message }
-    }
-
-    revalidatePath('/creator/withdrawals/card')
-    return { success: true, card: data }
-}
+// End of actions

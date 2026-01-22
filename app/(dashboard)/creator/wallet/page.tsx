@@ -14,6 +14,8 @@ export default async function CreatorWallet() {
     }
 
     const isConnected = !!profile?.stripe_account_id
+    const hasBank = !!profile?.bank_iban
+    const hasPayPal = !!profile?.paypal_email
 
     // Fetch recent withdrawals
     const { data: withdrawals } = await supabase
@@ -39,6 +41,8 @@ export default async function CreatorWallet() {
                         <div className="flex flex-wrap gap-4 mt-8">
                             <WithdrawButton
                                 isConnected={isConnected}
+                                hasBank={hasBank}
+                                hasPayPal={hasPayPal}
                                 balance={profile?.wallet_balance || 0}
                                 payoutPreference={profile?.payout_preference}
                             />

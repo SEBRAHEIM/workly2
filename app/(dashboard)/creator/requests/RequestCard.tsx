@@ -212,9 +212,12 @@ export default function RequestCard({ req }: RequestCardProps) {
                             </div>
 
                             <div className="space-y-3">
-                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-xl text-center">
-                                    <p className="text-xs text-orange-700 font-bold">Waiting for student payment</p>
-                                    <p className="text-[10px] text-orange-600/70 mt-1 uppercase tracking-wider">Project will start once paid</p>
+                                <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-center">
+                                    <p className="text-xs text-blue-700 font-bold flex items-center justify-center gap-2">
+                                        <Zap className="w-3 h-3 animate-pulse" />
+                                        Awaiting Secure Sync
+                                    </p>
+                                    <p className="text-[10px] text-blue-600/70 mt-1 uppercase tracking-wider">Order moves to Active once paid</p>
                                 </div>
                                 <button
                                     type="button"

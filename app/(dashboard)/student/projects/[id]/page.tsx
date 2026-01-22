@@ -138,7 +138,9 @@ export default async function ProjectPage({
                         ${['accepted', 'agreed', 'in_progress'].includes(project.status) ? 'bg-green-500' :
                             ['declined', 'cancelled'].includes(project.status) ? 'bg-red-500' :
                                 'bg-orange-400'}`} />
-                    <span className="font-bold uppercase text-sm">{project.status.replace('_', ' ')}</span>
+                    <span className="font-bold uppercase text-sm">
+                        {project.status === 'accepted' && project.funds_status === 'pending' ? 'Verifying Payment' : project.status.replace('_', ' ')}
+                    </span>
                 </div>
             </div>
 
@@ -188,31 +190,33 @@ export default async function ProjectPage({
 
                         {/* STATUS: UNPAID/ACCEPTED/AGREED -> PAY TO START */}
                         {(project.funds_status === 'unpaid' || (['accepted', 'agreed'].includes(project.status) && project.funds_status === 'pending')) && (
-                            <div className="bg-[#3E4C37] rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-6">
+                            <div className={`rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-6 transition-all duration-500 ${payment === 'success' ? 'bg-blue-600' : 'bg-[#3E4C37]'}`}>
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                                            <Shield className="w-5 h-5 text-[#C6A87C]" />
+                                            {payment === 'success' ? <Check className="w-5 h-5 text-white" /> : <Shield className="w-5 h-5 text-[#C6A87C]" />}
                                         </div>
                                         <div>
-                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Secure Escrow</p>
+                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">
+                                                {payment === 'success' ? 'Payment Received' : 'Secure Escrow'}
+                                            </p>
                                             <p className="text-xl font-bold font-serif">
-                                                {payment === 'success' ? 'Verifying Payment...' : 'Payment Required'}
+                                                {payment === 'success' ? 'Verifying with Stripe...' : 'Payment Required'}
                                             </p>
                                         </div>
                                     </div>
 
                                     <p className="text-sm text-white/70 mb-8 leading-relaxed">
                                         {payment === 'success'
-                                            ? "We've received confirmation from Stripe. We're just updating the project status—this usually takes a few seconds."
+                                            ? "Great! We're just waiting for the final confirmation from Stripe. This usually takes a few seconds. Do not pay again."
                                             : "Funds are held securely by Workly.day and only released to the creator once you approve the final delivery."
                                         }
                                     </p>
 
                                     {payment === 'success' ? (
-                                        <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl animate-pulse">
+                                        <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl">
                                             <Clock className="w-6 h-6 mr-3 animate-spin" />
-                                            <span className="font-bold uppercase tracking-widest text-sm">Processing Stripe Sync...</span>
+                                            <span className="font-bold uppercase tracking-widest text-sm text-white">Finalizing your order...</span>
                                         </div>
                                     ) : (
                                         <PaymentButton

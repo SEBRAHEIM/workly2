@@ -230,7 +230,7 @@ export async function requestManualPayout() {
 
     const { data: profile } = await supabase
         .from('profiles')
-        .select('id, wallet_balance, bank_iban, payout_preference')
+        .select('id, wallet_balance, bank_iban, bank_name, bank_account_name, payout_preference')
         .eq('id', user.id)
         .single()
 

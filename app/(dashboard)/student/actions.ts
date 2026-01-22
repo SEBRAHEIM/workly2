@@ -164,23 +164,24 @@ export async function createProject(prevState: any, formData: FormData) {
         return redirect(`/student/projects/${data.id}`)
     }
 
+    let sessionUrl: string | null = null
     try {
-        const sessionUrl = await createProjectStripeSession(
+        sessionUrl = await createProjectStripeSession(
             data.id,
             title,
             initialPrice,
             user.email!
         )
-
-        if (sessionUrl) {
-            redirect(sessionUrl)
-        }
     } catch (stripeError: any) {
         console.error('[CREATE PROJECT] Stripe Exception:', stripeError)
         const errorMessage = stripeError instanceof Error ? stripeError.message : String(stripeError)
         return {
             message: `Payment initialization failed: ${errorMessage}. Your request was saved, but it's hidden until paid. Please check your projects.`
         }
+    }
+
+    if (sessionUrl) {
+        redirect(sessionUrl)
     }
 }
 
@@ -243,22 +244,23 @@ export async function payProject(prevState: any, formData: FormData) {
         return { message: 'Project is already paid' }
     }
 
+    let sessionUrl: string | null = null
     try {
-        const sessionUrl = await createProjectStripeSession(
+        sessionUrl = await createProjectStripeSession(
             project.id,
             project.title,
             project.current_price,
             user.email!
         )
-
-        if (sessionUrl) {
-            redirect(sessionUrl)
-        } else {
-            return { message: 'Failed to create payment session' }
-        }
     } catch (err: any) {
         console.error('Pay project error:', err)
         return { message: err.message || 'Payment initialization failed' }
+    }
+
+    if (sessionUrl) {
+        redirect(sessionUrl)
+    } else {
+        return { message: 'Failed to create payment session' }
     }
 }
 

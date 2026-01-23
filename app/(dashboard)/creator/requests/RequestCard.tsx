@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { User, Clock, Download, ChevronDown, ChevronUp, XCircle, Trash2, Upload, File, Loader2 } from 'lucide-react'
+import { User, Clock, Download, ChevronDown, ChevronUp, XCircle, Trash2, Upload, File as FileIcon, Loader2, Zap, Shield, FileText, Check, MessageSquare, Briefcase, AlertTriangle } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
-import { declineProject, deleteProject, submitWork } from '../actions'
+import { declineProject, deleteProject, submitWork, startProject } from '../actions'
 import { toast } from 'sonner'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 import { useDropzone } from 'react-dropzone'
@@ -29,7 +29,7 @@ export default function RequestCard({ req }: RequestCardProps) {
 
     const supabase = createClient()
 
-    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const onDrop = useCallback(async (acceptedFiles: globalThis.File[]) => {
         if (acceptedFiles.length === 0) return
 
         setUploading(true)
@@ -95,6 +95,13 @@ export default function RequestCard({ req }: RequestCardProps) {
         }
     }
 
+    if (!req) {
+        console.error('[RequestCard] Rendered with null/undefined req');
+        return null;
+    }
+
+    console.log('[RequestCard] Rendering with req:', req);
+
     return (
         <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm hover:shadow-md transition-shadow">
             <div className="flex flex-col md:flex-row justify-between gap-8">
@@ -102,14 +109,14 @@ export default function RequestCard({ req }: RequestCardProps) {
                 <div className="flex-1">
                     <div className="flex items-center mb-4">
                         <div className="w-10 h-10 rounded-full bg-[#f0f0f0] mr-3 overflow-hidden">
-                            {req.student.avatar_url ? (
+                            {req.student?.avatar_url ? (
                                 <img src={req.student.avatar_url} alt="Student" className="w-full h-full object-cover" />
                             ) : (
                                 <User className="w-6 h-6 m-2 text-gray-400" />
                             )}
                         </div>
                         <div>
-                            <p className="font-bold text-[#333333]">{req.student.full_name || req.student.username}</p>
+                            <p className="font-bold text-[#333333]">{req.student?.full_name || req.student?.username || 'Unknown Student'}</p>
                             <p className="text-xs text-gray-400 uppercase tracking-wider">Student</p>
                         </div>
                         <div className="ml-auto md:hidden">
@@ -142,7 +149,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
                         <div className={`text-gray-600 mb-2 leading-relaxed border-l-2 border-[#E6E2D6] pl-4 break-words transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3'}`}>
-                            <MarkdownRenderer content={req.description} />
+                            <MarkdownRenderer content={req.description || ''} />
                         </div>
                         <div className="pl-4 mb-6">
                             <span className="text-xs font-bold text-[#3E4C37] flex items-center hover:underline">
@@ -189,9 +196,11 @@ export default function RequestCard({ req }: RequestCardProps) {
                     {req.status === 'requested' || req.status === 'accepted' ? (
                         <>
                             <div className="flex items-center mb-4 text-[#3E4C37]">
-                                <Clock className="w-5 h-5 mr-3" />
+                                <Shield className="w-5 h-5 mr-3 text-[#C6A87C]" />
                                 <div className="flex flex-col">
-                                    <span className="font-bold">Awaiting Payment</span>
+                                    <span className="font-bold">
+                                        {req.funds_status === 'unpaid' ? 'Awaiting Payment' : 'Secured & Starting'}
+                                    </span>
                                     {req.due_date && (
                                         <span className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter -mt-0.5">
                                             Requested Due Date: {new Date(req.due_date).toLocaleDateString()}
@@ -212,13 +221,34 @@ export default function RequestCard({ req }: RequestCardProps) {
                             </div>
 
                             <div className="space-y-3">
-                                <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-center">
-                                    <p className="text-xs text-blue-700 font-bold flex items-center justify-center gap-2">
-                                        <Zap className="w-3 h-3 animate-pulse" />
-                                        Awaiting Secure Sync
-                                    </p>
-                                    <p className="text-[10px] text-blue-600/70 mt-1 uppercase tracking-wider">Order moves to Active once paid</p>
-                                </div>
+                                {req.funds_status === 'unpaid' && (
+                                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-xl text-center">
+                                        <p className="text-xs text-orange-700 font-bold flex items-center justify-center gap-2">
+                                            <Zap className="w-3 h-3" />
+                                            WAITING FOR PAYMENT
+                                        </p>
+                                        <p className="text-[10px] text-orange-600/70 mt-1 uppercase tracking-wider">Order moves to Active once paid</p>
+                                    </div>
+                                )}
+
+                                {req.funds_status !== 'unpaid' && (req.status === 'requested' || req.status === 'accepted') && (
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            const res = await startProject(req.id)
+                                            if (res.error) {
+                                                toast.error(res.error)
+                                            } else {
+                                                toast.success('Work started! Let\'s go.')
+                                            }
+                                        }}
+                                        className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2D3828] transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        <Briefcase className="w-4 h-4" />
+                                        Confirm & Start Project
+                                    </button>
+                                )}
+
                                 <button
                                     type="button"
                                     onClick={handleDecline}
@@ -251,9 +281,9 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 {req.status === 'in_progress' ? 'Work in Progress' : 'Active Project'}
                             </div>
 
-                            {['accepted', 'agreed'].includes(req.status) && (
-                                <p className="text-xs text-orange-600 mb-4 font-bold flex items-center justify-center">
-                                    <Clock className="w-3 h-3 mr-1" /> Funds status: Pending
+                            {['accepted', 'agreed', 'in_progress'].includes(req.status) && (
+                                <p className="text-xs text-green-600 mb-4 font-bold flex items-center justify-center">
+                                    <Shield className="w-3 h-3 mr-1" /> Payment Secured by Workly.day
                                 </p>
                             )}
 
@@ -267,7 +297,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                     {uploadedUrl ? (
                                         <div className="p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
                                             <div className="flex items-center overflow-hidden">
-                                                <File className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                                                <FileIcon className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
                                                 <span className="text-xs text-green-700 font-medium truncate">{uploadedFileName}</span>
                                             </div>
                                             <button

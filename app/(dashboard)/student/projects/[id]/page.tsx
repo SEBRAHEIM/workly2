@@ -139,7 +139,7 @@ export default async function ProjectPage({
                             ['declined', 'cancelled'].includes(project.status) ? 'bg-red-500' :
                                 'bg-orange-400'}`} />
                     <span className="font-bold uppercase text-sm">
-                        {project.status === 'accepted' && project.funds_status === 'pending' ? 'Verifying Payment' : project.status.replace('_', ' ')}
+                        {payment === 'success' || (project.status === 'accepted' && project.funds_status === 'pending') ? 'Secured & Starting' : project.status.replace('_', ' ')}
                     </span>
                 </div>
             </div>
@@ -188,46 +188,26 @@ export default async function ProjectPage({
                         </div>
 
 
-                        {/* STATUS: UNPAID/ACCEPTED/AGREED -> PAY TO START */}
-                        {(project.funds_status === 'unpaid' || (['accepted', 'agreed'].includes(project.status) && project.funds_status === 'pending')) && (
-                            <div className={`rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-6 transition-all duration-500 ${payment === 'success' ? 'bg-blue-600' : 'bg-[#3E4C37]'}`}>
+
+                        {/* SUCCESS STATE: Payment was just made, waiting for sync */}
+                        {payment === 'success' && project.funds_status === 'pending' && (
+                            <div className="bg-blue-600 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-6">
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                                            {payment === 'success' ? <Check className="w-5 h-5 text-white" /> : <Shield className="w-5 h-5 text-[#C6A87C]" />}
+                                            <Check className="w-5 h-5 text-white" />
                                         </div>
                                         <div>
-                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">
-                                                {payment === 'success' ? 'Payment Received' : 'Secure Escrow'}
-                                            </p>
-                                            <p className="text-xl font-bold font-serif">
-                                                {payment === 'success' ? 'Verifying with Stripe...' : 'Payment Required'}
-                                            </p>
+                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Payment Received</p>
+                                            <p className="text-xl font-bold font-serif">Verifying with Stripe...</p>
                                         </div>
                                     </div>
-
                                     <p className="text-sm text-white/70 mb-8 leading-relaxed">
-                                        {payment === 'success'
-                                            ? "Great! We're just waiting for the final confirmation from Stripe. This usually takes a few seconds. Do not pay again."
-                                            : "Funds are held securely by Workly.day and only released to the creator once you approve the final delivery."
-                                        }
+                                        Great! We've received your payment. We're just waiting for the final confirmation from Stripe to move your project to "In Progress". This usually takes a few seconds.
                                     </p>
-
-                                    {payment === 'success' ? (
-                                        <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl">
-                                            <Clock className="w-6 h-6 mr-3 animate-spin" />
-                                            <span className="font-bold uppercase tracking-widest text-sm text-white">Finalizing your order...</span>
-                                        </div>
-                                    ) : (
-                                        <PaymentButton
-                                            projectId={project.id}
-                                            amount={displayPrice}
-                                        />
-                                    )}
-
-                                    <div className="mt-6 flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest justify-center">
-                                        <div className="w-1 h-1 rounded-full bg-green-500" />
-                                        Stripe Secured Payment
+                                    <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl">
+                                        <Clock className="w-6 h-6 mr-3 animate-spin" />
+                                        <span className="font-bold uppercase tracking-widest text-sm text-white">Finalizing your order...</span>
                                     </div>
                                 </div>
                                 <AEDIcon className="absolute -bottom-10 -right-10 w-48 h-48 text-white/5" />
@@ -272,12 +252,6 @@ export default async function ProjectPage({
                             </div>
                         </div>
 
-                        {project.status === 'accepted' && project.funds_status === 'pending' && (
-                            <div className="text-center">
-                                <p className="text-xs text-gray-500 mb-6 px-4">This project is fixed at the price above. Pay now to secure the deal and allow the creator to start working.</p>
-                                <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider mb-2">No refunds accepted after project starts</p>
-                            </div>
-                        )}
 
                         {/* Payment Policy & Reporting for Active/Submitted Projects */}
                         {['in_progress', 'submitted'].includes(project.status) && (

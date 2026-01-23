@@ -23,14 +23,7 @@ export default function PaymentReceiptModal({
     if (!isOpen) return null
 
     const handlePrint = () => {
-        const printContent = receiptRef.current
-        if (printContent) {
-            const originalContents = document.body.innerHTML
-            document.body.innerHTML = printContent.innerHTML
-            window.print()
-            document.body.innerHTML = originalContents
-            window.location.reload() // Reload to restore event listeners
-        }
+        window.print()
     }
 
     const handleClose = () => {
@@ -39,13 +32,36 @@ export default function PaymentReceiptModal({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:bg-white print:p-0">
+            <style jsx global>{`
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    .printable-receipt, .printable-receipt * {
+                        visibility: visible;
+                    }
+                    .printable-receipt {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        margin: 0;
+                        padding: 2rem;
+                        border: none !important;
+                        box-shadow: none !important;
+                    }
+                    .no-print {
+                        display: none !important;
+                    }
+                }
+            `}</style>
 
+            <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 print:max-w-none print:rounded-none printable-receipt">
                 {/* Printable Area */}
-                <div ref={receiptRef} className="p-8 bg-white relative">
+                <div role="region" aria-label="Receipt" className="p-8 bg-white relative">
                     <div className="flex flex-col items-center text-center">
-                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 no-print">
                             <Check className="w-8 h-8" />
                         </div>
                         <h2 className="text-2xl font-serif font-bold text-[#333333] mb-1">Payment Successful</h2>
@@ -78,14 +94,14 @@ export default function PaymentReceiptModal({
                         </div>
 
                         <div className="text-center">
-                            <p className="text-xs text-gray-400 mb-2">A receipt has also been sent to your email.</p>
+                            <p className="text-xs text-gray-400 mb-2 no-print">A receipt has also been sent to your email.</p>
                             <div className="font-bold text-lg tracking-widest text-[#333333]">WORKLY</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Actions (Not Printed) */}
-                <div className="p-6 bg-[#F3F0E9] border-t border-[#E6E2D6] flex gap-3">
+                <div className="p-6 bg-[#F3F0E9] border-t border-[#E6E2D6] flex gap-3 no-print">
                     <button
                         onClick={handlePrint}
                         className="flex-1 bg-[#333333] text-white font-bold py-3 rounded-xl flex items-center justify-center hover:bg-[#222222] transition-colors"

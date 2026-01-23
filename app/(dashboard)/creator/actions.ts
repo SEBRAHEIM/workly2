@@ -84,16 +84,31 @@ export async function initiateStripeWithdrawal() {
     }
 
     try {
-        // 1. Create a Transfer to the connected account
-        const transfer = await getStripe().transfers.create({
-            amount: Math.round(balance * 100),
-            currency: 'aed',
-            destination: profile.stripe_account_id,
-            description: `Workly payout for ${user.email}`,
-            metadata: {
-                creatorId: user.id
+        // Find Stripe details for reference
+        const { data: creatorProfile } = await supabase
+            .from('profiles')
+            .select('stripe_account_id, email')
+            .eq('id', user.id)
+            .single()
+
+        if (!creatorProfile?.stripe_account_id) {
+            return { error: 'No Stripe account connected' }
+        }
+
+        // 1. Log the withdrawal request as 'pending'
+        const { error: withdrawalError } = await supabase.from('withdrawals').insert({
+            creator_id: user.id,
+            amount: balance,
+            method: 'stripe',
+            status: 'pending',
+            details: {
+                payout_to: creatorProfile.stripe_account_id,
+                email: creatorProfile.email,
+                request_date: new Date().toISOString()
             }
         })
+
+        if (withdrawalError) throw withdrawalError
 
         // 2. Deduct from local wallet
         const { error: balanceError } = await supabase
@@ -102,15 +117,6 @@ export async function initiateStripeWithdrawal() {
             .eq('id', user.id)
 
         if (balanceError) throw balanceError
-
-        // 3. Log the withdrawal
-        await supabase.from('withdrawals').insert({
-            creator_id: user.id,
-            amount: balance,
-            method: 'stripe',
-            status: 'completed',
-            details: { transferId: transfer.id }
-        })
 
         revalidatePath('/creator/wallet')
         return { success: true }
@@ -289,7 +295,7 @@ export async function declineProject(projectId: string) {
     // Verify creator owns this project context (is the creator_id)
     const { data: project } = await supabase
         .from('projects')
-        .select('creator_id, student_id, title')
+        .select('creator_id, student_id, title, funds_status')
         .eq('id', projectId)
         .single()
 
@@ -297,11 +303,55 @@ export async function declineProject(projectId: string) {
         return { error: 'Unauthorized or Project not found' }
     }
 
-    // Soft Close
+    // Soft Close or Refund
+    const isEscrowed = project.funds_status === 'escrow'
+    let refundResult = null
+
+    if (isEscrowed) {
+        try {
+            // Find the transaction to get the payment_intent
+            const { data: transaction } = await supabase
+                .from('transactions')
+                .select('metadata, amount')
+                .eq('project_id', projectId)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .single()
+
+            const paymentIntentId = transaction?.metadata?.payment_intent
+
+            if (paymentIntentId) {
+                // Trigger Stripe Refund
+                await getStripe().refunds.create({
+                    payment_intent: paymentIntentId,
+                    reason: 'requested_by_customer', // In this case, creator's side refusal
+                    metadata: { projectId, studentId: project.student_id }
+                })
+
+                // Record Refund Transaction
+                await supabase.from('transactions').insert({
+                    student_id: project.student_id,
+                    creator_id: project.creator_id,
+                    project_id: projectId,
+                    amount: transaction.amount,
+                    status: 'completed',
+                    type: 'refund',
+                    metadata: { reason: 'Creator declined project', original_payment_intent: paymentIntentId }
+                })
+
+                refundResult = 'refunded'
+            }
+        } catch (refundError: any) {
+            console.error('[REFUND ERROR] Failed to automatically refund:', refundError)
+            // We don't block the decline, but we should alert admin or log it
+        }
+    }
+
     const { error } = await supabase
         .from('projects')
         .update({
             status: 'declined',
+            funds_status: refundResult || project.funds_status,
             closed_at: new Date().toISOString(),
             waiting_on: null
         })
@@ -317,21 +367,24 @@ export async function declineProject(projectId: string) {
         project_id: projectId,
         type: 'declined',
         actor_id: user.id,
-        payload: { notes: 'Offer declined by Creator' }
+        payload: { notes: 'Offer declined by Creator', refunded: !!refundResult }
     })
 
     // Notify Student
     if (project.student_id) {
         await createNotification({
             userId: project.student_id,
-            type: 'error',
-            message: `Offer Declined: ${project.title}`,
+            type: refundResult ? 'info' : 'error',
+            message: refundResult
+                ? `Project Declined & Refunded: ${project.title}. The amount has been sent back to your original payment method.`
+                : `Offer Declined: ${project.title}`,
             link: `/student/projects/${projectId}`
         })
     }
 
     revalidatePath('/creator/requests')
-    return { success: true }
+    revalidatePath(`/student/projects/${projectId}`)
+    return { success: true, refunded: !!refundResult }
 }
 
 export async function deleteProject(projectId: string) {
@@ -487,5 +540,55 @@ export async function submitWork(prevState: any, formData: FormData) {
 }
 
 // acceptOffer removed.
+
+export async function startProject(projectId: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    const { data: project } = await supabase
+        .from('projects')
+        .select('creator_id, status, student_id, title')
+        .eq('id', projectId)
+        .single()
+
+    if (!project || project.creator_id !== user.id) {
+        return { error: 'Unauthorized' }
+    }
+
+    const { error } = await supabase
+        .from('projects')
+        .update({
+            status: 'in_progress',
+            waiting_on: user.id // Waiting on creator to deliver
+        })
+        .eq('id', projectId)
+
+    if (error) {
+        console.error('Error starting project:', error)
+        return { error: 'Failed to start project' }
+    }
+
+    // Log Event
+    await supabase.from('project_events').insert({
+        project_id: projectId,
+        type: 'status_change',
+        actor_id: user.id,
+        payload: { from: project.status, to: 'in_progress', notes: 'Creator started work' }
+    })
+
+    // Notify Student
+    if (project.student_id) {
+        await createNotification({
+            userId: project.student_id,
+            type: 'info',
+            message: `Work started on: ${project.title}`,
+            link: `/student/projects/${projectId}`
+        })
+    }
+
+    revalidatePath('/creator/requests')
+    return { success: true }
+}
 
 // End of actions

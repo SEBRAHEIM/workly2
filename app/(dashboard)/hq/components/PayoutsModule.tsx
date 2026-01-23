@@ -22,7 +22,7 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
     })
 
     const handleComplete = async (id: string, amount: number) => {
-        if (!confirm(`Are you sure you have manually sent AED ${amount} and want to mark this as complete?`)) return
+        if (!confirm(`Confirm payout of AED ${amount}? For Stripe, this will trigger an immediate transfer from the platform account.`)) return
 
         setIsProcessing(id)
         try {
@@ -210,8 +210,8 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
                                     ) : (
                                         <div className="flex items-center justify-end gap-2">
                                             <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] border ${w.status === 'completed'
-                                                    ? 'bg-green-500/10 text-green-500 border-green-500/20'
-                                                    : 'bg-red-500/10 text-red-500 border-red-500/20'
+                                                ? 'bg-green-500/10 text-green-500 border-green-500/20'
+                                                : 'bg-red-500/10 text-red-500 border-red-500/20'
                                                 }`}>
                                                 {w.status}
                                             </span>

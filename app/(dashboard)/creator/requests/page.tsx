@@ -32,7 +32,16 @@ export default async function CreatorRequests(props: {
         .eq('creator_id', user.id)
         .order('created_at', { ascending: false })
 
-    if (!requests) return <div>Failed to load requests</div>
+    if (!requests) {
+        console.error('[CREATOR_REQUESTS] Failed to fetch requests or requests is null');
+        return <div>Failed to load requests</div>;
+    }
+
+    console.log(`[CREATOR_REQUESTS] Loaded ${requests.length} requests for user ${user.id}`);
+    if (requests.length > 0) {
+        console.log('[CREATOR_REQUESTS] Sample request:', requests[0]);
+    }
+
 
     // Helper to filter recent closed deals (48h)
     const isRecent = (dateStr: string | null) => {
@@ -43,11 +52,11 @@ export default async function CreatorRequests(props: {
 
     // Categorization
     const activeRequests = requests.filter(p =>
-        ['requested', 'accepted', 'agreed', 'negotiating', 'pending', 'countered'].includes(p.status) && p.funds_status === 'pending'
+        ['requested', 'negotiating', 'pending', 'countered'].includes(p.status)
     )
 
     const ongoingRequests = requests.filter(p =>
-        ['accepted', 'agreed', 'in_progress', 'submitted'].includes(p.status) && p.funds_status === 'escrow'
+        ['accepted', 'agreed', 'in_progress', 'submitted'].includes(p.status)
     )
 
     const closedRequests = requests.filter(p =>

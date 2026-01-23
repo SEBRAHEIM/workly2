@@ -6,31 +6,15 @@ export default async function AdminDashboard() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    // 1. Basic User Check
-    if (!user) redirect('/login')
-
-    // 2. Strict Access Control
+    // 1. Strict HQ Authorization Check
     const { data: profile } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', user.id)
+        .eq('id', user?.id || '')
         .single()
 
-    if (user.email !== 'workly.day@outlook.com' || profile?.role !== 'admin') {
-        return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-20 h-20 bg-red-600/10 border border-red-600/20 rounded-3xl flex items-center justify-center mb-8">
-                    <span className="text-3xl">🚫</span>
-                </div>
-                <h1 className="text-4xl font-serif font-black text-white mb-4 uppercase tracking-tighter italic">Access Denied</h1>
-                <p className="text-gray-500 max-w-sm font-medium tracking-wide">
-                    This sector is classified. Please return to your designated workspace.
-                </p>
-                <a href="/student" className="mt-10 px-8 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-200 transition-all">
-                    Safe Exit
-                </a>
-            </div>
-        )
+    if (!user || user.email !== 'workly.day@outlook.com' || profile?.role !== 'admin') {
+        redirect('/hq/login')
     }
 
     // 3. Comprehensive Data Fetching

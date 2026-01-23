@@ -1,8 +1,10 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createNotification } from '@/utils/notifications'
+import { getStripe } from '@/utils/stripe'
 
 async function checkAdmin() {
     const supabase = await createClient()
@@ -33,7 +35,7 @@ export async function verifyUser(userId: string) {
         .eq('id', userId)
 
     if (error) throw error
-    revalidatePath('/admin')
+    revalidatePath('/hq')
 }
 
 export async function suspendUser(userId: string) {
@@ -46,7 +48,7 @@ export async function suspendUser(userId: string) {
         .eq('id', userId)
 
     if (error) throw error
-    revalidatePath('/admin')
+    revalidatePath('/hq')
 }
 
 export async function cancelProject(projectId: string) {
@@ -59,7 +61,7 @@ export async function cancelProject(projectId: string) {
         .eq('id', projectId)
 
     if (error) throw error
-    revalidatePath('/admin')
+    revalidatePath('/hq')
 }
 
 export async function forceReleaseFunds(projectId: string) {
@@ -72,7 +74,7 @@ export async function forceReleaseFunds(projectId: string) {
         .eq('id', projectId)
 
     if (error) throw error
-    revalidatePath('/admin')
+    revalidatePath('/hq')
 }
 
 export async function completeWithdrawal(withdrawalId: string) {
@@ -81,11 +83,36 @@ export async function completeWithdrawal(withdrawalId: string) {
 
     const { data: withdrawal, error: fetchError } = await supabase
         .from('withdrawals')
-        .select('*, profiles(full_name, display_name)')
+        .select('*, profiles(id, full_name, display_name, email, stripe_account_id)')
         .eq('id', withdrawalId)
         .single()
 
     if (fetchError || !withdrawal) throw new Error('Withdrawal not found')
+    if (withdrawal.status !== 'pending') throw new Error('Withdrawal is already processed')
+
+    // Handle Stripe Transfer if needed
+    if (withdrawal.method === 'stripe') {
+        const creatorProfile = withdrawal.profiles
+        if (!creatorProfile?.stripe_account_id) {
+            throw new Error('Creator has no Stripe account connected')
+        }
+
+        try {
+            await getStripe().transfers.create({
+                amount: Math.round(withdrawal.amount * 100),
+                currency: 'aed',
+                destination: creatorProfile.stripe_account_id,
+                description: `Workly payout: Approved by Admin`,
+                metadata: {
+                    withdrawalId: withdrawal.id,
+                    creatorId: withdrawal.creator_id
+                }
+            })
+        } catch (stripeError: any) {
+            console.error('[STRIPE TRANSFER ERROR]', stripeError)
+            throw new Error(`Stripe Transfer failed: ${stripeError.message}`)
+        }
+    }
 
     const { error } = await supabase
         .from('withdrawals')
@@ -99,12 +126,11 @@ export async function completeWithdrawal(withdrawalId: string) {
     await createNotification({
         userId: withdrawal.creator_id,
         type: 'success',
-        message: `Withdrawal Complete: Your AED ${withdrawal.amount} payout has been sent.`,
+        message: `Withdrawal Approved: Your AED ${withdrawal.amount} payout has been processed.`,
         link: '/creator/wallet'
     })
 
-    revalidatePath('/admin')
-    revalidatePath('/admin/payouts')
+    revalidatePath('/hq')
     return { success: true }
 }
 
@@ -154,10 +180,64 @@ export async function rejectWithdrawal(withdrawalId: string, reason: string) {
         link: '/creator/wallet'
     })
 
-    revalidatePath('/admin')
-    revalidatePath('/admin/payouts')
+    revalidatePath('/hq')
     return { success: true }
 }
 
 // Helper for notifications within admin actions (since we don't have it imported here)
 // Actually I need to import it.
+
+export async function hqLogin(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    // 1. Strict Email Check BEFORE attempting login (Safety layer)
+    if (email !== 'workly.day@outlook.com') {
+        return { error: 'Access Denied: Specialized HQ clearance required.' }
+    }
+
+    // 2. Authenticate
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    })
+
+    if (error) {
+        return { error: 'Authentication failed. Please check your credentials.' }
+    }
+
+    // 3. Final Verification and Role Sync
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user && user.email === 'workly.day@outlook.com') {
+        // Fetch current profile
+        let { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+
+        // If no profile exists or role is wrong, fix it automatically
+        if (!profile || profile.role !== 'admin') {
+            const { error: upsertError } = await supabase
+                .from('profiles')
+                .upsert({
+                    id: user.id,
+                    role: 'admin',
+                    full_name: 'Workly Admin',
+                    is_verified: true
+                })
+
+            if (upsertError) {
+                console.error('[HQ LOGIN] Profile Sync Error:', upsertError)
+                return { error: 'Security profile synchronization failed.' }
+            }
+        }
+
+        redirect('/hq')
+    }
+
+    return { error: 'Unauthorized Sector. HQ access restricted.' }
+}

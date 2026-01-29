@@ -15,7 +15,7 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
         <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-[#2e3b29] active:scale-95 transition-all transform shadow-xl disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+            className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-[#2e3b29] active:scale-95 transition-all transform shadow-xl disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
         >
             {isPending ? (
                 <span className="flex items-center">
@@ -75,14 +75,14 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
 
             {/* Category Selection */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">I need help with...</label>
+                <label className="block text-sm font-bold text-[#1E293B] uppercase tracking-wider mb-2">I need help with...</label>
                 <div className="flex flex-wrap gap-2">
                     {specializations.map(slug => (
                         <button
                             key={slug}
                             type="button"
                             onClick={() => setSelectedCategory(slug)}
-                            className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${selectedCategory === slug ? 'bg-[#3E4C37] text-white border-[#3E4C37]' : 'bg-[#F3F0E9] text-gray-400 border-transparent hover:border-gray-300'}`}
+                            className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${selectedCategory === slug ? 'bg-[#0EA5E9] text-white border-[#0EA5E9]' : 'bg-[#F0F9FF] text-gray-400 border-transparent hover:border-gray-300'}`}
                         >
                             {categories.find(c => c.slug === slug)?.title || slug}
                         </button>
@@ -90,15 +90,15 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                 </div>
                 {languages && languages.length > 0 && (
                     <p className="mt-2 text-[10px] text-gray-400 font-medium tracking-wide">
-                        Available in: <span className="text-[#3E4C37] font-bold">{languages.join(', ')}</span>
+                        Available in: <span className="text-[#0EA5E9] font-bold">{languages.join(', ')}</span>
                     </p>
                 )}
             </div>
 
             {/* Pricing Info Display */}
-            <div className="bg-[#F3F0E9] rounded-2xl p-5 border border-[#E6E2D6]/50">
+            <div className="bg-[#F0F9FF] rounded-2xl p-5 border border-[#F0F9FF]/50">
                 <div className="flex items-center gap-2 mb-3">
-                    <AEDIcon className="w-5 h-5 text-[#3E4C37]" />
+                    <AEDIcon className="w-5 h-5 text-[#0EA5E9]" />
                     <h4 className="text-sm font-bold text-[#333] uppercase tracking-widest">Pricing Basis</h4>
                 </div>
 
@@ -109,7 +109,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                         {selectedService.pricing_mode === 'fixed' && (
                             <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-green-100">
                                 <span className="text-sm font-bold text-gray-600">Fixed Project Rate</span>
-                                <span className="text-lg font-serif font-bold text-[#3E4C37]">AED {selectedService.base_price}</span>
+                                <span className="text-lg font-serif font-bold text-[#0EA5E9]">AED {selectedService.base_price}</span>
                             </div>
                         )}
 
@@ -123,7 +123,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedPackage(tier)}
-                                                className={`p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-start ${selectedPackage === tier ? 'border-[#3E4C37] bg-white shadow-md' : 'border-white/50 bg-white/40 hover:border-gray-200'}`}
+                                                className={`p-4 rounded-2xl border-2 text-left transition-all flex justify-between items-start ${selectedPackage === tier ? 'border-[#0EA5E9] bg-white shadow-md' : 'border-white/50 bg-white/40 hover:border-gray-200'}`}
                                             >
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-2 mb-1">
@@ -135,26 +135,21 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
 
                                                     <div className="flex items-center gap-3 text-[10px] text-gray-400 font-bold uppercase mt-2">
                                                         <span className="flex items-center gap-1">
-                                                            <Clock className="w-3 h-3" />
-                                                            {pkg.delivery_days} Days Delivery
-                                                        </span>
-                                                        <span>•</span>
-                                                        <span className="flex items-center gap-1">
                                                             <Zap className="w-3 h-3" />
                                                             {pkg.revisions} Revisions
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-base font-serif font-bold text-[#3E4C37]">AED {pkg.price}</p>
-                                                    {selectedPackage === tier && <Check className="w-4 h-4 text-white bg-[#3E4C37] rounded-full p-0.5 ml-auto mt-2" />}
+                                                    <p className="text-base font-serif font-bold text-[#0EA5E9]">AED {pkg.price}</p>
+                                                    {selectedPackage === tier && <Check className="w-4 h-4 text-white bg-[#0EA5E9] rounded-full p-0.5 ml-auto mt-2" />}
                                                 </div>
                                             </button>
 
                                             {/* Expandable description if selected */}
                                             {selectedPackage === tier && pkg.description && (
-                                                <div className="bg-white/60 rounded-2xl p-4 border border-[#E6E2D6] text-xs text-gray-600 animate-in slide-in-from-top-2 duration-300 mx-2 -mt-2 mb-2">
-                                                    <h5 className="font-bold text-[#3E4C37] uppercase tracking-wider mb-2 text-[10px]">What's included:</h5>
+                                                <div className="bg-white/60 rounded-2xl p-4 border border-[#F0F9FF] text-xs text-gray-600 animate-in slide-in-from-top-2 duration-300 mx-2 -mt-2 mb-2">
+                                                    <h5 className="font-bold text-[#0EA5E9] uppercase tracking-wider mb-2 text-[10px]">What's included:</h5>
                                                     <MarkdownRenderer
                                                         content={pkg.description}
                                                         className="opacity-80 leading-relaxed"
@@ -172,19 +167,19 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
 
             <div className="space-y-4">
                 <div>
-                    <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">Project Title</label>
+                    <label className="block text-sm font-bold text-[#1E293B] uppercase tracking-wider mb-2">Project Title</label>
                     <input
                         type="text"
                         name="title"
                         required
                         dir="auto"
                         placeholder="e.g. Physics Assignment Help"
-                        className="w-full bg-[#F3F0E9] border-none rounded-xl p-4 text-[#333333] placeholder-gray-400 focus:ring-2 focus:ring-[#3E4C37] outline-none transition-all text-base"
+                        className="w-full bg-[#F0F9FF] border-none rounded-xl p-4 text-[#1E293B] placeholder-gray-400 focus:ring-2 focus:ring-[#0EA5E9] outline-none transition-all text-base"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">Description & Instructions</label>
+                    <label className="block text-sm font-bold text-[#1E293B] uppercase tracking-wider mb-2">Description & Instructions</label>
                     <FormattedTextarea
                         value={description}
                         onChange={setDescription}
@@ -195,20 +190,20 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">When do you need this by?</label>
+                    <label className="block text-sm font-bold text-[#1E293B] uppercase tracking-wider mb-2">When do you need this by?</label>
                     <input
                         type="date"
                         name="dueDate"
                         required
                         min={new Date().toISOString().split('T')[0]}
-                        className="w-full bg-[#F3F0E9] border-none rounded-xl p-4 text-[#333333] focus:ring-2 focus:ring-[#3E4C37] outline-none transition-all text-base"
+                        className="w-full bg-[#F0F9FF] border-none rounded-xl p-4 text-[#1E293B] focus:ring-2 focus:ring-[#0EA5E9] outline-none transition-all text-base"
                     />
                     <p className="mt-1 text-[10px] text-gray-400 font-medium">Please select a realistic due date for the creator.</p>
                 </div>
             </div>
 
             <div>
-                <label className="block text-sm font-bold text-[#333333] uppercase tracking-wider mb-2">Attachments</label>
+                <label className="block text-sm font-bold text-[#1E293B] uppercase tracking-wider mb-2">Attachments</label>
                 <MultiFileUpload
                     bucketName="project-files"
                     folderPath={`${creatorId}`}

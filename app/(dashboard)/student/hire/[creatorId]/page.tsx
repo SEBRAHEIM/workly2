@@ -47,14 +47,14 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
 
             {/* Minimal Header */}
             <div className="text-center mb-8">
-                <div className="w-20 h-20 rounded-full bg-[#F3F0E9] mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-sm overflow-hidden">
+                <div className="w-20 h-20 rounded-full bg-[#F0F9FF] mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-sm overflow-hidden">
                     {creator.avatar_url ? (
                         <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
                     ) : (
                         <User className="w-8 h-8 text-gray-400" />
                     )}
                 </div>
-                <h1 className="text-3xl font-serif font-bold text-[#333333] mb-1">
+                <h1 className="text-3xl font-serif font-bold text-[#1E293B] mb-1">
                     Hire {creator.display_name || creator.full_name || 'Creator'}
                 </h1>
                 {creator.username && (
@@ -66,7 +66,7 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                 {creator.languages && creator.languages.length > 0 && (
                     <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
                         {creator.languages.map((lang: string) => (
-                            <span key={lang} className="text-[9px] font-bold uppercase px-2 py-0.5 bg-[#3E4C37]/5 text-[#3E4C37] rounded-md border border-[#3E4C37]/10">
+                            <span key={lang} className="text-[9px] font-bold uppercase px-2 py-0.5 bg-[#0EA5E9]/5 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/10">
                                 {lang}
                             </span>
                         ))}
@@ -75,16 +75,16 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
 
                 <Link
                     href={`/student/creator/${creatorId}`}
-                    className="text-sm font-bold text-[#3E4C37] hover:underline"
+                    className="text-sm font-bold text-[#0EA5E9] hover:underline"
                 >
                     ← Back to Full Profile
                 </Link>
             </div>
 
             {/* The Hire Form */}
-            <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-xl">
-                <div className="mb-6 pb-6 border-b border-[#E6E2D6]">
-                    <h3 className="text-xl font-bold text-[#333333] mb-2">Project Details</h3>
+            <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-xl">
+                <div className="mb-6 pb-6 border-b border-[#F0F9FF]">
+                    <h3 className="text-xl font-bold text-[#1E293B] mb-2">Project Details</h3>
                     <p className="text-gray-500 text-sm">
                         Defining your project clear and early leads to better results.
                     </p>

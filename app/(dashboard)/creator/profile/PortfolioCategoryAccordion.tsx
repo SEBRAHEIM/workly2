@@ -33,7 +33,7 @@ export default function PortfolioCategoryAccordion({ category, items, readOnly =
     }
 
     return (
-        <div className="bg-white rounded-2xl border border-[#E6E2D6] overflow-hidden transition-all shadow-sm hover:shadow-md mb-4">
+        <div className="bg-white rounded-2xl border border-[#F0F9FF] overflow-hidden transition-all shadow-sm hover:shadow-md mb-4">
 
             {/* Header / Trigger */}
             <button
@@ -45,7 +45,7 @@ export default function PortfolioCategoryAccordion({ category, items, readOnly =
                         {hasItems ? <CheckCircle className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
                     </div>
                     <div>
-                        <h3 className="font-bold text-[#333333] text-lg">{category.title}</h3>
+                        <h3 className="font-bold text-[#1E293B] text-lg">{category.title}</h3>
                         <p className="text-sm text-gray-500">
                             {hasItems ? `${items.length} work sample(s)` : 'No work samples yet'}
                         </p>
@@ -75,13 +75,13 @@ export default function PortfolioCategoryAccordion({ category, items, readOnly =
 
             {/* Body */}
             {isOpen && (
-                <div className="p-6 pt-0 border-t border-[#E6E2D6] bg-white">
+                <div className="p-6 pt-0 border-t border-[#F0F9FF] bg-white">
                     <div className="mt-6">
                         {/* Grid of Items */}
                         {hasItems ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                 {items.map(item => (
-                                    <div key={item.id} className="group relative rounded-xl overflow-hidden border border-[#E6E2D6] aspect-video bg-gray-100 flex items-center justify-center">
+                                    <div key={item.id} className="group relative rounded-xl overflow-hidden border border-[#F0F9FF] aspect-video bg-gray-100 flex items-center justify-center">
                                         {/* File Display */}
                                         {isImage(item.image_url) ? (
                                             <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
@@ -146,7 +146,7 @@ export default function PortfolioCategoryAccordion({ category, items, readOnly =
                                 ) : (
                                     <button
                                         onClick={() => setShowUpload(true)}
-                                        className="w-full py-4 border-2 border-dashed border-[#E6E2D6] rounded-xl text-gray-500 font-bold hover:border-[#3E4C37] hover:text-[#3E4C37] hover:bg-[#F3F0E9] transition-all flex items-center justify-center gap-2"
+                                        className="w-full py-4 border-2 border-dashed border-[#F0F9FF] rounded-xl text-gray-500 font-bold hover:border-[#0EA5E9] hover:text-[#0EA5E9] hover:bg-[#F0F9FF] transition-all flex items-center justify-center gap-2"
                                     >
                                         <Plus className="w-5 h-5" />
                                         Add Work to {category.title}

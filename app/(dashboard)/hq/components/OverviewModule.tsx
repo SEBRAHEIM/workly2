@@ -3,16 +3,23 @@
 import { Shield, TrendingUp, Users, Briefcase, Activity, AlertTriangle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-export default function OverviewModule({ projects, profiles, stats }: { projects: any[], profiles: any[], stats: any }) {
+export default function OverviewModule({ projects, profiles, stats, withdrawals = [], setActiveTab }: { projects: any[], profiles: any[], stats: any, withdrawals?: any[], setActiveTab: (tab: any) => void }) {
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
         setIsMounted(true)
     }, [])
 
+    // Combine all events for the Live Pulse
+    const allEvents = [
+        ...projects.map(p => ({ id: p.id, type: 'Project', title: p.title, date: p.created_at, color: 'bg-blue-500' })),
+        ...profiles.map(p => ({ id: p.id, type: 'Registration', title: p.display_name || p.full_name || 'New User', date: p.created_at, color: 'bg-green-500' })),
+        ...withdrawals.map(w => ({ id: w.id, type: 'Withdrawal', title: `Request: AED ${w.amount}`, date: w.created_at, color: 'bg-orange-500' }))
+    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Header */}
+            {/* ... header ... */}
             <div className="flex justify-between items-end">
                 <div>
                     <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">System Health</h2>
@@ -56,7 +63,6 @@ export default function OverviewModule({ projects, profiles, stats }: { projects
                 />
             </div>
 
-            {/* Two Column Layout for Alerts and Recent */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Critical Alerts */}
                 <div className="lg:col-span-1 space-y-6">
@@ -67,21 +73,24 @@ export default function OverviewModule({ projects, profiles, stats }: { projects
                     <div className="space-y-4">
                         <AlertItem
                             label="Pending Payouts"
-                            count={profiles.filter((p: any) => p.wallet_balance > 100).length}
+                            count={withdrawals.filter(w => w.status === 'pending').length}
                             description="Creators waiting for withdrawal"
                             severity="high"
+                            onClick={() => setActiveTab('payouts')}
                         />
                         <AlertItem
                             label="Flagged Projects"
-                            count={0}
+                            count={projects.filter(p => p.status === 'disputed').length}
                             description="Reports of TOS violations"
                             severity="medium"
+                            onClick={() => setActiveTab('moderation')}
                         />
                         <AlertItem
                             label="Verification Queue"
-                            count={profiles.filter((p: any) => p.role === 'creator' && !p.specialization).length}
+                            count={profiles.filter(p => p.role === 'creator' && !p.is_verified).length}
                             description="New creators pending setup"
                             severity="low"
+                            onClick={() => setActiveTab('users')}
                         />
                     </div>
                 </div>
@@ -102,19 +111,19 @@ export default function OverviewModule({ projects, profiles, stats }: { projects
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {projects.slice(0, 6).map((project) => (
-                                    <tr key={project.id} className="hover:bg-white/5 transition-colors">
+                                {allEvents.slice(0, 10).map((event) => (
+                                    <tr key={event.id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.5)]" />
-                                                <span className="font-bold text-gray-300">Project Update</span>
+                                                <div className={`w-2 h-2 rounded-full ${event.color} shadow-[0_0_5px_rgba(59,130,246,0.3)]`} />
+                                                <span className="font-bold text-gray-300">{event.type}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-gray-500 truncate block max-w-[200px]">{project.title}</span>
+                                            <span className="text-gray-500 truncate block max-w-[200px]">{event.title}</span>
                                         </td>
                                         <td className="px-6 py-4 text-right font-mono text-gray-600 text-[10px]">
-                                            {isMounted ? new Date(project.created_at).toLocaleTimeString() : '...'}
+                                            {isMounted ? new Date(event.date).toLocaleTimeString() : '...'}
                                         </td>
                                     </tr>
                                 ))}
@@ -145,7 +154,7 @@ function StatCard({ label, value, icon: Icon, sub, trend, color = "text-white" }
     )
 }
 
-function AlertItem({ label, count, description, severity }: any) {
+function AlertItem({ label, count, description, severity, onClick }: any) {
     const colors = {
         high: 'border-red-500/50 bg-red-500/5 text-red-500',
         medium: 'border-yellow-500/50 bg-yellow-500/5 text-yellow-500',
@@ -153,7 +162,10 @@ function AlertItem({ label, count, description, severity }: any) {
     }
 
     return (
-        <div className={`p-5 rounded-2xl border ${colors[severity as keyof typeof colors]} flex items-center justify-between group cursor-pointer hover:shadow-lg transition-all`}>
+        <div
+            onClick={onClick}
+            className={`p-5 rounded-2xl border ${colors[severity as keyof typeof colors]} flex items-center justify-between group cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]`}
+        >
             <div>
                 <h4 className="font-bold text-sm tracking-wide">{label}</h4>
                 <p className="text-[10px] opacity-70 mt-1">{description}</p>

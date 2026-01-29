@@ -93,10 +93,10 @@ export default function NegotiationConsole({
         <div className="relative z-10">
             {/* Compact Header */}
             <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center p-2 rounded-full bg-[#F3F0E9] mb-3">
-                    <TrendingUp className="w-4 h-4 text-[#3E4C37]" />
+                <div className="inline-flex items-center justify-center p-2 rounded-full bg-[#F0F9FF] mb-3">
+                    <TrendingUp className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
-                <h3 className="text-3xl font-serif font-bold text-[#3E4C37] mb-1">
+                <h3 className="text-3xl font-serif font-bold text-[#0EA5E9] mb-1">
                     AED {currentPrice || '0.00'}
                 </h3>
                 <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">
@@ -107,15 +107,15 @@ export default function NegotiationConsole({
             {/* NEGOTIATION UI */}
             {isActionRequired && (
                 <div className="space-y-3">
-                    <div className="bg-[#3E4C37]/5 border border-[#3E4C37]/10 p-3 rounded-xl mb-4 text-center">
-                        <p className="text-[10px] text-[#3E4C37] font-bold uppercase tracking-wider mb-1">Incoming Offer</p>
-                        <p className="text-2xl font-bold text-[#3E4C37]">AED {latestOffer?.price || currentPrice}</p>
+                    <div className="bg-[#0EA5E9]/5 border border-[#0EA5E9]/10 p-3 rounded-xl mb-4 text-center">
+                        <p className="text-[10px] text-[#0EA5E9] font-bold uppercase tracking-wider mb-1">Incoming Offer</p>
+                        <p className="text-2xl font-bold text-[#0EA5E9]">AED {latestOffer?.price || currentPrice}</p>
                     </div>
 
                     <button
                         onClick={handleAccept}
                         disabled={isSubmitting}
-                        className="w-full bg-[#3E4C37] text-white font-bold text-sm py-3 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg shadow-[#3E4C37]/20 touch-manipulation disabled:opacity-50 flex justify-center items-center h-[44px]"
+                        className="w-full bg-[#0EA5E9] text-white font-bold text-sm py-3 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg shadow-[#0EA5E9]/20 touch-manipulation disabled:opacity-50 flex justify-center items-center h-[44px]"
                     >
                         {isSubmitting ? (
                             <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -150,7 +150,7 @@ export default function NegotiationConsole({
                             name="notes"
                             placeholder="Add notes (optional)..."
                             dir="auto"
-                            className="w-full p-3 rounded-xl border border-gray-100 focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] outline-none text-xs h-16 resize-none mb-2 bg-[#F3F0E9] font-medium"
+                            className="w-full p-3 rounded-xl border border-gray-100 focus:ring-2 focus:ring-[#0EA5E9]/20 focus:border-[#0EA5E9] outline-none text-xs h-16 resize-none mb-2 bg-[#F0F9FF] font-medium"
                         ></textarea>
                         <div className="flex gap-2">
                             <div className="relative flex-1">
@@ -160,7 +160,7 @@ export default function NegotiationConsole({
                                     name="price"
                                     placeholder="Amount"
                                     required
-                                    className="w-full pl-8 pr-3 py-3 rounded-xl bg-white border border-gray-200 text-[#333333] text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all font-medium h-[44px]"
+                                    className="w-full pl-8 pr-3 py-3 rounded-xl bg-white border border-gray-200 text-[#1E293B] text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]/20 focus:border-[#0EA5E9] transition-all font-medium h-[44px]"
                                 />
                             </div>
                             <button
@@ -185,17 +185,17 @@ export default function NegotiationConsole({
 
             {/* WAITING STATES (negotiating, pending, countered) */}
             {['negotiating', 'pending', 'countered'].includes(projectStatus) && iAmSender && (
-                <div className="text-center py-6 bg-[#F3F0E9] rounded-xl border border-[#E6E2D6]">
+                <div className="text-center py-6 bg-[#F0F9FF] rounded-xl border border-[#F0F9FF]">
                     <Clock className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                    <p className="font-bold text-[#333333] text-sm">Offer Sent</p>
+                    <p className="font-bold text-[#1E293B] text-sm">Offer Sent</p>
                     <p className="text-xs text-gray-500">Waiting for response...</p>
                 </div>
             )}
 
             {projectStatus === 'requested' && (
-                <div className="text-center py-6 bg-[#F3F0E9] rounded-xl border border-[#E6E2D6]">
+                <div className="text-center py-6 bg-[#F0F9FF] rounded-xl border border-[#F0F9FF]">
                     <MessageSquare className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                    <p className="font-bold text-[#333333] text-sm">Request Sent</p>
+                    <p className="font-bold text-[#1E293B] text-sm">Request Sent</p>
                     <p className="text-xs text-gray-500">
                         {currentPrice > 0 ? 'Waiting for creator to confirm' : 'Waiting for offer...'}
                     </p>
@@ -224,7 +224,7 @@ export default function NegotiationConsole({
                 <div className="mt-8 pt-6 border-t border-gray-100">
                     <button
                         onClick={() => setShowTimeline(!showTimeline)}
-                        className="w-full flex items-center justify-between text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#3E4C37] transition-colors mb-4"
+                        className="w-full flex items-center justify-between text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#0EA5E9] transition-colors mb-4"
                     >
                         <span>History & Timeline</span>
                         <span>{showTimeline ? 'Hide' : 'Show'}</span>
@@ -241,7 +241,7 @@ export default function NegotiationConsole({
                                                 ['offer_sent', 'counter_sent'].includes(e.type) ? 'bg-orange-400' : 'bg-gray-300'
                                         }`}
                                     />
-                                    <p className="text-xs font-bold text-[#333333]">
+                                    <p className="text-xs font-bold text-[#1E293B]">
                                         {e.type === 'offer_sent' ? 'Offer Sent' :
                                             e.type === 'counter_sent' ? 'Counter Offer' :
                                                 e.type === 'accepted' ? 'Offer Accepted' :

@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F3F0E9;
-  --foreground: #333333;
+  --background: #FFFFFF;
+  --foreground: #1E293B;
   --font-serif: "Fraunces", serif;
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 @theme inline {
@@ -11,16 +16,43 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-serif);
 
-  --color-cream: #F3F0E9;
-  --color-dark-olive: #3E4C37;
-  --color-tan: #C6A87C;
-  --color-dark-gray: #333333;
+  --color-cream: #FFFFFF;
+  /* Pure White background */
+  --color-dark-olive: #0EA5E9;
+  /* Sky Blue accent */
+  --color-tan: #0EA5E9;
+  /* Keeping gold as secondary soft accent */
+  --color-dark-gray: #1E293B;
+  /* Slate text */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Base mobile resets */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+/* Ensure large enough tap targets and uniform behavior */
+button,
+a {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* Prevent iOS auto-zoom on input focusing */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+  touch-action: manipulation;
 }
 
 /* Optimize mobile interactions */
@@ -34,6 +66,11 @@ textarea {
 
 /* Global active state for buttons if not overridden */
 button:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
   transition: transform 0.1s;
+}
+
+/* Utility for mobile bottom spacing (iPhone home bar) */
+.pb-safe {
+  padding-bottom: var(--safe-area-inset-bottom);
 }

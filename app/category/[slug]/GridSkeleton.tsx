@@ -6,7 +6,7 @@ export default function GridSkeleton() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="bg-white rounded-2xl p-6 border border-[#E6E2D6] shadow-sm animate-pulse">
+                    <div key={i} className="bg-white rounded-2xl p-6 border border-[#F0F9FF] shadow-sm animate-pulse">
                         {/* Header */}
                         <div className="flex items-center mb-6">
                             <div className="w-16 h-16 rounded-full bg-gray-200 mr-4"></div>
@@ -24,7 +24,7 @@ export default function GridSkeleton() {
                             <div className="h-3 w-2/3 bg-gray-100 rounded"></div>
                         </div>
                         {/* Stats */}
-                        <div className="flex items-center justify-between border-t border-[#E6E2D6] pt-4 mb-4">
+                        <div className="flex items-center justify-between border-t border-[#F0F9FF] pt-4 mb-4">
                             <div className="h-3 w-20 bg-gray-100 rounded"></div>
                             <div className="h-3 w-20 bg-gray-100 rounded"></div>
                         </div>

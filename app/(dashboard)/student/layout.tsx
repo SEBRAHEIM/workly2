@@ -6,7 +6,7 @@ export default function StudentLayout({
     children: React.ReactNode
 }) {
     return (
-        <main className="min-h-screen bg-[#F3F0E9] pt-24 md:pt-32">
+        <main className="min-h-screen bg-[#F0F9FF] pt-24 md:pt-32">
             <StudentNavbar />
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 {children}

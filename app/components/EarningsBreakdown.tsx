@@ -23,13 +23,13 @@ export default function EarningsBreakdown({ price, compact = false, showLabel = 
 
     const containerClasses = dark
         ? `rounded-xl border border-white/10 bg-white/5 ${compact ? 'p-3 my-2' : 'p-4 my-4'}`
-        : `rounded-xl border border-[#E6E2D6] bg-[#F8F7F2]/50 ${compact ? 'p-3 my-2' : 'p-4 my-4'}`
+        : `rounded-xl border border-[#F0F9FF] bg-[#FFFFFF]/50 ${compact ? 'p-3 my-2' : 'p-4 my-4'}`
 
     const labelClasses = dark ? "text-[10px] font-bold text-white/40 uppercase tracking-widest" : "text-[10px] font-bold text-gray-400 uppercase tracking-widest"
     const feeClasses = "text-xs font-medium text-red-500"
     const netLabelClasses = dark ? "text-xs font-bold text-white/80" : "text-xs font-bold text-[#333]"
-    const netValueClasses = dark ? "text-sm font-black text-white" : "text-sm font-black text-[#3E4C37]"
-    const dividerClasses = dark ? "border-t border-white/10" : "border-t border-[#E6E2D6]"
+    const netValueClasses = dark ? "text-sm font-black text-white" : "text-sm font-black text-[#0EA5E9]"
+    const dividerClasses = dark ? "border-t border-white/10" : "border-t border-[#F0F9FF]"
 
     return (
         <div className={containerClasses}>
@@ -44,7 +44,7 @@ export default function EarningsBreakdown({ price, compact = false, showLabel = 
                 <span className={netValueClasses}>{Math.max(0, earnings).toFixed(2)} AED</span>
             </div>
             {!compact && (
-                <p className={`text-[9px] mt-2 font-medium px-2 py-1 rounded inline-block ${dark ? 'text-white/40 bg-white/5' : 'text-gray-400 bg-[#3E4C37]/5'}`}>
+                <p className={`text-[9px] mt-2 font-medium px-2 py-1 rounded inline-block ${dark ? 'text-white/40 bg-white/5' : 'text-gray-400 bg-[#0EA5E9]/5'}`}>
                     Includes Workly service contribution & secure payment processing.
                 </p>
             )}

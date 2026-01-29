@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-[#F8F7F2] text-[#333333] selection:bg-[#3E4C37] selection:text-white`}
+        className={`${inter.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-white text-dark-gray selection:bg-[#BAE6FD] selection:text-black`}
       >
         {children}
         <Toaster position="top-center" richColors />

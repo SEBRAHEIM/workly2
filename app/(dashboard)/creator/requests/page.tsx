@@ -56,7 +56,7 @@ export default async function CreatorRequests(props: {
     )
 
     const ongoingRequests = requests.filter(p =>
-        ['accepted', 'agreed', 'in_progress', 'submitted'].includes(p.status)
+        ['accepted', 'agreed', 'in_progress', 'submitted', 'revision_requested'].includes(p.status)
     )
 
     const closedRequests = requests.filter(p =>
@@ -78,36 +78,36 @@ export default async function CreatorRequests(props: {
     return (
         <div className="p-8 max-w-6xl mx-auto min-h-screen">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-4xl font-serif font-bold text-[#3E4C37]">Project Orders</h1>
+                <h1 className="text-4xl font-serif font-bold text-[#0EA5E9]">Project Orders</h1>
             </div>
 
             {/* TABS */}
             <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
                 <Link href="/creator/requests"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     New Orders ({activeRequests.length})
                 </Link>
                 <Link href="/creator/requests?tab=ongoing"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'ongoing' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'ongoing' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     Active Work ({ongoingRequests.length})
                 </Link>
                 <Link href="/creator/requests?tab=completed"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'completed' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'completed' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     Completed ({requests.filter(p => p.status === 'completed').length})
                 </Link>
                 <Link href="/creator/requests?tab=closed"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'closed' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'closed' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
                     Cancelled ({closedRequests.length})
                 </Link>
             </div>
 
             {currentList.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-[#E6E2D6] shadow-sm overflow-hidden min-h-[400px] flex items-center justify-center">
+                <div className="bg-white rounded-3xl border border-[#F0F9FF] shadow-sm overflow-hidden min-h-[400px] flex items-center justify-center">
                     <div className="text-center p-8">
-                        <div className="w-16 h-16 bg-[#F3F0E9] rounded-full flex items-center justify-center mx-auto mb-4 text-[#3E4C37]">
+                        <div className="w-16 h-16 bg-[#F0F9FF] rounded-full flex items-center justify-center mx-auto mb-4 text-[#0EA5E9]">
                             <Briefcase className="w-8 h-8" />
                         </div>
-                        <h3 className="text-xl font-bold text-[#333333] mb-2">No {tab} requests</h3>
+                        <h3 className="text-xl font-bold text-[#1E293B] mb-2">No {tab} requests</h3>
                         <p className="text-gray-500 max-w-sm mx-auto">
                             {tab === 'active' ? 'Requests from students will appear here.' : `You have no ${tab} requests.`}
                         </p>

@@ -35,15 +35,6 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
     const searchParams = useSearchParams()
 
     useEffect(() => {
-        // Check for Stripe success
-        if (searchParams.get('stripe_success')) {
-            toast.success('Stripe account connected successfully!', {
-                description: 'You are now ready to receive payouts.',
-                duration: 5000,
-            })
-            setOpenSection('payouts' as any)
-        }
-
         // Run once on mount to determine where to start
         if (!hasIdentity) {
             setOpenSection('identity')
@@ -177,7 +168,7 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                                     <p className="text-orange-600 text-sm">Please complete the Expertise section first.</p>
                                     <button
                                         onClick={() => setOpenSection('expertise')}
-                                        className="mt-3 text-sm font-bold text-[#3E4C37] underline"
+                                        className="mt-3 text-sm font-bold text-[#0EA5E9] underline"
                                     >
                                         Go to Expertise
                                     </button>
@@ -187,25 +178,21 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                     </ProfileSection>
                 </div>
             )}
-            {/* 5. Payouts Section */}
-            {hasPortfolio && (
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ProfileSection
-                        title="5. Payouts"
-                        summary={
-                            profile?.stripe_account_id ? 'Stripe Connected' :
-                                profile?.bank_iban ? 'Bank Details Set' :
-                                    profile?.paypal_email ? 'PayPal Details Set' :
-                                        'Set up how you get paid'
-                        }
-                        isOpen={openSection === 'payouts' as any}
-                        isCompleted={!!(profile?.stripe_account_id || profile?.bank_iban || profile?.paypal_email)}
-                        onToggle={() => setOpenSection(openSection === 'payouts' as any ? null : 'payouts' as any)}
-                    >
-                        <PayoutSettings profile={profile} />
-                    </ProfileSection>
-                </div>
-            )}
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <ProfileSection
+                    title="5. Payouts"
+                    summary={
+                        profile?.bank_iban ? 'Bank Details Set' :
+                            profile?.paypal_email ? 'PayPal Details Set' :
+                                'Set up how you get paid'
+                    }
+                    isOpen={openSection === 'payouts' as any}
+                    isCompleted={!!(profile?.bank_iban || profile?.paypal_email)}
+                    onToggle={() => setOpenSection(openSection === 'payouts' as any ? null : 'payouts' as any)}
+                >
+                    <PayoutSettings profile={profile} />
+                </ProfileSection>
+            </div>
         </div>
     )
 }

@@ -33,7 +33,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
             details: ["Niche Experts"],
             icon: <Target size={20} />,
             size: "col-span-1",
-            bg: "bg-[#3E4C37] text-white"
+            bg: "bg-[#0EA5E9] text-white"
         },
         {
             title: "Global Standards",
@@ -41,7 +41,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
             details: ["24/7 Support"],
             icon: <ShieldCheck size={20} />,
             size: "col-span-1",
-            bg: "bg-[#C6A87C] text-[#333333]"
+            bg: "bg-slate-800 text-white"
         },
         {
             title: "Institutional Trust",
@@ -49,16 +49,16 @@ export default function Features({ hideCta = false }: FeaturesProps) {
             details: ["Secure Escrow", "Unlimited Edits"],
             icon: <Zap size={20} />,
             size: "col-span-1 md:col-span-2",
-            bg: "bg-white"
+            bg: "bg-white text-slate-800 border border-sky-100"
         }
     ];
 
     return (
-        <section ref={sectionRef} className="px-6 py-40 max-w-7xl mx-auto relative overflow-hidden">
-            {/* Parallax Background Text - RESPONSIVE SIZE */}
+        <section ref={sectionRef} className="px-6 py-40 max-w-7xl mx-auto relative overflow-hidden bg-white">
+            {/* Parallax Background Text */}
             <motion.div
                 style={{ x: xMove }}
-                className="absolute top-0 left-0 text-[10rem] md:text-[20rem] font-black text-[#3E4C37]/5 whitespace-nowrap pointer-events-none select-none uppercase tracking-tighter"
+                className="absolute top-0 left-0 text-[10rem] md:text-[20rem] font-black text-sky-500/5 whitespace-nowrap pointer-events-none select-none uppercase tracking-tighter"
             >
                 Precision Quality Trust Brilliance
             </motion.div>
@@ -72,15 +72,15 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         viewport={{ once: true }}
                         className="max-w-4xl"
                     >
-                        <h2 className="font-serif font-black text-5xl md:text-9xl text-[#3E4C37] leading-[0.8] tracking-tighter uppercase mb-10">
-                            The New <br /> <span className="text-[#C6A87C]">Standard.</span>
+                        <h2 className="font-serif font-black text-5xl md:text-9xl text-[#0EA5E9] leading-[0.8] tracking-tighter uppercase mb-10">
+                            The New <br /> <span className="text-slate-800">Standard.</span>
                         </h2>
-                        <div className="h-[2px] w-full bg-[#EBE7DE] mb-10 overflow-hidden">
+                        <div className="h-[2px] w-full bg-sky-100 mb-10 overflow-hidden">
                             <motion.div
                                 initial={{ x: "-100%" }}
                                 whileInView={{ x: "0%" }}
                                 transition={{ duration: 1.5, ease: "circOut" }}
-                                className="h-full w-full bg-[#3E4C37]"
+                                className="h-full w-full bg-[#0EA5E9]"
                             />
                         </div>
                     </motion.div>
@@ -94,7 +94,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ delay: idx * 0.1 }}
                         viewport={{ once: true }}
-                        className={`group relative p-8 md:p-10 overflow-hidden border border-[#EBE7DE] shadow-sm hover:shadow-2xl transition-all duration-500 rounded-none ${feature.size} ${feature.bg || 'bg-white'}`}
+                        className={`group relative p-8 md:p-10 overflow-hidden border border-sky-100 shadow-sm hover:shadow-2xl transition-all duration-500 rounded-none ${feature.size} ${feature.bg || 'bg-sky-50/30'}`}
                     >
                         {feature.image && (
                             <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
@@ -104,20 +104,20 @@ export default function Features({ hideCta = false }: FeaturesProps) {
 
                         <div className="relative z-10 h-full flex flex-col">
                             <div className="flex items-center justify-between mb-10">
-                                <div className={`w-12 h-12 flex items-center justify-center border ${feature.bg ? 'border-white/20' : 'border-[#3E4C37]/10'} group-hover:bg-[#3E4C37] group-hover:text-white transition-all duration-500`}>
+                                <div className={`w-12 h-12 flex items-center justify-center border ${feature.bg ? 'border-white/20' : 'border-sky-200'} group-hover:bg-[#0EA5E9] group-hover:text-white transition-all duration-500`}>
                                     {feature.icon}
                                 </div>
-                                <ArrowRight className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />
+                                <ArrowRight className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 text-[#0EA5E9]" />
                             </div>
 
-                            <h3 className="text-3xl font-black font-serif uppercase tracking-tighter mb-4">{feature.title}</h3>
-                            <p className={`text-lg font-medium mb-10 transition-colors ${feature.bg ? 'text-white/70' : 'text-[#333333]/60'}`}>
+                            <h3 className="text-3xl font-black font-serif uppercase tracking-tighter mb-4 text-[#1E293B] group-hover:text-[#0EA5E9] transition-colors">{feature.title}</h3>
+                            <p className={`text-lg font-medium mb-10 transition-colors ${feature.bg ? 'opacity-90 text-white' : 'text-slate-600'}`}>
                                 {feature.desc}
                             </p>
 
                             <div className="mt-auto flex flex-wrap gap-3">
                                 {feature.details.map((detail, i) => (
-                                    <span key={i} className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] border ${feature.bg ? 'border-white/20 bg-white/5' : 'border-[#3E4C37]/10 bg-[#F3F0E9]'}`}>
+                                    <span key={i} className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] border ${feature.bg ? 'border-white/20 bg-white/10' : 'border-sky-100 bg-white/50 text-slate-400'}`}>
                                         {detail}
                                     </span>
                                 ))}
@@ -125,7 +125,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         </div>
 
                         {/* Scanner Effect */}
-                        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C6A87C] to-transparent -translate-y-full group-hover:translate-y-full transition-all duration-[2000ms] ease-linear" />
+                        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#0EA5E9] to-transparent -translate-y-full group-hover:translate-y-full transition-all duration-[2000ms] ease-linear" />
                     </motion.div>
                 ))}
             </div>

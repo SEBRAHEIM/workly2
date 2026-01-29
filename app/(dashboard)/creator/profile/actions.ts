@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { containsContactInfo } from '@/utils/content-safety'
 
 // Update Basic Profile (Identity + Specializations)
 export async function updateCreatorProfile(formData: FormData) {
@@ -20,9 +21,11 @@ export async function updateCreatorIdentity(formData: FormData) {
     if (!user) throw new Error('Unauthorized')
 
     // Content Moderation
-    const contactRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/
-    if (contactRegex.test(bio) || contactRegex.test(tagline)) {
-        return { error: 'Bio or Tagline contains prohibited contact information.' }
+    const bioCheck = containsContactInfo(bio)
+    const taglineCheck = containsContactInfo(tagline)
+
+    if (bioCheck.hasContactInfo || taglineCheck.hasContactInfo) {
+        return { error: `Validation failed: ${bioCheck.reason || taglineCheck.reason}. Sharing contact info is strictly prohibited.` }
     }
 
     console.log('[SMS DEBUG] Updating profile for user:', user.id, { smsPhone })
@@ -120,6 +123,11 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
         .getPublicUrl(fileName)
 
     // 3. Insert Record
+    const descCheck = containsContactInfo(description)
+    if (descCheck.hasContactInfo) {
+        return { error: `Description validation failed: ${descCheck.reason}. Contact info is not allowed in portfolio items.` }
+    }
+
     const { error } = await supabase
         .from('portfolio_items')
         .insert({

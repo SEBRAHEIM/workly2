@@ -25,81 +25,94 @@ export default async function FavoritesPage() {
     const creators = favorites?.map((f: any) => f.profiles) || []
 
     return (
-        <div className="max-w-6xl mx-auto p-4 md:p-8">
-            <h1 className="text-3xl font-serif font-bold text-[#333333] mb-8">My Favorite Creators</h1>
-
-            {creators.length === 0 ? (
-                <div className="text-center py-24 bg-[#F9F7F2] rounded-3xl border border-[#E6E2D6]">
-                    <h2 className="text-xl font-bold text-gray-400 mb-2">No favorites yet</h2>
-                    <p className="text-gray-500 mb-8">Star creators you like to save them here.</p>
-                    <Link
-                        href="/"
-                        className="inline-block bg-[#3E4C37] text-white font-bold py-3 px-8 rounded-xl hover:bg-[#2e3b29] transition-all"
-                    >
-                        Browse Creators
-                    </Link>
+        <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+                <div className="mb-12">
+                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">
+                        Curated <br /> <span className="text-[#0EA5E9]">Talent.</span>
+                    </h1>
+                    <p className="text-slate-500 font-medium">Your collection of elite student creators.</p>
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {creators.map((creator: any) => {
-                        const profileUrl = `/student/creator/${creator.id}`
-                        return (
-                            <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#E6E2D6] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
 
-                                {/* Overlay Link */}
-                                <Link href={profileUrl} className="absolute inset-0 z-10 rounded-2xl" aria-label={`View ${creator.display_name}'s profile`} />
+                {creators.length === 0 ? (
+                    <div className="bg-sky-50 rounded-[2.5rem] p-16 text-center border border-sky-100">
+                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
+                            <User className="w-8 h-8 text-sky-200" />
+                        </div>
+                        <h2 className="text-3xl font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">No favorites yet</h2>
+                        <p className="text-slate-500 mb-10 max-w-sm mx-auto font-medium">Star creators you like to save them here for quick access.</p>
+                        <Link
+                            href="/"
+                            className="inline-block bg-[#0EA5E9] text-white font-black text-[10px] uppercase tracking-widest py-4 px-10 rounded-full hover:bg-sky-600 transition-all shadow-lg shadow-sky-100"
+                        >
+                            Browse Creators
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {creators.map((creator: any) => {
+                            const profileUrl = `/student/creator/${creator.id}`
+                            return (
+                                <div key={creator.id} className="bg-white rounded-[2rem] p-8 border border-sky-50 shadow-sm hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 relative group flex flex-col h-full overflow-hidden">
+                                    {/* Overlay Link */}
+                                    <Link href={profileUrl} className="absolute inset-0 z-10" />
 
-                                {/* Header: Identity */}
-                                <div className="flex items-start gap-3 mb-3 relative">
-                                    <div className="flex-shrink-0">
-                                        <div className="w-12 h-12 rounded-full bg-[#F3F0E9] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform">
-                                            {creator.avatar_url ? (
-                                                <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <User className="w-5 h-5 text-gray-400" />
-                                            )}
+                                    {/* Header: Identity */}
+                                    <div className="flex items-start gap-5 mb-8 relative z-20">
+                                        <div className="flex-shrink-0">
+                                            <div className="w-16 h-16 rounded-2xl bg-sky-50 flex items-center justify-center border border-sky-100 overflow-hidden text-center group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0">
+                                                {creator.avatar_url ? (
+                                                    <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User className="w-6 h-6 text-sky-200" />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 min-w-0 pt-1">
+                                            <div className="flex items-start justify-between">
+                                                <div className="">
+                                                    <h3 className="font-black text-xl text-slate-800 uppercase tracking-tight leading-tight group-hover:text-[#0EA5E9] transition-colors">
+                                                        {creator.display_name || creator.full_name || 'Creator'}
+                                                    </h3>
+                                                </div>
+                                                <div className="flex-shrink-0 relative z-30">
+                                                    <FavoriteButton creatorId={creator.id} initialIsFavorite={true} />
+                                                </div>
+                                            </div>
+                                            <p className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-widest flex items-center gap-1.5">
+                                                <ShieldCheck size={12} className="text-sky-400" />
+                                                Member Level {creator.level || 1}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="flex-1 min-w-0 pt-0.5">
-                                        <div className="flex items-center justify-between">
-                                            <div className="group-hover:text-[#3E4C37] transition-colors">
-                                                <h3 className="font-serif font-bold text-base text-[#333333] truncate pr-2">
-                                                    {creator.display_name || creator.full_name || 'Creator'}
-                                                </h3>
-                                            </div>
-                                            <div className="flex-shrink-0 relative z-20">
-                                                <FavoriteButton creatorId={creator.id} initialIsFavorite={true} />
-                                            </div>
-                                        </div>
-                                        <p className="text-xs text-gray-400 line-clamp-1">
-                                            {creator.tagline || 'Student Creator'}
-                                        </p>
+                                    {/* Tagline */}
+                                    <p className="text-slate-500 text-sm font-medium mb-8 line-clamp-2 leading-relaxed">
+                                        {creator.tagline || 'Excellence in student delivery and creative innovation.'}
+                                    </p>
+
+                                    {/* Spacer */}
+                                    <div className="flex-1"></div>
+
+                                    {/* Actions */}
+                                    <Link
+                                        href={`/student/hire/${creator.id}`}
+                                        className="block w-full bg-slate-900 text-white text-center font-black text-[10px] uppercase tracking-widest py-4 rounded-full hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-xl group-hover:shadow-sky-100 relative z-20"
+                                    >
+                                        Establish Contract
+                                    </Link>
+
+                                    {/* Abstract Background Design */}
+                                    <div className="absolute -bottom-10 -right-10 text-[120px] font-black text-sky-50/30 opacity-0 group-hover:opacity-100 group-hover:-translate-x-4 transition-all duration-700 pointer-events-none uppercase">
+                                        {(creator.display_name || creator.full_name)?.[0]}
                                     </div>
                                 </div>
-
-                                {/* Spacer */}
-                                <div className="flex-1"></div>
-
-                                {/* Metadata Row */}
-                                <div className="flex items-center gap-2 text-[11px] text-gray-400 font-medium mb-4 pt-3 border-t border-[#F9F7F2] relative">
-                                    <span className="bg-[#F3F0E9] text-[#555] px-2 py-0.5 rounded-md">
-                                        Level {creator.level || 1}
-                                    </span>
-                                </div>
-
-                                {/* Actions */}
-                                <Link
-                                    href={`/student/hire/${creator.id}`}
-                                    className="block w-full bg-[#333333] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#3E4C37] active:scale-95 transition-all shadow-sm group-hover:shadow-md relative z-20"
-                                >
-                                    Hire
-                                </Link>
-                            </div>
-                        )
-                    })}
-                </div>
-            )}
+                            )
+                        })}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

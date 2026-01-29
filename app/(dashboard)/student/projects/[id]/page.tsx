@@ -106,7 +106,7 @@ export default async function ProjectPage({
     const iAmSender = latestOffer?.sender_id === user?.id
 
     return (
-        <div className="max-w-5xl mx-auto p-8">
+        <div className="max-w-5xl mx-auto p-4 md:p-8">
             <PaymentReceiptModal
                 amount={displayPrice}
                 date={new Date().toLocaleString()}
@@ -116,30 +116,35 @@ export default async function ProjectPage({
             />
 
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h1 className="text-3xl font-serif font-bold text-[#333333] mb-2" dir="auto">{project.title}</h1>
-                    <div className="flex items-center text-gray-500">
-                        <div className="w-6 h-6 rounded-full bg-gray-200 overflow-hidden mr-2">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4 px-2 md:px-0">
+                <div className="flex-1">
+                    <h1 className="text-2xl md:text-3xl font-serif font-black text-[#1E293B] mb-2 leading-tight uppercase tracking-tighter" dir="auto">{project.title}</h1>
+                    <div className="flex items-center text-gray-400 text-xs font-medium">
+                        <div className="w-8 h-8 rounded-full bg-sky-50 border border-sky-100 overflow-hidden mr-3 flex items-center justify-center">
                             {project?.creator?.avatar_url ? (
                                 <img src={project.creator.avatar_url} alt="Creator" className="w-full h-full object-cover" />
                             ) : (
-                                <User className="w-4 h-4 text-gray-400 m-1" />
+                                <User className="w-4 h-4 text-sky-400" />
                             )}
                         </div>
-                        <span>Creator: <span className="font-bold text-[#333333]">{project?.creator?.full_name || 'Unknown'}</span></span>
+                        <span className="uppercase tracking-widest text-[10px] font-black">
+                            Lead: <span className="text-[#0EA5E9]">{project?.creator?.full_name || 'Unknown'}</span>
+                        </span>
                     </div>
                 </div>
-                <div className={`px-4 py-2 rounded-xl border flex items-center shadow-sm 
-                    ${['accepted', 'agreed', 'in_progress', 'completed'].includes(project.status) ? 'bg-green-50 border-green-200 text-green-700' :
-                        ['declined', 'cancelled'].includes(project.status) ? 'bg-red-50 border-red-200 text-red-700' :
-                            'bg-white border-[#E6E2D6] text-gray-600'}`}>
-                    <div className={`w-2 h-2 rounded-full mr-2 
-                        ${['accepted', 'agreed', 'in_progress'].includes(project.status) ? 'bg-green-500' :
+                <div className={`px-5 py-3 rounded-2xl border flex items-center shadow-sm w-full md:w-auto justify-center md:justify-start
+                    ${['accepted', 'agreed', 'in_progress', 'completed', 'submitted'].includes(project.status) ? 'bg-sky-50 border-sky-100 text-[#0EA5E9]' :
+                        ['declined', 'cancelled'].includes(project.status) ? 'bg-red-50 border-red-100 text-red-600' :
+                            project.status === 'revision_requested' ? 'bg-orange-50 border-orange-100 text-orange-600' :
+                                'bg-white border-sky-50 text-slate-400'}`}>
+                    <div className={`w-2 h-2 rounded-full mr-3 
+                        ${['accepted', 'agreed', 'in_progress', 'completed', 'submitted'].includes(project.status) ? 'bg-[#0EA5E9]' :
                             ['declined', 'cancelled'].includes(project.status) ? 'bg-red-500' :
                                 'bg-orange-400'}`} />
-                    <span className="font-bold uppercase text-sm">
-                        {payment === 'success' || (project.status === 'accepted' && project.funds_status === 'pending') ? 'Secured & Starting' : project.status.replace('_', ' ')}
+                    <span className="font-black uppercase text-[10px] tracking-widest">
+                        {payment === 'success' || (project.status === 'accepted' && project.funds_status === 'pending') ? 'Secured' :
+                            project.status === 'revision_requested' ? 'Revision requested' :
+                                project.status.replace('_', ' ')}
                     </span>
                 </div>
             </div>
@@ -147,16 +152,16 @@ export default async function ProjectPage({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left: Project Details */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm">
-                        <h2 className="text-lg font-bold text-[#333333] uppercase tracking-wider mb-4">Requirements</h2>
-                        <MarkdownRenderer content={project.description} className="text-gray-600 leading-relaxed" />
+                    <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-sky-50 shadow-sm">
+                        <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Briefing</h2>
+                        <MarkdownRenderer content={project.description} className="text-slate-600 leading-relaxed text-sm" />
 
                         {(project.file_urls?.length > 0 || project.file_url) && (
                             <div className="mt-6 space-y-2">
                                 {(project.file_urls || [project.file_url]).map((url: string, idx: number) => (
-                                    <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="p-4 bg-[#F3F0E9] rounded-xl flex items-center hover:bg-[#E6E2D6] transition-colors block">
-                                        <FileText className="w-5 h-5 text-[#3E4C37] mr-3" />
-                                        <span className="font-medium text-[#333333]">View Requirement {project.file_urls?.length > 1 ? idx + 1 : ''}</span>
+                                    <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="p-4 bg-[#F0F9FF] rounded-xl flex items-center hover:bg-[#F0F9FF] transition-colors block">
+                                        <FileText className="w-5 h-5 text-[#0EA5E9] mr-3" />
+                                        <span className="font-medium text-[#1E293B]">View Requirement {project.file_urls?.length > 1 ? idx + 1 : ''}</span>
                                     </a>
                                 ))}
                             </div>
@@ -165,15 +170,15 @@ export default async function ProjectPage({
                 </div>
 
                 {/* Right: Negotiation Console */}
-                <div className="bg-white rounded-[1.5rem] p-6 border border-[#E6E2D6] relative overflow-hidden shadow-sm">
+                <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-sky-50 relative overflow-hidden shadow-sm">
                     <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-gray-400 font-bold uppercase tracking-widest text-sm">
-                                Order Details
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-slate-400 font-black uppercase tracking-widest text-[10px]">
+                                Financials
                             </h3>
                             {project.pricing_type && (
-                                <div className="px-2 py-1 bg-[#F3F0E9] rounded-lg border border-[#E6E2D6] flex items-center gap-1.5 transition-all hover:border-[#C6A87C] group">
-                                    <AEDIcon className="w-3 h-3 text-[#3E4C37]" />
+                                <div className="px-3 py-1.5 bg-sky-50 rounded-xl border border-sky-100 flex items-center gap-2">
+                                    <AEDIcon className="w-3 h-3 text-[#0EA5E9]" />
                                     <span className="text-[10px] font-bold text-[#333] uppercase">
                                         {project.pricing_type} {project.current_terms?.tier ? `(${project.current_terms.tier})` : ''}
                                     </span>
@@ -238,16 +243,18 @@ export default async function ProjectPage({
                                     currentPrice={displayPrice}
                                     submissionUrl={project.submission_url}
                                     submissionNotes={project.submission_notes}
+                                    revisionsTotal={project.revisions_total || 0}
+                                    revisionsUsed={project.revisions_used || 0}
                                 />
                             </div>
                         )}
 
 
                         {/* CONSOLE REMOVED - Fixed Price Only */}
-                        <div className="bg-[#F3F0E9] rounded-2xl p-6 border border-[#E6E2D6] mb-6">
+                        <div className="bg-[#F0F9FF] rounded-2xl p-6 border border-[#F0F9FF] mb-6">
                             <div className="flex flex-col items-center">
-                                <AEDIcon className="w-12 h-12 text-[#3E4C37] mb-4 opacity-20" />
-                                <p className="text-3xl font-serif font-bold text-[#3E4C37]">AED {displayPrice}</p>
+                                <AEDIcon className="w-12 h-12 text-[#0EA5E9] mb-4 opacity-20" />
+                                <p className="text-3xl font-serif font-bold text-[#0EA5E9]">AED {displayPrice}</p>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Current Price</p>
                             </div>
                         </div>
@@ -255,7 +262,7 @@ export default async function ProjectPage({
 
                         {/* Payment Policy & Reporting for Active/Submitted Projects */}
                         {['in_progress', 'submitted'].includes(project.status) && (
-                            <div className="mt-8 border-t border-[#E6E2D6] pt-6 flex flex-col items-center gap-4">
+                            <div className="mt-8 border-t border-[#F0F9FF] pt-6 flex flex-col items-center gap-4">
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
                                     Project Policy
                                 </p>
@@ -275,7 +282,7 @@ export default async function ProjectPage({
 
                     </div>
                     {/* Background decoration */}
-                    <AEDIcon className="absolute -bottom-10 -right-10 w-64 h-64 text-[#3E4C37]/5" />
+                    <AEDIcon className="absolute -bottom-10 -right-10 w-64 h-64 text-[#0EA5E9]/5" />
                 </div>
             </div>
         </div>

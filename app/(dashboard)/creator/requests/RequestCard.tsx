@@ -103,7 +103,7 @@ export default function RequestCard({ req }: RequestCardProps) {
     console.log('[RequestCard] Rendering with req:', req);
 
     return (
-        <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-sm hover:shadow-md transition-shadow">
             <div className="flex flex-col md:flex-row justify-between gap-8">
                 {/* Left: Details */}
                 <div className="flex-1">
@@ -116,19 +116,19 @@ export default function RequestCard({ req }: RequestCardProps) {
                             )}
                         </div>
                         <div>
-                            <p className="font-bold text-[#333333]">{req.student?.full_name || req.student?.username || 'Unknown Student'}</p>
+                            <p className="font-bold text-[#1E293B]">{req.student?.full_name || req.student?.username || 'Unknown Student'}</p>
                             <p className="text-xs text-gray-400 uppercase tracking-wider">Student</p>
                         </div>
                         <div className="ml-auto md:hidden">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${req.status === 'requested' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}`}>
-                                {req.status}
+                                {req.status === 'revision_requested' ? 'revision req.' : req.status}
                             </span>
                         </div>
                     </div>
 
-                    <h3 className="text-xl font-bold text-[#3E4C37] mb-1">{req.title}</h3>
+                    <h3 className="text-xl font-bold text-[#0EA5E9] mb-1">{req.title}</h3>
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-0.5 bg-[#F3F0E9] text-[#3E4C37] text-[10px] font-bold rounded-md uppercase tracking-wider">
+                        <span className="px-2 py-0.5 bg-[#F0F9FF] text-[#0EA5E9] text-[10px] font-bold rounded-md uppercase tracking-wider">
                             {categories.find(c => c.slug === req.current_terms?.category)?.title || req.current_terms?.category || 'General'}
                         </span>
                         {req.current_terms?.tier && (
@@ -148,11 +148,11 @@ export default function RequestCard({ req }: RequestCardProps) {
                         className="relative group cursor-pointer"
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
-                        <div className={`text-gray-600 mb-2 leading-relaxed border-l-2 border-[#E6E2D6] pl-4 break-words transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3'}`}>
+                        <div className={`text-gray-600 mb-2 leading-relaxed border-l-2 border-[#F0F9FF] pl-4 break-words transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3'}`}>
                             <MarkdownRenderer content={req.description || ''} />
                         </div>
                         <div className="pl-4 mb-6">
-                            <span className="text-xs font-bold text-[#3E4C37] flex items-center hover:underline">
+                            <span className="text-xs font-bold text-[#0EA5E9] flex items-center hover:underline">
                                 {isExpanded ? (
                                     <>Show Less <ChevronUp className="w-3 h-3 ml-1" /></>
                                 ) : (
@@ -170,10 +170,10 @@ export default function RequestCard({ req }: RequestCardProps) {
                                     href={url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center bg-[#F3F0E9] px-4 py-2 rounded-lg text-sm font-medium text-[#333333] hover:bg-[#EBE7DE] mr-2 mb-2 group transition-colors"
+                                    className="inline-flex items-center bg-[#F0F9FF] px-4 py-2 rounded-lg text-sm font-medium text-[#1E293B] hover:bg-[#EBE7DE] mr-2 mb-2 group transition-colors"
                                     title="Click to download"
                                 >
-                                    <Download className="w-4 h-4 mr-2 text-[#3E4C37]" />
+                                    <Download className="w-4 h-4 mr-2 text-[#0EA5E9]" />
                                     Download File {idx + 1}
                                 </a>
                             ))
@@ -182,9 +182,9 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 href={req.file_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center bg-[#F3F0E9] px-4 py-2 rounded-lg text-sm font-medium text-[#333333] hover:bg-[#EBE7DE] group transition-colors"
+                                className="inline-flex items-center bg-[#F0F9FF] px-4 py-2 rounded-lg text-sm font-medium text-[#1E293B] hover:bg-[#EBE7DE] group transition-colors"
                             >
-                                <Download className="w-4 h-4 mr-2 text-[#3E4C37]" />
+                                <Download className="w-4 h-4 mr-2 text-[#0EA5E9]" />
                                 Download Requirements
                             </a>
                         ) : null}
@@ -192,11 +192,11 @@ export default function RequestCard({ req }: RequestCardProps) {
                 </div>
 
                 {/* Right: Action / Pricing */}
-                <div className="w-full md:w-80 bg-[#F3F0E9] rounded-2xl p-6 flex flex-col justify-center">
+                <div className="w-full md:w-80 bg-[#F0F9FF] rounded-2xl p-6 flex flex-col justify-center">
                     {req.status === 'requested' || req.status === 'accepted' ? (
                         <>
-                            <div className="flex items-center mb-4 text-[#3E4C37]">
-                                <Shield className="w-5 h-5 mr-3 text-[#C6A87C]" />
+                            <div className="flex items-center mb-4 text-[#0EA5E9]">
+                                <Shield className="w-5 h-5 mr-3 text-[#0EA5E9]" />
                                 <div className="flex flex-col">
                                     <span className="font-bold">
                                         {req.funds_status === 'unpaid' ? 'Awaiting Payment' : 'Secured & Starting'}
@@ -209,9 +209,9 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 </div>
                             </div>
 
-                            <div className="bg-white p-4 rounded-xl border border-[#E6E2D6] mb-4 text-center">
+                            <div className="bg-white p-4 rounded-xl border border-[#F0F9FF] mb-4 text-center">
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Total Order Price</p>
-                                <p className="text-3xl font-serif font-bold text-[#3E4C37]">
+                                <p className="text-3xl font-serif font-bold text-[#0EA5E9]">
                                     AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                                 </p>
                                 <p className="text-[10px] text-gray-500 mt-1 uppercase font-medium">
@@ -242,7 +242,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                                 toast.success('Work started! Let\'s go.')
                                             }
                                         }}
-                                        className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2D3828] transition-colors flex items-center justify-center gap-2"
+                                        className="w-full bg-[#0EA5E9] text-white font-bold py-3 rounded-xl hover:bg-[#2D3828] transition-colors flex items-center justify-center gap-2"
                                     >
                                         <Briefcase className="w-4 h-4" />
                                         Confirm & Start Project
@@ -262,7 +262,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                     ) : ['negotiating', 'pending', 'countered'].includes(req.status) ? (
                         <div className="text-center">
                             <p className="text-sm text-gray-500 mb-2">Order Price</p>
-                            <p className="text-3xl font-bold text-[#3E4C37] mb-4">
+                            <p className="text-3xl font-bold text-[#0EA5E9] mb-4">
                                 AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                             </p>
                             <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-xl text-sm font-bold inline-block">
@@ -272,25 +272,48 @@ export default function RequestCard({ req }: RequestCardProps) {
                     ) : ['accepted', 'agreed', 'in_progress'].includes(req.status) ? (
                         <div className="text-center">
                             <p className="text-sm text-gray-500 mb-2">Agreed Price</p>
-                            <p className="text-3xl font-bold text-[#3E4C37] mb-4">
+                            <p className="text-3xl font-bold text-[#0EA5E9] mb-4">
                                 AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                             </p>
 
-                            <div className={`px-4 py-2 rounded-xl text-sm font-bold inline-block mb-6 
-                                ${req.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                                {req.status === 'in_progress' ? 'Work in Progress' : 'Active Project'}
+                            <div className={`px-4 py-2 rounded-xl text-sm font-bold inline-block mb-3 
+                                ${req.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                                    req.status === 'revision_requested' ? 'bg-orange-100 text-orange-700' :
+                                        'bg-green-100 text-green-700'}`}>
+                                {req.status === 'in_progress' ? 'Work in Progress' :
+                                    req.status === 'revision_requested' ? 'Revision Requested' :
+                                        'Active Project'}
                             </div>
 
-                            {['accepted', 'agreed', 'in_progress'].includes(req.status) && (
+                            {req.status === 'revision_requested' && req.revision_notes && (
+                                <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-xl text-left">
+                                    <p className="text-[10px] text-orange-700 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+                                        <MessageSquare className="w-3 h-3" />
+                                        Revision Notes from Student
+                                    </p>
+                                    <p className="text-xs text-orange-800 leading-relaxed italic">{req.revision_notes}</p>
+                                </div>
+                            )}
+
+                            {['accepted', 'agreed', 'in_progress', 'revision_requested'].includes(req.status) && (
                                 <p className="text-xs text-green-600 mb-4 font-bold flex items-center justify-center">
                                     <Shield className="w-3 h-3 mr-1" /> Payment Secured by Workly.day
                                 </p>
                             )}
 
                             <form action={async (formData) => {
-                                await submitWork(null, formData)
+                                const res = await submitWork(null, formData)
+                                if (res?.error) {
+                                    toast.error(res.error)
+                                } else {
+                                    toast.success('Work submitted for review!')
+                                    setUploadedUrl('')
+                                    setUploadedFileName('')
+                                }
                             }} className="text-left space-y-3 bg-white p-4 rounded-xl border border-gray-100">
-                                <p className="text-xs font-bold text-[#3E4C37] uppercase tracking-wider mb-2">Submit Work</p>
+                                <p className="text-xs font-bold text-[#0EA5E9] uppercase tracking-wider mb-2">
+                                    {req.status === 'revision_requested' ? 'Submit Revised Work' : 'Submit Work'}
+                                </p>
                                 <input type="hidden" name="projectId" value={req.id} />
 
                                 <div className="space-y-3 mb-2">
@@ -314,11 +337,11 @@ export default function RequestCard({ req }: RequestCardProps) {
                                         </div>
                                     ) : (
                                         <div {...getRootProps()} className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors
-                                            ${isDragActive ? 'border-[#3E4C37] bg-gray-50' : 'border-gray-200 hover:border-[#3E4C37] hover:bg-gray-50'}`}>
+                                            ${isDragActive ? 'border-[#0EA5E9] bg-gray-50' : 'border-gray-200 hover:border-[#0EA5E9] hover:bg-gray-50'}`}>
                                             <input {...getInputProps()} />
                                             {uploading ? (
                                                 <div className="flex flex-col items-center justify-center py-2">
-                                                    <Loader2 className="w-6 h-6 text-[#3E4C37] animate-spin mb-2" />
+                                                    <Loader2 className="w-6 h-6 text-[#0EA5E9] animate-spin mb-2" />
                                                     <p className="text-xs text-gray-500">Uploading...</p>
                                                 </div>
                                             ) : (
@@ -337,7 +360,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                         placeholder="Or paste an external link..."
                                         defaultValue={uploadedUrl}
                                         required={!uploadedUrl}
-                                        className={`w-full pl-3 pr-3 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#3E4C37] outline-none ${uploadedUrl ? 'hidden' : ''}`}
+                                        className={`w-full pl-3 pr-3 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none ${uploadedUrl ? 'hidden' : ''}`}
                                         key={uploadedUrl ? 'hidden-url' : 'visible-url'}
                                     />
                                     {uploadedUrl && <input type="hidden" name="url" value={uploadedUrl} />}
@@ -346,10 +369,14 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 <textarea
                                     name="notes"
                                     placeholder="Add notes for the student..."
-                                    className="w-full p-3 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#3E4C37] outline-none h-20 resize-none"
+                                    className="w-full p-3 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none h-20 resize-none"
                                 ></textarea>
+                                <p className="text-[10px] text-red-500 font-bold uppercase tracking-tight flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3" />
+                                    No phone numbers or emails allowed.
+                                </p>
 
-                                <button type="submit" className="w-full bg-[#3E4C37] text-white font-bold py-2 rounded-lg text-sm hover:bg-[#2e3b29] transition-colors">
+                                <button type="submit" className="w-full bg-[#0EA5E9] text-white font-bold py-2 rounded-lg text-sm hover:bg-[#2e3b29] transition-colors">
                                     Submit for Review
                                 </button>
                             </form>
@@ -357,7 +384,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                     ) : ['completed', 'submitted'].includes(req.status) ? (
                         <div className="text-center">
                             <p className="text-sm text-gray-500 mb-2">Agreed Price</p>
-                            <p className="text-3xl font-bold text-[#3E4C37] mb-4">
+                            <p className="text-3xl font-bold text-[#0EA5E9] mb-4">
                                 AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                             </p>
                             <div className="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm font-bold inline-block mb-4">

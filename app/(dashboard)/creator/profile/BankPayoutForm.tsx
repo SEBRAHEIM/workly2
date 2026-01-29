@@ -57,7 +57,7 @@ export default function BankPayoutForm({ profile }: BankPayoutFormProps) {
                         name="bank_name"
                         defaultValue={profile?.bank_name || ""}
                         required
-                        className="w-full bg-[#F3F0E9] border border-[#E6E2D6] rounded-2xl px-5 py-4 text-[#333] font-bold focus:outline-none focus:border-[#C6A87C] transition-colors appearance-none"
+                        className="w-full bg-[#F0F9FF] border border-[#F0F9FF] rounded-2xl px-5 py-4 text-[#333] font-bold focus:outline-none focus:border-[#0EA5E9] transition-colors appearance-none"
                     >
                         <option value="" disabled>Select your bank</option>
                         {uaeBanks.map(bank => (
@@ -77,7 +77,7 @@ export default function BankPayoutForm({ profile }: BankPayoutFormProps) {
                         defaultValue={profile?.bank_account_name || ""}
                         required
                         placeholder="John Doe"
-                        className="w-full bg-[#F3F0E9] border border-[#E6E2D6] rounded-2xl px-5 py-4 text-[#333] font-bold placeholder:text-gray-300 focus:outline-none focus:border-[#C6A87C] transition-colors"
+                        className="w-full bg-[#F0F9FF] border border-[#F0F9FF] rounded-2xl px-5 py-4 text-[#333] font-bold placeholder:text-gray-300 focus:outline-none focus:border-[#0EA5E9] transition-colors"
                     />
                 </div>
 
@@ -93,7 +93,7 @@ export default function BankPayoutForm({ profile }: BankPayoutFormProps) {
                         required
                         placeholder="AE00 0000 0000 0000 0000 000"
                         pattern="^AE[0-9]{2}[0-9]{19}$"
-                        className="w-full bg-[#F3F0E9] border border-[#E6E2D6] rounded-2xl px-5 py-4 text-[#333] font-mono font-bold placeholder:text-gray-300 focus:outline-none focus:border-[#C6A87C] transition-colors uppercase"
+                        className="w-full bg-[#F0F9FF] border border-[#F0F9FF] rounded-2xl px-5 py-4 text-[#333] font-mono font-bold placeholder:text-gray-300 focus:outline-none focus:border-[#0EA5E9] transition-colors uppercase"
                     />
                     <p className="text-[9px] text-gray-400 ml-1 uppercase tracking-tighter">
                         Must be a valid UAE IBAN starting with AE followed by 21 digits.
@@ -105,7 +105,7 @@ export default function BankPayoutForm({ profile }: BankPayoutFormProps) {
                 <button
                     type="submit"
                     disabled={isPending || (!hasChanges && profile?.bank_iban)}
-                    className="w-full flex items-center justify-center bg-[#3E4C37] text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-[#333e2d] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl active:scale-95"
+                    className="w-full flex items-center justify-center bg-[#0EA5E9] text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-[#333e2d] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl active:scale-95"
                 >
                     {isPending ? (
                         <Loader2 className="w-5 h-5 animate-spin mr-3" />

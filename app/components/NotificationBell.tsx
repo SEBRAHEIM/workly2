@@ -107,35 +107,37 @@ export default function NotificationBell({ userId }: { userId: string }) {
         <div className="relative" ref={bellRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-full border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-all relative"
+                className="w-12 h-12 rounded-2xl border border-sky-100 hover:bg-sky-50 active:scale-95 transition-all relative text-[#0EA5E9] shadow-sm bg-white flex items-center justify-center touch-manipulation"
+                aria-label="Open Notifications"
             >
-                <Bell className="w-5 h-5 text-[#333333]" />
+                <Bell className="w-6 h-6" />
                 {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#0EA5E9] rounded-full border-2 border-white text-[8px] font-black text-white flex items-center justify-center">
+                        {unreadCount}
+                    </span>
                 )}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-[#E6E2D6] overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                    <div className="p-4 border-b border-[#E6E2D6] flex justify-between items-center bg-[#F3F0E9]/50">
-                        <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-[#333333]">Notifications</h3>
+                <div className="absolute right-0 mt-4 w-96 max-w-[calc(100vw-2rem)] bg-white rounded-[2rem] shadow-2xl border border-sky-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                    <div className="p-6 border-b border-sky-50 flex justify-between items-center bg-sky-50/30">
+                        <div className="flex items-center gap-3">
+                            <h3 className="font-serif font-black text-slate-900 uppercase tracking-tight">Intelligence</h3>
                             <button
                                 onClick={() => { fetchNotifications() }}
                                 disabled={isLoading}
-                                className={`p-1 hover:bg-black/5 rounded-full transition-all ${isLoading ? 'animate-spin opacity-50' : ''}`}
+                                className={`p-2 hover:bg-sky-100 rounded-full transition-all ${isLoading ? 'animate-spin opacity-50' : ''}`}
                                 title="Refresh"
                             >
-                                <RefreshCw className="w-3 h-3 text-gray-400" />
+                                <RefreshCw className="w-4 h-4 text-[#0EA5E9]" />
                             </button>
                         </div>
                         <div className="flex flex-col items-end">
                             {unreadCount > 0 && (
-                                <button onClick={markAllRead} className="text-[10px] text-[#3E4C37] font-medium hover:underline">
-                                    Mark all read
+                                <button onClick={markAllRead} className="text-[10px] text-[#0EA5E9] font-black uppercase tracking-widest hover:underline">
+                                    Purge Alerts
                                 </button>
                             )}
-                            <span className="text-[8px] text-gray-300 font-mono mt-0.5">ID: {userId.substring(0, 8)}...</span>
                         </div>
                     </div>
                     <div className="max-h-96 overflow-y-auto">
@@ -150,14 +152,15 @@ export default function NotificationBell({ userId }: { userId: string }) {
                                     <div
                                         key={notif.id}
                                         onClick={() => handleMarkAsRead(notif.id, notif.link)}
-                                        className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors flex items-start gap-3 ${!notif.is_read ? 'bg-blue-50/50' : ''}`}
+                                        className={`p-6 border-b border-sky-50 hover:bg-sky-50/50 cursor-pointer transition-colors flex items-start gap-4 ${!notif.is_read ? 'bg-sky-50/30' : ''}`}
                                     >
-                                        <div className={`mt-1 flex-shrink-0 w-2 h-2 rounded-full ${!notif.is_read ? 'bg-blue-500' : 'bg-transparent'}`}></div>
-                                        <div>
-                                            <p className={`text-sm ${!notif.is_read ? 'font-semibold text-[#333333]' : 'text-gray-600'}`}>
+                                        <div className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${!notif.is_read ? 'bg-[#0EA5E9] shadow-sm shadow-sky-500' : 'bg-slate-200'}`}></div>
+                                        <div className="flex-1">
+                                            <p className={`text-sm leading-snug ${!notif.is_read ? 'font-bold text-slate-800' : 'text-slate-500'}`}>
                                                 {notif.message}
                                             </p>
-                                            <p className="text-[10px] text-gray-400 mt-1">
+                                            <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-2 flex items-center gap-2">
+                                                <div className="w-1 h-1 bg-sky-200 rounded-full" />
                                                 {new Date(notif.created_at).toLocaleDateString()}
                                             </p>
                                         </div>

@@ -53,7 +53,7 @@ export default async function CreatorGrid({
                 const profileUrl = `/student/creator/${creator.id}`
 
                 return (
-                    <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#E6E2D6] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
+                    <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#F0F9FF] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
 
                         {/* Overlay Link - Makes whole card clickable */}
                         {user && (
@@ -63,7 +63,7 @@ export default async function CreatorGrid({
                         {/* Header: Identity */}
                         <div className="flex items-start gap-3 mb-3 relative">
                             <div className="flex-shrink-0">
-                                <div className="w-12 h-12 rounded-full bg-[#F3F0E9] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform">
+                                <div className="w-12 h-12 rounded-full bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform">
                                     {creator.avatar_url ? (
                                         <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
                                     ) : (
@@ -74,8 +74,8 @@ export default async function CreatorGrid({
 
                             <div className="flex-1 min-w-0 pt-0.5">
                                 <div className="flex items-center justify-between">
-                                    <div className="group-hover:text-[#3E4C37] transition-colors">
-                                        <h3 className="font-serif font-bold text-base text-[#333333] truncate pr-2">
+                                    <div className="group-hover:text-[#0EA5E9] transition-colors">
+                                        <h3 className="font-serif font-bold text-base text-[#1E293B] truncate pr-2">
                                             {creator.display_name || creator.full_name || 'Creator'}
                                         </h3>
                                     </div>
@@ -96,7 +96,7 @@ export default async function CreatorGrid({
 
                         {/* Metadata Row */}
                         <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-400 font-medium mb-4 pt-3 border-t border-[#F9F7F2] relative">
-                            <span className="bg-[#F3F0E9] text-[#555] px-2 py-0.5 rounded-md whitespace-nowrap">
+                            <span className="bg-[#F0F9FF] text-[#555] px-2 py-0.5 rounded-md whitespace-nowrap">
                                 Level {creator.level || 1}
                             </span>
                             {creator.languages && creator.languages.length > 0 && (
@@ -104,7 +104,7 @@ export default async function CreatorGrid({
                                     {creator.languages.map((lang: string) => {
                                         const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ع' : lang.substring(0, 2).toUpperCase()
                                         return (
-                                            <span key={lang} className="text-[9px] font-black uppercase px-1.5 py-0.5 bg-[#3E4C37]/5 text-[#3E4C37] rounded-md border border-[#3E4C37]/10">
+                                            <span key={lang} className="text-[9px] font-black uppercase px-1.5 py-0.5 bg-[#0EA5E9]/5 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/10">
                                                 {displayAbbr}
                                             </span>
                                         )
@@ -117,14 +117,14 @@ export default async function CreatorGrid({
                         {!user ? (
                             <Link
                                 href="/join"
-                                className="block w-full bg-[#333333] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#3E4C37] active:scale-95 transition-all shadow-sm relative z-20"
+                                className="block w-full bg-[#1E293B] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-sm relative z-20"
                             >
                                 Contact
                             </Link>
                         ) : (
                             <Link
                                 href={`/student/hire/${creator.id}`}
-                                className="block w-full bg-[#333333] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#3E4C37] active:scale-95 transition-all shadow-sm group-hover:shadow-md relative z-20"
+                                className="block w-full bg-[#1E293B] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-sm group-hover:shadow-md relative z-20"
                             >
                                 Hire
                             </Link>

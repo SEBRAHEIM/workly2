@@ -1,44 +1,33 @@
 'use client'
 
 import { Download, Loader2, Landmark, CheckCircle2, Send } from 'lucide-react'
-import { initiateStripeWithdrawal, requestManualPayout, requestPayPalPayout } from '../actions'
+import { requestManualPayout, requestPayPalPayout } from '../actions'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 export default function WithdrawButton({
-    isConnected,
     hasBank,
     hasPayPal,
     balance,
     payoutPreference
 }: {
-    isConnected: boolean,
     hasBank: boolean,
     hasPayPal: boolean,
     balance: number,
-    payoutPreference?: 'stripe' | 'bank' | 'paypal'
+    payoutPreference?: 'bank' | 'paypal'
 }) {
     const [isPending, setIsPending] = useState(false)
     const [showSelection, setShowSelection] = useState(false)
     const router = useRouter()
 
-    const handleWithdraw = async (method: 'stripe' | 'bank' | 'paypal') => {
-        if (method === 'stripe' && !isConnected) {
-            toast.error('Stripe not connected', {
-                description: 'Please connect your Stripe account in Profile settings first.'
-            })
-            return
-        }
-
+    const handleWithdraw = async (method: 'bank' | 'paypal') => {
         if (balance <= 0) {
             toast.error('Insufficient balance')
             return
         }
 
-        let methodLabel = 'your connected Stripe account'
-        if (method === 'paypal') methodLabel = 'your PayPal account'
-        else if (method === 'bank') methodLabel = 'your bank account via Manual Transfer'
+        let methodLabel = method === 'paypal' ? 'your PayPal account' : 'your bank account via Manual Transfer'
 
         if (!confirm(`Are you sure you want to withdraw AED ${balance.toFixed(2)} to ${methodLabel}?`)) {
             return
@@ -48,17 +37,14 @@ export default function WithdrawButton({
         setShowSelection(false)
         try {
             let result
-            if (method === 'stripe') result = await initiateStripeWithdrawal()
-            else if (method === 'paypal') result = await requestPayPalPayout()
+            if (method === 'paypal') result = await requestPayPalPayout()
             else result = await requestManualPayout()
 
             if (result.success) {
                 toast.success('Withdrawal requested!', {
-                    description: method === 'stripe'
-                        ? `AED ${balance.toFixed(2)} has been transferred to your Stripe account.`
-                        : method === 'paypal'
-                            ? `Your PayPal payout request for AED ${balance.toFixed(2)} has been sent.`
-                            : `Your manual payout request for AED ${balance.toFixed(2)} has been sent for processing.`
+                    description: method === 'paypal'
+                        ? `Your PayPal payout request for AED ${balance.toFixed(2)} has been sent.`
+                        : `Your manual payout request for AED ${balance.toFixed(2)} has been sent for processing.`
                 })
                 router.refresh()
             } else {
@@ -74,7 +60,6 @@ export default function WithdrawButton({
     }
 
     const availableMethods = [
-        { id: 'stripe', label: 'Stripe', available: isConnected, icon: <Download className="w-4 h-4" /> },
         { id: 'bank', label: 'Bank Transfer', available: hasBank, icon: <Landmark className="w-4 h-4" /> },
         { id: 'paypal', label: 'PayPal', available: hasPayPal, icon: <Send className="w-4 h-4" /> }
     ].filter(m => m.available)
@@ -114,7 +99,7 @@ export default function WithdrawButton({
                 else toast.error('No payout methods set up', { description: 'Please add a payout method in your profile settings.' })
             }}
             disabled={isPending || balance <= 0}
-            className="flex items-center bg-[#C6A87C] text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-[#b0946a] transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="flex items-center bg-[#0EA5E9] text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-[#b0946a] transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
         >
             {isPending ? (
                 <Loader2 className="w-5 h-5 mr-3 animate-spin" />

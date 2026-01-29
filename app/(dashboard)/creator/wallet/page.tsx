@@ -1,4 +1,4 @@
-import { Wallet, TrendingUp, Download, ArrowUpRight, Settings, Check } from 'lucide-react'
+import { Wallet, TrendingUp, Download, ArrowUpRight, Settings, Check, Clock } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import WithdrawButton from './WithdrawButton'
@@ -13,7 +13,6 @@ export default async function CreatorWallet() {
         profile = data
     }
 
-    const isConnected = !!profile?.stripe_account_id
     const hasBank = !!profile?.bank_iban
     const hasPayPal = !!profile?.paypal_email
 
@@ -26,83 +25,102 @@ export default async function CreatorWallet() {
         .limit(5)
 
     return (
-        <div className="p-8 max-w-6xl mx-auto">
-            <h1 className="text-4xl font-serif font-bold text-[#3E4C37] mb-8">Earnings & Wallet</h1>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                {/* Balance Card */}
-                <div className="bg-[#333333] rounded-[2.5rem] p-10 text-white shadow-xl relative overflow-hidden lg:col-span-2">
-                    <div className="relative z-10 flex flex-col h-full justify-between">
-                        <div>
-                            <p className="text-white/60 font-medium mb-2 uppercase text-sm tracking-wider">Available Balance</p>
-                            <h2 className="text-6xl font-bold mb-4">AED {profile?.wallet_balance?.toFixed(2) || '0.00'}</h2>
-                        </div>
-
-                        <div className="flex flex-wrap gap-4 mt-8">
-                            <WithdrawButton
-                                isConnected={isConnected}
-                                hasBank={hasBank}
-                                hasPayPal={hasPayPal}
-                                balance={profile?.wallet_balance || 0}
-                                payoutPreference={profile?.payout_preference}
-                            />
-                        </div>
-                    </div>
-                    <TrendingUp className="absolute -bottom-10 -right-10 w-64 h-64 text-white/5" />
+        <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
+                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
+                        Treasury & <br /> <span className="text-[#0EA5E9]">Payouts.</span>
+                    </h1>
                 </div>
 
-                {/* Stats */}
-                <div className="space-y-6">
-                    <div className="bg-white rounded-3xl p-8 border border-[#E6E2D6] shadow-sm">
-                        <p className="text-gray-500 text-sm mb-2">Pending Clearance</p>
-                        <h3 className="text-3xl font-bold text-[#333333]">AED 0.00</h3>
-                    </div>
-                    <div className="bg-white rounded-3xl p-8 border border-[#E6E2D6] shadow-sm">
-                        <p className="text-gray-500 text-sm mb-2">Completed Projects</p>
-                        <h3 className="text-3xl font-bold text-[#3E4C37]">{profile?.completed_projects || 0}</h3>
-                    </div>
-                </div>
-            </div>
-
-            {/* Recent Withdrawals Section */}
-            <div className="bg-white rounded-[2.5rem] p-8 border border-[#E6E2D6] shadow-sm">
-                <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-bold text-[#333333]">Recent Payouts</h2>
-                    <Link href="/creator/history" className="text-sm font-bold text-[#3E4C37] hover:underline">View All</Link>
-                </div>
-
-                {withdrawals && withdrawals.length > 0 ? (
-                    <div className="space-y-4">
-                        {withdrawals.map((w: any) => (
-                            <div key={w.id} className="flex items-center justify-between p-6 rounded-2xl bg-[#F3F0E9] border border-[#E6E2D6]">
-                                <div className="flex items-center gap-4">
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${w.status === 'pending' ? 'bg-amber-100' :
-                                        w.status === 'completed' ? 'bg-green-100' : 'bg-red-100'
-                                        }`}>
-                                        <Download className={`w-6 h-6 ${w.status === 'pending' ? 'text-amber-600' :
-                                            w.status === 'completed' ? 'text-green-600' : 'text-red-600'
-                                            }`} />
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-[#333333] capitalize">{w.method} Withdrawal</p>
-                                        <p className="text-xs text-gray-500">{new Date(w.created_at).toLocaleDateString()}</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="font-black text-[#333333]">- AED {w.amount.toFixed(2)}</p>
-                                    <p className={`text-[10px] font-black uppercase tracking-widest ${w.status === 'pending' ? 'text-amber-600' :
-                                        w.status === 'completed' ? 'text-green-600' : 'text-red-600'
-                                        }`}>{w.status}</p>
-                                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+                    {/* Balance Card */}
+                    <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl shadow-slate-200 lg:col-span-2 relative overflow-hidden group">
+                        <div className="relative z-10 flex flex-col h-full">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 block">Liquid Balance</span>
+                            <div className="flex items-baseline gap-3 mb-10">
+                                <span className="text-2xl font-serif font-bold text-sky-400">AED</span>
+                                <span className="text-7xl md:text-8xl font-serif font-black tracking-tighter transition-transform duration-700 group-hover:scale-105 inline-block">
+                                    {profile?.wallet_balance?.toFixed(2) || '0.00'}
+                                </span>
                             </div>
-                        ))}
+
+                            <div className="mt-auto flex flex-wrap gap-4">
+                                <WithdrawButton
+                                    hasBank={hasBank}
+                                    hasPayPal={hasPayPal}
+                                    balance={profile?.wallet_balance || 0}
+                                    payoutPreference={profile?.payout_preference}
+                                />
+                            </div>
+                        </div>
+                        <TrendingUp className="absolute -bottom-10 -right-10 w-64 h-64 text-white/5 rotate-12 transition-transform duration-1000 group-hover:rotate-0" />
                     </div>
-                ) : (
-                    <div className="text-center py-12">
-                        <Download className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-                        <p className="text-gray-400 font-medium">No withdrawal history yet.</p>
+
+                    {/* Stats */}
+                    <div className="space-y-6 flex flex-col justify-center">
+                        <div className="bg-sky-50 rounded-[2rem] p-8 border border-sky-100 relative overflow-hidden group">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pending Clearance</p>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-sm font-bold text-[#0EA5E9]">AED</span>
+                                <h3 className="text-3xl font-black text-slate-800">0.00</h3>
+                            </div>
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <Clock className="w-8 h-8" />
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-[2rem] p-8 border border-sky-50 shadow-sm relative overflow-hidden group hover:shadow-xl hover:shadow-sky-50 transition-all">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Completed Pipeline</p>
+                            <h3 className="text-3xl font-black text-slate-800">{profile?.completed_projects || 0}</h3>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1 text-emerald-500">Optimized Performance</p>
+                        </div>
                     </div>
-                )}
+                </div>
+
+                {/* Recent Withdrawals Section */}
+                <div className="max-w-4xl">
+                    <div className="flex items-center justify-between mb-10">
+                        <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-4">
+                            <div className="w-12 h-[1px] bg-sky-100" />
+                            Recent Settlements
+                        </h2>
+                        <Link href="/creator/history" className="text-[10px] font-black text-[#0EA5E9] uppercase tracking-widest hover:underline">Full History Archive</Link>
+                    </div>
+
+                    {withdrawals && withdrawals.length > 0 ? (
+                        <div className="space-y-4">
+                            {withdrawals.map((w: any) => (
+                                <div key={w.id} className="flex items-center justify-between p-8 bg-white border border-sky-50 rounded-[2rem] hover:shadow-xl hover:shadow-sky-50 transition-all duration-300">
+                                    <div className="flex items-center gap-6">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border ${w.status === 'pending' ? 'bg-amber-50 border-amber-100 text-amber-500' :
+                                            w.status === 'completed' ? 'bg-sky-50 border-sky-100 text-[#0EA5E9]' : 'bg-red-50 border-red-100 text-red-500'
+                                            }`}>
+                                            <Download size={24} />
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-slate-800 uppercase tracking-tight text-base mb-1">{w.method} Settlement</p>
+                                            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em]">{new Date(w.created_at).toLocaleDateString()} • REF_{w.id.slice(0, 8)}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="mb-2">
+                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5">Debit</p>
+                                            <p className="font-serif font-black text-slate-900 text-xl tracking-tighter">- AED {w.amount.toFixed(2)}</p>
+                                        </div>
+                                        <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${w.status === 'pending' ? 'bg-amber-50/50 border-amber-100 text-amber-600' :
+                                            w.status === 'completed' ? 'bg-sky-50/50 border-sky-100 text-sky-600' : 'bg-red-50/50 border-red-100 text-red-600'
+                                            }`}>{w.status}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="p-20 text-center bg-slate-50 border border-slate-100 rounded-[2.5rem]">
+                            <Download className="w-12 h-12 text-slate-200 mx-auto mb-6" />
+                            <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">No historical activity</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

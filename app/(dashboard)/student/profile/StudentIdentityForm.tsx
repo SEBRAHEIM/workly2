@@ -38,7 +38,7 @@ export default function StudentIdentityForm({ profile }: Props) {
         >
             {/* SMS Phone */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">SMS Phone Number</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">SMS Phone Number</label>
                 <div className="flex gap-2 isolate">
                     <div className="flex-1 sms-phone-wrapper">
                         <PhoneInput
@@ -47,7 +47,7 @@ export default function StudentIdentityForm({ profile }: Props) {
                             value={phone}
                             onChange={(val) => setPhone(val || '')}
                             placeholder="e.g. +971 50 123 4567"
-                            className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#3E4C37] focus-within:border-transparent transition-all h-[58px]"
+                            className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#0EA5E9] focus-within:border-transparent transition-all h-[58px]"
                         />
                     </div>
                 </div>
@@ -72,7 +72,7 @@ export default function StudentIdentityForm({ profile }: Props) {
 
             <button
                 disabled={isSaving}
-                className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg hover:shadow-xl flex items-center justify-center disabled:opacity-50"
+                className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg hover:shadow-xl flex items-center justify-center disabled:opacity-50"
             >
                 {isSaving ? 'Saving...' : (
                     <>

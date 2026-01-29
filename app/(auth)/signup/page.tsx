@@ -13,23 +13,30 @@ export default function Signup() {
     const [state, formAction] = useFormState(signup, initialState)
 
     return (
-        <main className="min-h-screen bg-[#F3F0E9] flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-md">
+        <main className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-60" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-sky-50 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 opacity-60" />
+
+            <div className="w-full max-w-md relative z-10">
                 <Link
                     href="/join"
-                    className="inline-flex items-center text-gray-500 hover:text-[#333333] transition-colors mb-8"
+                    className="inline-flex items-center text-slate-400 hover:text-sky-500 transition-colors mb-12 font-black text-[10px] uppercase tracking-widest group"
                 >
-                    <ArrowLeft className="w-5 h-5 mr-2" />
+                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                     Back
                 </Link>
 
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-[#E6E2D6]">
+                <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100">
                     <div className="text-center mb-10">
-                        <h1 className="font-serif font-bold text-3xl md:text-4xl text-[#3E4C37] mb-3">
-                            Create Account
+                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
+                            <span className="text-white font-serif font-black text-3xl">W</span>
+                        </div>
+                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                            Elite <br /> <span className="text-[#0EA5E9]">Standard.</span>
                         </h1>
-                        <p className="text-gray-500 font-sans">
-                            Sign up with your email to get started
+                        <p className="text-slate-500 font-medium text-sm">
+                            Create your digital identity.
                         </p>
                     </div>
 
@@ -39,9 +46,9 @@ export default function Signup() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                placeholder="Email address"
+                                placeholder="Email Address"
                                 required
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
                             />
                         </div>
                         <div>
@@ -49,27 +56,27 @@ export default function Signup() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                placeholder="Password"
+                                placeholder="Secure Password"
                                 required
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
                             />
                         </div>
                         {state?.error && (
-                            <p className="text-red-500 text-sm">{state.error}</p>
+                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center">{state.error}</p>
                         )}
                         <button
                             type="submit"
-                            className="w-full rounded-xl bg-[#3E4C37] px-4 py-3 text-white font-medium hover:bg-[#2e3b29] transition-colors shadow-lg mt-2"
+                            className="w-full rounded-full bg-[#0EA5E9] px-4 py-4 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 mt-4 shadow-lg shadow-sky-100"
                         >
-                            Sign Up
+                            Establish Identity
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center bg-gray-50 -mx-8 -mb-8 sm:-mx-12 sm:-mb-12 p-6 rounded-b-3xl border-t border-gray-100">
-                        <p className="text-sm text-gray-500">
-                            Already have an account?{' '}
-                            <Link href="/login" className="text-[#3E4C37] font-semibold hover:underline">
-                                Log in
+                    <div className="mt-12 text-center pt-8 border-t border-sky-50">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            Member?{' '}
+                            <Link href="/login" className="text-[#0EA5E9] hover:underline">
+                                Sign In
                             </Link>
                         </p>
                     </div>

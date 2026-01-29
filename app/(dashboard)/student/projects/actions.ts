@@ -203,6 +203,8 @@ export async function requestRevision(projectId: string, notes: string) {
         .from('projects')
         .update({
             status: 'revision_requested',
+            revision_notes: notes,
+            revisions_used: (project.revisions_used || 0) + 1,
             waiting_on: project.creator_id // Back to creator
         })
         .eq('id', projectId)

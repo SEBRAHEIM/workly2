@@ -84,14 +84,19 @@ export async function createProject(prevState: any, formData: FormData) {
 
     const mainFileUrl = finalFileUrls.length > 0 ? finalFileUrls[0] : null
 
-    // 5. Calculate Initial Price
+    // 5. Calculate Initial Price & Revisions
     let initialPrice = 0
+    let totalRevisions = 0
     if (service) {
         if (pricingType === 'fixed') {
             initialPrice = service.base_price || 0
+            totalRevisions = 1 // Default for fixed
         } else if (pricingType === 'packages' && packageTier) {
             const pkg = service.service_packages?.[packageTier]
-            if (pkg) initialPrice = pkg.price || 0
+            if (pkg) {
+                initialPrice = pkg.price || 0
+                totalRevisions = pkg.revisions || 0
+            }
         }
     }
 
@@ -113,7 +118,9 @@ export async function createProject(prevState: any, formData: FormData) {
             file_url: mainFileUrl,
             file_urls: finalFileUrls,
             waiting_on: null, // No negotiation waiting state
-            due_date: dueDate.toISOString()
+            due_date: dueDate.toISOString(),
+            revisions_total: totalRevisions,
+            revisions_used: 0
         })
         .select()
         .single()

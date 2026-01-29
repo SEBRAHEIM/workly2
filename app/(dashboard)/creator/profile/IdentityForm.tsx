@@ -2,13 +2,11 @@
 
 import { useState } from 'react'
 import { updateCreatorIdentity } from './actions'
-import { Save, Check } from 'lucide-react'
+import { Save, Check, AlertTriangle } from 'lucide-react'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { toast } from 'sonner'
-
-// Helper to check for content policy violations locally too
-const contactRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/
+import { containsContactInfo } from '@/utils/content-safety'
 
 interface Props {
     profile: any
@@ -29,8 +27,11 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 // Client-side quick check
                 const bio = formData.get('bio') as string
                 const tagline = formData.get('tagline') as string
-                if (contactRegex.test(bio) || contactRegex.test(tagline)) {
-                    setError('Bio or Tagline contains prohibited contact information.')
+                const bioCheck = containsContactInfo(bio)
+                const taglineCheck = containsContactInfo(tagline)
+
+                if (bioCheck.hasContactInfo || taglineCheck.hasContactInfo) {
+                    setError(`Validation failed: ${bioCheck.reason || taglineCheck.reason}. Sharing contact info is strictly prohibited.`)
                     setIsSaving(false)
                     return
                 }
@@ -55,7 +56,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
         >
             {/* Display Name */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">Display Name</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">Display Name</label>
                 <input
                     type="text"
                     name="displayName"
@@ -63,13 +64,13 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     placeholder="e.g. Ahmed M."
                     required
                     dir="auto"
-                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all"
+                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all"
                 />
             </div>
 
             {/* Title / Tagline */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">Professional Title</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">Professional Title</label>
                 <input
                     type="text"
                     name="tagline"
@@ -77,14 +78,14 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     placeholder="e.g. Video Editor & Motion Graphics Artist"
                     required
                     dir="auto"
-                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all"
+                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all"
                 />
                 <p className="text-xs text-gray-400 mt-2">One line describing what you do.</p>
             </div>
 
             {/* SMS Phone */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">SMS Phone Number</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">SMS Phone Number</label>
                 <div className="flex gap-2 isolate">
                     <div className="flex-1 sms-phone-wrapper">
                         <PhoneInput
@@ -93,7 +94,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                             value={phone}
                             onChange={(val) => setPhone(val || '')}
                             placeholder="e.g. +971 50 123 4567"
-                            className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#3E4C37] focus-within:border-transparent transition-all h-[58px]"
+                            className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#0EA5E9] focus-within:border-transparent transition-all h-[58px]"
                         />
                     </div>
                 </div>
@@ -119,13 +120,13 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
 
             {/* Working Languages */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-3">Working Languages</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-3">Working Languages</label>
                 <div className="flex gap-4">
                     {[
                         { label: 'English', value: 'English' },
                         { label: 'العربية', value: 'العربية' }
                     ].map((lang) => (
-                        <label key={lang.value} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-5 py-4 cursor-pointer hover:border-[#3E4C37] transition-all flex-1">
+                        <label key={lang.value} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-5 py-4 cursor-pointer hover:border-[#0EA5E9] transition-all flex-1">
                             <input
                                 type="checkbox"
                                 name="languages"
@@ -135,7 +136,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                                     (lang.value === 'العربية' && profile?.languages?.includes('Arabic')) ||
                                     (lang.value === 'English' && !profile?.languages)
                                 }
-                                className="w-5 h-5 rounded border-gray-300 text-[#3E4C37] focus:ring-[#3E4C37]"
+                                className="w-5 h-5 rounded border-gray-300 text-[#0EA5E9] focus:ring-[#0EA5E9]"
                             />
                             <span className="text-base font-medium text-gray-700">{lang.label}</span>
                         </label>
@@ -146,7 +147,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
 
             {/* Bio */}
             <div>
-                <label className="block text-sm font-bold text-[#333333] mb-2">About Me</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">About Me</label>
                 <textarea
                     name="bio"
                     defaultValue={profile?.bio || ''}
@@ -154,10 +155,11 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     rows={4}
                     required
                     dir="auto"
-                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#3E4C37] focus:border-transparent transition-all resize-none"
+                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all resize-none"
                 />
-                <p className="text-xs text-gray-400 mt-2">
-                    Please do not include email or phone numbers. Keep it professional.
+                <p className="text-[10px] text-red-500 font-bold uppercase tracking-tight flex items-center gap-1 mt-2">
+                    <AlertTriangle className="w-3 h-3" />
+                    No phone numbers or emails allowed. Sharing contact info will result in a ban.
                 </p>
             </div>
 
@@ -169,7 +171,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
 
             <button
                 disabled={isSaving}
-                className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg hover:shadow-xl flex items-center justify-center disabled:opacity-50"
+                className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg hover:shadow-xl flex items-center justify-center disabled:opacity-50"
             >
                 {isSaving ? 'Saving...' : (
                     <>

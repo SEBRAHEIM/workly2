@@ -57,40 +57,40 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
     const daysLeft = dueDate ? Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0
 
     return (
-        <div className="max-w-5xl mx-auto p-8">
+        <div className="max-w-5xl mx-auto p-4 md:p-8 pt-24 md:pt-8">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <div className="flex items-center text-sm text-gray-400 mb-2 uppercase tracking-wider">
-                        <Link href="/creator/requests" className="hover:text-[#3E4C37] transition-colors">Requests</Link>
-                        <span className="mx-2">/</span>
-                        <span>Project Details</span>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4 px-2 md:px-0">
+                <div className="flex-1">
+                    <div className="flex items-center text-[10px] font-black text-slate-400 mb-3 uppercase tracking-[0.2em]">
+                        <Link href="/creator/requests" className="hover:text-[#0EA5E9] transition-colors">Workspace</Link>
+                        <span className="mx-2 opacity-30">/</span>
+                        <span>Terminal</span>
                     </div>
-                    <h1 className="text-3xl font-serif font-bold text-[#333333] mb-2" dir="auto">{project.title}</h1>
-                    <div className="flex items-center text-gray-500">
-                        <div className="w-6 h-6 rounded-full bg-gray-200 overflow-hidden mr-2">
+                    <h1 className="text-2xl md:text-3xl font-serif font-black text-slate-800 mb-2 uppercase tracking-tighter leading-tight" dir="auto">{project.title}</h1>
+                    <div className="flex items-center text-slate-500 text-xs mt-4">
+                        <div className="w-8 h-8 rounded-full bg-sky-50 border border-sky-100 overflow-hidden mr-3 flex items-center justify-center">
                             {project.student.avatar_url ? (
                                 <img src={project.student.avatar_url} className="w-full h-full object-cover" />
                             ) : (
-                                <User className="w-4 h-4 m-auto" />
+                                <User className="w-4 h-4 text-sky-300" />
                             )}
                         </div>
-                        <span>Student: <span className="font-bold text-[#333333]">{project.student.full_name || project.student.username}</span></span>
+                        <span className="uppercase tracking-widest text-[10px] font-black">Operator: <span className="text-[#0EA5E9]">{project.student.full_name || project.student.username}</span></span>
                     </div>
                 </div>
 
                 {/* Status Badge */}
-                <div className={`px-4 py-2 rounded-xl border flex items-center shadow-sm ${project.status === 'in_progress' ? 'bg-blue-50 border-blue-200 text-blue-700' :
-                    project.status === 'agreed' ? 'bg-green-50 border-green-200 text-green-700' :
-                        project.status === 'submitted' ? 'bg-purple-50 border-purple-200 text-purple-700' :
-                            'bg-white border-[#E6E2D6] text-gray-600'
+                <div className={`px-5 py-3 rounded-2xl border flex items-center shadow-sm w-full md:w-auto justify-center md:justify-start ${project.status === 'in_progress' ? 'bg-sky-50 border-sky-100 text-[#0EA5E9]' :
+                    project.status === 'agreed' ? 'bg-green-50 border-green-100 text-green-700' :
+                        project.status === 'submitted' ? 'bg-purple-50 border-purple-100 text-purple-700' :
+                            'bg-white border-sky-50 text-slate-400'
                     }`}>
-                    <div className={`w-2 h-2 rounded-full mr-2 ${project.status === 'in_progress' ? 'bg-blue-500' :
+                    <div className={`w-2 h-2 rounded-full mr-3 ${project.status === 'in_progress' ? 'bg-[#0EA5E9]' :
                         project.status === 'agreed' ? 'bg-green-500' :
                             project.status === 'submitted' ? 'bg-purple-500' :
-                                'bg-gray-400'
+                                'bg-slate-200'
                         }`} />
-                    <span className="font-bold uppercase text-sm">{project.status.replace('_', ' ')}</span>
+                    <span className="font-black uppercase text-[10px] tracking-widest">{project.status.replace('_', ' ')}</span>
                 </div>
             </div>
 
@@ -98,14 +98,14 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                 {/* Left: Project Context */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Requirements Card */}
-                    <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm">
-                        <h2 className="text-lg font-bold text-[#333333] uppercase tracking-wider mb-4">Brief & Requirements</h2>
-                        <MarkdownRenderer content={project.description} className="text-gray-600 leading-relaxed" />
+                    <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-sky-50 shadow-sm">
+                        <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Briefing</h2>
+                        <MarkdownRenderer content={project.description} className="text-slate-600 leading-relaxed text-sm" />
                         {project.file_url && (
-                            <div className="mt-6 p-4 bg-[#F3F0E9] rounded-xl flex items-center border border-[#E6E2D6]/50">
-                                <FileText className="w-5 h-5 text-[#3E4C37] mr-3" />
-                                <span className="font-medium text-[#333333]">Attached File</span>
-                                <button className="ml-auto text-sm text-[#3E4C37] font-bold hover:underline">Download</button>
+                            <div className="mt-6 p-4 bg-[#F0F9FF] rounded-xl flex items-center border border-[#F0F9FF]/50">
+                                <FileText className="w-5 h-5 text-[#0EA5E9] mr-3" />
+                                <span className="font-medium text-[#1E293B]">Attached File</span>
+                                <button className="ml-auto text-sm text-[#0EA5E9] font-bold hover:underline">Download</button>
                             </div>
                         )}
                     </div>
@@ -114,7 +114,7 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                 {/* Right: Action Console */}
                 <div className="space-y-6">
                     {/* Financial Status */}
-                    <div className="bg-[#333333] rounded-[2rem] p-6 text-white relative overflow-hidden">
+                    <div className="bg-[#1E293B] rounded-[2rem] p-6 text-white relative overflow-hidden">
                         <div className="relative z-10">
                             <h3 className="text-white/60 font-bold uppercase tracking-widest text-xs mb-4">Financial Status</h3>
                             <div className="flex items-center justify-between mb-4">
@@ -154,7 +154,7 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                                 <span className="font-bold">Time Remaining: {daysLeft} Days</span>
                             </div>
 
-                            <h3 className="font-bold text-[#333333] text-lg mb-2">Submit Your Work</h3>
+                            <h3 className="font-bold text-[#1E293B] text-lg mb-2">Submit Your Work</h3>
                             <p className="text-sm text-gray-500 mb-6">
                                 Upload your final files here. The student will review them before funds are released.
                             </p>

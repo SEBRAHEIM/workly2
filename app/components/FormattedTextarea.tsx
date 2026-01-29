@@ -126,7 +126,7 @@ export default function FormattedTextarea({
         <div className={className}>
             {label && <label className="block text-xs font-bold text-[#333] mb-1.5">{label}</label>}
 
-            <div className="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#3E4C37] focus-within:border-transparent transition-all bg-white shadow-sm">
+            <div className="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#0EA5E9] focus-within:border-transparent transition-all bg-white shadow-sm">
                 {/* Toolbar */}
                 <div className="flex flex-wrap items-center gap-1 p-2 bg-[#F9F7F2] border-b border-gray-100">
                     <div className="flex items-center gap-0.5 mr-1">
@@ -135,7 +135,7 @@ export default function FormattedTextarea({
                                 key={index}
                                 type="button"
                                 onClick={tool.action}
-                                className={`p-1.5 rounded-lg transition-all hover:shadow-sm ${tool.isActive ? 'bg-white text-[#3E4C37] shadow-sm' : 'text-gray-500 hover:text-[#3E4C37] hover:bg-white'}`}
+                                className={`p-1.5 rounded-lg transition-all hover:shadow-sm ${tool.isActive ? 'bg-white text-[#0EA5E9] shadow-sm' : 'text-gray-500 hover:text-[#0EA5E9] hover:bg-white'}`}
                                 title={tool.label}
                             >
                                 <tool.icon className="w-4 h-4" />
@@ -151,7 +151,7 @@ export default function FormattedTextarea({
                                 key={index}
                                 type="button"
                                 onClick={tool.action}
-                                className="p-1.5 rounded-lg text-gray-400 hover:text-[#3E4C37] hover:bg-white transition-all hover:shadow-sm"
+                                className="p-1.5 rounded-lg text-gray-400 hover:text-[#0EA5E9] hover:bg-white transition-all hover:shadow-sm"
                                 title={tool.label}
                             >
                                 <tool.icon className="w-3.5 h-3.5" />
@@ -168,7 +168,7 @@ export default function FormattedTextarea({
                                 key={idx}
                                 type="button"
                                 onClick={() => editor.chain().focus().insertContent(preset.content).run()}
-                                className="px-2 py-1 bg-white border border-gray-200 rounded-md text-[9px] font-bold text-gray-500 hover:border-[#3E4C37] hover:text-[#3E4C37] transition-all"
+                                className="px-2 py-1 bg-white border border-gray-200 rounded-md text-[9px] font-bold text-gray-500 hover:border-[#0EA5E9] hover:text-[#0EA5E9] transition-all"
                             >
                                 + {preset.name}
                             </button>

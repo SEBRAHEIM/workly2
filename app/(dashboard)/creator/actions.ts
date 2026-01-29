@@ -11,6 +11,7 @@ import { getStripe } from '@/utils/stripe'
 import { headers } from 'next/headers'
 
 // Stripe Connect actions
+/*
 export async function createStripeOnboardingLink() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -62,69 +63,8 @@ export async function createStripeOnboardingLink() {
         return { error: `Stripe error: ${err.message}` }
     }
 }
+*/
 
-export async function initiateStripeWithdrawal() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('Unauthorized')
-
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('id, wallet_balance, stripe_account_id')
-        .eq('id', user.id)
-        .single()
-
-    if (!profile || !profile.stripe_account_id) {
-        return { error: 'Stripe account not connected' }
-    }
-
-    const balance = profile.wallet_balance || 0
-    if (balance <= 0) {
-        return { error: 'No funds available to withdraw' }
-    }
-
-    try {
-        // Find Stripe details for reference
-        const { data: creatorProfile } = await supabase
-            .from('profiles')
-            .select('stripe_account_id, email')
-            .eq('id', user.id)
-            .single()
-
-        if (!creatorProfile?.stripe_account_id) {
-            return { error: 'No Stripe account connected' }
-        }
-
-        // 1. Log the withdrawal request as 'pending'
-        const { error: withdrawalError } = await supabase.from('withdrawals').insert({
-            creator_id: user.id,
-            amount: balance,
-            method: 'stripe',
-            status: 'pending',
-            details: {
-                payout_to: creatorProfile.stripe_account_id,
-                email: creatorProfile.email,
-                request_date: new Date().toISOString()
-            }
-        })
-
-        if (withdrawalError) throw withdrawalError
-
-        // 2. Deduct from local wallet
-        const { error: balanceError } = await supabase
-            .from('profiles')
-            .update({ wallet_balance: 0 })
-            .eq('id', user.id)
-
-        if (balanceError) throw balanceError
-
-        revalidatePath('/creator/wallet')
-        return { success: true }
-    } catch (err: any) {
-        console.error('Withdrawal error:', err)
-        return { error: err.message || 'Withdrawal failed' }
-    }
-}
 
 export async function updateBankDetails(formData: FormData) {
     const supabase = await createClient()
@@ -491,6 +431,7 @@ export async function submitWork(prevState: any, formData: FormData) {
             submission_url: finalUrl,
             submission_notes: notes || '',
             submission_file_urls: submissionFileUrls,
+            revision_notes: null, // Clear notes after submission
             waiting_on: project.student_id, // Now waiting on student to review
             submitted_at: new Date().toISOString()
         })

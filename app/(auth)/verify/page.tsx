@@ -42,15 +42,22 @@ function VerifyContent() {
     }
 
     return (
-        <main className="min-h-screen bg-[#F3F0E9] flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-md">
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-[#E6E2D6]">
+        <main className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-6 relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-sky-50 rounded-full blur-[80px] md:blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-60" />
+            <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-sky-50 rounded-full blur-[80px] md:blur-[120px] translate-y-1/2 -translate-x-1/2 opacity-60" />
+
+            <div className="w-full max-w-md relative z-10">
+                <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <h1 className="font-serif font-bold text-3xl md:text-4xl text-[#3E4C37] mb-3">
-                            Check your inbox
+                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
+                            <span className="text-white font-serif font-black text-3xl">W</span>
+                        </div>
+                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                            Identity <br /> <span className="text-[#0EA5E9]">Verify.</span>
                         </h1>
-                        <p className="text-gray-500 font-sans">
-                            We've sent a 6-digit code to <br /> <span className="text-[#333333] font-medium">{email}</span>
+                        <p className="text-slate-500 font-medium text-sm">
+                            Enter the 6-digit access code sent to <br /> <span className="text-slate-900 font-bold">{email}</span>
                         </p>
                     </div>
 
@@ -64,30 +71,30 @@ function VerifyContent() {
                                 required
                                 pattern="[0-9]{6}"
                                 maxLength={6}
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-black text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all placeholder:tracking-normal"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-5 text-slate-900 text-center text-3xl tracking-[0.4em] font-serif font-black focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all placeholder:tracking-normal"
                                 placeholder="000000"
                             />
                         </div>
                         {state?.error && (
-                            <p className="text-red-500 text-sm text-center">{state.error}</p>
+                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center">{state.error}</p>
                         )}
                         <button
                             type="submit"
-                            className="w-full rounded-xl bg-[#3E4C37] px-4 py-3 text-white font-medium hover:bg-[#2e3b29] transition-colors shadow-lg mt-2"
+                            className="w-full rounded-full bg-[#0EA5E9] px-4 py-4 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 mt-4 shadow-lg shadow-sky-100"
                         >
-                            Verify
+                            Authorize session
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center bg-gray-50 -mx-8 -mb-8 sm:-mx-12 sm:-mb-12 p-6 rounded-b-3xl border-t border-gray-100">
-                        <p className="text-sm text-gray-400">
-                            Didn't receive code?{' '}
+                    <div className="mt-12 text-center pt-8 border-t border-sky-50">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            Code expired?{' '}
                             <button
                                 onClick={handleResend}
                                 disabled={countdown > 0 || isResending}
-                                className="text-[#3E4C37] font-semibold hover:underline disabled:text-gray-400 disabled:no-underline"
+                                className="text-[#0EA5E9] hover:underline disabled:text-slate-300 disabled:no-underline"
                             >
-                                {isResending ? 'Sending...' : countdown > 0 ? `Resend in ${countdown}s` : 'Resend'}
+                                {isResending ? 'Processing...' : countdown > 0 ? `Retry in ${countdown}s` : 'Request New Token'}
                             </button>
                         </p>
                     </div>
@@ -99,8 +106,8 @@ function VerifyContent() {
 
 export default function Verify() {
     return (
-        <div className="min-h-screen bg-[#F3F0E9]">
-            <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+        <div className="min-h-screen bg-white">
+            <Suspense fallback={<div className="flex items-center justify-center h-screen font-serif font-black text-sky-400 animate-pulse uppercase tracking-widest">Initialising Verify Layer...</div>}>
                 <VerifyContent />
             </Suspense>
         </div>

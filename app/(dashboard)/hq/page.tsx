@@ -18,10 +18,10 @@ export default async function AdminDashboard() {
     }
 
     // 3. Comprehensive Data Fetching
-    const [projectsResponse, profilesResponse, withdrawalsResponse] = await Promise.all([
+    const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse] = await Promise.all([
         supabase
             .from('projects')
-            .select('*, student:student_id(email), creator:creator_id(email, wallet_balance)')
+            .select('*, student:student_id(email, full_name, display_name), creator:creator_id(email, full_name, display_name, wallet_balance)')
             .order('created_at', { ascending: false }),
         supabase
             .from('profiles')
@@ -30,12 +30,18 @@ export default async function AdminDashboard() {
         supabase
             .from('withdrawals')
             .select('*, profiles(id, full_name, display_name, email)')
+            .order('created_at', { ascending: false }),
+        supabase
+            .from('project_events')
+            .select('*, actor:actor_id(display_name, full_name), projects(title)')
             .order('created_at', { ascending: false })
+            .limit(20)
     ])
 
     const projects = projectsResponse.data || []
     const profiles = profilesResponse.data || []
     const withdrawals = withdrawalsResponse.data || []
+    const events = eventsResponse.data || []
 
     // 4. Calculate Comprehensive Stats
     const stats = {
@@ -50,6 +56,7 @@ export default async function AdminDashboard() {
         projects,
         profiles,
         withdrawals,
+        events,
         stats
     }
 

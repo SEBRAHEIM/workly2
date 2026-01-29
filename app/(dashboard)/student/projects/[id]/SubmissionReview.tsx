@@ -11,6 +11,8 @@ interface SubmissionReviewProps {
     currentPrice: number
     submissionUrl: string | null
     submissionNotes: string | null
+    revisionsTotal: number
+    revisionsUsed: number
 }
 
 export default function SubmissionReview({
@@ -18,7 +20,9 @@ export default function SubmissionReview({
     creatorId,
     currentPrice,
     submissionUrl,
-    submissionNotes
+    submissionNotes,
+    revisionsTotal,
+    revisionsUsed
 }: SubmissionReviewProps) {
     const [isRevising, setIsRevising] = useState(false)
     const [revisionNotes, setRevisionNotes] = useState('')
@@ -69,7 +73,7 @@ export default function SubmissionReview({
                     <Check className="w-8 h-8 text-purple-600" />
                 </div>
 
-                <h3 className="font-serif font-bold text-2xl text-[#333333] mb-2">Work Submitted</h3>
+                <h3 className="font-serif font-bold text-2xl text-[#1E293B] mb-2">Work Submitted</h3>
                 <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
                     The creator has delivered the work. Please review it casually before approving.
                 </p>
@@ -87,7 +91,7 @@ export default function SubmissionReview({
                                 <Download className="w-5 h-5 text-purple-700" />
                             </div>
                             <div className="overflow-hidden min-w-0">
-                                <p className="font-bold text-[#333333] text-sm truncate">Download Deliverable</p>
+                                <p className="font-bold text-[#1E293B] text-sm truncate">Download Deliverable</p>
                                 <p className="text-xs text-gray-400 truncate block">{submissionUrl}</p>
                             </div>
                         </a>
@@ -112,7 +116,7 @@ export default function SubmissionReview({
                         <button
                             onClick={handleApprove}
                             disabled={loading}
-                            className="w-full bg-[#3E4C37] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg shadow-[#3E4C37]/20 flex items-center justify-center"
+                            className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg shadow-[#0EA5E9]/20 flex items-center justify-center"
                         >
                             {loading ? 'Processing...' : 'Approve & Release Funds'}
                         </button>
@@ -120,11 +124,19 @@ export default function SubmissionReview({
                         <button
                             onClick={() => setIsRevising(true)}
                             disabled={loading}
-                            className="w-full bg-white text-gray-600 font-bold py-3 rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center text-sm"
+                            className={`w-full font-bold py-3 rounded-xl border transition-all flex items-center justify-center text-sm
+                                ${revisionsUsed >= revisionsTotal && revisionsTotal > 0
+                                    ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
+                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
                         >
-                            <RefreshCw className="w-4 h-4 mr-2" />
-                            Request Changes
+                            <RefreshCw className={`w-4 h-4 mr-2 ${revisionsUsed >= revisionsTotal && revisionsTotal > 0 ? 'text-red-500' : ''}`} />
+                            {revisionsUsed >= revisionsTotal && revisionsTotal > 0 ? 'Request Extra Revision' : 'Request Changes'}
                         </button>
+                        {revisionsTotal > 0 && (
+                            <p className={`text-[10px] font-bold uppercase tracking-widest text-center mt-2 ${revisionsUsed >= revisionsTotal ? 'text-red-400' : 'text-gray-400'}`}>
+                                {revisionsUsed} of {revisionsTotal} revisions used
+                            </p>
+                        )}
                     </div>
                 ) : (
                     <div className="bg-orange-50 rounded-xl p-4 border border-orange-100 animate-in fade-in slide-in-from-bottom-2">

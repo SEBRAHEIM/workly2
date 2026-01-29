@@ -42,8 +42,8 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
             {/* Header / Identity */}
             {/* Header / Identity */}
-            <div className="bg-white rounded-3xl p-6 border border-[#E6E2D6] shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left mb-6">
-                <div className="w-20 h-20 rounded-full bg-[#F3F0E9] flex-shrink-0 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center">
+            <div className="bg-white rounded-3xl p-6 border border-[#F0F9FF] shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left mb-6">
+                <div className="w-20 h-20 rounded-full bg-[#F0F9FF] flex-shrink-0 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center">
                     {creator.avatar_url ? (
                         <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
                     ) : (
@@ -51,20 +51,20 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                     )}
                 </div>
                 <div className="flex-1">
-                    <h1 className="text-2xl font-serif font-bold text-[#333333] mb-1" dir="auto">
+                    <h1 className="text-2xl font-serif font-bold text-[#1E293B] mb-1" dir="auto">
                         {creator.display_name || creator.full_name || 'Creator'}
                     </h1>
                     {creator.username && (
                         <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
                     )}
-                    <p className="text-base text-[#3E4C37] font-medium mb-1" dir="auto">
+                    <p className="text-base text-[#0EA5E9] font-medium mb-1" dir="auto">
                         {creator.tagline || 'Student Creator'}
                     </p>
 
                     {creator.languages && creator.languages.length > 0 && (
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mb-4">
                             {creator.languages.map((lang: string) => (
-                                <span key={lang} className="text-[10px] font-bold uppercase px-2 py-0.5 bg-[#3E4C37]/10 text-[#3E4C37] rounded-md border border-[#3E4C37]/20">
+                                <span key={lang} className="text-[10px] font-bold uppercase px-2 py-0.5 bg-[#0EA5E9]/10 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/20">
                                     {lang}
                                 </span>
                             ))}
@@ -72,7 +72,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                     )}
 
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-xs font-medium text-gray-500">
-                        <span className="bg-[#F3F0E9] px-2 py-1 rounded-md text-[#333]">
+                        <span className="bg-[#F0F9FF] px-2 py-1 rounded-md text-[#333]">
                             Level {creator.level || 1}
                         </span>
                         <span>•</span>
@@ -84,7 +84,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                 <div className="flex-shrink-0 mt-4 md:mt-0">
                     <Link
                         href={`/student/hire/${creatorId}`}
-                        className="inline-flex items-center px-6 py-3 bg-[#333333] text-white font-bold rounded-xl hover:bg-[#3E4C37] transition-all shadow-md active:scale-95"
+                        className="inline-flex items-center px-6 py-3 bg-[#1E293B] text-white font-bold rounded-xl hover:bg-[#0EA5E9] transition-all shadow-md active:scale-95"
                     >
                         Hire Me <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
@@ -93,8 +93,8 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
             {/* Bio */}
             {creator.bio && (
-                <div className="bg-white rounded-[2rem] p-8 border border-[#E6E2D6] shadow-sm mb-8">
-                    <h3 className="text-lg font-bold text-[#333333] mb-4">About Me</h3>
+                <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-sm mb-8">
+                    <h3 className="text-lg font-bold text-[#1E293B] mb-4">About Me</h3>
                     <p className="text-gray-600 leading-relaxed whitespace-pre-wrap" dir="auto">
                         {creator.bio}
                     </p>
@@ -104,7 +104,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
             {/* Portfolio */}
             <div>
                 <div className="flex items-center justify-between mb-6 px-2">
-                    <h3 className="text-xl font-bold text-[#333333]">Portfolio & Expertise</h3>
+                    <h3 className="text-xl font-bold text-[#1E293B]">Portfolio & Expertise</h3>
                 </div>
 
                 {specializations.length > 0 ? (
@@ -158,10 +158,10 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                     {service?.pricing_mode === 'packages' && service.service_packages && (
                                         <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 px-2">
                                             {Object.entries(service.service_packages).map(([tier, pkg]: [string, any]) => (
-                                                <div key={tier} className="bg-white border border-[#E6E2D6] rounded-xl p-3 shadow-sm hover:border-[#3E4C37] transition-all">
+                                                <div key={tier} className="bg-white border border-[#F0F9FF] rounded-xl p-3 shadow-sm hover:border-[#0EA5E9] transition-all">
                                                     <div className="flex justify-between items-start mb-1">
                                                         <span className="text-[10px] font-bold uppercase text-gray-400">{tier}</span>
-                                                        <span className="text-sm font-bold text-[#3E4C37]">AED {pkg.price}</span>
+                                                        <span className="text-sm font-bold text-[#0EA5E9]">AED {pkg.price}</span>
                                                     </div>
                                                     <h4 className="text-xs font-bold text-[#333] truncate mb-1">{pkg.title}</h4>
                                                     <p className="text-[10px] text-gray-500 line-clamp-2 leading-tight">{pkg.description}</p>
@@ -180,10 +180,10 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
             {/* Footer Hire CTA */}
             <div className="mt-12 text-center">
-                <h3 className="text-2xl font-serif font-bold text-[#333333] mb-4">Ready to work with {creator.display_name}?</h3>
+                <h3 className="text-2xl font-serif font-bold text-[#1E293B] mb-4">Ready to work with {creator.display_name}?</h3>
                 <Link
                     href={`/student/hire/${creatorId}`}
-                    className="inline-block px-8 py-4 bg-[#3E4C37] text-white font-bold text-lg rounded-xl hover:bg-[#2e3b29] transition-all shadow-xl hover:shadow-2xl active:scale-95"
+                    className="inline-block px-8 py-4 bg-[#0EA5E9] text-white font-bold text-lg rounded-xl hover:bg-[#2e3b29] transition-all shadow-xl hover:shadow-2xl active:scale-95"
                 >
                     Start a Project
                 </Link>

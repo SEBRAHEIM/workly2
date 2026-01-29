@@ -89,23 +89,32 @@ export default function ProjectsModule({ projects }: { projects: any[] }) {
 
                                 <h3 className="text-xl font-bold text-white tracking-tight">{p.title}</h3>
 
-                                <div className="flex items-center gap-6 text-[11px] font-medium tracking-wide">
-                                    <div className="flex items-center gap-2 text-gray-400">
-                                        <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10" />
-                                        Buyer: <span className="text-gray-200">{p.student?.email ? p.student.email.split('@')[0] : 'Unknown'}</span>
+                                <div className="flex flex-col md:flex-row items-start md:items-center gap-6 text-[11px] font-medium tracking-wide">
+                                    <div className="flex items-center gap-3 text-gray-400 bg-white/5 px-3 py-2 rounded-xl border border-white/5">
+                                        <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 font-black text-[8px]">ST</div>
+                                        <div>
+                                            <div className="text-gray-200 font-bold">{p.student?.full_name || p.student?.display_name || 'Admin'}</div>
+                                            <div className="text-[9px] text-gray-500 font-mono tracking-tighter truncate max-w-[120px]">{p.student?.email}</div>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2 text-gray-400">
-                                        <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10" />
-                                        Seller: <span className="text-gray-200">{p.creator?.email ? p.creator.email.split('@')[0] : 'Unknown'}</span>
+                                    <div className="flex items-center gap-3 text-gray-400 bg-white/5 px-3 py-2 rounded-xl border border-white/5">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 font-black text-[8px]">CR</div>
+                                        <div>
+                                            <div className="text-gray-200 font-bold">{p.creator?.full_name || p.creator?.display_name || 'Creator'}</div>
+                                            <div className="text-[9px] text-gray-500 font-mono tracking-tighter truncate max-w-[120px]">{p.creator?.email}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Financial Summary */}
-                            <div className="lg:text-right flex flex-row lg:flex-col justify-between items-center lg:items-end gap-2 border-l border-white/5 lg:pl-10">
+                            <div className="lg:text-right flex flex-row lg:flex-col justify-between items-center lg:items-end gap-2 border-l border-white/5 lg:pl-10 min-w-[150px]">
                                 <div>
                                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Project Price</div>
                                     <div className="text-2xl font-black text-white">AED {p.current_price || '0.00'}</div>
+                                    <div className="text-[9px] text-green-500 font-bold uppercase mt-1">
+                                        Net Payout: AED {((p.current_price || 0) * 0.80).toFixed(2)}
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
                                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1.5 ${p.funds_status === 'escrow' ? 'bg-blue-500/10 text-blue-400' :

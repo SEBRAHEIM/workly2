@@ -60,81 +60,97 @@ export default async function StudentProjectsPage(props: {
     if (tab === 'archive') currentList = archivedProjects
 
     return (
-        <div className="p-8 max-w-6xl mx-auto min-h-screen">
-            <h1 className="text-4xl font-serif font-bold text-[#3E4C37] mb-8">My Projects</h1>
-
-            {/* TABS */}
-            <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-                <Link href="/student/projects"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Active ({activeProjects.length})
-                </Link>
-                <Link href="/student/projects?tab=recent"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'recent' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Recent ({recentProjects.length})
-                </Link>
-                <Link href="/student/projects?tab=archive"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'archive' ? 'bg-[#3E4C37] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Archive ({archivedProjects.length})
-                </Link>
-            </div>
-
-            {/* LIST */}
-            {currentList.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-3xl border border-[#E6E2D6]">
-                    <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-[#333333]">No {tab} projects found</h3>
-                    {tab === 'active' && (
-                        <Link
-                            href="/"
-                            className="inline-block mt-6 bg-[#3E4C37] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#2e3b29] transition-colors"
-                        >
-                            Browse Creators
-                        </Link>
-                    )}
+        <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12">
+                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none">
+                        Our <br /> <span className="text-[#0EA5E9]">Projects.</span>
+                    </h1>
                 </div>
-            ) : (
-                <div className="grid gap-6">
-                    {currentList.map((project) => (
-                        <Link
-                            key={project.id}
-                            href={`/student/projects/${project.id}`}
-                            className="block bg-white rounded-2xl p-6 border border-[#E6E2D6] hover:shadow-lg transition-all group"
-                        >
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <div className="flex items-center mb-2">
-                                        <h3 className="text-xl font-bold text-[#333333] group-hover:text-[#3E4C37] transition-colors" dir="auto">
-                                            {project.title}
-                                        </h3>
-                                        <span className={`ml-4 px-3 py-1 rounded-full text-xs font-bold uppercase 
-                                            ${['accepted', 'agreed'].includes(project.status) ? 'bg-green-100 text-green-700' :
-                                                ['pending', 'countered', 'negotiating'].includes(project.status) ? 'bg-orange-100 text-orange-700' :
-                                                    ['declined', 'cancelled'].includes(project.status) ? 'bg-red-100 text-red-700' :
-                                                        'bg-gray-100 text-gray-700'
-                                            }`}>
-                                            {project.status.replace('_', ' ')}
-                                        </span>
+
+                {/* TABS */}
+                <div className="flex items-center gap-2 mb-12 overflow-x-auto pb-4 scrollbar-hide border-b border-sky-50">
+                    <Link href="/student/projects"
+                        className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'active' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
+                        Active ({activeProjects.length})
+                    </Link>
+                    <Link href="/student/projects?tab=recent"
+                        className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'recent' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
+                        Recent ({recentProjects.length})
+                    </Link>
+                    <Link href="/student/projects?tab=archive"
+                        className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'archive' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
+                        Archive ({archivedProjects.length})
+                    </Link>
+                </div>
+
+                {/* LIST */}
+                {currentList.length === 0 ? (
+                    <div className="bg-sky-50 rounded-3xl p-16 text-center border border-sky-100">
+                        <Briefcase className="w-16 h-16 text-sky-200 mx-auto mb-6" />
+                        <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2">No {tab} projects found</h3>
+                        {tab === 'active' && (
+                            <Link
+                                href="/"
+                                className="inline-block mt-6 bg-[#0EA5E9] text-white font-black text-[10px] uppercase tracking-widest py-4 px-10 rounded-full hover:bg-sky-600 transition-all shadow-lg shadow-sky-100"
+                            >
+                                Browse Creators
+                            </Link>
+                        )}
+                    </div>
+                ) : (
+                    <div className="grid gap-6">
+                        {currentList.map((project) => (
+                            <Link
+                                key={project.id}
+                                href={`/student/projects/${project.id}`}
+                                className="block bg-white rounded-[2rem] p-8 border border-sky-50 hover:shadow-2xl hover:shadow-sky-100 transition-all group relative overflow-hidden"
+                            >
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10">
+                                    <div className="mb-6 md:mb-0">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <h3 className="text-2xl font-black text-slate-800 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight" dir="auto">
+                                                {project.title}
+                                            </h3>
+                                            <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest
+                                                ${['accepted', 'agreed', 'in_progress', 'submitted'].includes(project.status) ? 'bg-sky-100 text-[#0EA5E9]' :
+                                                    ['pending', 'countered', 'negotiating'].includes(project.status) ? 'bg-orange-50 text-orange-600' :
+                                                        ['declined', 'cancelled'].includes(project.status) ? 'bg-slate-100 text-slate-500' :
+                                                            'bg-slate-50 text-slate-400'
+                                                }`}>
+                                                {project.status.replace('_', ' ')}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm text-slate-500 font-medium">
+                                            Partnered with <span className="text-slate-900 font-bold">{project.creator.full_name || project.creator.username}</span>
+                                        </p>
+                                        <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-4">
+                                            ID: {project.id.slice(0, 8)} • {project.status === 'declined' ? `Closed ${new Date(project.closed_at).toLocaleDateString()}` : `Updated ${new Date(project.created_at).toLocaleDateString()}`}
+                                        </p>
                                     </div>
-                                    <p className="text-gray-500 text-sm">
-                                        Working with <span className="font-semibold text-[#333333]">{project.creator.full_name || project.creator.username}</span>
-                                    </p>
-                                    <p className="text-xs text-gray-400 mt-2">
-                                        {project.status === 'declined' ? `Closed at ${new Date(project.closed_at).toLocaleDateString()}` : `Updated ${new Date(project.created_at).toLocaleDateString()}`}
-                                    </p>
+
+                                    <div className="md:text-right w-full md:w-auto pt-6 md:pt-0 border-t md:border-t-0 border-sky-50">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Contract Value</p>
+                                        <div className="flex items-baseline md:justify-end gap-1">
+                                            <span className="text-xs font-bold text-sky-400 uppercase">AED</span>
+                                            <span className="text-3xl font-serif font-black text-slate-900">
+                                                {project.current_price || '0.00'}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="text-right">
-                                    <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">Price</p>
-                                    <p className="text-2xl font-bold text-[#3E4C37]">
-                                        {project.current_price ? `AED ${project.current_price}` : 'Pending'}
-                                    </p>
+                                {/* Background Decorative Overlay */}
+                                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                    <div className="w-12 h-12 bg-sky-50 rounded-full flex items-center justify-center text-[#0EA5E9]">
+                                        <TrendingUp size={20} />
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            )}
+                            </Link>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

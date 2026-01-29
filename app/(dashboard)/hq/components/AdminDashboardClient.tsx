@@ -17,6 +17,7 @@ interface AdminDashboardClientProps {
         projects: any[]
         profiles: any[]
         withdrawals: any[]
+        events: any[]
         stats: {
             totalUsers: number
             totalRevenue: number
@@ -44,10 +45,16 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                             projects={initialData.projects}
                             profiles={initialData.profiles}
                             stats={initialData.stats}
+                            withdrawals={initialData.withdrawals}
+                            setActiveTab={setActiveTab}
                         />
                     )}
                     {activeTab === 'users' && (
-                        <UsersModule profiles={initialData.profiles} />
+                        <UsersModule
+                            profiles={initialData.profiles}
+                            projects={initialData.projects}
+                            setActiveTab={setActiveTab}
+                        />
                     )}
                     {activeTab === 'projects' && (
                         <ProjectsModule projects={initialData.projects} />
@@ -56,10 +63,18 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                         <PayoutsModule withdrawals={initialData.withdrawals} />
                     )}
                     {activeTab === 'finances' && (
-                        <FinancesModule projects={initialData.projects} stats={initialData.stats} />
+                        <FinancesModule
+                            projects={initialData.projects}
+                            stats={initialData.stats}
+                            withdrawals={initialData.withdrawals}
+                        />
                     )}
                     {activeTab === 'moderation' && (
-                        <ModerationModule projects={initialData.projects} profiles={initialData.profiles} />
+                        <ModerationModule
+                            projects={initialData.projects}
+                            profiles={initialData.profiles}
+                            events={initialData.events}
+                        />
                     )}
                 </div>
             </main>

@@ -10,7 +10,7 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
         <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-[#3E4C37] text-white font-bold py-3 rounded-xl hover:bg-[#2e3b29] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#0EA5E9] text-white font-bold py-3 rounded-xl hover:bg-[#2e3b29] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
             {isPending ? 'Submitting...' : 'Submit for Review'}
         </button>

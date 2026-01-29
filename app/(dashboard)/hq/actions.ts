@@ -90,30 +90,7 @@ export async function completeWithdrawal(withdrawalId: string) {
     if (fetchError || !withdrawal) throw new Error('Withdrawal not found')
     if (withdrawal.status !== 'pending') throw new Error('Withdrawal is already processed')
 
-    // Handle Stripe Transfer if needed
-    if (withdrawal.method === 'stripe') {
-        const creatorProfile = withdrawal.profiles
-        if (!creatorProfile?.stripe_account_id) {
-            throw new Error('Creator has no Stripe account connected')
-        }
-
-        try {
-            await getStripe().transfers.create({
-                amount: Math.round(withdrawal.amount * 100),
-                currency: 'aed',
-                destination: creatorProfile.stripe_account_id,
-                description: `Workly payout: Approved by Admin`,
-                metadata: {
-                    withdrawalId: withdrawal.id,
-                    creatorId: withdrawal.creator_id
-                }
-            })
-        } catch (stripeError: any) {
-            console.error('[STRIPE TRANSFER ERROR]', stripeError)
-            throw new Error(`Stripe Transfer failed: ${stripeError.message}`)
-        }
-    }
-
+    // 3. Mark as completed (Manual Payout Confirmation)
     const { error } = await supabase
         .from('withdrawals')
         .update({ status: 'completed' })

@@ -18,22 +18,19 @@ interface PricingFormProps {
 type PricingMode = 'fixed' | 'negotiable' | 'packages'
 
 const DEFAULT_PACKAGES = {
-    basic: { title: 'Basic', price: 50, description: '', delivery_days: 3, revisions: 1 },
-    standard: { title: 'Standard', price: 100, description: '', delivery_days: 5, revisions: 2 },
-    premium: { title: 'Premium', price: 200, description: '', delivery_days: 7, revisions: 3 }
+    basic: { title: 'Basic', price: 50, description: '', revisions: 1 },
+    standard: { title: 'Standard', price: 100, description: '', revisions: 2 },
+    premium: { title: 'Premium', price: 200, description: '', revisions: 3 }
 }
 
 export default function PricingForm({ profile, services, specializations }: PricingFormProps) {
     const [loading, setLoading] = useState(false)
 
     // Category Selection state
-    // If no specializations, we fallback to a "General" or handle empty state.
-    // If specializations exist, allow selecting one.
     const [selectedCategory, setSelectedCategory] = useState<string>(specializations[0] || 'general')
 
     // Local state for the CURRENTLY selected category
-    // We initialize these based on the `services` prop matching `selectedCategory`
-    const [mode, setMode] = useState<PricingMode>('fixed')
+    const [mode, setMode] = useState<PricingMode>('packages')
     const [basePrice, setBasePrice] = useState(0)
     const [packages, setPackages] = useState(DEFAULT_PACKAGES)
     const [activeTab, setActiveTab] = useState<'basic' | 'standard' | 'premium'>('basic')
@@ -44,16 +41,12 @@ export default function PricingForm({ profile, services, specializations }: Pric
         const savedService = services.find(s => s.category_slug === selectedCategory)
 
         if (savedService) {
-            // Force 'fixed' if it was previously 'negotiable'
-            const initialMode = savedService.pricing_mode === 'negotiable' ? 'fixed' : savedService.pricing_mode
-            setMode(initialMode as PricingMode)
+            // Force 'packages' mode
+            setMode('packages')
             setBasePrice(savedService.base_price || 0)
             setPackages(savedService.service_packages || DEFAULT_PACKAGES)
         } else {
-            // Fallback to Profile Defaults if no specific service exists yet
-            // OR reset to new
-            // Ideally reset to new defaults to prompt setup
-            setMode('fixed')
+            setMode('packages')
             setBasePrice(0)
             setPackages(DEFAULT_PACKAGES)
         }
@@ -66,7 +59,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
 
         const formData = new FormData()
         formData.append('categorySlug', selectedCategory)
-        formData.append('pricingMode', mode)
+        formData.append('pricingMode', 'packages') // Force packages
         formData.append('basePrice', basePrice.toString())
         formData.append('servicePackages', JSON.stringify(packages))
 
@@ -105,14 +98,14 @@ export default function PricingForm({ profile, services, specializations }: Pric
         <div className="space-y-6">
 
             {/* Category Tabs */}
-            <div className="flex overflow-x-auto pb-2 gap-2 scrollbar-hide">
+            <div className="flex overflow-x-auto pb-4 gap-3 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
                 {specializations.map(slug => (
                     <button
                         key={slug}
                         onClick={() => setSelectedCategory(slug)}
-                        className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${selectedCategory === slug
-                            ? 'bg-[#3E4C37] text-white border-[#3E4C37]'
-                            : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+                        className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border touch-manipulation shadow-sm ${selectedCategory === slug
+                            ? 'bg-[#0EA5E9] text-white border-[#0EA5E9] shadow-lg shadow-sky-100'
+                            : 'bg-white text-slate-400 border-sky-50 hover:border-sky-100 hover:text-slate-600'
                             }`}
                     >
                         {getCategoryTitle(slug)}
@@ -123,141 +116,93 @@ export default function PricingForm({ profile, services, specializations }: Pric
             <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in duration-500">
 
                 <h3 className="text-xl font-serif font-bold text-[#333]">
-                    Pricing for {getCategoryTitle(selectedCategory)}
+                    Setup 3-Tier Packages for {getCategoryTitle(selectedCategory)}
                 </h3>
 
-                {/* Mode Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button
-                        type="button"
-                        onClick={() => setMode('fixed')}
-                        className={`p-4 rounded-xl border-2 text-left transition-all ${mode === 'fixed' ? 'border-[#3E4C37] bg-[#F3F0E9]' : 'border-gray-100 hover:border-gray-200'}`}
-                    >
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-3 text-[#3E4C37] shadow-sm">
-                            <AEDIcon className="w-6 h-6" />
-                        </div>
-                        <h3 className="font-bold text-[#333]">Fixed Price</h3>
-                        <p className="text-xs text-gray-500 mt-1">Single rate per project.</p>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setMode('packages')}
-                        className={`p-4 rounded-xl border-2 text-left transition-all ${mode === 'packages' ? 'border-[#3E4C37] bg-[#F3F0E9]' : 'border-gray-100 hover:border-gray-200'}`}
-                    >
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-3 text-[#3E4C37] shadow-sm">
-                            <Briefcase className="w-5 h-5" />
-                        </div>
-                        <h3 className="font-bold text-[#333]">Packages</h3>
-                        <p className="text-xs text-gray-500 mt-1">3-Tier Services.</p>
-                    </button>
+                {/* Mode Selection Removed - Force Packages */}
+                <div className="hidden">
+                    <button type="button" onClick={() => setMode('packages')} className="hidden" />
                 </div>
 
                 {/* Dynamic content based on Mode */}
-                <div className="bg-white rounded-2xl border border-[#E6E2D6] p-6 shadow-sm">
+                <div className="bg-white rounded-[2rem] border border-sky-50 p-6 md:p-10 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                        <Briefcase size={120} className="text-[#0EA5E9] -rotate-12" />
+                    </div>
 
-                    {mode === 'fixed' && (
-                        <div className="max-w-md">
-                            <label className="block text-sm font-bold text-[#333] mb-2">Your Fixed Rate</label>
-                            <div className="relative">
-                                <span className="absolute left-3 top-3 text-xs font-bold text-gray-400 mt-0.5">AED</span>
-                                <input
-                                    type="number"
-                                    value={basePrice}
-                                    onChange={(e) => setBasePrice(Number(e.target.value))}
-                                    className="w-full pl-12 p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3E4C37]"
-                                    placeholder="500"
-                                />
-                            </div>
-                            <EarningsBreakdown price={basePrice} />
-                            <p className="text-xs text-gray-400 mt-2">Projects will be charged at this rate.</p>
+                    <div className="relative z-10">
+                        <div className="flex gap-4 md:gap-8 mb-10 border-b border-sky-50 pb-0 overflow-x-auto scrollbar-hide">
+                            {(['basic', 'standard', 'premium'] as const).map(tier => (
+                                <button
+                                    key={tier}
+                                    type="button"
+                                    onClick={() => setActiveTab(tier)}
+                                    className={`px-4 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all border-b-2 -mb-[2px] whitespace-nowrap ${activeTab === tier ? 'border-[#0EA5E9] text-[#0EA5E9]' : 'border-transparent text-slate-300 hover:text-slate-500'}`}
+                                >
+                                    {tier} Tier
+                                </button>
+                            ))}
                         </div>
-                    )}
 
-
-                    {mode === 'packages' && (
-                        <div>
-                            <div className="flex gap-2 mb-6 border-b border-gray-100 pb-1">
-                                {(['basic', 'standard', 'premium'] as const).map(tier => (
-                                    <button
-                                        key={tier}
-                                        type="button"
-                                        onClick={() => setActiveTab(tier)}
-                                        className={`px-4 py-2 text-sm font-bold capitalize transition-colors border-b-2 -mb-1.5 ${activeTab === tier ? 'border-[#3E4C37] text-[#3E4C37]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-                                    >
-                                        {tier}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-bottom-2 duration-300" key={activeTab}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-xs font-bold text-[#333] mb-1">Package Title</label>
-                                        <input
-                                            type="text"
-                                            value={packages[activeTab].title}
-                                            onChange={(e) => updatePackage(activeTab, 'title', e.target.value)}
-                                            className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
-                                            placeholder={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Package`}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-[#333] mb-1">Price (AED)</label>
-                                        <input
-                                            type="number"
-                                            value={packages[activeTab].price}
-                                            onChange={(e) => updatePackage(activeTab, 'price', Number(e.target.value))}
-                                            className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
-                                        />
-                                        <EarningsBreakdown price={packages[activeTab].price} compact />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold text-[#333] mb-1">Delivery (Days)</label>
-                                            <input
-                                                type="number"
-                                                value={packages[activeTab].delivery_days}
-                                                onChange={(e) => updatePackage(activeTab, 'delivery_days', Number(e.target.value))}
-                                                className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-[#333] mb-1">Revisions</label>
-                                            <input
-                                                type="number"
-                                                value={packages[activeTab].revisions}
-                                                onChange={(e) => updatePackage(activeTab, 'revisions', Number(e.target.value))}
-                                                className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
-                                            />
-                                        </div>
-                                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-bottom-2 duration-300" key={activeTab}>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-[#333] mb-1">Package Title</label>
+                                    <input
+                                        type="text"
+                                        value={packages[activeTab].title}
+                                        onChange={(e) => updatePackage(activeTab, 'title', e.target.value)}
+                                        className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
+                                        placeholder={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Package`}
+                                    />
                                 </div>
                                 <div>
-                                    <FormattedTextarea
-                                        label="What's included?"
-                                        value={packages[activeTab].description}
-                                        onChange={(val) => updatePackage(activeTab, 'description', val)}
-                                        rows={8}
-                                        placeholder="List features, deliverables, and important details...
+                                    <label className="block text-xs font-bold text-[#333] mb-1">Price (AED)</label>
+                                    <input
+                                        type="number"
+                                        value={packages[activeTab].price}
+                                        onChange={(e) => updatePackage(activeTab, 'price', Number(e.target.value))}
+                                        className="w-full p-3 md:p-4 rounded-xl border border-sky-50 bg-sky-50/20 text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all"
+                                    />
+                                    <EarningsBreakdown price={packages[activeTab].price} compact />
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-[#333] mb-1">Revisions Included</label>
+                                        <input
+                                            type="number"
+                                            value={packages[activeTab].revisions}
+                                            onChange={(e) => updatePackage(activeTab, 'revisions', Number(e.target.value))}
+                                            className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
+                                        />
+                                        <p className="text-[10px] text-gray-400 mt-1">Students can request this many rounds of changes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <FormattedTextarea
+                                    label="What's included in this tier?"
+                                    value={packages[activeTab].description}
+                                    onChange={(val) => updatePackage(activeTab, 'description', val)}
+                                    rows={8}
+                                    placeholder="List features, deliverables, and important details...
 • Feature 1
 • Feature 2
 ✅ Guarantee"
-                                    />
-                                </div>
+                                />
                             </div>
                         </div>
-                    )}
+                    </div>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-center md:justify-end">
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-[#333333] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#3E4C37] transition-all disabled:opacity-50 flex items-center gap-2"
+                        className="w-full md:w-auto bg-[#0EA5E9] text-white px-10 py-5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-sky-100 active:scale-95 touch-manipulation"
                     >
                         {loading ? <Zap className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                        Save {getCategoryTitle(selectedCategory)} Pricing
+                        Secure {getCategoryTitle(selectedCategory)} Deployment
                     </button>
                 </div>
             </form >

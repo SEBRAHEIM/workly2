@@ -170,14 +170,14 @@ export default function FileCompressor() {
             <div className="flex justify-center gap-4 mb-4">
                 <button
                     onClick={() => setMode('smart')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all ${mode === 'smart' ? 'bg-[#3E4C37] text-white border-[#3E4C37] shadow-md' : 'bg-white text-gray-500 border-transparent hover:bg-gray-50'}`}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all ${mode === 'smart' ? 'bg-[#0EA5E9] text-white border-[#0EA5E9] shadow-md' : 'bg-white text-gray-500 border-transparent hover:bg-gray-50'}`}
                 >
                     <Zap className="w-4 h-4" />
                     <span className="font-bold text-sm">Smart Optimize</span>
                 </button>
                 <button
                     onClick={() => setMode('archive')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all ${mode === 'archive' ? 'bg-[#3E4C37] text-white border-[#3E4C37] shadow-md' : 'bg-white text-gray-500 border-transparent hover:bg-gray-50'}`}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all ${mode === 'archive' ? 'bg-[#0EA5E9] text-white border-[#0EA5E9] shadow-md' : 'bg-white text-gray-500 border-transparent hover:bg-gray-50'}`}
                 >
                     <Archive className="w-4 h-4" />
                     <span className="font-bold text-sm">Secure ZIP</span>
@@ -188,34 +188,34 @@ export default function FileCompressor() {
                 {!fileState ? (
                     <div
                         {...getRootProps()}
-                        className={`bg-white rounded-2xl p-6 md:p-8 border-2 border-dashed ${isDragActive ? 'border-[#3E4C37] bg-green-50' : 'border-[#E6E2D6]'} shadow-sm text-center cursor-pointer transition-all hover:border-[#3E4C37] group`}
+                        className={`bg-white rounded-2xl p-6 md:p-8 border-2 border-dashed ${isDragActive ? 'border-[#0EA5E9] bg-green-50' : 'border-[#F0F9FF]'} shadow-sm text-center cursor-pointer transition-all hover:border-[#0EA5E9] group`}
                     >
                         <input {...getInputProps()} />
-                        <div className="w-12 h-12 bg-[#F3F0E9] rounded-xl flex items-center justify-center mx-auto mb-4 text-[#3E4C37] group-hover:scale-110 transition-transform">
+                        <div className="w-12 h-12 bg-[#F0F9FF] rounded-xl flex items-center justify-center mx-auto mb-4 text-[#0EA5E9] group-hover:scale-110 transition-transform">
                             {mode === 'smart' ? <Zap className="w-5 h-5" /> : <Archive className="w-5 h-5" />}
                         </div>
-                        <h2 className="text-xl font-bold text-[#333333] mb-2">
+                        <h2 className="text-xl font-bold text-[#1E293B] mb-2">
                             {mode === 'smart' ? 'Optimize File Size' : 'Archive to ZIP'}
                         </h2>
                         <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto leading-relaxed">
                             {mode === 'smart'
-                                ? <span>Reduces size of <strong className="text-[#3E4C37]">PPTX & Images</strong> by optimizing internal media.</span>
-                                : <span>Creates a secure compressed ZIP archive. Works for <strong className="text-[#3E4C37]">any file type</strong>.</span>
+                                ? <span>Reduces size of <strong className="text-[#0EA5E9]">PPTX & Images</strong> by optimizing internal media.</span>
+                                : <span>Creates a secure compressed ZIP archive. Works for <strong className="text-[#0EA5E9]">any file type</strong>.</span>
                             }
                         </p>
-                        <button className="bg-[#333333] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#3E4C37] transition-colors shadow-sm active:scale-95">
+                        <button className="bg-[#1E293B] text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-[#0EA5E9] transition-colors shadow-sm active:scale-95">
                             Select File
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-white rounded-2xl p-6 border border-[#E6E2D6] shadow-sm">
+                    <div className="bg-white rounded-2xl p-6 border border-[#F0F9FF] shadow-sm">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-[#F3F0E9] rounded-lg flex items-center justify-center text-[#3E4C37]">
+                                <div className="w-10 h-10 bg-[#F0F9FF] rounded-lg flex items-center justify-center text-[#0EA5E9]">
                                     <FileIcon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-[#333333] text-sm line-clamp-1">{fileState.original.name}</h3>
+                                    <h3 className="font-bold text-[#1E293B] text-sm line-clamp-1">{fileState.original.name}</h3>
                                     <p className="text-xs text-gray-400">{formatSize(fileState.original.size)}</p>
                                 </div>
                             </div>
@@ -227,12 +227,12 @@ export default function FileCompressor() {
                         {fileState.status === 'compressing' && (
                             <div className="space-y-2">
                                 <div className="flex justify-between text-xs font-medium">
-                                    <span className="text-[#3E4C37]">Optimizing...</span>
+                                    <span className="text-[#0EA5E9]">Optimizing...</span>
                                     <span className="text-gray-400">{fileState.progress.toFixed(0)}%</span>
                                 </div>
-                                <div className="h-1.5 bg-[#F3F0E9] rounded-full overflow-hidden">
+                                <div className="h-1.5 bg-[#F0F9FF] rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-[#3E4C37] transition-all duration-300 ease-out"
+                                        className="h-full bg-[#0EA5E9] transition-all duration-300 ease-out"
                                         style={{ width: `${fileState.progress}%` }}
                                     />
                                 </div>
@@ -257,7 +257,7 @@ export default function FileCompressor() {
 
                                 <button
                                     onClick={handleDownload}
-                                    className="w-full bg-[#333333] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#3E4C37] transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95"
+                                    className="w-full bg-[#1E293B] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#0EA5E9] transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95"
                                 >
                                     <Download className="w-4 h-4" /> Download {mode === 'archive' ? 'ZIP' : 'File'}
                                 </button>
@@ -274,20 +274,20 @@ export default function FileCompressor() {
                 )}
             </div>
 
-            <div className="bg-[#F9F7F2] rounded-2xl p-6 border border-[#E6E2D6]">
+            <div className="bg-[#F9F7F2] rounded-2xl p-6 border border-[#F0F9FF]">
                 <button
                     onClick={() => setShowInfo(!showInfo)}
                     className="flex items-center gap-2 w-full text-left"
                 >
-                    <Info className="w-5 h-5 text-[#3E4C37]" />
-                    <span className="font-bold text-[#333333]">Mode Comparison</span>
+                    <Info className="w-5 h-5 text-[#0EA5E9]" />
+                    <span className="font-bold text-[#1E293B]">Mode Comparison</span>
                 </button>
 
                 <div className={`mt-4 space-y-4 text-sm text-gray-600 leading-relaxed ${showInfo ? 'block' : 'hidden md:block'}`}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-white p-4 rounded-xl border border-[#E6E2D6]">
+                        <div className="bg-white p-4 rounded-xl border border-[#F0F9FF]">
                             <div className="flex items-center gap-2 mb-2">
-                                <Zap className="w-4 h-4 text-[#3E4C37]" />
+                                <Zap className="w-4 h-4 text-[#0EA5E9]" />
                                 <strong className="text-[#333]">Smart Optimize</strong>
                             </div>
                             <p className="text-xs text-gray-500 mb-2">Best for: PPTX, Images</p>
@@ -297,9 +297,9 @@ export default function FileCompressor() {
                                 <li>Keeps text/formatting exact</li>
                             </ul>
                         </div>
-                        <div className="bg-white p-4 rounded-xl border border-[#E6E2D6]">
+                        <div className="bg-white p-4 rounded-xl border border-[#F0F9FF]">
                             <div className="flex items-center gap-2 mb-2">
-                                <Archive className="w-4 h-4 text-[#3E4C37]" />
+                                <Archive className="w-4 h-4 text-[#0EA5E9]" />
                                 <strong className="text-[#333]">Secure ZIP</strong>
                             </div>
                             <p className="text-xs text-gray-500 mb-2">Best for: PDF, Docs, Code</p>

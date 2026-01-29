@@ -34,104 +34,113 @@ export default function Onboarding() {
 
 
     return (
-        <main className="min-h-screen bg-[#F3F0E9] flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-xl">
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-[#E6E2D6]">
+        <main className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-6 relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-sky-50 rounded-full blur-[80px] md:blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-60" />
+            <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-sky-50 rounded-full blur-[80px] md:blur-[120px] translate-y-1/2 -translate-x-1/2 opacity-60" />
+
+            <div className="w-full max-w-xl relative z-10">
+                <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <p className="text-[#333333] text-sm tracking-widest uppercase mb-4 opacity-60">Almost there</p>
-                        <h1 className="font-serif font-bold text-3xl md:text-4xl text-[#3E4C37] mb-3">
-                            Set up your profile
+                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
+                            <span className="text-white font-serif font-black text-3xl">W</span>
+                        </div>
+                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                            Identity <br /> <span className="text-[#0EA5E9]">Setup.</span>
                         </h1>
-                        <p className="text-gray-500 font-sans">
-                            Tell us how you want to use the platform
+                        <p className="text-slate-500 font-medium text-sm">
+                            Configure your workspace profile.
                         </p>
                     </div>
 
                     <form action={formAction} className="flex flex-col space-y-8">
                         {!isAdmin ? (
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-4 text-center">I am a...</label>
-                                <div className="grid grid-cols-2 gap-4">
+                                <label className="block text-[10px] font-black text-slate-400 mb-6 text-center uppercase tracking-widest">Select Core Objective</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <button
                                         type="button"
                                         onClick={() => setRole('student')}
-                                        className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'student'
-                                            ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
-                                            : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
+                                        className={`p-8 border rounded-[2rem] flex flex-col items-center text-center transition-all duration-300 touch-manipulation group ${role === 'student'
+                                            ? 'border-[#0EA5E9] bg-sky-50/50 text-[#0EA5E9] shadow-lg shadow-sky-100'
+                                            : 'border-sky-50 bg-white text-slate-400 hover:border-sky-100'
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'student' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                            <User className="w-6 h-6" />
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'student' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
+                                            <User size={28} />
                                         </div>
-                                        <span className="font-semibold">Student</span>
+                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Student</span>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Deploy Projects</p>
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setRole('creator')}
-                                        className={`p-6 border-2 rounded-2xl flex flex-col items-center text-center transition-all duration-200 ${role === 'creator'
-                                            ? 'border-[#3E4C37] bg-[#F3F0E9] text-[#3E4C37]'
-                                            : 'border-gray-100 hover:border-[#E6E2D6] text-gray-500'
+                                        className={`p-8 border rounded-[2rem] flex flex-col items-center text-center transition-all duration-300 touch-manipulation group ${role === 'creator'
+                                            ? 'border-[#0EA5E9] bg-sky-50/50 text-[#0EA5E9] shadow-lg shadow-sky-100'
+                                            : 'border-sky-50 bg-white text-slate-400 hover:border-sky-100'
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${role === 'creator' ? 'bg-[#3E4C37] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                            <PenTool className="w-6 h-6" />
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'creator' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
+                                            <PenTool size={28} />
                                         </div>
-                                        <span className="font-semibold">Creator</span>
+                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Creator</span>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Execution Elite</p>
                                     </button>
                                 </div>
                                 <input type="hidden" name="role" value={role} />
                             </div>
                         ) : (
-                            <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center">
-                                <div className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                    <Shield className="w-6 h-6" />
+                            <div className="bg-sky-50 border border-sky-100 rounded-[2rem] p-8 text-center relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <div className="w-16 h-16 bg-[#0EA5E9] text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-sky-200">
+                                        <Shield size={32} />
+                                    </div>
+                                    <h3 className="font-serif font-black text-2xl text-slate-900 mb-2 uppercase tracking-tight">Root Admin</h3>
+                                    <p className="text-[#0EA5E9] text-[10px] font-black uppercase tracking-widest">Master Authority Granted</p>
                                 </div>
-                                <h3 className="font-bold text-red-900 mb-1">Admin Access Detected</h3>
-                                <p className="text-red-600 text-sm">You will be granted full administrative privileges.</p>
                                 <input type="hidden" name="role" value="admin" />
                             </div>
                         )}
 
-                        <div className="space-y-4">
+                        <div className="space-y-6 pt-4">
                             <div>
-                                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Username
+                                <label htmlFor="username" className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">
+                                    Terminal Handle
                                 </label>
                                 <input
                                     id="username"
                                     name="username"
                                     type="text"
                                     required
-                                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all"
-                                    placeholder="unique_username"
+                                    className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
+                                    placeholder="unique_handle"
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Full Name (Optional)
+                                <label htmlFor="fullName" className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">
+                                    Registry Name
                                 </label>
                                 <input
                                     id="fullName"
                                     name="fullName"
                                     type="text"
-                                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-[#3E4C37]/20 focus:border-[#3E4C37] transition-all"
-                                    placeholder="John Doe"
+                                    className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
+                                    placeholder="Operator Name"
                                 />
                             </div>
                         </div>
 
                         {state?.error && (
-                            <p className="text-red-500 text-sm">{state.error}</p>
+                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center">{state.error}</p>
                         )}
 
                         <button
                             type="submit"
-                            className={`w-full rounded-xl px-4 py-4 text-white font-medium transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-4 ${isAdmin ? 'bg-red-600 hover:bg-red-700' : 'bg-[#3E4C37] hover:bg-[#2e3b29]'
-                                }`}
+                            className="w-full rounded-full bg-[#0EA5E9] px-6 py-5 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-2xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 shadow-xl shadow-sky-100 disabled:opacity-50 mt-4"
                             disabled={!role && !isAdmin}
                         >
-                            {isAdmin ? 'Initialize Admin Profile' : 'Complete Setup'}
+                            {isAdmin ? 'Deploy Admin Identity' : 'Secure Access'}
                         </button>
                     </form>
                 </div>

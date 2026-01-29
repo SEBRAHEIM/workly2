@@ -6,7 +6,7 @@ export default function CreatorLayout({
     children: React.ReactNode
 }) {
     return (
-        <main className="min-h-screen bg-[#F3F0E9]">
+        <main className="min-h-screen bg-[#F0F9FF]">
             <CreatorNavbar />
             {children}
         </main>

@@ -19,57 +19,89 @@ export default async function StudentWallet() {
         .limit(3)
 
     return (
-        <div className="p-8 max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-4xl font-serif font-bold text-[#3E4C37]">Wallet</h1>
-                <button className="flex items-center bg-[#333333] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-black transition-colors">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Funds
-                </button>
-            </div>
+        <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12">
+                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none">
+                        Vault & <br /> <span className="text-[#0EA5E9]">Finance.</span>
+                    </h1>
+                    <button className="mt-8 md:mt-0 flex items-center bg-slate-950 text-white px-10 py-4 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#0EA5E9] transition-all shadow-xl active:scale-95 group">
+                        <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform" />
+                        Add Funds
+                    </button>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-[#3E4C37] rounded-3xl p-8 text-white shadow-lg md:col-span-2 relative overflow-hidden">
-                    <div className="relative z-10">
-                        <p className="text-white/60 font-medium mb-1 uppercase text-sm tracking-wider">Total Balance</p>
-                        <h2 className="text-4xl font-bold mb-8">AED {profile?.wallet_balance?.toFixed(2) || '0.00'}</h2>
-                        <div className="flex space-x-4">
-                            <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
-                                <span className="text-xs text-white/60 block">Account Status</span>
-                                <span className="font-medium text-sm">Active</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl shadow-slate-200 md:col-span-2 relative overflow-hidden group">
+                        <div className="relative z-10 h-full flex flex-col">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 block">Available Liquidity</span>
+                            <div className="flex items-baseline gap-3 mb-10">
+                                <span className="text-2xl font-serif font-bold text-sky-400">AED</span>
+                                <span className="text-7xl md:text-8xl font-serif font-black tracking-tighter">
+                                    {profile?.wallet_balance?.toFixed(2) || '0.00'}
+                                </span>
+                            </div>
+
+                            <div className="mt-auto flex items-center gap-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                        <div className="w-2 h-2 bg-sky-400 rounded-full animate-pulse" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Status</p>
+                                        <p className="text-xs font-bold uppercase tracking-widest">Active Secure</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <Wallet className="absolute -bottom-12 -right-12 w-64 h-64 text-white/5 rotate-12 transition-transform duration-700 group-hover:rotate-0" />
                     </div>
-                    <Wallet className="absolute -bottom-8 -right-8 w-48 h-48 text-white/5 rotate-12" />
-                </div>
 
-                <div className="bg-white rounded-3xl p-8 border border-[#E6E2D6] shadow-sm flex flex-col justify-center items-center text-center">
-                    <p className="text-gray-500 text-sm mb-2">Monthly Spending</p>
-                    <h3 className="text-2xl font-bold text-[#333333] mb-1">AED 0.00</h3>
-                    <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">+0% from last month</span>
-                </div>
-            </div>
-
-            <h2 className="text-2xl font-serif font-bold text-[#333333] mb-4">Recent Usage</h2>
-            <div className="bg-white rounded-3xl border border-[#E6E2D6] shadow-sm divide-y divide-[#E6E2D6]">
-                {transactions && transactions.length > 0 ? (
-                    transactions.map((t: any) => (
-                        <div key={t.id} className="p-6 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-[#3E4C37]">
-                                    <CreditCard className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <p className="font-bold text-[#333333]">{t.metadata?.project_title || 'Payment'}</p>
-                                    <p className="text-xs text-gray-400">{new Date(t.created_at).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                            <p className="font-black text-[#333333]">- AED {t.amount.toFixed(2)}</p>
+                    <div className="bg-sky-50 rounded-[2.5rem] p-10 border border-sky-100 flex flex-col justify-center relative overflow-hidden">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Platform Spend</p>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-sm font-bold text-[#0EA5E9]">AED</span>
+                            <h3 className="text-4xl font-black text-slate-800">0.00</h3>
                         </div>
-                    ))
-                ) : (
-                    <div className="p-8 text-center text-gray-500">No recent transactions</div>
-                )}
+                        <div className="mt-4 inline-flex items-center text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                            +0% optimized
+                        </div>
+
+                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-sky-100/50 rounded-full blur-2xl" />
+                    </div>
+                </div>
+
+                <div className="max-w-4xl">
+                    <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
+                        <div className="w-12 h-[1px] bg-sky-100" />
+                        Audit Trail
+                    </h2>
+                    <div className="space-y-4">
+                        {transactions && transactions.length > 0 ? (
+                            transactions.map((t: any) => (
+                                <div key={t.id} className="p-8 bg-white border border-sky-50 rounded-3xl flex items-center justify-between hover:shadow-xl hover:shadow-sky-50 transition-all duration-300">
+                                    <div className="flex items-center gap-6">
+                                        <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center text-[#0EA5E9] border border-sky-100">
+                                            <CreditCard size={20} />
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-slate-800 uppercase tracking-tight text-base mb-1">{t.metadata?.project_title || 'Secure Payment'}</p>
+                                            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em]">{new Date(t.created_at).toLocaleDateString()} • REF_{t.id.slice(0, 8)}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Debit</p>
+                                        <p className="font-serif font-black text-slate-900 text-xl tracking-tighter">- AED {t.amount.toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="p-16 text-center bg-slate-50 border border-slate-100 rounded-3xl">
+                                <p className="text-xs font-black text-slate-300 uppercase tracking-[0.3em]">No activity detected</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     )

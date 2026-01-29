@@ -64,17 +64,17 @@ export default function PaymentReceiptModal({
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 no-print">
                             <Check className="w-8 h-8" />
                         </div>
-                        <h2 className="text-2xl font-serif font-bold text-[#333333] mb-1">Payment Successful</h2>
+                        <h2 className="text-2xl font-serif font-bold text-[#1E293B] mb-1">Payment Successful</h2>
                         <p className="text-gray-500 text-sm mb-6">Thank you for your payment!</p>
 
                         <div className="w-full border-t border-b border-dashed border-gray-300 py-6 mb-6">
                             <div className="flex justify-between mb-3 text-sm">
                                 <span className="text-gray-500">Amount Paid</span>
-                                <span className="font-bold text-[#333333]">AED {amount.toFixed(2)}</span>
+                                <span className="font-bold text-[#1E293B]">AED {amount.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between mb-1 text-sm">
                                 <span className="text-gray-500">Date</span>
-                                <span className="font-medium text-[#333333]">{date}</span>
+                                <span className="font-medium text-[#1E293B]">{date}</span>
                             </div>
                             <div className="flex justify-between mb-3 text-xs text-gray-400">
                                 <span>Status</span>
@@ -85,7 +85,7 @@ export default function PaymentReceiptModal({
                             </div>
                             <div className="flex justify-between mb-3 text-sm">
                                 <span className="text-gray-500">Project</span>
-                                <span className="font-medium text-[#333333] max-w-[200px] truncate text-right">{projectName}</span>
+                                <span className="font-medium text-[#1E293B] max-w-[200px] truncate text-right">{projectName}</span>
                             </div>
                             <div className="flex justify-between text-xs text-gray-400 mt-4 pt-4 border-t border-gray-100">
                                 <span>Transaction Reference</span>
@@ -95,25 +95,25 @@ export default function PaymentReceiptModal({
 
                         <div className="text-center">
                             <p className="text-xs text-gray-400 mb-2 no-print">A receipt has also been sent to your email.</p>
-                            <div className="font-bold text-lg tracking-widest text-[#333333]">WORKLY</div>
+                            <div className="font-bold text-lg tracking-widest text-[#1E293B]">WORKLY</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Actions (Not Printed) */}
-                <div className="p-6 bg-[#F3F0E9] border-t border-[#E6E2D6] flex gap-3 no-print">
+                <div className="p-6 bg-[#F0F9FF] border-t border-[#F0F9FF] flex gap-3 no-print">
                     <button
                         onClick={handlePrint}
-                        className="flex-1 bg-[#333333] text-white font-bold py-3 rounded-xl flex items-center justify-center hover:bg-[#222222] transition-colors"
+                        className="flex-1 bg-[#1E293B] text-white font-bold py-3 rounded-xl flex items-center justify-center hover:bg-[#222222] transition-colors"
                     >
                         <Printer className="w-4 h-4 mr-2" />
                         Print / PDF
                     </button>
                     <button
                         onClick={handleClose}
-                        className="p-3 bg-white border border-[#E6E2D6] rounded-xl hover:bg-gray-50 transition-colors"
+                        className="p-3 bg-white border border-[#F0F9FF] rounded-xl hover:bg-gray-50 transition-colors"
                     >
-                        <X className="w-5 h-5 text-[#333333]" />
+                        <X className="w-5 h-5 text-[#1E293B]" />
                     </button>
                 </div>
             </div>

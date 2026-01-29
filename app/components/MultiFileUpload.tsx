@@ -126,12 +126,12 @@ export default function MultiFileUpload({
             {uploadedUrls.length > 0 && (
                 <div className="space-y-2">
                     {uploadedUrls.map((url, index) => (
-                        <div key={index} className="flex items-center justify-between bg-[#F3F0E9] px-4 py-3 rounded-xl border border-[#E6E2D6]">
+                        <div key={index} className="flex items-center justify-between bg-[#F0F9FF] px-4 py-3 rounded-xl border border-[#F0F9FF]">
                             <div className="flex items-center overflow-hidden">
                                 <div className="w-8 h-8 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                                     <CheckCircle className="w-4 h-4" />
                                 </div>
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="font-bold text-[#333333] truncate pr-2 hover:underline">
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="font-bold text-[#1E293B] truncate pr-2 hover:underline">
                                     File {index + 1} (Uploaded)
                                 </a>
                             </div>
@@ -161,7 +161,7 @@ export default function MultiFileUpload({
             {!uploading && (
                 <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-[#E6E2D6] hover:border-[#3E4C37] hover:bg-[#F3F0E9] rounded-2xl p-6 text-center transition-all cursor-pointer group"
+                    className="border-2 border-dashed border-[#F0F9FF] hover:border-[#0EA5E9] hover:bg-[#F0F9FF] rounded-2xl p-6 text-center transition-all cursor-pointer group"
                 >
                     <input
                         type="file"
@@ -171,10 +171,10 @@ export default function MultiFileUpload({
                         className="hidden"
                     />
 
-                    <div className="w-12 h-12 bg-[#F3F0E9] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-white text-[#3E4C37] transition-colors">
+                    <div className="w-12 h-12 bg-[#F0F9FF] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-white text-[#0EA5E9] transition-colors">
                         <Upload className="w-6 h-6" />
                     </div>
-                    <p className="font-bold text-[#333333] mb-1">Click to upload files</p>
+                    <p className="font-bold text-[#1E293B] mb-1">Click to upload files</p>
                     <p className="text-xs text-gray-400">Up to {maxSizeMB}MB per file</p>
                 </div>
             )}

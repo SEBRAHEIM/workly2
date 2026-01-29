@@ -13,12 +13,12 @@ interface Props {
 
 export default function ProfileSection({ title, summary, isOpen, isCompleted, onToggle, children }: Props) {
     return (
-        <div className={`bg-white rounded-[2rem] border transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#3E4C37] shadow-md ring-1 ring-[#3E4C37]/10' : 'border-[#E6E2D6] shadow-sm'
+        <div className={`bg-white rounded-[2rem] border transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#0EA5E9] shadow-md ring-1 ring-[#0EA5E9]/10' : 'border-[#F0F9FF] shadow-sm'
             }`}>
             {/* Header / Summary */}
             <div
                 onClick={onToggle}
-                className={`p-6 md:p-8 flex items-start md:items-center justify-between cursor-pointer group ${isOpen ? 'border-b border-[#E6E2D6]' : ''
+                className={`p-6 md:p-8 flex items-start md:items-center justify-between cursor-pointer group ${isOpen ? 'border-b border-[#F0F9FF]' : ''
                     }`}
             >
                 <div className="flex items-center gap-4">
@@ -27,7 +27,7 @@ export default function ProfileSection({ title, summary, isOpen, isCompleted, on
                         {isCompleted ? <CheckCircle className="w-5 h-5 md:w-6 md:h-6" /> : <Circle className="w-5 h-5 md:w-6 md:h-6" />}
                     </div>
                     <div>
-                        <h2 className={`text-xl md:text-2xl font-serif font-bold transition-colors ${isOpen ? 'text-[#3E4C37]' : 'text-[#333333]'
+                        <h2 className={`text-xl md:text-2xl font-serif font-bold transition-colors ${isOpen ? 'text-[#0EA5E9]' : 'text-[#1E293B]'
                             }`}>
                             {title}
                         </h2>
@@ -41,7 +41,7 @@ export default function ProfileSection({ title, summary, isOpen, isCompleted, on
 
                 <div className="flex items-center gap-2">
                     {!isOpen && isCompleted && (
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#3E4C37] transition-colors flex items-center">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#0EA5E9] transition-colors flex items-center">
                             <Edit2 className="w-3 h-3 mr-1" />
                             Edit
                         </span>

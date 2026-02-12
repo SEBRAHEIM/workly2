@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import { User, ShieldCheck, ArrowLeft } from 'lucide-react'
 import HireCreatorForm from './HireCreatorForm'
 import { categories } from '@/app/data/categories'
+import { Suspense } from 'react'
 
 export default async function HireCreatorPage({ params }: { params: Promise<{ creatorId: string }> }) {
     const supabase = await createClient()
@@ -83,12 +84,23 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                         <h2 className="text-base font-bold font-serif text-slate-900 uppercase tracking-tight">Project Details</h2>
                     </div>
 
-                    <HireCreatorForm
-                        creatorId={creatorId}
-                        specializations={specializations}
-                        services={services || []}
-                        languages={creator.languages || []}
-                    />
+                    <div className="min-h-[400px]">
+                        <Suspense fallback={
+                            <div className="space-y-4 animate-pulse">
+                                <div className="h-4 bg-slate-50 rounded w-1/4"></div>
+                                <div className="h-20 bg-slate-50 rounded-2xl w-full"></div>
+                                <div className="h-4 bg-slate-50 rounded w-1/3 mt-8"></div>
+                                <div className="h-64 bg-slate-50 rounded-[2rem] w-full"></div>
+                            </div>
+                        }>
+                            <HireCreatorForm
+                                creatorId={creatorId}
+                                specializations={specializations}
+                                services={services || []}
+                                languages={creator.languages || []}
+                            />
+                        </Suspense>
+                    </div>
                 </div>
 
                 <div className="mt-6 text-center opacity-30">

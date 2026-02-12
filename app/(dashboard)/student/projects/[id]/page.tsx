@@ -32,7 +32,7 @@ export default async function ProjectPage({
     }
 
     // 1. Fetch all data in parallel
-    const [projectResponse, latestOfferResponse, eventsResponse] = await Promise.all([
+    const [projectResponse, latestOfferResponse, eventsResponse, reviewResponse] = await Promise.all([
         supabase
             .from('projects')
             .select(`
@@ -58,12 +58,18 @@ export default async function ProjectPage({
             .from('project_events')
             .select('*')
             .eq('project_id', id)
-            .order('created_at', { ascending: true })
+            .order('created_at', { ascending: true }),
+        supabase
+            .from('reviews')
+            .select('*')
+            .eq('project_id', id)
+            .maybeSingle()
     ])
 
     const { data: project, error: projectError } = projectResponse
     const { data: latestOffer } = latestOfferResponse
     const { data: events } = eventsResponse
+    const { data: review } = reviewResponse
 
     if (projectError || !project) notFound()
     if (project.student_id !== user.id) notFound()
@@ -243,17 +249,19 @@ export default async function ProjectPage({
                             </div>
                         )}
 
-                        {/* STATUS: SUBMITTED -> REVIEW & RELEASE */}
-                        {project.status === 'submitted' && (
+                        {/* STATUS: SUBMITTED or COMPLETED (without review) -> REVIEW & RELEASE */}
+                        {(project.status === 'submitted' || (project.status === 'completed' && !review)) && (
                             <div className="mb-6">
                                 <SubmissionReview
                                     projectId={project.id}
                                     creatorId={project.creator_id}
+                                    creatorName={project?.creator?.full_name || 'the Creator'}
                                     currentPrice={displayPrice}
                                     submissionUrl={project.submission_url}
                                     submissionNotes={project.submission_notes}
                                     revisionsTotal={project.revisions_total || 0}
                                     revisionsUsed={project.revisions_used || 0}
+                                    initialIsCompleted={project.status === 'completed'}
                                 />
                             </div>
                         )}

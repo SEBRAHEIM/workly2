@@ -1,7 +1,7 @@
 'use client'
 
 import { createProject } from '../../actions'
-import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Zap } from 'lucide-react'
+import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Zap, ArrowRight } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 import { useState, useActionState, useEffect } from 'react'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
@@ -10,13 +10,14 @@ import FormattedTextarea from '@/app/components/FormattedTextarea'
 import { categories } from '@/app/data/categories'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 
-function SubmitButton({ isPending }: { isPending: boolean }) {
+function SubmitButton({ isPending, price }: { isPending: boolean, price?: number }) {
     return (
         <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-[#2e3b29] active:scale-95 transition-all transform shadow-xl disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+            className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl flex items-center justify-center hover:shadow-sky-200 active:scale-95 transition-all transform shadow-xl shadow-sky-100 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group"
         >
             {isPending ? (
                 <span className="flex items-center">
@@ -24,9 +25,13 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
                     Sending Request...
                 </span>
             ) : (
-                <>
+                <div className="flex items-center gap-2">
                     Confirm & Pay
-                </>
+                    {price !== undefined && price > 0 && (
+                        <span className="bg-white/20 px-2 py-0.5 rounded-lg text-xs font-black">AED {price}</span>
+                    )}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
             )}
         </button>
     )
@@ -48,16 +53,24 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
     const [files, setFiles] = useState<string[]>([])
     const [description, setDescription] = useState('')
 
+    const searchParams = useSearchParams()
+    const urlCategory = searchParams.get('category')
+    const urlTier = searchParams.get('tier')
+
     // Category Selection
-    const [selectedCategory, setSelectedCategory] = useState<string>(specializations[0] || '')
+    const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory || specializations[0] || '')
     const [selectedService, setSelectedService] = useState<any>(null)
-    const [selectedPackage, setSelectedPackage] = useState<string | null>(null)
+    const [selectedPackage, setSelectedPackage] = useState<string | null>(urlTier || null)
 
     useEffect(() => {
         const service = services.find(s => s.category_slug === selectedCategory)
         setSelectedService(service || null)
-        setSelectedPackage(null) // Reset package on category change
-    }, [selectedCategory, services])
+
+        // Only reset package if the category actually changed and it's not the initial URL load
+        if (selectedCategory !== urlCategory) {
+            setSelectedPackage(null)
+        }
+    }, [selectedCategory, services, urlCategory])
 
 
     return (
@@ -251,8 +264,24 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                 </div>
             )}
 
+            {/* Validation warning if packages mode but nothing selected */}
+            {selectedService?.pricing_mode === 'packages' && !selectedPackage && (
+                <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-pulse">
+                    <Zap className="w-5 h-5 text-amber-500 shrink-0" />
+                    <span className="text-xs font-black uppercase tracking-tight">Please select a package tier above to continue.</span>
+                </div>
+            )}
+
             <div className="pt-2">
-                <SubmitButton isPending={isPending} />
+                <SubmitButton
+                    isPending={isPending}
+                    price={selectedService?.pricing_mode === 'fixed'
+                        ? selectedService.base_price
+                        : selectedPackage
+                            ? selectedService?.service_packages?.[selectedPackage]?.price
+                            : 0
+                    }
+                />
             </div>
         </motion.form>
     )

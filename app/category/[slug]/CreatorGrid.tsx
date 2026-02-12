@@ -20,7 +20,7 @@ export default async function CreatorGrid({
     const [creatorsResponse, favoritesResponse] = await Promise.all([
         supabase
             .from('profiles')
-            .select('id, display_name, full_name, avatar_url, tagline, level, languages')
+            .select('id, display_name, full_name, avatar_url, tagline, level, languages, rating_avg, total_reviews')
             .not('display_name', 'is', null)
             .contains('specializations', categorySlug ? [categorySlug] : []),
         user ? supabase
@@ -49,54 +49,50 @@ export default async function CreatorGrid({
                 return (
                     <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#F0F9FF] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
 
-                        {/* Overlay Link - Makes whole card clickable */}
-                        {user && (
-                            <Link href={profileUrl} className="absolute inset-0 z-10 rounded-2xl" aria-label={`View ${creator.display_name}'s profile`} />
-                        )}
-
-                        {/* Header: Identity */}
-                        <div className="flex items-start gap-3 mb-3 relative">
-                            <div className="flex-shrink-0">
-                                <div className="w-12 h-12 rounded-full bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform relative">
+                        {/* Header: Identity - Now clearly interactive */}
+                        <div className="flex items-start gap-4 mb-4 relative z-20">
+                            <Link href={profileUrl} className="flex-shrink-0 group/avatar">
+                                <div className="w-14 h-14 rounded-2xl bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover/avatar:scale-105 group-hover/avatar:shadow-md transition-all relative">
                                     {creator.avatar_url ? (
                                         <Image
                                             src={creator.avatar_url}
                                             alt={creator.display_name || ''}
                                             fill
                                             className="object-cover"
-                                            sizes="48px"
+                                            sizes="56px"
                                         />
                                     ) : (
-                                        <User className="w-5 h-5 text-gray-400" />
+                                        <User className="w-6 h-6 text-sky-200" />
                                     )}
                                 </div>
-                            </div>
+                            </Link>
 
-                            <div className="flex-1 min-w-0 pt-0.5">
+                            <div className="flex-1 min-w-0 pt-1">
                                 <div className="flex items-center justify-between">
-                                    <div className="group-hover:text-[#0EA5E9] transition-colors">
-                                        <h3 className="font-serif font-bold text-base text-[#1E293B] truncate pr-2">
+                                    <Link href={profileUrl} className="group/name block truncate">
+                                        <h3 className="font-serif font-black text-lg text-[#1E293B] truncate pr-2 group-hover/name:text-[#0EA5E9] transition-colors">
                                             {creator.display_name || creator.full_name || 'Creator'}
                                         </h3>
-                                    </div>
+                                    </Link>
                                     {user && (
-                                        <div className="flex-shrink-0 relative z-20"> {/* Button above overlay */}
+                                        <div className="flex-shrink-0">
                                             <FavoriteButton creatorId={creator.id} initialIsFavorite={isFavorite} />
                                         </div>
                                     )}
                                 </div>
-                                <p className="text-xs text-gray-400 line-clamp-1">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                                     {creator.tagline || 'Student Creator'}
                                 </p>
                             </div>
                         </div>
 
-                        {/* Spacer */}
-                        <div className="flex-1"></div>
-
                         {/* Metadata Row */}
-                        <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-400 font-medium mb-4 pt-3 border-t border-[#F9F7F2] relative">
-                            <span className="bg-[#F0F9FF] text-[#555] px-2 py-0.5 rounded-md whitespace-nowrap">
+                        <div className="flex flex-wrap items-center gap-2 mb-6 pt-4 border-t border-slate-50 relative z-20">
+                            <div className="flex items-center gap-1.5 bg-amber-50 text-amber-600 text-[9px] font-black uppercase px-2 py-1 rounded-lg border border-amber-100">
+                                <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                                <span>{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'} ({creator.total_reviews || 0})</span>
+                            </div>
+                            <span className="bg-slate-50 text-slate-500 text-[9px] font-black uppercase px-2 py-1 rounded-lg border border-slate-100">
                                 Level {creator.level || 1}
                             </span>
                             {creator.languages && creator.languages.length > 0 && (
@@ -104,7 +100,7 @@ export default async function CreatorGrid({
                                     {creator.languages.map((lang: string) => {
                                         const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ع' : lang.substring(0, 2).toUpperCase()
                                         return (
-                                            <span key={lang} className="text-[9px] font-black uppercase px-1.5 py-0.5 bg-[#0EA5E9]/5 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/10">
+                                            <span key={lang} className="text-[9px] font-black uppercase px-2 py-1 bg-sky-50 text-[#0EA5E9] rounded-lg border border-sky-100">
                                                 {displayAbbr}
                                             </span>
                                         )
@@ -114,21 +110,31 @@ export default async function CreatorGrid({
                         </div>
 
                         {/* Actions */}
-                        {!user ? (
-                            <Link
-                                href="/join"
-                                className="block w-full bg-[#1E293B] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-sm relative z-20"
-                            >
-                                Contact
-                            </Link>
-                        ) : (
-                            <Link
-                                href={`/student/hire/${creator.id}`}
-                                className="block w-full bg-[#1E293B] text-white text-center font-bold text-sm py-3 rounded-lg hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-sm group-hover:shadow-md relative z-20"
-                            >
-                                Hire
-                            </Link>
-                        )}
+                        <div className="mt-auto space-y-2 relative z-20">
+                            {!user ? (
+                                <Link
+                                    href="/join"
+                                    className="block w-full bg-[#1E293B] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-xl shadow-slate-100"
+                                >
+                                    Join to Contact
+                                </Link>
+                            ) : (
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link
+                                        href={profileUrl}
+                                        className="bg-white text-[#1E293B] border border-slate-100 text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-slate-50 hover:border-[#0EA5E9]/30 active:scale-95 transition-all flex items-center justify-center shadow-sm"
+                                    >
+                                        View Portfolio
+                                    </Link>
+                                    <Link
+                                        href={`/student/hire/${creator.id}`}
+                                        className="bg-[#0EA5E9] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:shadow-sky-200 active:scale-95 transition-all shadow-xl shadow-sky-100 flex items-center justify-center"
+                                    >
+                                        Hire Now
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )
             })}

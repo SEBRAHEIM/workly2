@@ -24,14 +24,29 @@ export default async function CreatorWallet() {
         .order('created_at', { ascending: false })
         .limit(5)
 
-    // Fetch pending transactions for "Pending Clearance"
-    const { data: pendingTxs } = await supabase
-        .from('transactions')
-        .select('creator_net_amount')
-        .eq('creator_id', user?.id)
-        .eq('status', 'pending')
+    // Fetch pending transactions and escrowed projects for "Pending Clearance"
+    const [txResponse, projectsResponse] = await Promise.all([
+        supabase
+            .from('transactions')
+            .select('creator_net_amount')
+            .eq('creator_id', user?.id)
+            .eq('status', 'pending'),
+        supabase
+            .from('projects')
+            .select('current_price, net_earnings')
+            .eq('creator_id', user?.id)
+            .in('funds_status', ['escrow', 'pending', 'unpaid', 'requested'])
+            .in('status', ['accepted', 'in_progress', 'submitted', 'revision_requested', 'completed'])
+    ])
 
-    const pendingClearance = pendingTxs?.reduce((acc, tx) => acc + Number(tx.creator_net_amount), 0) || 0
+    const pendingTxAmount = txResponse.data?.reduce((acc, tx) => acc + Number(tx.creator_net_amount), 0) || 0
+    // If net_earnings column isn't populated yet, fallback to 80% of current_price
+    const pendingProjectAmount = projectsResponse.data?.reduce((acc, p) => {
+        const net = p.net_earnings ? Number(p.net_earnings) : (Number(p.current_price) * 0.8)
+        return acc + net
+    }, 0) || 0
+
+    const pendingClearance = pendingTxAmount + pendingProjectAmount
 
     return (
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">

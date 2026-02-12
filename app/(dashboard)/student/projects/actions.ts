@@ -289,3 +289,41 @@ export async function reportProject(projectId: string, reason: string) {
     revalidatePath(`/student/projects/${projectId}`)
     return { success: true }
 }
+
+export async function submitReview(projectId: string, rating: number, comment: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) throw new Error('Unauthorized')
+
+    // 1. Fetch Project to Verify Eligibility
+    const { data: project } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', projectId)
+        .single()
+
+    if (!project) throw new Error('Project not found')
+    if (project.student_id !== user.id) throw new Error('Unauthorized')
+    if (project.status !== 'completed') throw new Error('Project must be completed to leave a review')
+
+    // 2. Insert Review (Trigger will update profile stats)
+    const { error } = await supabase
+        .from('reviews')
+        .insert({
+            project_id: projectId,
+            student_id: user.id,
+            creator_id: project.creator_id,
+            rating: rating,
+            comment: comment.trim() || null
+        })
+
+    if (error) {
+        if (error.code === '23505') return { error: 'You have already reviewed this project.' }
+        return { error: 'Failed to submit review' }
+    }
+
+    revalidatePath(`/student/projects/${projectId}`)
+    revalidatePath(`/student/creator/${project.creator_id}`)
+    return { success: true }
+}

@@ -30,7 +30,7 @@ export default async function CreatorRequests(props: {
             )
         `)
         .eq('creator_id', user.id)
-        .order('updated_at', { ascending: false })
+        .order('created_at', { ascending: false })
 
     if (!requests) {
         console.error('[CREATOR_REQUESTS] Failed to fetch requests or requests is null');

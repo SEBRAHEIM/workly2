@@ -90,9 +90,9 @@ export async function forceReleaseFunds(projectId: string) {
     if (!existingTx && project) {
         // Record the transaction for the new ledger system
         const gross = project.current_price || 0
-        const worklyFee = Math.round(gross * 0.17 * 100) / 100
-        const stripeFee = Math.round((gross * 0.029 + 1) * 100) / 100
-        const creatorNet = Math.round((gross - worklyFee - stripeFee) * 100) / 100
+        const worklyFee = Math.round(gross * 0.20 * 100) / 100
+        const stripeFee = 0 // Internal bookkeeping - Stripe already took its fee on intake
+        const creatorNet = Math.round((gross - worklyFee) * 100) / 100
 
         await supabaseAdminClient.from('transactions').insert({
             project_id: projectId,
@@ -105,6 +105,13 @@ export async function forceReleaseFunds(projectId: string) {
             amount: gross,
             status: 'pending' // Still pending payout by admin
         })
+
+        // Also update project net_earnings for dashboard visibility
+        await supabaseAdminClient.from('projects').update({
+            commission_rate: 0.20,
+            commission_amount: worklyFee,
+            net_earnings: creatorNet
+        }).eq('id', projectId)
     }
 
     revalidatePath('/hq')
@@ -145,9 +152,9 @@ export async function syncProjectPayment(projectId: string) {
 
     if (!existingTx) {
         const gross = project.current_price || 0
-        const worklyFee = Math.round(gross * 0.17 * 100) / 100
-        const stripeFee = Math.round((gross * 0.029 + 1) * 100) / 100
-        const creatorNet = Math.round((gross - worklyFee - stripeFee) * 100) / 100
+        const worklyFee = Math.round(gross * 0.20 * 100) / 100
+        const stripeFee = 0 // Internal bookkeeping - we handle payouts as separate bank/paypal transfers
+        const creatorNet = Math.round((gross - worklyFee) * 100) / 100
 
         await supabaseAdminClient.from('transactions').insert({
             project_id: projectId,
@@ -162,6 +169,13 @@ export async function syncProjectPayment(projectId: string) {
             type: 'payment',
             metadata: { notes: 'MANUAL SYNC BY ADMIN' }
         })
+
+        // IMPORTANT: Store net earnings on project for simple dashboard fetching
+        await supabaseAdminClient.from('projects').update({
+            commission_rate: 0.20,
+            commission_amount: worklyFee,
+            net_earnings: creatorNet
+        }).eq('id', projectId)
     }
 
     revalidatePath('/hq')

@@ -19,7 +19,7 @@ export default async function CreatorDashboard() {
         supabase.from('projects')
             .select('*')
             .eq('creator_id', user.id)
-            .order('updated_at', { ascending: false })
+            .order('created_at', { ascending: false })
             .limit(50)
     ])
 

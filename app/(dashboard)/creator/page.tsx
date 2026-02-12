@@ -13,17 +13,23 @@ export default async function CreatorDashboard() {
     if (!user) return <div>Please log in</div>
 
     // 2. Parallel fetch for all dashboard requirements
-    const [profileRes, portfolioRes, recentRes, activeRes] = await Promise.all([
+    const [profileRes, portfolioRes, projectsRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('portfolio_items').select('id', { count: 'exact', head: true }).eq('creator_id', user.id),
-        supabase.from('projects').select('*').eq('creator_id', user.id).in('status', ['requested', 'negotiating', 'agreed']).order('created_at', { ascending: false }).limit(5),
-        supabase.from('projects').select('*').eq('creator_id', user.id).in('status', ['in_progress', 'revision_requested', 'submitted']).order('updated_at', { ascending: false }).limit(10)
+        supabase.from('projects')
+            .select('*')
+            .eq('creator_id', user.id)
+            .order('updated_at', { ascending: false })
+            .limit(50)
     ])
 
     const profile = profileRes.data
     const portfolioCount = portfolioRes.count || 0
-    const recentRequests = recentRes.data || []
-    const activeWork = activeRes.data || []
+    const allProjects = projectsRes.data || []
+
+    // Split projects into logical sections
+    const activeWork = allProjects.filter(p => ['in_progress', 'revision_requested', 'submitted', 'completed'].includes(p.status))
+    const recentRequests = allProjects.filter(p => ['requested', 'negotiating', 'agreed', 'accepted'].includes(p.status))
 
     // Check Completion
     const hasBio = profile?.bio && profile.bio.length > 10
@@ -120,21 +126,27 @@ export default async function CreatorDashboard() {
                     <div className="mt-12">
                         <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
                             <div className="w-12 h-[1px] bg-[#0EA5E9]/20" />
-                            Active Projects
+                            Active & Delivered
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {activeWork.map(project => (
                                 <Link
                                     href={`/creator/projects/${project.id}`}
                                     key={project.id}
-                                    className="block bg-[#1E293B] hover:bg-[#0EA5E9]/10 rounded-[2rem] p-6 border border-slate-700 transition-all duration-300 group relative overflow-hidden"
+                                    className={`block bg-[#1E293B] hover:bg-[#0EA5E9]/10 rounded-[2rem] p-6 border transition-all duration-300 group relative overflow-hidden ${!project.is_read ? 'border-sky-500/50 shadow-[0_0_20px_rgba(14,165,233,0.15)] ring-1 ring-sky-500/20' : 'border-slate-700'}`}
                                 >
                                     <div className="relative z-10">
-                                        <div className={`text-[8px] font-black uppercase tracking-[0.2em] mb-4 inline-block px-3 py-1 rounded-full border ${project.status === 'revision_requested' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
-                                            project.status === 'submitted' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-                                                'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                                            }`}>
-                                            {project.status.replace('_', ' ')}
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div className={`text-[8px] font-black uppercase tracking-[0.2em] inline-block px-3 py-1 rounded-full border ${project.status === 'revision_requested' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                                project.status === 'submitted' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                                    project.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                                                        'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                                }`}>
+                                                {project.status.replace('_', ' ')}
+                                            </div>
+                                            {!project.is_read && (
+                                                <span className="text-[8px] font-black bg-[#0EA5E9] text-white px-2 py-0.5 rounded-md animate-pulse">NEW</span>
+                                            )}
                                         </div>
                                         <h3 className="text-xl font-black text-white mb-2 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight line-clamp-1" dir="auto">{project.title}</h3>
                                         <div className="flex items-center justify-between mt-6">
@@ -166,12 +178,14 @@ export default async function CreatorDashboard() {
                                 <Link
                                     href={`/creator/projects/${project.id}`}
                                     key={project.id}
-                                    className="block bg-white hover:bg-sky-50/30 rounded-[2rem] p-6 border border-sky-50 shadow-sm transition-all duration-300 group relative overflow-hidden"
+                                    className={`block bg-white hover:bg-sky-50/30 rounded-[2rem] p-6 border transition-all duration-300 group relative overflow-hidden ${!project.is_read ? 'border-sky-300 shadow-[0_0_20px_rgba(14,165,233,0.1)]' : 'border-sky-50'}`}
                                 >
                                     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 relative z-10">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-3 mb-2">
-                                                <span className="text-[10px] font-black text-[#0EA5E9] uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full">New Order</span>
+                                                <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${!project.is_read ? 'bg-[#0EA5E9] text-white' : 'bg-sky-50 text-[#0EA5E9]'}`}>
+                                                    {!project.is_read ? 'New Order' : 'Order'}
+                                                </span>
                                                 <h3 className="text-xl font-black text-slate-800 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight" dir="auto">{project.title}</h3>
                                             </div>
                                             <p className="text-slate-500 font-medium line-clamp-1 max-w-2xl text-sm" dir="auto">{project.description}</p>

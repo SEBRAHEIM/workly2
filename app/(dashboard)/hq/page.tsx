@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { redirect } from 'next/navigation'
 import AdminDashboardClient from './components/AdminDashboardClient'
 
@@ -17,31 +18,45 @@ export default async function AdminDashboard() {
         redirect('/hq/login')
     }
 
-    // 3. Comprehensive Data Fetching
-    const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse] = await Promise.all([
-        supabase
+    // 3. Comprehensive Data Fetching (Using Admin Client for God Mode)
+    const supabaseAdminClient = createAdminClient()
+    const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse, transactionsResponse, batchesResponse] = await Promise.all([
+        supabaseAdminClient
             .from('projects')
-            .select('*, student:student_id(email, full_name, display_name), creator:creator_id(email, full_name, display_name, wallet_balance)')
+            .select('*, student:student_id(full_name, display_name), creator:creator_id(full_name, display_name, wallet_balance)')
             .order('created_at', { ascending: false }),
-        supabase
+        supabaseAdminClient
             .from('profiles')
             .select('*')
             .order('created_at', { ascending: false }),
-        supabase
+        supabaseAdminClient
             .from('withdrawals')
-            .select('*, profiles(id, full_name, display_name, email)')
+            .select('*, profiles(id, full_name, display_name)')
             .order('created_at', { ascending: false }),
-        supabase
+        supabaseAdminClient
             .from('project_events')
             .select('*, actor:actor_id(display_name, full_name), projects(title)')
             .order('created_at', { ascending: false })
-            .limit(20)
+            .limit(20),
+        supabaseAdminClient
+            .from('transactions')
+            .select('*, project:project_id(title), creator:creator_id(display_name, full_name)')
+            .order('created_at', { ascending: false }),
+        supabaseAdminClient
+            .from('payout_batches')
+            .select('*')
+            .order('created_at', { ascending: false })
     ])
+
+    if (projectsResponse.error) console.error('[HQ] Projects Error:', projectsResponse.error.message)
+    if (profilesResponse.error) console.error('[HQ] Profiles Error:', profilesResponse.error.message)
 
     const projects = projectsResponse.data || []
     const profiles = profilesResponse.data || []
     const withdrawals = withdrawalsResponse.data || []
     const events = eventsResponse.data || []
+    const transactions = transactionsResponse.data || []
+    const payoutBatches = batchesResponse.data || []
 
     // 4. Calculate Comprehensive Stats
     const stats = {
@@ -57,6 +72,8 @@ export default async function AdminDashboard() {
         profiles,
         withdrawals,
         events,
+        transactions,
+        payoutBatches,
         stats
     }
 

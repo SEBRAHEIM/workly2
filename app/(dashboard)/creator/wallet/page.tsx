@@ -24,6 +24,15 @@ export default async function CreatorWallet() {
         .order('created_at', { ascending: false })
         .limit(5)
 
+    // Fetch pending transactions for "Pending Clearance"
+    const { data: pendingTxs } = await supabase
+        .from('transactions')
+        .select('creator_net_amount')
+        .eq('creator_id', user?.id)
+        .eq('status', 'pending')
+
+    const pendingClearance = pendingTxs?.reduce((acc, tx) => acc + Number(tx.creator_net_amount), 0) || 0
+
     return (
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -63,7 +72,7 @@ export default async function CreatorWallet() {
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pending Clearance</p>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-sm font-bold text-[#0EA5E9]">AED</span>
-                                <h3 className="text-3xl font-black text-slate-800">0.00</h3>
+                                <h3 className="text-3xl font-black text-slate-800">{pendingClearance.toFixed(2)}</h3>
                             </div>
                             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <Clock className="w-8 h-8" />
@@ -109,7 +118,11 @@ export default async function CreatorWallet() {
                                         </div>
                                         <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${w.status === 'pending' ? 'bg-amber-50/50 border-amber-100 text-amber-600' :
                                             w.status === 'completed' ? 'bg-sky-50/50 border-sky-100 text-sky-600' : 'bg-red-50/50 border-red-100 text-red-600'
-                                            }`}>{w.status}</span>
+                                            }`}>
+                                            {w.status === 'pending' ? 'pending (3-7 days)' :
+                                                w.status === 'completed' ? 'money on the way' :
+                                                    w.status}
+                                        </span>
                                     </div>
                                 </div>
                             ))}

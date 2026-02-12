@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createNotification } from '@/utils/notifications'
@@ -8,13 +9,14 @@ import { getStripe } from '@/utils/stripe'
 
 async function checkAdmin() {
     const supabase = await createClient()
+    const supabaseAdminClient = createAdminClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user || user.email !== 'workly.day@outlook.com') {
         throw new Error('Unauthorized')
     }
 
-    const { data: profile } = await supabase
+    const { data: profile } = await supabaseAdminClient
         .from('profiles')
         .select('role')
         .eq('id', user.id)
@@ -66,14 +68,102 @@ export async function cancelProject(projectId: string) {
 
 export async function forceReleaseFunds(projectId: string) {
     await checkAdmin()
-    const supabase = await createClient()
+    const supabaseAdminClient = createAdminClient()
 
-    const { error } = await supabase
+    // 1. Update Project Status
+    const { data: project, error: updateError } = await supabaseAdminClient
         .from('projects')
         .update({ funds_status: 'released', status: 'completed' })
         .eq('id', projectId)
+        .select('*')
+        .single()
 
-    if (error) throw error
+    if (updateError) throw updateError
+
+    // 2. Ensure a transaction record exists for the ledger
+    const { data: existingTx } = await supabaseAdminClient
+        .from('transactions')
+        .select('id')
+        .eq('project_id', projectId)
+        .single()
+
+    if (!existingTx && project) {
+        // Record the transaction for the new ledger system
+        const gross = project.current_price || 0
+        const worklyFee = Math.round(gross * 0.17 * 100) / 100
+        const stripeFee = Math.round((gross * 0.029 + 1) * 100) / 100
+        const creatorNet = Math.round((gross - worklyFee - stripeFee) * 100) / 100
+
+        await supabaseAdminClient.from('transactions').insert({
+            project_id: projectId,
+            student_id: project.student_id,
+            creator_id: project.creator_id,
+            gross_amount: gross,
+            workly_fee_amount: worklyFee,
+            stripe_fee_amount: stripeFee,
+            creator_net_amount: creatorNet,
+            amount: gross,
+            status: 'pending' // Still pending payout by admin
+        })
+    }
+
+    revalidatePath('/hq')
+}
+
+export async function syncProjectPayment(projectId: string) {
+    await checkAdmin()
+    const supabaseAdminClient = createAdminClient()
+
+    // 1. Fetch Project
+    const { data: project, error: fetchError } = await supabaseAdminClient
+        .from('projects')
+        .select('*')
+        .eq('id', projectId)
+        .single()
+
+    if (fetchError || !project) throw new Error('Project not found')
+
+    // 2. Update Status to Escrow
+    const { error: updateError } = await supabaseAdminClient
+        .from('projects')
+        .update({
+            funds_status: 'escrow',
+            status: 'in_progress',
+            updated_at: new Date().toISOString()
+        })
+        .eq('id', projectId)
+
+    if (updateError) throw updateError
+
+    // 3. Create a transaction record if it doesn't exist
+    const { data: existingTx } = await supabaseAdminClient
+        .from('transactions')
+        .select('id')
+        .eq('project_id', projectId)
+        .eq('type', 'payment')
+        .maybeSingle()
+
+    if (!existingTx) {
+        const gross = project.current_price || 0
+        const worklyFee = Math.round(gross * 0.17 * 100) / 100
+        const stripeFee = Math.round((gross * 0.029 + 1) * 100) / 100
+        const creatorNet = Math.round((gross - worklyFee - stripeFee) * 100) / 100
+
+        await supabaseAdminClient.from('transactions').insert({
+            project_id: projectId,
+            student_id: project.student_id,
+            creator_id: project.creator_id,
+            gross_amount: gross,
+            workly_fee_amount: worklyFee,
+            stripe_fee_amount: stripeFee,
+            creator_net_amount: creatorNet,
+            amount: gross,
+            status: 'pending',
+            type: 'payment',
+            metadata: { notes: 'MANUAL SYNC BY ADMIN' }
+        })
+    }
+
     revalidatePath('/hq')
 }
 
@@ -103,7 +193,7 @@ export async function completeWithdrawal(withdrawalId: string) {
     await createNotification({
         userId: withdrawal.creator_id,
         type: 'success',
-        message: `Withdrawal Approved: Your AED ${withdrawal.amount} payout has been processed.`,
+        message: `Payout Processed: Your AED ${withdrawal.amount} is on the way.`,
         link: '/creator/wallet'
     })
 

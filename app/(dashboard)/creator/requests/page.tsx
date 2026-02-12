@@ -18,8 +18,8 @@ export default async function CreatorRequests(props: {
         return redirect('/login?next=/creator/requests')
     }
 
-    // Fetch all projects for this creator
-    const { data: requests } = await supabase
+    // Fetch all projects for this creator (Only paid ones as requested)
+    let { data: requests } = await supabase
         .from('projects')
         .select(`
             *,
@@ -30,7 +30,7 @@ export default async function CreatorRequests(props: {
             )
         `)
         .eq('creator_id', user.id)
-        .order('created_at', { ascending: false })
+        .order('updated_at', { ascending: false })
 
     if (!requests) {
         console.error('[CREATOR_REQUESTS] Failed to fetch requests or requests is null');
@@ -51,12 +51,8 @@ export default async function CreatorRequests(props: {
     }
 
     // Categorization
-    const activeRequests = requests.filter(p =>
-        ['requested', 'negotiating', 'pending', 'countered'].includes(p.status)
-    )
-
-    const ongoingRequests = requests.filter(p =>
-        ['accepted', 'agreed', 'in_progress', 'submitted', 'revision_requested'].includes(p.status)
+    const activeWork = requests.filter(p =>
+        ['requested', 'negotiating', 'pending', 'countered', 'accepted', 'agreed', 'in_progress', 'submitted', 'revision_requested'].includes(p.status)
     )
 
     const closedRequests = requests.filter(p =>
@@ -69,8 +65,7 @@ export default async function CreatorRequests(props: {
     )
 
 
-    let currentList = activeRequests
-    if (tab === 'ongoing') currentList = ongoingRequests
+    let currentList = activeWork
     if (tab === 'completed') currentList = requests.filter(p => p.status === 'completed')
     if (tab === 'closed') currentList = closedRequests
     if (tab === 'archived') currentList = archivedRequests
@@ -84,12 +79,8 @@ export default async function CreatorRequests(props: {
             {/* TABS */}
             <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
                 <Link href="/creator/requests"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    New Orders ({activeRequests.length})
-                </Link>
-                <Link href="/creator/requests?tab=ongoing"
-                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'ongoing' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
-                    Active Work ({ongoingRequests.length})
+                    className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'active' || tab === 'ongoing' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                    Active Work ({activeWork.length})
                 </Link>
                 <Link href="/creator/requests?tab=completed"
                     className={`px-4 py-2 rounded-full font-bold text-sm transition-colors whitespace-nowrap ${tab === 'completed' ? 'bg-[#0EA5E9] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>

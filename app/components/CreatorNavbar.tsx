@@ -160,7 +160,7 @@ export default function CreatorNavbar() {
                                         <span className="font-bold text-sm">Dashboard</span>
                                     </Link>
                                     <Link
-                                        href="/creator/projects"
+                                        href="/creator/requests"
                                         onClick={() => setIsMenuOpen(false)}
                                         className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
                                     >

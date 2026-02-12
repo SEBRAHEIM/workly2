@@ -138,34 +138,15 @@ export async function createProject(prevState: any, formData: FormData) {
     // 7. Non-Blocking Post-creation Tasks
     after(async () => {
         try {
-            const baseUrl = 'https://workly.day'
             // Notifications & Events
             await Promise.all([
-                createNotification({
-                    userId: creatorId,
-                    type: 'info',
-                    message: `New Order (Due: ${dueDate.toLocaleDateString()}): ${title}`,
-                    link: `/creator/requests`
-                }),
                 supabase.from('project_events').insert({
                     project_id: data.id,
-                    type: 'accepted', // Event is acceptance
+                    type: 'accepted',
                     actor_id: user.id,
-                    payload: { price: initialPrice, notes: `Project created at fixed price. Due: ${dueDate.toISOString()}` }
+                    payload: { price: initialPrice, notes: `Project created and awaiting initial payment. Due: ${dueDate.toISOString()}` }
                 })
             ])
-
-            // WhatsApp Notification
-            if (creatorProfile?.whatsapp_phone) {
-                await notifyCreatorOfNewHire({
-                    to: creatorProfile.whatsapp_phone,
-                    studentName: (user as any).user_metadata?.full_name || 'A Student',
-                    projectTitle: title,
-                    tier: packageTier || 'Fixed',
-                    price: initialPrice,
-                    link: `${baseUrl}/creator/requests`
-                }).catch(e => console.error('[SMS] Background alert failed:', e))
-            }
         } catch (postError) {
             console.error('Error in background tasks:', postError)
         }

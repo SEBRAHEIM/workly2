@@ -18,6 +18,8 @@ interface AdminDashboardClientProps {
         profiles: any[]
         withdrawals: any[]
         events: any[]
+        transactions: any[]
+        payoutBatches: any[]
         stats: {
             totalUsers: number
             totalRevenue: number
@@ -57,7 +59,7 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                         />
                     )}
                     {activeTab === 'projects' && (
-                        <ProjectsModule projects={initialData.projects} />
+                        <ProjectsModule projects={initialData.projects} events={initialData.events} />
                     )}
                     {activeTab === 'payouts' && (
                         <PayoutsModule withdrawals={initialData.withdrawals} />
@@ -67,6 +69,8 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                             projects={initialData.projects}
                             stats={initialData.stats}
                             withdrawals={initialData.withdrawals}
+                            transactions={initialData.transactions}
+                            payoutBatches={initialData.payoutBatches}
                         />
                     )}
                     {activeTab === 'moderation' && (

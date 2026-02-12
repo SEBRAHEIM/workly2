@@ -22,12 +22,12 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
     })
 
     const handleComplete = async (id: string, amount: number) => {
-        if (!confirm(`Confirm payout of AED ${amount}? For Stripe, this will trigger an immediate transfer from the platform account.`)) return
+        if (!confirm(`Confirm you have sent AED ${amount} to the creator? This will notify them that the money is on the way.`)) return
 
         setIsProcessing(id)
         try {
             await completeWithdrawal(id)
-            toast.success('Payout marked as complete')
+            toast.success('Payout marked as complete. Creator will see "Money on the way".')
         } catch (error: any) {
             toast.error(error.message || 'Failed to complete payout')
         } finally {
@@ -204,7 +204,7 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
                                                 onClick={() => handleComplete(w.id, w.amount)}
                                                 className="px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all"
                                             >
-                                                {isProcessing === w.id ? '...' : <><CheckCircle className="w-4 h-4" /> Send AED {w.amount}</>}
+                                                {isProcessing === w.id ? '...' : <><CheckCircle className="w-4 h-4" /> Mark as Sent</>}
                                             </button>
                                         </div>
                                     ) : (

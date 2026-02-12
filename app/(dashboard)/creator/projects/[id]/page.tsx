@@ -40,15 +40,19 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
         notFound()
     }
 
-    // Auto-transition 'requested' -> 'negotiating' to remove from dashboard "Recent Requests"
-    if (project.status === 'requested') {
+    // Auto-transition 'requested' -> 'negotiating' and mark as read
+    if (project.status === 'requested' || !project.is_read) {
+        const updateData: any = { is_read: true }
+        if (project.status === 'requested') updateData.status = 'negotiating'
+
         const { error: updateError } = await supabase
             .from('projects')
-            .update({ status: 'negotiating' })
+            .update(updateData)
             .eq('id', id)
 
         if (!updateError) {
-            project.status = 'negotiating'
+            if (updateData.status) project.status = updateData.status
+            project.is_read = true
         }
     }
 

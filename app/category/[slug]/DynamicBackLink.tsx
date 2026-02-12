@@ -1,38 +1,18 @@
-import Link from 'next/link'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { createClient } from '@/utils/supabase/server'
 
-export default async function DynamicBackLink() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    let backLink = '/'
-    let backText = 'Back to Home'
-
-    if (user) {
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-
-        if (profile?.role === 'creator') {
-            backLink = '/creator'
-            backText = 'Back to Dashboard'
-        } else {
-            backLink = '/student'
-            backText = 'Back to Dashboard'
-        }
-    }
+export default function DynamicBackLink() {
+    const router = useRouter()
 
     return (
-        <Link
-            href={backLink}
-            prefetch={true}
-            className="inline-flex items-center text-white/60 hover:text-white mb-6 transition-colors touch-manipulation"
+        <button
+            onClick={() => router.back()}
+            className="inline-flex items-center px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-white/70 hover:text-white hover:bg-white/10 transition-all touch-manipulation group"
         >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {backText}
-        </Link>
+            <ArrowLeft className="w-3.5 h-3.5 mr-2 group-hover:-translate-x-1 transition-transform" />
+            Back
+        </button>
     )
 }

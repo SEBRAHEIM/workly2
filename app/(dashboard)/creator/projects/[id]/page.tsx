@@ -53,8 +53,11 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
     }
 
     // Calculate time remaining
-    const dueDate = project.due_date ? new Date(project.due_date) : null
+    const isRevision = project.status === 'revision_requested'
+    const deadlineStr = isRevision ? project.revision_due_date : project.due_date
+    const dueDate = deadlineStr ? new Date(deadlineStr) : null
     const daysLeft = dueDate ? Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0
+    const isOverdue = daysLeft < 0
 
     return (
         <div className="max-w-5xl mx-auto p-4 md:p-8 pt-24 md:pt-8">
@@ -147,11 +150,25 @@ export default async function CreatorProjectPage({ params }: { params: Promise<{
                     </div>
 
                     {/* Delivery Panel */}
-                    {project.status === 'in_progress' && project.funds_status === 'escrow' && (
+                    {(project.status === 'in_progress' || project.status === 'revision_requested') && project.funds_status === 'escrow' && (
                         <div className="bg-white rounded-[2rem] p-6 border-2 border-blue-500/10 shadow-lg shadow-blue-500/5">
-                            <div className="flex items-center mb-4 text-blue-600">
+                            {project.status === 'revision_requested' && (
+                                <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl mb-4 flex items-start">
+                                    <AlertCircle className="w-5 h-5 text-orange-500 mr-3 shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-sm font-bold text-orange-800 mb-1">Revision Requested</p>
+                                        <p className="text-xs text-orange-600 mb-2 leading-relaxed italic" dir="auto">"{project.revision_notes}"</p>
+                                        <p className="text-[10px] uppercase font-black text-orange-400">Revisions Used: {project.revisions_used} of {project.revisions_total || '∞'}</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className={`flex items-center mb-4 ${isOverdue ? 'text-red-600' : 'text-blue-600'}`}>
                                 <Clock className="w-5 h-5 mr-2" />
-                                <span className="font-bold">Time Remaining: {daysLeft} Days</span>
+                                <span className="font-bold">
+                                    {isRevision ? 'Revision Deadline: ' : 'Time Remaining: '}
+                                    {isOverdue ? `Overdue by ${Math.abs(daysLeft)} Days` : `${daysLeft} Days`}
+                                </span>
                             </div>
 
                             <h3 className="font-bold text-[#1E293B] text-lg mb-2">Submit Your Work</h3>

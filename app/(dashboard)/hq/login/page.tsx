@@ -2,7 +2,8 @@
 
 import { hqLogin } from '../actions'
 import { useFormState } from 'react-dom'
-import { Shield, Lock, ArrowLeft, Loader2 } from 'lucide-react'
+import { Shield, Lock, ArrowLeft, Loader2, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
 
 export default function HQLogin() {
     const [state, formAction] = useFormState(hqLogin, initialState)
+    const [showPassword, setShowPassword] = useState(false)
 
     return (
         <main className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 selection:bg-red-500 selection:text-white">
@@ -63,11 +65,18 @@ export default function HQLogin() {
                                 <input
                                     id="password"
                                     name="password"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
                                     required
-                                    className="w-full bg-black/50 rounded-2xl border border-white/5 px-5 py-4 text-white text-sm focus:outline-none focus:border-red-500/50 transition-all placeholder:text-gray-700"
+                                    className="w-full bg-black/50 rounded-2xl border border-white/5 px-5 py-4 pr-14 text-white text-sm focus:outline-none focus:border-red-500/50 transition-all placeholder:text-gray-700"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
                             </div>
                         </div>
 

@@ -15,42 +15,34 @@ interface DashboardCardProps {
 function DashboardCard({ val, label, sublabel, href, icon: Icon }: DashboardCardProps) {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="group relative bg-white border border-sky-50 overflow-hidden"
+            className="group relative bg-white border border-slate-200 hover:border-[#0EA5E9] hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden"
         >
-            <Link href={href} className="block p-8 md:p-12 h-full relative z-10 transition-all duration-700">
-                <div className="flex justify-between items-start mb-10">
-                    <div className="w-14 h-14 bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-all shadow-sm rounded-2xl">
-                        <Icon size={28} />
+            <Link href={href} className="block p-6 h-full relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                    <div className="w-10 h-10 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-[#0EA5E9]/10 group-hover:text-[#0EA5E9] transition-all duration-300 rounded-xl">
+                        <Icon size={20} />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 group-hover:text-[#0EA5E9] transition-colors">
-                        Protocol // 0{label.length % 5 + 1}
-                    </span>
                 </div>
 
-                <div className="mb-12">
-                    <h3 className="text-5xl md:text-6xl font-black font-serif text-slate-900 leading-none mb-3 tracking-tighter uppercase">
+                <div className="mb-6">
+                    <h3 className="text-xl font-bold text-slate-900 mb-1 leading-tight">
                         {val}
                     </h3>
-                    <p className="text-sm font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
+                    <p className="text-sm font-semibold text-[#0EA5E9] mb-2">
                         {label}
                     </p>
-                    <p className="text-xs text-slate-400 mt-3 font-medium leading-relaxed max-w-[200px]">
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed max-w-[200px]">
                         {sublabel}
                     </p>
                 </div>
 
-                <div className="flex items-center gap-3">
-                    <div className="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-8 py-4 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 shadow-2xl flex items-center gap-3 rounded-full">
-                        Initialize
-                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <div className="flex items-center gap-2">
+                    <div className="text-[#0EA5E9] text-xs font-bold flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                        Get Started
+                        <ArrowRight size={12} />
                     </div>
-                </div>
-
-                {/* Decorative Pattern */}
-                <div className="absolute -bottom-10 -right-10 opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-1000 group-hover:scale-110">
-                    <TrendingUp size={240} className="text-slate-900 -rotate-12" />
                 </div>
             </Link>
         </motion.div>
@@ -65,22 +57,8 @@ export default function StudentDashboardOverview({
     balance?: string
 }) {
     return (
-        <section className="px-4 md:px-6 py-12 md:py-20 max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-px md:bg-sky-50 md:border md:border-sky-50 shadow-2xl shadow-sky-100/50 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden">
-                <DashboardCard
-                    val={projectCount}
-                    label="Active Projects"
-                    sublabel="Manage your ongoing institutional collaborations."
-                    href="/student/projects"
-                    icon={Briefcase}
-                />
-                <DashboardCard
-                    val={balance}
-                    label="Wallet Balance"
-                    sublabel="Available substrate for project allocation."
-                    href="/student/wallet"
-                    icon={Wallet}
-                />
+        <section className="px-4 md:px-6 py-12 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <DashboardCard
                     val="Discovery"
                     label="Find Creators"

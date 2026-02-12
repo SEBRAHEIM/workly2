@@ -66,8 +66,12 @@ textarea {
 
 /* Global active state for buttons if not overridden */
 button:active {
-  transform: scale(0.96);
-  transition: transform 0.1s;
+  transform: scale(0.98);
+  transition: transform 0.05s;
+}
+
+.transition-fast {
+  transition-duration: 200ms !important;
 }
 
 /* Utility for mobile bottom spacing (iPhone home bar) */

@@ -24,18 +24,14 @@ export default async function StudentDashboard() {
     const welcomeName = profile?.full_name?.split(' ')[0] || profile?.username || "Student"
 
     return (
-        <div className="min-h-screen">
-            <Hero
-                hideCta={true}
-                title="Workly."
-                subtitle={`Desk.`}
-            />
-
-            <div className="relative -mt-32 z-20">
-                <StudentDashboardOverview
-                    projectCount={projectCount}
-                    balance={`AED ${profile?.wallet_balance?.toFixed(2) || '0.00'}`}
-                />
+        <div className="min-h-screen bg-white">
+            <div className="bg-[#E0F2FE] pt-14 md:pt-32">
+                <div className="relative z-20">
+                    <StudentDashboardOverview
+                        projectCount={projectCount}
+                        balance={`AED ${profile?.wallet_balance?.toFixed(2) || '0.00'}`}
+                    />
+                </div>
             </div>
 
             <Categories />

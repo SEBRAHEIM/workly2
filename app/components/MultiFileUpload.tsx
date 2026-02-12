@@ -10,6 +10,7 @@ interface MultiFileUploadProps {
     onUploadComplete: (urls: string[]) => void
     existingFiles?: string[] // For editing scenarios if needed
     maxSizeMB?: number
+    compact?: boolean
 }
 
 export default function MultiFileUpload({
@@ -17,7 +18,8 @@ export default function MultiFileUpload({
     folderPath = 'uploads',
     onUploadComplete,
     existingFiles = [],
-    maxSizeMB = 50
+    maxSizeMB = 50,
+    compact = false
 }: MultiFileUploadProps) {
     const [files, setFiles] = useState<File[]>([])
     const [uploading, setUploading] = useState(false)
@@ -126,21 +128,21 @@ export default function MultiFileUpload({
             {uploadedUrls.length > 0 && (
                 <div className="space-y-2">
                     {uploadedUrls.map((url, index) => (
-                        <div key={index} className="flex items-center justify-between bg-[#F0F9FF] px-4 py-3 rounded-xl border border-[#F0F9FF]">
+                        <div key={index} className={`flex items-center justify-between bg-[#F0F9FF] border border-[#F0F9FF] ${compact ? 'px-2 py-1.5 rounded-lg' : 'px-4 py-3 rounded-xl'}`}>
                             <div className="flex items-center overflow-hidden">
-                                <div className="w-8 h-8 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
-                                    <CheckCircle className="w-4 h-4" />
+                                <div className={`${compact ? 'w-5 h-5 mr-2' : 'w-8 h-8 mr-3'} bg-green-100 text-green-600 rounded-lg flex items-center justify-center flex-shrink-0`}>
+                                    <CheckCircle className={compact ? 'w-3 h-3' : 'w-4 h-4'} />
                                 </div>
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="font-bold text-[#1E293B] truncate pr-2 hover:underline">
-                                    File {index + 1} (Uploaded)
+                                <a href={url} target="_blank" rel="noopener noreferrer" className={`font-bold text-[#1E293B] truncate pr-2 hover:underline ${compact ? 'text-[10px]' : ''}`}>
+                                    File {index + 1}
                                 </a>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => removeUrl(index)}
-                                className="p-2 hover:bg-black/5 rounded-full text-gray-400 hover:text-red-500 transition-colors"
+                                className={`${compact ? 'p-1' : 'p-2'} hover:bg-black/5 rounded-full text-gray-400 hover:text-red-500 transition-colors`}
                             >
-                                <X className="w-4 h-4" />
+                                <X className={compact ? 'w-3 h-3' : 'w-4 h-4'} />
                             </button>
                         </div>
                     ))}
@@ -157,11 +159,10 @@ export default function MultiFileUpload({
                 </div>
             )}
 
-            {/* Dropzone */}
             {!uploading && (
                 <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-[#F0F9FF] hover:border-[#0EA5E9] hover:bg-[#F0F9FF] rounded-2xl p-6 text-center transition-all cursor-pointer group"
+                    className={`border-2 border-dashed border-[#F0F9FF] hover:border-[#0EA5E9] hover:bg-[#F0F9FF] text-center transition-all cursor-pointer group ${compact ? 'p-3 rounded-xl' : 'p-6 rounded-2xl'}`}
                 >
                     <input
                         type="file"
@@ -171,11 +172,13 @@ export default function MultiFileUpload({
                         className="hidden"
                     />
 
-                    <div className="w-12 h-12 bg-[#F0F9FF] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-white text-[#0EA5E9] transition-colors">
-                        <Upload className="w-6 h-6" />
+                    <div className={`${compact ? 'w-8 h-8 mb-1.5' : 'w-12 h-12 mb-3'} bg-[#F0F9FF] rounded-xl flex items-center justify-center mx-auto group-hover:bg-white text-[#0EA5E9] transition-colors`}>
+                        <Upload className={compact ? 'w-4 h-4' : 'w-6 h-6'} />
                     </div>
-                    <p className="font-bold text-[#1E293B] mb-1">Click to upload files</p>
-                    <p className="text-xs text-gray-400">Up to {maxSizeMB}MB per file</p>
+                    <p className={`font-bold text-[#1E293B] ${compact ? 'text-[10px] mb-0' : 'mb-1'}`}>
+                        {compact ? 'Upload Files' : 'Click to upload files'}
+                    </p>
+                    {!compact && <p className="text-xs text-gray-400">Up to {maxSizeMB}MB per file</p>}
                 </div>
             )}
         </div>

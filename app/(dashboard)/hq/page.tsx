@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
     // 4. Calculate Comprehensive Stats
     const stats = {
         totalUsers: profiles.length,
-        totalRevenue: projects?.filter(p => p.status === 'completed').reduce((acc, curr) => acc + ((curr.current_price || 0) * 0.17), 0) || 0,
+        totalRevenue: projects?.filter(p => p.status === 'completed').reduce((acc, curr) => acc + ((curr.current_price || 0) * 0.20), 0) || 0,
         activeProjects: projects?.filter(p => !['completed', 'cancelled'].includes(p.status)).length || 0,
         escrowHeld: projects?.filter(p => p.funds_status === 'escrow').reduce((acc, curr) => acc + (curr.current_price || 0), 0) || 0,
         pendingWithdrawals: withdrawals?.filter(w => w.status === 'pending').reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0,

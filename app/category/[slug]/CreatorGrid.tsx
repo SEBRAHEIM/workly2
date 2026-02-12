@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { User, Star, Briefcase, ShieldCheck } from 'lucide-react' // Added ShieldCheck
+import Image from 'next/image'
+import { User, Star, Briefcase, ShieldCheck } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
-import FavoriteButton from '@/app/components/FavoriteButton' // Added FavoriteButton
+import FavoriteButton from '@/app/components/FavoriteButton'
 
 export default async function CreatorGrid({
     categorySlug,
@@ -12,18 +13,24 @@ export default async function CreatorGrid({
 }) {
     const supabase = await createClient()
 
-    // 1. Parallel Fetch: User (for favorites) and Creators (with only required fields)
-    const [userResponse, creatorsResponse] = await Promise.all([
-        supabase.auth.getUser(),
+    // 1. Get User First (needed for favorites query)
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // 2. Parallel Fetch: Creators and Favorites (if user exists)
+    const [creatorsResponse, favoritesResponse] = await Promise.all([
         supabase
             .from('profiles')
             .select('id, display_name, full_name, avatar_url, tagline, level, languages')
             .not('display_name', 'is', null)
-            .contains('specializations', categorySlug ? [categorySlug] : [])
+            .contains('specializations', categorySlug ? [categorySlug] : []),
+        user ? supabase
+            .from('favorite_creators')
+            .select('creator_id')
+            .eq('student_id', user.id) : Promise.resolve({ data: null })
     ])
 
-    const user = userResponse.data.user
     const creators = creatorsResponse.data
+    const favoriteIds = new Set(favoritesResponse.data?.map(f => f.creator_id) || [])
 
     if (!creators || creators.length === 0) {
         return (
@@ -31,19 +38,6 @@ export default async function CreatorGrid({
                 <p className="text-gray-500 text-lg">No creators found in this category yet.</p>
             </div>
         )
-    }
-
-    // 2. Fetch Favorites in parallel with the rest of the render if user exists
-    let favoriteIds = new Set<string>()
-    if (user) {
-        const { data: favorites } = await supabase
-            .from('favorite_creators')
-            .select('creator_id')
-            .eq('student_id', user.id)
-
-        if (favorites) {
-            favorites.forEach(f => favoriteIds.add(f.creator_id))
-        }
     }
 
     return (
@@ -63,9 +57,15 @@ export default async function CreatorGrid({
                         {/* Header: Identity */}
                         <div className="flex items-start gap-3 mb-3 relative">
                             <div className="flex-shrink-0">
-                                <div className="w-12 h-12 rounded-full bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform">
+                                <div className="w-12 h-12 rounded-full bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover:scale-105 transition-transform relative">
                                     {creator.avatar_url ? (
-                                        <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
+                                        <Image
+                                            src={creator.avatar_url}
+                                            alt={creator.display_name || ''}
+                                            fill
+                                            className="object-cover"
+                                            sizes="48px"
+                                        />
                                     ) : (
                                         <User className="w-5 h-5 text-gray-400" />
                                     )}

@@ -269,7 +269,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 Waiting for Student Payment...
                             </div>
                         </div>
-                    ) : ['accepted', 'agreed', 'in_progress'].includes(req.status) ? (
+                    ) : ['accepted', 'agreed', 'in_progress', 'revision_requested'].includes(req.status) ? (
                         <div className="text-center">
                             <p className="text-sm text-gray-500 mb-2">Agreed Price</p>
                             <p className="text-3xl font-bold text-[#0EA5E9] mb-4">

@@ -18,9 +18,9 @@ interface PricingFormProps {
 type PricingMode = 'fixed' | 'negotiable' | 'packages'
 
 const DEFAULT_PACKAGES = {
-    basic: { title: 'Basic', price: 50, description: '', revisions: 1 },
-    standard: { title: 'Standard', price: 100, description: '', revisions: 2 },
-    premium: { title: 'Premium', price: 200, description: '', revisions: 3 }
+    basic: { title: 'Basic', price: 50, description: '', revisions: 1, turnaround: 2 },
+    standard: { title: 'Standard', price: 100, description: '', revisions: 2, turnaround: 2 },
+    premium: { title: 'Premium', price: 200, description: '', revisions: 3, turnaround: 2 }
 }
 
 export default function PricingForm({ profile, services, specializations }: PricingFormProps) {
@@ -41,10 +41,19 @@ export default function PricingForm({ profile, services, specializations }: Pric
         const savedService = services.find(s => s.category_slug === selectedCategory)
 
         if (savedService) {
-            // Force 'packages' mode
             setMode('packages')
             setBasePrice(savedService.base_price || 0)
-            setPackages(savedService.service_packages || DEFAULT_PACKAGES)
+            // Merge saved packages with defaults to ensure 'turnaround' exists if it was missing
+            const mergedPackages = { ...DEFAULT_PACKAGES }
+            if (savedService.service_packages) {
+                Object.keys(savedService.service_packages).forEach(tier => {
+                    mergedPackages[tier as keyof typeof DEFAULT_PACKAGES] = {
+                        ...DEFAULT_PACKAGES[tier as keyof typeof DEFAULT_PACKAGES],
+                        ...savedService.service_packages[tier]
+                    }
+                })
+            }
+            setPackages(mergedPackages)
         } else {
             setMode('packages')
             setBasePrice(0)
@@ -55,11 +64,19 @@ export default function PricingForm({ profile, services, specializations }: Pric
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        // Validation: Ensure all titles and descriptions are filled
+        const incomplete = Object.values(packages).some(p => !p.title || !p.description || !p.price)
+        if (incomplete) {
+            toast.error('All 3 tiers (Basic, Standard, Premium) must be fully completed to save.')
+            return
+        }
+
         setLoading(true)
 
         const formData = new FormData()
         formData.append('categorySlug', selectedCategory)
-        formData.append('pricingMode', 'packages') // Force packages
+        formData.append('pricingMode', 'packages')
         formData.append('basePrice', basePrice.toString())
         formData.append('servicePackages', JSON.stringify(packages))
 
@@ -68,7 +85,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
         if (result.error) {
             toast.error(result.error)
         } else {
-            toast.success(`Pricing for ${getCategoryTitle(selectedCategory)} saved!`)
+            toast.success(`Pricing for ${getCategoryTitle(selectedCategory)} deployed!`)
         }
         setLoading(false)
     }
@@ -115,13 +132,22 @@ export default function PricingForm({ profile, services, specializations }: Pric
 
             <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in duration-500">
 
-                <h3 className="text-xl font-serif font-bold text-[#333]">
-                    Setup 3-Tier Packages for {getCategoryTitle(selectedCategory)}
-                </h3>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h3 className="text-xl font-serif font-black text-slate-900 uppercase tracking-tighter">
+                            Package Architecture: {getCategoryTitle(selectedCategory)}
+                        </h3>
+                        <p className="text-xs text-slate-500 font-medium mt-1">Configure all three tiers to activate this service segment.</p>
+                    </div>
+                </div>
 
-                {/* Mode Selection Removed - Force Packages */}
-                <div className="hidden">
-                    <button type="button" onClick={() => setMode('packages')} className="hidden" />
+                <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-4">
+                    <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <div className="text-xs text-amber-800 leading-relaxed font-medium">
+                        <strong>Pricing Transparency:</strong> Workly charges a flat <strong>20% commission</strong> on all earnings.
+                        This covers your platform access, marketing, and secure Stripe payment processing.
+                        You will see your net payout estimate below the price input.
+                    </div>
                 </div>
 
                 {/* Dynamic content based on Mode */}
@@ -144,52 +170,66 @@ export default function PricingForm({ profile, services, specializations }: Pric
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-bottom-2 duration-300" key={activeTab}>
-                            <div className="space-y-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 animate-in slide-in-from-bottom-2 duration-300" key={activeTab}>
+                            <div className="space-y-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-[#333] mb-1">Package Title</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Package Heading</label>
                                     <input
                                         type="text"
                                         value={packages[activeTab].title}
                                         onChange={(e) => updatePackage(activeTab, 'title', e.target.value)}
-                                        className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
-                                        placeholder={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Package`}
+                                        className="w-full p-4 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-800 placeholder:text-slate-300 outline-none focus:ring-1 focus:ring-[#0EA5E9] transition-all"
+                                        placeholder={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Deliverable`}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-[#333] mb-1">Price (AED)</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Price (AED)</label>
                                     <input
                                         type="number"
                                         value={packages[activeTab].price}
                                         onChange={(e) => updatePackage(activeTab, 'price', Number(e.target.value))}
-                                        className="w-full p-3 md:p-4 rounded-xl border border-sky-50 bg-sky-50/20 text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all"
+                                        className="w-full p-4 rounded-xl border border-[#0EA5E9]/20 bg-sky-50/20 text-base font-black text-slate-900 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-[#0EA5E9] transition-all"
                                     />
                                     <EarningsBreakdown price={packages[activeTab].price} compact />
                                 </div>
-                                <div className="grid grid-cols-1 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-[#333] mb-1">Revisions Included</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revisions</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].revisions}
                                             onChange={(e) => updatePackage(activeTab, 'revisions', Number(e.target.value))}
-                                            className="w-full p-2.5 rounded-lg border border-gray-200 text-sm"
+                                            className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
                                         />
-                                        <p className="text-[10px] text-gray-400 mt-1">Students can request this many rounds of changes.</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Time (Days)</label>
+                                        <input
+                                            type="number"
+                                            value={packages[activeTab].turnaround || 2}
+                                            onChange={(e) => updatePackage(activeTab, 'turnaround', Number(e.target.value))}
+                                            className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
+                                            placeholder="2"
+                                        />
                                     </div>
                                 </div>
+                                <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
+                                    Revision time is the number of days you have to complete a requested change round.
+                                </p>
                             </div>
                             <div>
                                 <FormattedTextarea
-                                    label="What's included in this tier?"
+                                    label="Deliverables & Details"
                                     value={packages[activeTab].description}
                                     onChange={(val) => updatePackage(activeTab, 'description', val)}
-                                    rows={8}
+                                    compact={true}
                                     placeholder="List features, deliverables, and important details...
 • Feature 1
 • Feature 2
 ✅ Guarantee"
                                 />
+                                <p className="text-[10px] text-slate-400 font-medium mt-3 italic">Be specific about what the student receives in this tier.</p>
                             </div>
                         </div>
                     </div>
@@ -199,10 +239,10 @@ export default function PricingForm({ profile, services, specializations }: Pric
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full md:w-auto bg-[#0EA5E9] text-white px-10 py-5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-sky-100 active:scale-95 touch-manipulation"
+                        className="w-full md:w-auto bg-[#0EA5E9] text-white px-10 py-5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-sky-100 active:scale-95 touch-manipulation"
                     >
                         {loading ? <Zap className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                        Secure {getCategoryTitle(selectedCategory)} Deployment
+                        Save All 3 Tiers for {getCategoryTitle(selectedCategory)}
                     </button>
                 </div>
             </form >

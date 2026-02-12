@@ -91,24 +91,14 @@ export default function CreatorNavbar() {
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
                     <Link href="/creator" className="group flex items-center gap-3">
-                        <div className="w-8 h-8 bg-slate-900 flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
-                            <span className="text-white font-serif font-black text-lg">W</span>
-                        </div>
-                        <span className="text-xl tracking-[0.4em] text-slate-900 font-serif font-black uppercase hidden sm:block">
+                        <span className="text-xl tracking-[0.4em] text-slate-900 font-serif font-black uppercase">
                             Workly
                         </span>
                     </Link>
                 </div>
 
-                <div className="flex items-center justify-end min-w-[40px] gap-4">
+                <div className="flex items-center justify-end min-w-[120px] gap-4">
                     {user && <NotificationBell userId={user.id} />}
-                    <Link href="/creator/profile" className="w-10 h-10 rounded-full border border-sky-50 overflow-hidden hover:border-[#0EA5E9] transition-all">
-                        <img
-                            src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=0EA5E9&color=fff`}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                        />
-                    </Link>
                 </div>
             </nav>
 
@@ -128,42 +118,37 @@ export default function CreatorNavbar() {
                             <X className="w-6 h-6 text-slate-400" />
                         </button>
 
-                        <div className="flex flex-col items-center pt-16 pb-10 border-b border-sky-50">
-                            <div className="w-20 h-20 rounded-full bg-sky-50 flex items-center justify-center mb-4 overflow-hidden border-2 border-white shadow-sm">
-                                {profile?.avatar_url ? (
-                                    <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-                                ) : (
-                                    <User className="w-10 h-10 text-sky-200" />
-                                )}
-                            </div>
-                            <h2 className="font-serif text-xl font-bold text-slate-900 text-center px-4 uppercase tracking-tight">
-                                {displayName}
+                        <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
+                            <h2 className="font-serif text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                {profile?.full_name || 'Operator'}
                             </h2>
-                            <div className="flex items-center mt-3 px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100">
+                            <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] opacity-80 mb-4">
+                                @{profile?.username || 'registry'}
+                            </p>
+                            <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
                                 <Star className="w-3 h-3 text-sky-400 fill-sky-400 mr-2" />
                                 <span className="text-xs font-black text-slate-700 mr-3">{profile?.rating_avg || '0.0'}</span>
                                 <span className="text-[9px] text-[#0EA5E9] font-black uppercase tracking-wider border-l border-sky-200 pl-3">
                                     Lvl {profile?.level || 1}
                                 </span>
                             </div>
+
+                            <Link
+                                href="/creator/profile"
+                                onClick={() => setIsMenuOpen(false)}
+                                className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all border border-transparent hover:border-sky-100 mb-2"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
+                                    <User size={18} />
+                                </div>
+                                <span className="font-bold text-sm">Profile Settings</span>
+                            </Link>
                         </div>
 
                         <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                             <div className="px-6 mb-8">
                                 <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6">Workspace</h3>
                                 <div className="space-y-2">
-                                    {profile?.role === 'admin' && (
-                                        <Link
-                                            href="/admin"
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-3 rounded-2xl text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
-                                        >
-                                            <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 shadow-sm">
-                                                <Shield size={18} />
-                                            </div>
-                                            <span className="font-bold text-sm">God Mode</span>
-                                        </Link>
-                                    )}
                                     <Link
                                         href="/creator"
                                         onClick={() => setIsMenuOpen(false)}
@@ -175,6 +160,26 @@ export default function CreatorNavbar() {
                                         <span className="font-bold text-sm">Dashboard</span>
                                     </Link>
                                     <Link
+                                        href="/creator/projects"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
+                                            <Briefcase size={18} />
+                                        </div>
+                                        <span className="font-bold text-sm">Active Work</span>
+                                    </Link>
+                                    <Link
+                                        href="/creator/history"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
+                                            <Clock size={18} />
+                                        </div>
+                                        <span className="font-bold text-sm">Project History</span>
+                                    </Link>
+                                    <Link
                                         href="/creator/wallet"
                                         onClick={() => setIsMenuOpen(false)}
                                         className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
@@ -182,31 +187,11 @@ export default function CreatorNavbar() {
                                         <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
                                             <Wallet size={18} />
                                         </div>
-                                        <span className="font-bold text-sm">Treasury</span>
+                                        <span className="font-bold text-sm">Payout</span>
                                     </Link>
                                 </div>
                             </div>
 
-                            <div className="px-6 mb-8">
-                                <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6">Categories</h3>
-                                <div className="space-y-1">
-                                    {categories.map((cat) => (
-                                        <Link
-                                            key={cat.slug}
-                                            href={`/category/${cat.slug}`}
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-sky-50 transition-all group"
-                                        >
-                                            <div className="w-9 h-9 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
-                                                <cat.icon size={16} />
-                                            </div>
-                                            <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">
-                                                {cat.title}
-                                            </span>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
                         </div>
 
                         <div className="p-6 border-t border-sky-50">

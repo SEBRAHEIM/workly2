@@ -25,16 +25,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     return (
         <div className="min-h-screen bg-white">
             {/* Header - Renders Instantly */}
-            <div className="bg-slate-900 text-white pt-32 pb-20 px-6 relative overflow-hidden group">
+            <div className="bg-slate-900 text-white pt-10 md:pt-32 pb-20 px-6 relative overflow-hidden group">
                 {/* Background Sky Soft Glows */}
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0EA5E9] rounded-full blur-[160px] -translate-y-1/2 translate-x-1/2 opacity-20 transition-opacity duration-1000 group-hover:opacity-30" />
 
                 <div className="max-w-7xl mx-auto relative z-10">
-                    <Suspense fallback={<div className="h-6 w-32 bg-white/10 rounded mb-10 animate-pulse" />}>
-                        <div className="mb-10">
-                            <DynamicBackLink />
-                        </div>
-                    </Suspense>
+                    <div className="mb-10">
+                        <DynamicBackLink />
+                    </div>
 
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="max-w-3xl">

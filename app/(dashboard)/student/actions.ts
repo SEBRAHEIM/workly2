@@ -84,18 +84,21 @@ export async function createProject(prevState: any, formData: FormData) {
 
     const mainFileUrl = finalFileUrls.length > 0 ? finalFileUrls[0] : null
 
-    // 5. Calculate Initial Price & Revisions
+    // 5. Calculate Initial Price, Revisions & Turnaround
     let initialPrice = 0
     let totalRevisions = 0
+    let revisionTurnaround = 2
     if (service) {
         if (pricingType === 'fixed') {
             initialPrice = service.base_price || 0
             totalRevisions = 1 // Default for fixed
+            revisionTurnaround = 2
         } else if (pricingType === 'packages' && packageTier) {
             const pkg = service.service_packages?.[packageTier]
             if (pkg) {
                 initialPrice = pkg.price || 0
                 totalRevisions = pkg.revisions || 0
+                revisionTurnaround = pkg.turnaround || 2
             }
         }
     }
@@ -111,6 +114,7 @@ export async function createProject(prevState: any, formData: FormData) {
             status: 'accepted', // Immediately accepted for payment
             pricing_type: pricingType,
             current_price: initialPrice,
+            commission_rate: 0.20,
             current_terms: {
                 category: categorySlug,
                 tier: packageTier || null
@@ -120,7 +124,8 @@ export async function createProject(prevState: any, formData: FormData) {
             waiting_on: null, // No negotiation waiting state
             due_date: dueDate.toISOString(),
             revisions_total: totalRevisions,
-            revisions_used: 0
+            revisions_used: 0,
+            revision_turnaround: revisionTurnaround
         })
         .select()
         .single()

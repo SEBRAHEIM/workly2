@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { updateCreatorIdentity } from './actions'
 import { Save, Check, AlertTriangle } from 'lucide-react'
 import PhoneInput from 'react-phone-number-input'
@@ -17,6 +17,11 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState('')
     const [phone, setPhone] = useState(profile?.whatsapp_phone || '')
+
+    // Sync state if profile update comes from outside (prop change)
+    useEffect(() => {
+        setPhone(profile?.whatsapp_phone || '')
+    }, [profile?.whatsapp_phone])
 
     return (
         <form
@@ -54,17 +59,51 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
             }}
             className="space-y-6"
         >
+            {/* Full Name */}
+            <div>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">Full Name</label>
+                <input
+                    type="text"
+                    name="fullName"
+                    defaultValue={profile?.full_name || ''}
+                    placeholder="Your legal name"
+                    required
+                    readOnly={!!profile?.full_name}
+                    dir="auto"
+                    className={`w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all shadow-sm ${profile?.full_name ? 'bg-gray-50 cursor-not-allowed opacity-70' : ''}`}
+                />
+            </div>
+
+            {/* Username */}
+            <div>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2">Username (@)</label>
+                <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">@</span>
+                    <input
+                        type="text"
+                        name="username"
+                        defaultValue={profile?.username?.replace(/^@/, '') || ''}
+                        placeholder="unique_handle"
+                        required
+                        readOnly={!!profile?.username}
+                        dir="auto"
+                        className={`w-full bg-white border border-gray-200 rounded-xl p-4 pl-8 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all shadow-sm ${profile?.username ? 'bg-gray-50 cursor-not-allowed opacity-70' : ''}`}
+                    />
+                </div>
+            </div>
+
             {/* Display Name */}
             <div>
-                <label className="block text-sm font-bold text-[#1E293B] mb-2">Display Name</label>
+                <label className="block text-sm font-bold text-[#1E293B] mb-2 uppercase tracking-widest text-[10px]">Display Name</label>
                 <input
                     type="text"
                     name="displayName"
-                    defaultValue={profile?.display_name || profile?.full_name || ''}
+                    defaultValue={profile?.display_name || ''}
                     placeholder="e.g. Ahmed M."
                     required
+                    readOnly={!!profile?.display_name}
                     dir="auto"
-                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all"
+                    className={`w-full bg-white border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none transition-all shadow-sm ${profile?.display_name ? 'bg-gray-50 cursor-not-allowed opacity-70' : ''}`}
                 />
             </div>
 
@@ -78,7 +117,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     placeholder="e.g. Video Editor & Motion Graphics Artist"
                     required
                     dir="auto"
-                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-base focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent transition-all"
+                    className="w-full bg-white border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none transition-all"
                 />
                 <p className="text-xs text-gray-400 mt-2">One line describing what you do.</p>
             </div>

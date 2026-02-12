@@ -1,7 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { User, ShieldCheck, ArrowRight } from 'lucide-react'
+import { User, ShieldCheck, ArrowRight, Briefcase, TrendingUp } from 'lucide-react'
 import { categories } from '@/app/data/categories'
 import PortfolioCategoryAccordion from '@/app/(dashboard)/creator/profile/PortfolioCategoryAccordion'
 
@@ -10,29 +11,21 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
     const { creatorId: rawId } = await params
     const creatorId = rawId?.trim()
 
-    // Public page, but nice to know if logged in
-    const { data: { user } } = await supabase.auth.getUser()
+    // 1. Parallel Fetch: Auth, Profile, Portfolio, Services
+    const [authResponse, profileResponse, portfolioResponse, servicesResponse] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase.from('profiles').select('*').eq('id', creatorId).single(),
+        supabase.from('portfolio_items').select('*').eq('creator_id', creatorId),
+        supabase.from('creator_services').select('*').eq('creator_id', creatorId)
+    ])
 
-    // Fetch creator details
-    const { data: creator } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', creatorId)
-        .single()
-
-    const { data: portfolioItems } = await supabase
-        .from('portfolio_items')
-        .select('*')
-        .eq('creator_id', creatorId)
-
-    // NEW: Fetch Pricing Services
-    const { data: services } = await supabase
-        .from('creator_services')
-        .select('*')
-        .eq('creator_id', creatorId)
+    const user = authResponse.data.user
+    const creator = profileResponse.data
+    const portfolioItems = portfolioResponse.data
+    const services = servicesResponse.data
 
     if (!creator) {
-        return <div>Creator not found</div>
+        return <div className="p-20 text-center">Creator not found</div>
     }
 
     const specializations = creator.specializations || []
@@ -41,61 +34,80 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
         <div className="max-w-4xl mx-auto p-4 md:p-8 pb-32">
 
             {/* Header / Identity */}
-            {/* Header / Identity */}
-            <div className="bg-white rounded-3xl p-6 border border-[#F0F9FF] shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left mb-6">
-                <div className="w-20 h-20 rounded-full bg-[#F0F9FF] flex-shrink-0 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center">
-                    {creator.avatar_url ? (
-                        <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
-                    ) : (
-                        <User className="w-8 h-8 text-gray-400" />
-                    )}
-                </div>
-                <div className="flex-1">
-                    <h1 className="text-2xl font-serif font-bold text-[#1E293B] mb-1" dir="auto">
-                        {creator.display_name || creator.full_name || 'Creator'}
-                    </h1>
-                    {creator.username && (
-                        <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
-                    )}
-                    <p className="text-base text-[#0EA5E9] font-medium mb-1" dir="auto">
-                        {creator.tagline || 'Student Creator'}
-                    </p>
-
-                    {creator.languages && creator.languages.length > 0 && (
-                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mb-4">
-                            {creator.languages.map((lang: string) => (
-                                <span key={lang} className="text-[10px] font-bold uppercase px-2 py-0.5 bg-[#0EA5E9]/10 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/20">
-                                    {lang}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-xs font-medium text-gray-500">
-                        <span className="bg-[#F0F9FF] px-2 py-1 rounded-md text-[#333]">
-                            Level {creator.level || 1}
-                        </span>
-                        <span>•</span>
-                        <span>{creator.completed_projects || 0} Projects Completed</span>
+            <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-8 text-center md:text-left mb-8">
+                <div className="relative">
+                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-slate-50 flex-shrink-0 flex items-center justify-center border border-slate-100 overflow-hidden relative">
+                        {creator.avatar_url ? (
+                            <Image
+                                src={creator.avatar_url}
+                                alt={creator.display_name || ''}
+                                fill
+                                className="object-cover"
+                                sizes="112px"
+                            />
+                        ) : (
+                            <User className="w-10 h-10 text-slate-300" />
+                        )}
                     </div>
                 </div>
 
-                {/* Hire Me Button (Header) */}
-                <div className="flex-shrink-0 mt-4 md:mt-0">
-                    <Link
-                        href={`/student/hire/${creatorId}`}
-                        className="inline-flex items-center px-6 py-3 bg-[#1E293B] text-white font-bold rounded-xl hover:bg-[#0EA5E9] transition-all shadow-md active:scale-95"
-                    >
-                        Hire Me <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
+                <div className="flex-1 w-full">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                        <div>
+                            <h1 className="text-2xl font-bold text-slate-900 mb-1" dir="auto">
+                                {creator.display_name || creator.full_name || 'Creator'}
+                            </h1>
+                            <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
+                                {creator.username && (
+                                    <span className="text-xs font-medium text-slate-400">
+                                        @{creator.username}
+                                    </span>
+                                )}
+                                {creator.languages && creator.languages.length > 0 && (
+                                    <div className="flex gap-1">
+                                        {creator.languages.map((lang: string) => (
+                                            <span key={lang} className="text-[10px] font-bold uppercase px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded border border-slate-200">
+                                                {lang}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex-shrink-0">
+                            <Link
+                                href={`/student/hire/${creatorId}`}
+                                className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0EA5E9] text-white font-bold text-sm rounded-lg hover:bg-[#0284c7] transition-all shadow-sm active:scale-95"
+                            >
+                                Hire Me
+                                <ArrowRight size={16} />
+                            </Link>
+                        </div>
+                    </div>
+
+                    <p className="text-sm text-slate-600 font-medium mb-6" dir="auto">
+                        {creator.tagline || 'Student Creator'}
+                    </p>
+
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4 border-t border-slate-50">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Level</span>
+                            <span className="text-sm font-bold text-slate-900">{creator.level || 1}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed</span>
+                            <span className="text-sm font-bold text-slate-900">{creator.completed_projects || 0} Projects</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Bio */}
             {creator.bio && (
-                <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-sm mb-8">
-                    <h3 className="text-lg font-bold text-[#1E293B] mb-4">About Me</h3>
-                    <p className="text-gray-600 leading-relaxed whitespace-pre-wrap" dir="auto">
+                <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm mb-12">
+                    <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4">About Me</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">
                         {creator.bio}
                     </p>
                 </div>

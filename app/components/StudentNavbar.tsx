@@ -11,6 +11,7 @@ import { categories } from '../data/categories'
 
 export default function StudentNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [categoriesOpen, setCategoriesOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const [profile, setProfile] = useState<any>(null)
     const [user, setUser] = useState<any>(null)
@@ -78,71 +79,64 @@ export default function StudentNavbar() {
 
     return (
         <>
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-white/90 backdrop-blur-xl border-sky-100 py-4' : 'bg-transparent border-transparent py-8'
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b ${isScrolled ? 'bg-white border-slate-200 py-3 shadow-sm' : 'bg-white/95 backdrop-blur-md border-transparent py-4'
                 }`}>
-                <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-3 items-center">
-                    {/* Left: Menu Trigger */}
-                    <div className="flex items-center">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between">
+                    {/* Left: Menu & Brand */}
+                    <div className="flex items-center gap-6">
+                        <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="w-12 h-12 md:w-12 md:h-12 bg-white border border-sky-100 flex items-center justify-center text-[#0EA5E9] hover:bg-sky-50 transition-all shadow-sm rounded-xl touch-manipulation"
+                            className="p-2 hover:bg-slate-50 transition-colors rounded-lg text-slate-600"
                             aria-label="Open Menu"
                         >
-                            <Menu size={24} className="w-6 h-6" />
-                        </motion.button>
+                            <Menu size={20} />
+                        </button>
 
-                        <div className="hidden lg:flex items-center ml-8 space-x-6">
-                            {['Directory', 'Projects'].map((item) => (
-                                <Link
-                                    key={item}
-                                    href={`/student/${item.toLowerCase()}`}
-                                    className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-[#0EA5E9] transition-colors"
-                                >
-                                    {item}
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Center: Logo */}
-                    <div className="flex justify-center">
-                        <Link href="/student" className="group flex items-center md:space-x-4">
-                            <div className="w-8 h-8 md:w-10 md:h-10 bg-slate-900 flex items-center justify-center group-hover:rotate-90 transition-transform duration-500">
-                                <span className="text-white font-serif font-black text-lg md:text-xl">W</span>
-                            </div>
-                            <span className="text-xl md:text-2xl tracking-[0.4em] text-slate-900 font-serif font-black uppercase hidden sm:block">
+                        <Link href="/student" className="flex items-center">
+                            <span className="text-xl tracking-tight text-slate-900 font-bold">
                                 Workly
                             </span>
                         </Link>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex items-center justify-end space-x-6">
-                        <div className="hidden md:flex items-center space-x-4 border-r border-sky-50 pr-6">
+                    <div className="flex items-center space-x-6">
+                        <div className="flex items-center space-x-4">
                             {user && <NotificationBell userId={user.id} />}
+                            {user && (
+                                <div className="relative group">
+                                    <Link href="/student/profile" className="flex items-center gap-2 pr-1 rounded-full border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all p-0.5">
+                                        <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-100">
+                                            <img
+                                                src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=0EA5E9&color=fff`}
+                                                alt="Profile"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </Link>
+
+                                    {/* Desktop Hover Dropdown */}
+                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[60]">
+                                        <Link href="/student/profile" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                                            <User size={16} className="mr-3 text-slate-400" />
+                                            Profile Settings
+                                        </Link>
+                                        <Link href="/student/projects" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                                            <Briefcase size={16} className="mr-3 text-slate-400" />
+                                            Projects
+                                        </Link>
+                                        <div className="h-px bg-slate-50 my-2 mx-4" />
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="w-full flex items-center px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-medium transition-colors"
+                                        >
+                                            <LogOut size={16} className="mr-3" />
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-
-                        <Link
-                            href="/student/profile"
-                            className="w-10 h-10 border border-sky-50 overflow-hidden hover:border-[#0EA5E9] transition-colors group rounded-full"
-                        >
-                            <img
-                                src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=0EA5E9&color=fff`}
-                                alt="Profile"
-                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
-                            />
-                        </Link>
-
-                        <motion.button
-                            whileHover={{ y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-slate-900 text-white px-4 md:px-6 py-2 md:py-2.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-sky-100 hover:bg-[#0EA5E9] hidden xs:block rounded-full"
-                            onClick={handleSignOut}
-                        >
-                            Log Out
-                        </motion.button>
                     </div>
                 </div>
             </nav>
@@ -156,7 +150,7 @@ export default function StudentNavbar() {
                             onClick={() => setIsMenuOpen(false)}
                         />
 
-                        <div className="fixed top-0 left-0 h-[100dvh] w-[300px] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-r border-sky-100">
+                        <div className="fixed top-0 left-0 h-[100dvh] w-[300px] bg-white shadow-2xl flex flex-col transform transition-transform duration-150 ease-in-out border-r border-sky-100">
                             <button
                                 onClick={() => setIsMenuOpen(false)}
                                 className="absolute top-4 right-4 p-2 rounded-full hover:bg-sky-50"
@@ -165,11 +159,11 @@ export default function StudentNavbar() {
                             </button>
 
                             <div className="flex flex-col items-start pt-20 pb-8 border-b border-sky-50 px-8">
-                                <h2 className="font-serif text-3xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-2">
-                                    {profile?.username || 'Operator'}
+                                <h2 className="font-serif text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                    {profile?.full_name || 'Operator'}
                                 </h2>
-                                <p className="text-[10px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] opacity-80">
-                                    {profile?.full_name || 'Registry Identity'}
+                                <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] opacity-80">
+                                    @{profile?.username || 'registry'}
                                 </p>
                             </div>
 
@@ -186,6 +180,16 @@ export default function StudentNavbar() {
                                                 <LayoutDashboard size={14} />
                                             </div>
                                             <span className="font-black text-[9px] uppercase tracking-widest">Dashboard</span>
+                                        </Link>
+                                        <Link
+                                            href="/student/profile"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-2 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                        >
+                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
+                                                <User size={14} />
+                                            </div>
+                                            <span className="font-black text-[9px] uppercase tracking-widest">Profile Settings</span>
                                         </Link>
                                         <Link
                                             href="/student/projects"
@@ -211,24 +215,37 @@ export default function StudentNavbar() {
                                 </div>
 
                                 <div className="px-6 mb-10">
-                                    <h3 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-6">Discovery</h3>
-                                    <div className="space-y-1">
-                                        {categories.map((cat) => (
-                                            <Link
-                                                key={cat.slug}
-                                                href={`/category/${cat.slug}`}
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="flex items-center gap-3 p-1.5 rounded-lg hover:bg-sky-50 transition-all group"
-                                            >
-                                                <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
-                                                    <cat.icon size={14} />
-                                                </div>
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-900 transition-colors">
-                                                    {cat.title}
-                                                </span>
-                                            </Link>
-                                        ))}
-                                    </div>
+                                    <button
+                                        onClick={() => setCategoriesOpen(!categoriesOpen)}
+                                        className="w-full flex items-center justify-between text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4 hover:text-[#0EA5E9] transition-colors"
+                                    >
+                                        Categories
+                                        <ChevronRight size={12} className={`transition-transform duration-200 ${categoriesOpen ? 'rotate-90' : ''}`} />
+                                    </button>
+
+                                    {categoriesOpen && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            className="space-y-1 overflow-hidden"
+                                        >
+                                            {categories.map((cat) => (
+                                                <Link
+                                                    key={cat.slug}
+                                                    href={`/category/${cat.slug}`}
+                                                    onClick={() => setIsMenuOpen(false)}
+                                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-sky-50 transition-all group"
+                                                >
+                                                    <div className="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
+                                                        <cat.icon size={12} />
+                                                    </div>
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-900 transition-colors">
+                                                        {cat.title}
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </motion.div>
+                                    )}
                                 </div>
 
                                 <div className="px-6 mb-8">
@@ -242,7 +259,7 @@ export default function StudentNavbar() {
                                             <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
                                                 <Wallet size={14} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Vault</span>
+                                            <span className="font-black text-[9px] uppercase tracking-widest">Refunds</span>
                                         </Link>
                                         <Link
                                             href="/student/payment-history"

@@ -26,6 +26,7 @@ interface FormattedTextareaProps {
     placeholder?: string
     rows?: number
     className?: string
+    compact?: boolean
 }
 
 export default function FormattedTextarea({
@@ -33,7 +34,8 @@ export default function FormattedTextarea({
     onChange,
     label,
     placeholder = 'Start typing...',
-    className = ''
+    className = '',
+    compact = false
 }: FormattedTextareaProps) {
     const editor = useEditor({
         extensions: [
@@ -55,7 +57,7 @@ export default function FormattedTextarea({
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-sm focus:outline-none max-w-none min-h-[150px] p-4 text-sm text-[#333] leading-relaxed',
+                class: `prose prose-sm focus:outline-none ${compact ? 'min-h-[100px] p-2' : 'min-h-[150px] p-4'} text-sm text-[#333] leading-relaxed`,
                 dir: 'auto',
             },
         },
@@ -162,7 +164,7 @@ export default function FormattedTextarea({
                     <div className="w-px h-4 bg-gray-300 mx-1 hidden md:block" />
 
                     <div className="flex items-center gap-1 ml-auto">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mr-1 opacity-60">Presets:</span>
+                        {!compact && <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mr-1 opacity-60">Presets:</span>}
                         {presets.map((preset, idx) => (
                             <button
                                 key={idx}
@@ -181,15 +183,14 @@ export default function FormattedTextarea({
                     <EditorContent editor={editor} />
                 </div>
             </div>
-            <div className="flex justify-between items-center mt-1.5 px-px">
-                <p className="text-[9px] text-gray-400 italic">
-                    WYSIWYG Editor: Bold and italic will appear immediately.
-                </p>
-                <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
-                    <Info className="w-3 h-3" />
-                    Clean Markdown Output
+            {!compact && (
+                <div className="flex justify-end items-center mt-1.5 px-px">
+                    <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
+                        <Info className="w-3 h-3" />
+                        Clean Markdown Output
+                    </div>
                 </div>
-            </div>
+            )}
 
             <style jsx global>{`
                 .tiptap p.is-editor-empty:first-child::before {

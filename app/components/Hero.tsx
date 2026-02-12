@@ -118,7 +118,7 @@ export default function Hero({
     }, [])
 
     return (
-        <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
+        <section ref={sectionRef} className="relative min-h-[auto] pb-12 md:pb-0 md:min-h-screen flex flex-col items-center justify-start pt-32 md:pt-0 md:justify-center bg-white overflow-hidden">
             {/* Soft Gradient Overlay */}
             <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#E0F2FE] via-white to-white" />
 
@@ -145,14 +145,20 @@ export default function Hero({
                 className="relative z-20 container mx-auto px-6 flex flex-col items-center text-center"
             >
                 {/* Headline: WORKLY. CREATIVE. */}
-                <h1 ref={titleRef} className="perspective-1000 mb-8 md:mb-12">
-                    <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#1E293B] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#0EA5E9]">
-                        {title}
-                    </span>
-                    <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#0EA5E9] leading-[0.75] tracking-tighter uppercase mt-2 md:mt-4">
-                        {subtitle}
-                    </span>
-                </h1>
+                {(title || subtitle) && (
+                    <h1 ref={titleRef} className="perspective-1000 mb-6 md:mb-12">
+                        {title && (
+                            <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#1E293B] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#0EA5E9]">
+                                {title}
+                            </span>
+                        )}
+                        {subtitle && (
+                            <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#0EA5E9] leading-[0.75] tracking-tighter uppercase mt-2 md:mt-4">
+                                {subtitle}
+                            </span>
+                        )}
+                    </h1>
+                )}
 
                 {/* Subtext with Group Vision */}
                 <motion.div
@@ -160,20 +166,20 @@ export default function Hero({
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.8, duration: 1 }}
-                    className="flex flex-col md:flex-row items-center gap-6 md:gap-8 mb-12 md:mb-16 max-w-4xl"
+                    className="flex flex-col md:flex-row items-center gap-4 md:gap-8 mb-4 md:mb-16 max-w-4xl"
                 >
                     <div className="h-[1px] w-12 md:w-24 bg-[#0EA5E9] hidden sm:block" />
-                    <p className="text-[#1E293B]/70 text-base sm:text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1 px-4 md:px-0">
+                    <p className="text-[#1E293B]/70 text-sm sm:text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1 px-4 md:px-0">
                         The definitive ecosystem for <span className="text-[#0EA5E9] font-black border-b-2 md:border-b-4 border-[#0EA5E9] pb-1 transition-all hover:text-[#1E293B] hover:border-[#1E293B]">independent talent</span> and creative visionaries. Linking elite freelancers with projects that matter.
                     </p>
                 </motion.div>
             </motion.div>
 
-            {/* Scroll Indicator */}
+            {/* Scroll Indicator - HIDE ON MOBILE TO REDUCE GAP */}
             <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-40 hover:opacity-100 transition-opacity z-20"
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-40 hover:opacity-100 transition-opacity z-20"
             >
                 <div className="w-[1px] h-12 bg-[#0EA5E9]" />
                 <span className="text-[10px] font-black uppercase tracking-widest mt-3 text-[#0EA5E9] vertical-text">Experience</span>

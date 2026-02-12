@@ -8,9 +8,12 @@ const envContent = fs.readFileSync(envPath, 'utf8')
 
 const env = {}
 envContent.split('\n').forEach(line => {
-    const [key, value] = line.split('=')
-    if (key && value) {
-        env[key.trim()] = value.trim()
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/)
+    if (match) {
+        let value = match[2] || ''
+        if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1)
+        if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1)
+        env[match[1]] = value.trim()
     }
 })
 
@@ -27,11 +30,15 @@ const supabase = createClient(
 async function checkProject() {
     const { data, error } = await supabase
         .from('projects')
-        .select('id, status, current_price, creator_id, funds_status')
-        .eq('id', '79834a35-b67e-4f7e-9151-a6bc3df4f4d4')
-        .single()
+        .select('*')
+        .limit(1)
 
-    console.log('Project Status:', data)
+    if (data && data.length > 0) {
+        console.log('Columns in projects:', Object.keys(data[0]))
+        console.log('Revision tracking present:',
+            'revisions_total' in data[0] && 'revisions_used' in data[0]
+        )
+    }
     if (error) console.log('Error:', error)
 }
 

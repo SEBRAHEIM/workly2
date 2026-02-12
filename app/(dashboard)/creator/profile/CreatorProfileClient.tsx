@@ -87,6 +87,7 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                 onToggle={() => setOpenSection(openSection === 'identity' ? null : 'identity')}
             >
                 <IdentityForm
+                    key={`identity-${profile?.id}-${profile?.updated_at || ''}`}
                     profile={profile}
                     onSuccess={handleIdentitySave}
                 />
@@ -103,6 +104,7 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                         onToggle={() => setOpenSection(openSection === 'expertise' ? null : 'expertise')}
                     >
                         <ExpertiseForm
+                            key={`expertise-${profile?.id}`}
                             savedSpecializations={savedSpecializations}
                             onSuccess={handleExpertiseSave}
                         />

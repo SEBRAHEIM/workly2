@@ -4,7 +4,7 @@ export const revalidate = 0
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { User, ShieldCheck } from 'lucide-react'
+import { User, ShieldCheck, ArrowLeft } from 'lucide-react'
 import HireCreatorForm from './HireCreatorForm'
 import { categories } from '@/app/data/categories'
 
@@ -43,65 +43,64 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
     const specializations = creator.specializations || []
 
     return (
-        <div className="max-w-2xl mx-auto p-4 md:p-8 pb-32">
-
-            {/* Minimal Header */}
-            <div className="text-center mb-8">
-                <div className="w-20 h-20 rounded-full bg-[#F0F9FF] mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-sm overflow-hidden">
-                    {creator.avatar_url ? (
-                        <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
-                    ) : (
-                        <User className="w-8 h-8 text-gray-400" />
-                    )}
-                </div>
-                <h1 className="text-3xl font-serif font-bold text-[#1E293B] mb-1">
-                    Hire {creator.display_name || creator.full_name || 'Creator'}
-                </h1>
-                {creator.username && (
-                    <p className="text-sm text-gray-400 font-medium mb-2">@{creator.username}</p>
-                )}
-                <p className="text-gray-500 text-sm mb-3">
-                    {creator.tagline}
-                </p>
-                {creator.languages && creator.languages.length > 0 && (
-                    <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
-                        {creator.languages.map((lang: string) => (
-                            <span key={lang} className="text-[9px] font-bold uppercase px-2 py-0.5 bg-[#0EA5E9]/5 text-[#0EA5E9] rounded-md border border-[#0EA5E9]/10">
-                                {lang}
-                            </span>
-                        ))}
+        <div className="min-h-screen bg-white pb-10">
+            {/* Simple Header */}
+            <div className="bg-[#E0F2FE]/40 pt-8 pb-8 px-4 relative">
+                <div className="max-w-2xl mx-auto relative z-10">
+                    <div className="mb-4">
+                        <Link
+                            href={`/student/creator/${creatorId}`}
+                            className="inline-flex items-center px-4 py-2 bg-white/60 backdrop-blur-md border border-sky-100 rounded-full text-xs font-bold text-[#0EA5E9] hover:bg-white transition-all shadow-sm"
+                        >
+                            <ArrowLeft className="w-3.5 h-3.5 mr-2" />
+                            Back
+                        </Link>
                     </div>
-                )}
 
-                <Link
-                    href={`/student/creator/${creatorId}`}
-                    className="text-sm font-bold text-[#0EA5E9] hover:underline"
-                >
-                    ← Back to Full Profile
-                </Link>
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-sky-100 shadow-sm overflow-hidden flex-shrink-0">
+                            {creator.avatar_url ? (
+                                <img src={creator.avatar_url} alt={creator.display_name} className="w-full h-full object-cover" />
+                            ) : (
+                                <User className="w-5 h-5 text-sky-200" />
+                            )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <h1 className="text-xl font-bold font-serif text-slate-900 leading-tight truncate">
+                                Hire {creator.display_name || creator.full_name || 'Creator'}
+                            </h1>
+                            {creator.username && (
+                                <p className="text-[10px] text-slate-500 font-medium">@{creator.username}</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* The Hire Form */}
-            <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-xl">
-                <div className="mb-6 pb-6 border-b border-[#F0F9FF]">
-                    <h3 className="text-xl font-bold text-[#1E293B] mb-2">Project Details</h3>
-                    <p className="text-gray-500 text-sm">
-                        Defining your project clear and early leads to better results.
+            <div className="max-w-2xl mx-auto px-4 -mt-4">
+                <div className="bg-white rounded-[2rem] p-4 md:p-10 shadow-xl shadow-sky-100/50 border border-sky-50 relative z-20">
+                    <div className="mb-6 pb-3 border-b border-slate-50">
+                        <h2 className="text-base font-bold font-serif text-slate-900 uppercase tracking-tight">Project Details</h2>
+                    </div>
+
+                    <HireCreatorForm
+                        creatorId={creatorId}
+                        specializations={specializations}
+                        services={services || []}
+                        languages={creator.languages || []}
+                    />
+                </div>
+
+                <div className="mt-6 text-center opacity-30">
+                    <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <ShieldCheck className="w-3 h-3" />
+                        <span className="text-[9px] font-bold uppercase tracking-widest">Secure Escrow</span>
+                    </div>
+                    <p className="text-[8px] font-medium text-slate-500">
+                        Funds held safely until work is approved.
                     </p>
                 </div>
-                <HireCreatorForm
-                    creatorId={creatorId}
-                    specializations={specializations}
-                    services={services || []}
-                    languages={creator.languages || []}
-                />
             </div>
-
-            <div className="mt-8 text-center text-xs text-gray-400">
-                <ShieldCheck className="w-4 h-4 mx-auto mb-2" />
-                <p>Protected by Student Creator Guarantee. Funds held in escrow.</p>
-            </div>
-
         </div>
     )
 }

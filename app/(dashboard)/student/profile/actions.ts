@@ -6,16 +6,20 @@ import { revalidatePath } from 'next/cache'
 export async function updateStudentIdentity(formData: FormData) {
     const supabase = await createClient()
     const smsPhone = formData.get('smsPhone') as string
+    const fullName = formData.get('fullName') as string
+    const username = formData.get('username') as string
+    const displayName = formData.get('displayName') as string
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
 
-    console.log('[SMS DEBUG] Updating student profile for user:', user.id, { smsPhone })
-
     const { error } = await supabase
         .from('profiles')
         .update({
-            whatsapp_phone: smsPhone
+            whatsapp_phone: smsPhone,
+            full_name: fullName,
+            username: username,
+            display_name: displayName
         })
         .eq('id', user.id)
 

@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation'
 import { getStripe } from '@/utils/stripe'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 // Create Stripe Checkout Session
 export async function createCheckoutSession(prevState: any, formData: FormData) {
@@ -106,19 +107,22 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
 
     // Handle Escrow Release logic: Internal Wallet Model
     if (project.funds_status === 'escrow') {
-        const platformFeePercent = 0.17
-        const stripePercent = 0.029
-        const stripeFixedFee = 1 // 1 AED
+        const commissionRate = project.commission_rate || 0.20
+        const commissionAmount = amount * commissionRate
+        const creatorEarnings = amount - commissionAmount
 
-        const platformFee = amount * platformFeePercent
-        const processingFee = (amount * stripePercent) + stripeFixedFee
-        const creatorEarnings = amount - platformFee - processingFee
-
-        const { data: creator } = await supabase
+        // Use ADMIN client to update creator wallet (Student doesn't have permissions)
+        const adminSupabase = createAdminClient()
+        const { data: creator, error: fetchError } = await adminSupabase
             .from('profiles')
             .select('wallet_balance, completed_projects')
             .eq('id', creatorId)
             .single()
+
+        if (fetchError) {
+            console.error('[RELEASE FUNDS] Error fetching creator:', fetchError)
+            return { error: 'Failed to verify creator account' }
+        }
 
         if (creator) {
             // Update Statistics and Wallet Balance
@@ -130,7 +134,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
             else if (newCompletedCount >= 20) newLevel = 3
             else if (newCompletedCount >= 3) newLevel = 2
 
-            const { error: balanceError } = await supabase
+            const { error: balanceError } = await adminSupabase
                 .from('profiles')
                 .update({
                     wallet_balance: (creator.wallet_balance || 0) + creatorEarnings,
@@ -139,9 +143,12 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
                 })
                 .eq('id', creatorId)
 
-            if (!balanceError) {
-                transferSuccess = true
+            if (balanceError) {
+                console.error('[RELEASE FUNDS] Balance update failed:', balanceError)
+                return { error: 'Financial transfer failed. Please contact support.' }
             }
+
+            transferSuccess = true
         }
     }
 
@@ -151,7 +158,9 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
         .update({
             funds_status: transferSuccess ? 'released' : (project.funds_status === 'escrow' ? 'failed_release' : project.funds_status),
             status: 'completed',
-            waiting_on: null
+            waiting_on: null,
+            commission_amount: amount * (project.commission_rate || 0.20),
+            net_earnings: amount - (amount * (project.commission_rate || 0.20))
         })
         .eq('id', projectId)
 
@@ -198,13 +207,26 @@ export async function requestRevision(projectId: string, notes: string) {
     if (!project) throw new Error('Project not found')
     if (project.student_id !== user.id) throw new Error('Unauthorized')
 
-    // 2. Update Status
+    // 2. Check Revision Limit
+    const revisionsUsed = project.revisions_used || 0
+    const revisionsTotal = project.revisions_total || 0
+    if (revisionsUsed >= revisionsTotal) {
+        return { error: 'No revisions remaining for this package.' }
+    }
+
+    // 3. Calculate Deadline
+    const turnaround = project.revision_turnaround || 2
+    const dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + turnaround)
+
+    // 4. Update Status
     const { error } = await supabase
         .from('projects')
         .update({
             status: 'revision_requested',
             revision_notes: notes,
-            revisions_used: (project.revisions_used || 0) + 1,
+            revisions_used: revisionsUsed + 1,
+            revision_due_date: dueDate.toISOString(),
             waiting_on: project.creator_id // Back to creator
         })
         .eq('id', projectId)

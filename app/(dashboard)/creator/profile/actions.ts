@@ -13,6 +13,8 @@ export async function updateCreatorIdentity(formData: FormData) {
     const supabase = await createClient()
     const bio = formData.get('bio') as string
     const displayName = formData.get('displayName') as string
+    const fullName = formData.get('fullName') as string
+    const username = formData.get('username') as string
     const tagline = formData.get('tagline') as string
     const smsPhone = formData.get('smsPhone') as string
     const languages = formData.getAll('languages') as string[]
@@ -35,6 +37,8 @@ export async function updateCreatorIdentity(formData: FormData) {
         .update({
             bio,
             display_name: displayName,
+            full_name: fullName,
+            username: username,
             tagline: tagline,
             whatsapp_phone: smsPhone,
             languages: languages
@@ -162,9 +166,17 @@ export async function updateCreatorPricing(formData: FormData) {
         return { error: 'Invalid pricing mode.' }
     }
 
-    let servicePackages = []
+    let servicePackages: Record<string, any> = {}
     try {
         servicePackages = JSON.parse(servicePackagesStr)
+        // Content Moderation
+        for (const [key, pkg] of Object.entries(servicePackages)) {
+            const titleCheck = containsContactInfo(pkg.title)
+            const descCheck = containsContactInfo(pkg.description)
+            if (titleCheck.hasContactInfo || descCheck.hasContactInfo) {
+                return { error: `Contact info detected in ${key} package. Sharing contact info is strictly prohibited.` }
+            }
+        }
     } catch (e) {
         return { error: 'Invalid packages data.' }
     }

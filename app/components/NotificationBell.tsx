@@ -107,10 +107,10 @@ export default function NotificationBell({ userId }: { userId: string }) {
         <div className="relative" ref={bellRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-12 h-12 rounded-2xl border border-sky-100 hover:bg-sky-50 active:scale-95 transition-all relative text-[#0EA5E9] shadow-sm bg-white flex items-center justify-center touch-manipulation"
+                className="w-10 h-10 rounded-xl border border-slate-200 hover:bg-slate-50 active:scale-95 transition-all relative text-slate-600 bg-white flex items-center justify-center touch-manipulation"
                 aria-label="Open Notifications"
             >
-                <Bell className="w-6 h-6" />
+                <Bell size={18} />
                 {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#0EA5E9] rounded-full border-2 border-white text-[8px] font-black text-white flex items-center justify-center">
                         {unreadCount}
@@ -119,23 +119,23 @@ export default function NotificationBell({ userId }: { userId: string }) {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-4 w-96 max-w-[calc(100vw-2rem)] bg-white rounded-[2rem] shadow-2xl border border-sky-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                    <div className="p-6 border-b border-sky-50 flex justify-between items-center bg-sky-50/30">
-                        <div className="flex items-center gap-3">
-                            <h3 className="font-serif font-black text-slate-900 uppercase tracking-tight">Intelligence</h3>
+                <div className="absolute right-0 mt-3 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                    <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <div className="flex items-center gap-2">
+                            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">Notifications</h3>
                             <button
                                 onClick={() => { fetchNotifications() }}
                                 disabled={isLoading}
-                                className={`p-2 hover:bg-sky-100 rounded-full transition-all ${isLoading ? 'animate-spin opacity-50' : ''}`}
+                                className={`p-1.5 hover:bg-slate-200 rounded-lg transition-all ${isLoading ? 'animate-spin opacity-50' : ''}`}
                                 title="Refresh"
                             >
-                                <RefreshCw className="w-4 h-4 text-[#0EA5E9]" />
+                                <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
                             </button>
                         </div>
                         <div className="flex flex-col items-end">
                             {unreadCount > 0 && (
-                                <button onClick={markAllRead} className="text-[10px] text-[#0EA5E9] font-black uppercase tracking-widest hover:underline">
-                                    Purge Alerts
+                                <button onClick={markAllRead} className="text-[9px] text-[#0EA5E9] font-bold uppercase tracking-widest hover:underline">
+                                    Mark all read
                                 </button>
                             )}
                         </div>
@@ -152,15 +152,14 @@ export default function NotificationBell({ userId }: { userId: string }) {
                                     <div
                                         key={notif.id}
                                         onClick={() => handleMarkAsRead(notif.id, notif.link)}
-                                        className={`p-6 border-b border-sky-50 hover:bg-sky-50/50 cursor-pointer transition-colors flex items-start gap-4 ${!notif.is_read ? 'bg-sky-50/30' : ''}`}
+                                        className={`p-4 border-b border-slate-50 hover:bg-slate-50/50 cursor-pointer transition-colors flex items-start gap-3 ${!notif.is_read ? 'bg-slate-50/30' : ''}`}
                                     >
-                                        <div className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${!notif.is_read ? 'bg-[#0EA5E9] shadow-sm shadow-sky-500' : 'bg-slate-200'}`}></div>
+                                        <div className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${!notif.is_read ? 'bg-[#0EA5E9]' : 'bg-slate-200'}`}></div>
                                         <div className="flex-1">
-                                            <p className={`text-sm leading-snug ${!notif.is_read ? 'font-bold text-slate-800' : 'text-slate-500'}`}>
+                                            <p className={`text-xs leading-normal ${!notif.is_read ? 'font-semibold text-slate-800' : 'text-slate-500'}`}>
                                                 {notif.message}
                                             </p>
-                                            <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-2 flex items-center gap-2">
-                                                <div className="w-1 h-1 bg-sky-200 rounded-full" />
+                                            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-1.5 flex items-center gap-2">
                                                 {new Date(notif.created_at).toLocaleDateString()}
                                             </p>
                                         </div>

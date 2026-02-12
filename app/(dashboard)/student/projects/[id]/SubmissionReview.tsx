@@ -26,19 +26,32 @@ export default function SubmissionReview({
 }: SubmissionReviewProps) {
     const [isRevising, setIsRevising] = useState(false)
     const [revisionNotes, setRevisionNotes] = useState('')
+    const [confirming, setConfirming] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const handleApprove = async () => {
-        if (!confirm('Are you sure you want to approve this work? Funds will be released (if escrowed) and the project will be marked as complete.')) return
+        if (!confirming) {
+            setConfirming(true)
+            // Auto-cancel confirmation after 4 seconds
+            setTimeout(() => setConfirming(false), 4000)
+            return
+        }
 
         setLoading(true)
         try {
-            await releaseFunds(projectId, currentPrice, creatorId)
-            toast.success('Project approved!')
-            // Keep loading true until redirect/refresh happens
+            const result = await releaseFunds(projectId, currentPrice, creatorId)
+            if (result && (result as any).error) {
+                toast.error((result as any).error)
+                setLoading(false)
+                setConfirming(false)
+            } else {
+                toast.success('Project approved and funds released!')
+                // Keep loading true for revalidation
+            }
         } catch (e: any) {
             toast.error('Error approving project: ' + e.message)
             setLoading(false)
+            setConfirming(false)
         }
     }
 
@@ -116,27 +129,34 @@ export default function SubmissionReview({
                         <button
                             onClick={handleApprove}
                             disabled={loading}
-                            className="w-full bg-[#0EA5E9] text-white font-bold py-4 rounded-xl hover:bg-[#2e3b29] active:scale-95 transition-all shadow-lg shadow-[#0EA5E9]/20 flex items-center justify-center"
+                            className={`w-full font-bold py-4 rounded-xl text-white active:scale-95 transition-all shadow-lg flex items-center justify-center
+                                ${confirming ? 'bg-green-600 shadow-green-200' : 'bg-[#0EA5E9] shadow-sky-200'}`}
                         >
-                            {loading ? 'Processing...' : 'Approve & Release Funds'}
+                            {loading ? (
+                                <RefreshCw className="w-5 h-5 animate-spin mr-2" />
+                            ) : null}
+                            {loading ? 'Processing...' : confirming ? 'Confirm Approval?' : 'Approve & Release Funds'}
                         </button>
 
-                        <button
-                            onClick={() => setIsRevising(true)}
-                            disabled={loading}
-                            className={`w-full font-bold py-3 rounded-xl border transition-all flex items-center justify-center text-sm
-                                ${revisionsUsed >= revisionsTotal && revisionsTotal > 0
-                                    ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}
-                        >
-                            <RefreshCw className={`w-4 h-4 mr-2 ${revisionsUsed >= revisionsTotal && revisionsTotal > 0 ? 'text-red-500' : ''}`} />
-                            {revisionsUsed >= revisionsTotal && revisionsTotal > 0 ? 'Request Extra Revision' : 'Request Changes'}
-                        </button>
-                        {revisionsTotal > 0 && (
-                            <p className={`text-[10px] font-bold uppercase tracking-widest text-center mt-2 ${revisionsUsed >= revisionsTotal ? 'text-red-400' : 'text-gray-400'}`}>
-                                {revisionsUsed} of {revisionsTotal} revisions used
-                            </p>
+                        {revisionsUsed < revisionsTotal ? (
+                            <button
+                                onClick={() => setIsRevising(true)}
+                                disabled={loading}
+                                className="w-full font-bold py-3 rounded-xl border transition-all flex items-center justify-center text-sm bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+                            >
+                                <RefreshCw className="w-4 h-4 mr-2" />
+                                Request Changes
+                            </button>
+                        ) : (
+                            <div className="p-3 bg-red-50 rounded-xl border border-red-100 flex items-center justify-center gap-2">
+                                <AlertCircle className="w-4 h-4 text-red-500" />
+                                <span className="text-xs font-bold text-red-600">Revision limit reached</span>
+                            </div>
                         )}
+
+                        <p className={`text-[10px] font-bold uppercase tracking-widest text-center mt-2 ${revisionsUsed >= revisionsTotal ? 'text-red-400' : 'text-gray-400'}`}>
+                            {revisionsUsed} of {revisionsTotal} revisions used
+                        </p>
                     </div>
                 ) : (
                     <div className="bg-orange-50 rounded-xl p-4 border border-orange-100 animate-in fade-in slide-in-from-bottom-2">
@@ -177,7 +197,7 @@ export default function SubmissionReview({
                 )}
 
                 <p className="text-[10px] text-gray-300 mt-4 text-center">
-                    Approved funds specific 17% fee.
+                    Flat 20% Workly commission applies.
                 </p>
             </div>
         </div>

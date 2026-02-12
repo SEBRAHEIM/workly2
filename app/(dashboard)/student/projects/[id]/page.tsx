@@ -5,7 +5,7 @@ import { releaseFunds } from '../actions'
 import { User, FileText, Check, MessageSquare, Clock, Shield, Briefcase, Download, AlertTriangle } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 
-import PaymentReceiptModal from './PaymentReceiptModal'
+import PaymentReceiptModal from '@/app/components/PaymentReceiptModal'
 import PaymentButton from './PaymentButton'
 import SubmissionReview from './SubmissionReview'
 import ReportIssueForm from './ReportIssueForm'
@@ -109,10 +109,19 @@ export default async function ProjectPage({
         <div className="max-w-5xl mx-auto p-4 md:p-8">
             <PaymentReceiptModal
                 amount={displayPrice}
-                date={new Date().toLocaleString()}
+                date={new Date().toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}
                 projectName={project.title}
-                transactionId={session_id || 'UNKNOWN'}
+                transactionId={session_id || 'LOCAL-SYNC'}
                 showReceipt={payment === 'success'}
+                studentName={user.user_metadata?.full_name}
+                studentEmail={user.email}
+                creatorName={project?.creator?.full_name}
             />
 
             {/* Header */}
@@ -203,16 +212,16 @@ export default async function ProjectPage({
                                             <Check className="w-5 h-5 text-white" />
                                         </div>
                                         <div>
-                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Payment Received</p>
-                                            <p className="text-xl font-bold font-serif">Verifying with Stripe...</p>
+                                            <p className="font-black uppercase tracking-widest text-[10px] text-white/60">Secure Payment Received</p>
+                                            <p className="text-xl font-bold font-serif">Verifying Transaction...</p>
                                         </div>
                                     </div>
                                     <p className="text-sm text-white/70 mb-8 leading-relaxed">
-                                        Great! We've received your payment. We're just waiting for the final confirmation from Stripe to move your project to "In Progress". This usually takes a few seconds.
+                                        Great! We've received your payment. We're just waiting for the final network confirmation to move your project to "In Progress". This usually takes a few seconds.
                                     </p>
                                     <div className="flex items-center justify-center p-4 bg-white/10 rounded-2xl">
                                         <Clock className="w-6 h-6 mr-3 animate-spin" />
-                                        <span className="font-bold uppercase tracking-widest text-sm text-white">Finalizing your order...</span>
+                                        <span className="font-bold uppercase tracking-widest text-sm text-white">Activating your project...</span>
                                     </div>
                                 </div>
                                 <AEDIcon className="absolute -bottom-10 -right-10 w-48 h-48 text-white/5" />

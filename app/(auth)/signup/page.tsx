@@ -3,7 +3,8 @@
 import { signup } from '../actions'
 import { useFormState } from 'react-dom'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 const initialState = {
     error: '',
@@ -11,6 +12,7 @@ const initialState = {
 
 export default function Signup() {
     const [state, formAction] = useFormState(signup, initialState)
+    const [showPassword, setShowPassword] = useState(false)
 
     return (
         <main className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -29,14 +31,11 @@ export default function Signup() {
 
                 <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100">
                     <div className="text-center mb-10">
-                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
-                            <span className="text-white font-serif font-black text-3xl">W</span>
-                        </div>
                         <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
-                            Elite <br /> <span className="text-[#0EA5E9]">Standard.</span>
+                            Join <br /> <span className="text-[#0EA5E9]">Workly.</span>
                         </h1>
                         <p className="text-slate-500 font-medium text-sm">
-                            Create your digital identity.
+                            Join the network for elite students and creators.
                         </p>
                     </div>
 
@@ -51,15 +50,22 @@ export default function Signup() {
                                 className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
                             />
                         </div>
-                        <div>
+                        <div className="relative">
                             <input
                                 id="password"
                                 name="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Secure Password"
                                 required
-                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 pr-14 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#0EA5E9] transition-colors"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
                         </div>
                         {state?.error && (
                             <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center">{state.error}</p>
@@ -68,7 +74,7 @@ export default function Signup() {
                             type="submit"
                             className="w-full rounded-full bg-[#0EA5E9] px-4 py-4 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 mt-4 shadow-lg shadow-sky-100"
                         >
-                            Establish Identity
+                            Create Account
                         </button>
                     </form>
 

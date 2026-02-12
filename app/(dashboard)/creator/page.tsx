@@ -13,15 +13,17 @@ export default async function CreatorDashboard() {
     if (!user) return <div>Please log in</div>
 
     // 2. Parallel fetch for all dashboard requirements
-    const [profileRes, portfolioRes, requestsRes] = await Promise.all([
+    const [profileRes, portfolioRes, recentRes, activeRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         supabase.from('portfolio_items').select('id', { count: 'exact', head: true }).eq('creator_id', user.id),
-        supabase.from('projects').select('*').eq('creator_id', user.id).eq('status', 'requested').order('created_at', { ascending: false }).limit(5)
+        supabase.from('projects').select('*').eq('creator_id', user.id).in('status', ['requested', 'negotiating', 'agreed']).order('created_at', { ascending: false }).limit(5),
+        supabase.from('projects').select('*').eq('creator_id', user.id).in('status', ['in_progress', 'revision_requested', 'submitted']).order('updated_at', { ascending: false }).limit(10)
     ])
 
     const profile = profileRes.data
     const portfolioCount = portfolioRes.count || 0
-    const recentRequests = requestsRes.data
+    const recentRequests = recentRes.data || []
+    const activeWork = activeRes.data || []
 
     // Check Completion
     const hasBio = profile?.bio && profile.bio.length > 10
@@ -113,6 +115,44 @@ export default async function CreatorDashboard() {
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <DashboardHeader />
 
+                {/* Active Work Section */}
+                {activeWork.length > 0 && (
+                    <div className="mt-12">
+                        <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
+                            <div className="w-12 h-[1px] bg-[#0EA5E9]/20" />
+                            Active Projects
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {activeWork.map(project => (
+                                <Link
+                                    href={`/creator/projects/${project.id}`}
+                                    key={project.id}
+                                    className="block bg-[#1E293B] hover:bg-[#0EA5E9]/10 rounded-[2rem] p-6 border border-slate-700 transition-all duration-300 group relative overflow-hidden"
+                                >
+                                    <div className="relative z-10">
+                                        <div className={`text-[8px] font-black uppercase tracking-[0.2em] mb-4 inline-block px-3 py-1 rounded-full border ${project.status === 'revision_requested' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                                            project.status === 'submitted' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                                'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                            }`}>
+                                            {project.status.replace('_', ' ')}
+                                        </div>
+                                        <h3 className="text-xl font-black text-white mb-2 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight line-clamp-1" dir="auto">{project.title}</h3>
+                                        <div className="flex items-center justify-between mt-6">
+                                            <span className="text-xs font-bold text-slate-400">AED {project.current_price}</span>
+                                            <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white group-hover:bg-[#0EA5E9] transition-all">
+                                                <ArrowRight className="w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="absolute -right-4 -bottom-4 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
+                                        <Briefcase size={80} />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Recent Requests */}
                 <div className="mt-20">
                     <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-10 flex items-center gap-4">
@@ -121,28 +161,24 @@ export default async function CreatorDashboard() {
                     </h2>
 
                     {recentRequests && recentRequests.length > 0 ? (
-                        <div className="grid gap-6">
+                        <div className="grid gap-4">
                             {recentRequests.map(project => (
                                 <Link
                                     href={`/creator/projects/${project.id}`}
                                     key={project.id}
-                                    className="block bg-white hover:bg-sky-50/30 rounded-[2rem] p-8 border border-sky-50 shadow-sm transition-all duration-300 group relative overflow-hidden"
+                                    className="block bg-white hover:bg-sky-50/30 rounded-[2rem] p-6 border border-sky-50 shadow-sm transition-all duration-300 group relative overflow-hidden"
                                 >
                                     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 relative z-10">
                                         <div className="flex-1">
-                                            <h3 className="text-2xl font-black text-slate-800 mb-2 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight" dir="auto">{project.title}</h3>
-                                            <p className="text-slate-500 font-medium line-clamp-1 max-w-2xl" dir="auto">{project.description}</p>
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <span className="text-[10px] font-black text-[#0EA5E9] uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full">New Order</span>
+                                                <h3 className="text-xl font-black text-slate-800 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight" dir="auto">{project.title}</h3>
+                                            </div>
+                                            <p className="text-slate-500 font-medium line-clamp-1 max-w-2xl text-sm" dir="auto">{project.description}</p>
                                         </div>
                                         <div className="flex items-center justify-center w-full md:w-auto text-white font-black text-[10px] uppercase tracking-widest bg-slate-900 group-hover:bg-[#0EA5E9] px-8 py-4 rounded-full transition-all shadow-xl group-hover:shadow-sky-100">
                                             Review Brief
                                             <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
-                                        </div>
-                                    </div>
-
-                                    {/* Abstract background hover design */}
-                                    <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <div className="w-12 h-12 bg-sky-50 rounded-full flex items-center justify-center text-[#0EA5E9]">
-                                            <TrendingUp size={20} />
                                         </div>
                                     </div>
                                 </Link>

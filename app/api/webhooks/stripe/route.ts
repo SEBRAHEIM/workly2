@@ -3,6 +3,8 @@ import { getStripe } from '@/utils/stripe'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { NextResponse } from 'next/server'
 import { notifyCreatorOfNewHire } from '@/utils/sms'
+import { createNotification } from '@/utils/notifications'
+
 
 export const dynamic = 'force-dynamic'
 
@@ -87,15 +89,17 @@ export async function POST(req: Request) {
 
             // 4. Send Notifications
             await Promise.all([
-                supabaseAdmin.from('notifications').insert({
-                    user_id: project.student_id,
+                createNotification({
+                    userId: project.student_id,
                     type: 'success',
+                    title: 'Payment Successful',
                     message: `Payment successful for "${project.title}". Work has started!`,
                     link: `/student/projects/${project.id}`
                 }),
-                supabaseAdmin.from('notifications').insert({
-                    user_id: project.creator_id,
+                createNotification({
+                    userId: project.creator_id,
                     type: 'success',
+                    title: 'New Paid Order',
                     message: `New Paid Order (Secure Escrow): "${project.title}". You can start working now.`,
                     link: `/creator/requests`
                 }),
@@ -109,6 +113,7 @@ export async function POST(req: Request) {
                     link: `https://workly.day/creator/requests`
                 }).catch(e => console.error('[SMS] Webhook alert failed:', e)) : Promise.resolve()
             ])
+
 
             console.log(`[STRIPE WEBHOOK] Successfully processed payment for project ${projectId}`)
 
@@ -130,13 +135,15 @@ export async function POST(req: Request) {
                     .single()
 
                 if (profile) {
-                    await supabaseAdmin.from('notifications').insert({
-                        user_id: profile.id,
+                    await createNotification({
+                        userId: profile.id,
                         type: 'success',
+                        title: 'Account Verified',
                         message: "Congratulations! Your Stripe account is fully verified and ready for payouts.",
                         link: "/creator/profile"
                     })
                 }
+
             }
         } catch (accountError: any) {
             console.error(`[STRIPE WEBHOOK] Account Update Error: ${accountError.message}`)

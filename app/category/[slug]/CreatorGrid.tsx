@@ -92,9 +92,6 @@ export default async function CreatorGrid({
                                 <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                                 <span>{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'} ({creator.total_reviews || 0})</span>
                             </div>
-                            <span className="bg-slate-50 text-slate-500 text-[9px] font-black uppercase px-2 py-1 rounded-lg border border-slate-100">
-                                Level {creator.level || 1}
-                            </span>
                             {creator.languages && creator.languages.length > 0 && (
                                 <div className="flex gap-1 items-center">
                                     {creator.languages.map((lang: string) => {

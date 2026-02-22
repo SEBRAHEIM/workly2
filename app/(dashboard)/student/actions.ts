@@ -145,8 +145,16 @@ export async function createProject(prevState: any, formData: FormData) {
                     type: 'accepted',
                     actor_id: user.id,
                     payload: { price: initialPrice, notes: `Project created and awaiting initial payment. Due: ${dueDate.toISOString()}` }
+                }),
+                createNotification({
+                    userId: creatorId,
+                    type: 'info',
+                    title: 'New Project Requested',
+                    message: `You have a new project request: "${title || 'Untitled Project'}"`,
+                    link: `/creator/requests`
                 })
             ])
+
         } catch (postError) {
             console.error('Error in background tasks:', postError)
         }

@@ -315,11 +315,13 @@ export async function declineProject(projectId: string) {
         await createNotification({
             userId: project.student_id,
             type: refundResult ? 'info' : 'error',
+            title: refundResult ? 'Project Declined & Refunded' : 'Offer Declined',
             message: refundResult
                 ? `Project Declined & Refunded: ${project.title}. The amount has been sent back to your original payment method.`
                 : `Offer Declined: ${project.title}`,
             link: `/student/projects/${projectId}`
         })
+
     }
 
     revalidatePath('/creator/requests')
@@ -455,9 +457,11 @@ export async function submitWork(prevState: any, formData: FormData) {
         await createNotification({
             userId: project.student_id,
             type: 'success',
+            title: 'Work Submitted',
             message: `Work Submitted: ${project.title}`,
             link: `/student/projects/${projectId}`
         })
+
 
         // Background WhatsApp Alert
         if (finalStudentPhone) {
@@ -523,9 +527,11 @@ export async function startProject(projectId: string) {
         await createNotification({
             userId: project.student_id,
             type: 'info',
+            title: 'Work Started',
             message: `Work started on: ${project.title}`,
             link: `/student/projects/${projectId}`
         })
+
     }
 
     revalidatePath('/creator/requests')

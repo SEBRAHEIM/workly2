@@ -105,10 +105,6 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Level</span>
-                            <span className="text-sm font-bold text-slate-900">{creator.level || 1}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed</span>
                             <span className="text-sm font-bold text-slate-900">{creator.completed_projects || 0} Projects</span>
                         </div>

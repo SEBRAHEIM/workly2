@@ -127,10 +127,7 @@ export default function CreatorNavbar() {
                             </p>
                             <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
                                 <Star className="w-3 h-3 text-sky-400 fill-sky-400 mr-2" />
-                                <span className="text-xs font-black text-slate-700 mr-3">{profile?.rating_avg || '0.0'}</span>
-                                <span className="text-[9px] text-[#0EA5E9] font-black uppercase tracking-wider border-l border-sky-200 pl-3">
-                                    Lvl {profile?.level || 1}
-                                </span>
+                                <span className="text-xs font-black text-slate-700">{profile?.rating_avg || '0.0'}</span>
                             </div>
 
                             <Link

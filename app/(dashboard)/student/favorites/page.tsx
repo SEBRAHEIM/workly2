@@ -82,10 +82,6 @@ export default async function FavoritesPage() {
                                                     <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                                                     <span>{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'} ({creator.total_reviews || 0})</span>
                                                 </div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5 ml-1">
-                                                    <ShieldCheck size={12} className="text-sky-400" />
-                                                    Level {creator.level || 1}
-                                                </p>
                                             </div>
                                         </div>
                                     </div>

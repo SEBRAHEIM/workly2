@@ -207,9 +207,11 @@ export async function completeWithdrawal(withdrawalId: string) {
     await createNotification({
         userId: withdrawal.creator_id,
         type: 'success',
+        title: 'Payout Processed',
         message: `Payout Processed: Your AED ${withdrawal.amount} is on the way.`,
         link: '/creator/wallet'
     })
+
 
     revalidatePath('/hq')
     return { success: true }
@@ -257,9 +259,11 @@ export async function rejectWithdrawal(withdrawalId: string, reason: string) {
     await createNotification({
         userId: withdrawal.creator_id,
         type: 'error',
+        title: 'Withdrawal Rejected',
         message: `Withdrawal Rejected: ${reason}. Funds returned to wallet.`,
         link: '/creator/wallet'
     })
+
 
     revalidatePath('/hq')
     return { success: true }

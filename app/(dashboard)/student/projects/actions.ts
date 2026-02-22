@@ -178,9 +178,11 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
     await createNotification({
         userId: project.creator_id,
         type: 'success',
+        title: 'Project Completed',
         message: `Project Completed: ${project.title}`,
         link: `/creator/requests`
     })
+
 
     revalidatePath(`/student/projects/${projectId}`)
 }
@@ -245,9 +247,11 @@ export async function requestRevision(projectId: string, notes: string) {
     await createNotification({
         userId: project.creator_id,
         type: 'warning',
+        title: 'Revision Requested',
         message: `Revision Requested: ${project.title}`,
         link: `/creator/requests` // Or project view
     })
+
 
     revalidatePath(`/student/projects/${projectId}`)
     return { success: true }

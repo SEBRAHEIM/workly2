@@ -41,6 +41,11 @@ export async function createNotification({
         // Note: We don't await this to keep the application responsive, but we do catch errors.
         (async () => {
             try {
+                if (!process.env.RESEND_API_KEY) {
+                    console.warn('NOTICE: RESEND_API_KEY is missing. Skipping email notification. Please configure this in Vercel/Environment to enable emails.')
+                    return
+                }
+
                 const { data: userData, error: userError } = await supabase
                     .auth.admin.getUserById(userId)
 

@@ -1,9 +1,11 @@
+
 'use client'
 
 import { useState } from 'react'
-import { Check, Download, AlertCircle, RefreshCw, ChevronUp } from 'lucide-react'
-import { releaseFunds, requestRevision } from '../actions' // Import server actions
+import { Check, Download, AlertCircle, RefreshCw, ChevronUp, Shield, Star, MessageSquare, Upload } from 'lucide-react'
+import { releaseFunds, requestRevision } from '../actions'
 import { toast } from 'sonner'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import ReviewForm from './ReviewForm'
 
@@ -86,150 +88,174 @@ export default function SubmissionReview({
         }
     }
 
-    // If completed and showReview is true, show the form
     if (isCompleted && showReview) {
         return (
-            <ReviewForm
-                projectId={projectId}
-                creatorName={creatorName}
-                onSuccess={() => setShowReview(false)}
-            />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+                <ReviewForm
+                    projectId={projectId}
+                    creatorName={creatorName}
+                    onSuccess={() => setShowReview(false)}
+                />
+            </motion.div>
         )
     }
 
-    // If completed but review dismissed/done, show a success message
     if (isCompleted) {
         return (
-            <div className="bg-green-50 border border-green-100 rounded-3xl p-8 text-center animate-in fade-in duration-500">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                    <Check className="w-8 h-8 text-green-500" />
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-emerald-500 rounded-[2rem] p-8 text-white shadow-xl shadow-emerald-500/20 text-center flex flex-col items-center"
+            >
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6">
+                    <Check className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-serif font-bold text-slate-900 mb-1 leading-tight uppercase tracking-tighter">Project Completed</h3>
-                <p className="text-slate-500 text-sm font-medium">Transfer successful. Thank you for using Workly!</p>
-            </div>
+                <h3 className="text-2xl font-serif font-black mb-2 uppercase tracking-tight">Project Completed</h3>
+                <p className="text-white/70 text-sm font-medium leading-relaxed">
+                    Transfer successful. The creator has received their earnings.
+                </p>
+            </motion.div>
         )
     }
 
     return (
-        <div className="w-full relative">
-            <div className="text-center pt-2">
-                <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                    <Check className="w-8 h-8 text-purple-600" />
-                </div>
-
-                <h3 className="font-serif font-bold text-2xl text-[#1E293B] mb-2 uppercase tracking-tight">Work Submitted</h3>
-                <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto font-medium">
-                    The creator has delivered the work. Please review it casually before approving.
-                </p>
-
-                {/* Submission Details Card */}
-                <div className="bg-[#F9FAFB] rounded-xl p-4 border border-gray-100 text-left mb-6">
-                    {submissionUrl ? (
-                        <a
-                            href={submissionUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all group mb-3"
-                        >
-                            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-purple-200 transition-colors shrink-0">
-                                <Download className="w-5 h-5 text-purple-700" />
-                            </div>
-                            <div className="overflow-hidden min-w-0">
-                                <p className="font-bold text-[#1E293B] text-sm truncate">Download Deliverable</p>
-                                <p className="text-xs text-gray-400 truncate block">{submissionUrl}</p>
-                            </div>
-                        </a>
-                    ) : (
-                        <div className="flex items-center p-3 bg-yellow-50 rounded-lg border border-yellow-100 mb-3">
-                            <AlertCircle className="w-5 h-5 text-yellow-500 mr-2 shrink-0" />
-                            <p className="text-sm text-yellow-700 font-medium">No direct link provided.</p>
-                        </div>
-                    )}
-
-                    {submissionNotes && (
-                        <div className="pl-2 border-l-2 border-purple-200">
-                            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-widest">Creator Notes</p>
-                            <p className="text-sm text-gray-600 italic" dir="auto">"{submissionNotes}"</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Actions */}
-                {!isRevising ? (
-                    <div className="space-y-3">
-                        <button
-                            onClick={handleApprove}
-                            disabled={loading}
-                            className={`w-full font-black uppercase tracking-widest text-[10px] py-4 rounded-xl text-white active:scale-95 transition-all shadow-lg flex items-center justify-center
-                                ${confirming ? 'bg-green-600 shadow-green-200' : 'bg-[#0EA5E9] shadow-sky-200'}`}
-                        >
-                            {loading && (
-                                <RefreshCw className="w-4 h-4 animate-spin mr-2" />
-                            )}
-                            {loading ? 'Processing...' : confirming ? 'Confirm Approval?' : 'Approve & Release Funds'}
-                        </button>
-
-                        {revisionsUsed < revisionsTotal ? (
-                            <button
-                                onClick={() => setIsRevising(true)}
-                                disabled={loading}
-                                className="w-full font-black uppercase tracking-widest text-[10px] py-3 rounded-xl border transition-all flex items-center justify-center bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                            >
-                                <RefreshCw className="w-4 h-4 mr-2" />
-                                Request Changes
-                            </button>
-                        ) : (
-                            <div className="p-3 bg-red-50 rounded-xl border border-red-100 flex items-center justify-center gap-2">
-                                <AlertCircle className="w-4 h-4 text-red-500" />
-                                <span className="text-xs font-bold text-red-600 uppercase tracking-tight">Revision limit reached</span>
-                            </div>
-                        )}
-
-                        <p className={`text-[9px] font-black uppercase tracking-[0.2em] text-center mt-2 ${revisionsUsed >= revisionsTotal ? 'text-red-400' : 'text-gray-400'}`}>
-                            {revisionsUsed} of {revisionsTotal} revisions used
-                        </p>
+        <div className="space-y-6">
+            <div className="bg-white rounded-[2rem] p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center">
+                        <Upload className="w-6 h-6 text-indigo-500" />
                     </div>
+                    <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Workspace Update</p>
+                        <h3 className="text-xl font-bold text-slate-900 leading-tight">Review Work Output</h3>
+                    </div>
+                </div>
+
+                {submissionUrl ? (
+                    <a
+                        href={submissionUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-4 p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-indigo-200 hover:shadow-lg transition-all group mb-6"
+                    >
+                        <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <Download className="w-7 h-7 text-indigo-500" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Final Result</p>
+                            <p className="font-bold text-slate-900 truncate">Access Deliverable</p>
+                        </div>
+                    </a>
                 ) : (
-                    <div className="bg-orange-50 rounded-xl p-4 border border-orange-100 animate-in fade-in slide-in-from-bottom-2">
-                        <div className="flex justify-between items-center mb-2">
-                            <h4 className="font-black text-orange-800 text-[10px] uppercase tracking-widest flex items-center">
-                                <RefreshCw className="w-4 h-4 mr-2" /> Request Revision
-                            </h4>
-                            <button onClick={() => setIsRevising(false)} className="text-gray-400 hover:text-gray-600">
-                                <ChevronUp className="w-4 h-4" />
-                            </button>
-                        </div>
-
-                        <textarea
-                            placeholder="Describe what changes you need..."
-                            dir="auto"
-                            className="w-full p-3 rounded-lg border border-orange-200 text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none h-24 mb-3 bg-white"
-                            value={revisionNotes}
-                            onChange={(e) => setRevisionNotes(e.target.value)}
-                        />
-
-                        <div className="flex gap-2">
-                            <button
-                                onClick={handleRequestRevision}
-                                disabled={loading}
-                                className="flex-1 bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] py-2 rounded-lg hover:bg-orange-700 transition-colors"
-                            >
-                                {loading ? 'Sending...' : 'Send Request'}
-                            </button>
-                            <button
-                                onClick={() => setIsRevising(false)}
-                                disabled={loading}
-                                className="px-4 bg-white text-gray-500 font-black uppercase tracking-widest text-[10px] py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                    <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl mb-6 flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-amber-500 shrink-0" />
+                        <p className="text-sm font-bold text-amber-700 leading-relaxed">System Note: No direct file link attached. Check creator notes for details.</p>
                     </div>
                 )}
 
-                <p className="text-[9px] font-black tracking-widest text-gray-300 mt-4 text-center uppercase">
-                    Flat 20% Workly commission applies.
-                </p>
+                {submissionNotes && (
+                    <div className="mb-8 p-6 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <MessageSquare className="w-3 h-3" />
+                            Creator Comments
+                        </p>
+                        <p className="text-sm text-slate-700 leading-relaxed italic" dir="auto">"{submissionNotes}"</p>
+                    </div>
+                )}
+
+                <AnimatePresence mode="wait">
+                    {!isRevising ? (
+                        <motion.div
+                            key="actions"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="space-y-4"
+                        >
+                            <button
+                                onClick={handleApprove}
+                                disabled={loading}
+                                className={`w-full font-black uppercase tracking-[0.2em] text-[10px] py-5 rounded-2xl text-white transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95
+                                    ${confirming ? 'bg-emerald-600 shadow-emerald-500/20' : 'bg-slate-900 shadow-slate-900/20 group hover:bg-[#0EA5E9] hover:shadow-[#0EA5E9]/20'}`}
+                            >
+                                {loading ? (
+                                    <RefreshCw className="w-4 h-4 animate-spin" />
+                                ) : confirming ? (
+                                    <Check className="w-4 h-4" />
+                                ) : (
+                                    <Shield className="w-4 h-4 group-hover:animate-pulse" />
+                                )}
+                                {loading ? 'Processing...' : confirming ? 'Confirm Acceptance' : 'Accept & Release Earnings'}
+                            </button>
+
+                            {revisionsUsed < revisionsTotal ? (
+                                <button
+                                    onClick={() => setIsRevising(true)}
+                                    disabled={loading}
+                                    className="w-full font-black uppercase tracking-[0.2em] text-[10px] py-4 rounded-2xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" />
+                                    Request Course Correction
+                                </button>
+                            ) : (
+                                <div className="p-4 bg-rose-50 rounded-2xl border border-rose-100 flex items-center justify-center gap-2 text-rose-500">
+                                    <AlertCircle className="w-4 h-4" />
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Revision Limit Reached</span>
+                                </div>
+                            )}
+
+                            <div className="flex items-center justify-center gap-2 opacity-40">
+                                <div className="h-[1px] w-8 bg-slate-900"></div>
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">
+                                    {revisionsUsed} / {revisionsTotal} Credits Used
+                                </span>
+                                <div className="h-[1px] w-8 bg-slate-900"></div>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="revision-form"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="bg-amber-50 rounded-3xl p-8 border border-amber-100"
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h4 className="font-black text-amber-600 text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                    <RefreshCw className="w-4 h-4" /> Revision Directive
+                                </h4>
+                                <button onClick={() => setIsRevising(false)} className="text-amber-400 hover:text-amber-600">
+                                    <ChevronUp className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <textarea
+                                placeholder="Detail precisely what changes are required for project success..."
+                                dir="auto"
+                                className="w-full p-5 rounded-2xl border border-amber-200 text-sm focus:ring-4 focus:ring-amber-500/10 focus:border-amber-400 outline-none h-32 mb-6 bg-white transition-all shadow-inner"
+                                value={revisionNotes}
+                                onChange={(e) => setRevisionNotes(e.target.value)}
+                            />
+
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={handleRequestRevision}
+                                    disabled={loading}
+                                    className="flex-1 bg-amber-600 text-white font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20 active:scale-95"
+                                >
+                                    {loading ? 'Transmitting...' : 'Transmit Revision Brief'}
+                                </button>
+                                <button
+                                    onClick={() => setIsRevising(false)}
+                                    disabled={loading}
+                                    className="px-6 bg-white text-slate-500 font-black uppercase tracking-widest text-[10px] py-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all active:scale-95"
+                                >
+                                    Abort
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     )

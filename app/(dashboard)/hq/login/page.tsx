@@ -36,7 +36,7 @@ export default function HQLogin() {
                     </div>
 
                     <div className="text-center mb-10">
-                        <h1 className="font-serif font-black text-3xl md:text-4xl text-white mb-3 italic tracking-tighter uppercase">
+                        <h1 className="font-sans font-black text-3xl md:text-4xl text-white mb-3 tracking-tighter uppercase leading-[0.95]">
                             Workly HQ
                         </h1>
                         <p className="text-gray-500 font-bold text-[10px] uppercase tracking-[0.3em]">

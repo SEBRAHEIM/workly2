@@ -53,7 +53,7 @@ function VerifyContent() {
                         <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
                             <span className="text-white font-serif font-black text-3xl">W</span>
                         </div>
-                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                        <h1 className="font-sans font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.95]">
                             Identity <br /> <span className="text-[#0EA5E9]">Verify.</span>
                         </h1>
                         <p className="text-slate-500 font-medium text-sm">

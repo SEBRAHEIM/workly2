@@ -48,18 +48,18 @@ export default function Categories() {
                                     <cat.icon className="w-6 h-6 md:w-8 md:h-8" />
                                 </div>
 
-                                <h3 className="text-xs leading-tight md:text-4xl font-black font-sans text-slate-900 mb-2 md:mb-4 uppercase tracking-tighter group-hover:text-[#0EA5E9] transition-colors duration-200">
+                                <h3 className="text-xl md:text-2xl font-black font-sans text-slate-900 mb-2 md:mb-3 uppercase tracking-tight group-hover:text-[#0EA5E9] transition-colors duration-200">
                                     {cat.title}
                                 </h3>
 
-                                <p className="hidden md:block text-slate-500 text-sm leading-relaxed font-semibold mb-12 group-hover:text-slate-700 transition-colors duration-200">
+                                <p className="hidden md:block text-slate-500 text-sm leading-relaxed font-medium mb-8 group-hover:text-slate-700 transition-colors duration-200">
                                     {cat.desc}
                                 </p>
 
                                 <div className="mt-auto hidden md:block">
-                                    <div className="flex items-center gap-4 text-slate-900 font-black text-[10px] uppercase tracking-widest group-hover:text-[#0EA5E9] transition-colors duration-200">
+                                    <div className="flex items-center gap-3 text-[#0EA5E9] font-bold text-[10px] uppercase tracking-widest group-hover:gap-5 transition-all duration-300">
                                         Discover Sector
-                                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-200" />
+                                        <ArrowRight className="w-4 h-4" />
                                     </div>
                                 </div>
                             </div>

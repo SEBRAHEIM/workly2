@@ -41,10 +41,10 @@ export default function Login() {
 
                 <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <h1 className="font-serif font-black text-5xl md:text-6xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.9]">
+                        <h1 className="font-sans font-black text-4xl md:text-5xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.95]">
                             Welcome <br /> <span className="text-[#0EA5E9]">Back.</span>
                         </h1>
-                        <p className="text-slate-500 font-bold text-[11px] md:text-xs uppercase tracking-widest mt-6 opacity-80">
+                        <p className="text-slate-600 font-black text-[11px] md:text-xs uppercase tracking-widest mt-6 opacity-30">
                             Log in to your Workly workspace.
                         </p>
                     </div>

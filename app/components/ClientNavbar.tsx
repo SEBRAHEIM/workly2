@@ -117,18 +117,18 @@ export default function ClientNavbar() {
 
                                     {/* Desktop Hover Dropdown */}
                                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[60]">
-                                        <Link href="/client/profile" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                                        <Link href="/client/profile" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-black transition-colors">
                                             <User size={16} className="mr-3 text-slate-400" />
                                             Profile Settings
                                         </Link>
-                                        <Link href="/client/projects" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium transition-colors">
+                                        <Link href="/client/projects" className="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-black transition-colors">
                                             <Briefcase size={16} className="mr-3 text-slate-400" />
                                             Projects
                                         </Link>
                                         <div className="h-px bg-slate-50 my-2 mx-4" />
                                         <button
                                             onClick={handleSignOut}
-                                            className="w-full flex items-center px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-medium transition-colors"
+                                            className="w-full flex items-center px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-black transition-colors"
                                         >
                                             <LogOut size={16} className="mr-3" />
                                             Sign Out
@@ -239,7 +239,7 @@ export default function ClientNavbar() {
                                                     <div className="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
                                                         <cat.icon size={12} />
                                                     </div>
-                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-900 transition-colors">
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 group-hover:text-slate-900 transition-colors">
                                                         {cat.title}
                                                     </span>
                                                 </Link>

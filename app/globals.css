@@ -31,8 +31,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-weight: 500;
+  /* Increased from default */
   overflow-x: hidden;
   width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p,
+span,
+input,
+textarea,
+select {
+  font-weight: 500;
 }
 
 /* Base mobile resets */

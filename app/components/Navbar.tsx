@@ -131,8 +131,8 @@ export default function Navbar() {
 
                                     {/* Categories Section */}
                                     <div>
-                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
-                                            <div className="w-4 h-[1px] bg-sky-200" />
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-6 flex items-center gap-2">
+                                            <div className="w-4 h-[1px] bg-sky-300" />
                                             Categories
                                         </h3>
                                         <div className="space-y-1">
@@ -146,7 +146,7 @@ export default function Navbar() {
                                                     <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
                                                         <cat.icon size={16} />
                                                     </div>
-                                                    <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">
+                                                    <span className="text-sm font-black text-slate-700 group-hover:text-slate-900 transition-colors">
                                                         {cat.title}
                                                     </span>
                                                 </Link>
@@ -155,8 +155,8 @@ export default function Navbar() {
                                     </div>
 
                                     {/* Currency info */}
-                                    <div className="pt-8 border-t border-sky-50 flex items-center justify-between">
-                                        <span className="text-slate-400 font-bold tracking-widest text-[9px] uppercase">Currency</span>
+                                    <div className="pt-8 border-t border-sky-100 flex items-center justify-between">
+                                        <span className="text-slate-500 font-black tracking-widest text-[9px] uppercase">Currency</span>
                                         <span className="font-black text-slate-900 text-xs">AED</span>
                                     </div>
                                 </div>

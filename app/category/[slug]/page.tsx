@@ -48,7 +48,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                 <span className="text-[#0EA5E9]">{category.title.split(' ').slice(1).join(' ') || 'Services.'}</span>
                             </h1>
 
-                            <p className="text-xl text-slate-400 max-w-2xl font-medium leading-relaxed">
+                            <p className="text-xl text-slate-300 max-w-2xl font-black leading-relaxed">
                                 {category.fullDesc}
                             </p>
                         </div>
@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <div className="max-w-7xl mx-auto px-4 md:px-6 py-20">
                 <div className="flex items-center gap-4 mb-12">
                     <div className="h-[1px] flex-1 bg-sky-50" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">Available Talent</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Available Talent</span>
                     <div className="h-[1px] flex-1 bg-sky-50" />
                 </div>
                 <Suspense fallback={<GridSkeleton />}>

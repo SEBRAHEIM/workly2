@@ -52,14 +52,14 @@ export default async function CreatorDashboard() {
                         <h1 className="text-5xl font-serif font-black text-slate-900 mb-4 tracking-tighter uppercase leading-none">
                             Welcome, <br /> <span className="text-[#0EA5E9]">Creator.</span>
                         </h1>
-                        <p className="text-xl text-slate-500 max-w-xl mx-auto font-medium leading-relaxed">
+                        <p className="text-xl text-slate-700 max-w-xl mx-auto font-black leading-relaxed">
                             To start receiving project requests and receive payouts, establish your digital profile.
                         </p>
                     </div>
 
                     <div className="bg-white rounded-[2.5rem] p-10 md:p-14 border border-sky-50 shadow-2xl shadow-sky-100/50 relative overflow-hidden group">
                         <div className="relative z-10">
-                            <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-10 flex items-center gap-4">
+                            <h2 className="text-xs font-black text-slate-600 uppercase tracking-[0.3em] mb-10 flex items-center gap-4">
                                 <div className="w-12 h-[1px] bg-sky-100" />
                                 Action Required
                             </h2>
@@ -72,10 +72,10 @@ export default async function CreatorDashboard() {
                                         <div className="w-6 h-6 rounded-full border-2 border-slate-200 mr-5 flex-shrink-0" />
                                     )}
                                     <div>
-                                        <h3 className={`font-black uppercase tracking-tight ${(hasSpecialization && hasBio) ? 'text-slate-800' : 'text-slate-400'}`}>
+                                        <h3 className={`font-black uppercase tracking-tight ${(hasSpecialization && hasBio) ? 'text-slate-800' : 'text-slate-500'}`}>
                                             Identity & Expertise
                                         </h3>
-                                        <p className="text-sm text-slate-500 font-medium">Define your vertical and professional bio.</p>
+                                        <p className="text-sm text-slate-700 font-black">Define your vertical and professional bio.</p>
                                     </div>
                                 </div>
 
@@ -86,10 +86,10 @@ export default async function CreatorDashboard() {
                                         <div className="w-6 h-6 rounded-full border-2 border-slate-200 mr-5 flex-shrink-0" />
                                     )}
                                     <div>
-                                        <h3 className={`font-black uppercase tracking-tight ${hasPortfolio ? 'text-slate-800' : 'text-slate-400'}`}>
+                                        <h3 className={`font-black uppercase tracking-tight ${hasPortfolio ? 'text-slate-800' : 'text-slate-500'}`}>
                                             Portfolio Assets
                                         </h3>
-                                        <p className="text-sm text-slate-500 font-medium">Upload at least one high-quality deliverable.</p>
+                                        <p className="text-sm text-slate-700 font-black">Upload at least one high-quality deliverable.</p>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@ export default async function CreatorDashboard() {
                 {/* Active Work Section */}
                 {activeWork.length > 0 && (
                     <div className="mt-12">
-                        <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
+                        <h2 className="text-xs font-black text-slate-600 uppercase tracking-[0.3em] mb-8 flex items-center gap-4">
                             <div className="w-12 h-[1px] bg-[#0EA5E9]/20" />
                             Active & Delivered
                         </h2>
@@ -150,7 +150,7 @@ export default async function CreatorDashboard() {
                                         </div>
                                         <h3 className="text-xl font-black text-white mb-2 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight line-clamp-1" dir="auto">{project.title}</h3>
                                         <div className="flex items-center justify-between mt-6">
-                                            <span className="text-xs font-bold text-slate-400">AED {project.current_price}</span>
+                                            <span className="text-xs font-black text-slate-300">AED {project.current_price}</span>
                                             <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white group-hover:bg-[#0EA5E9] transition-all">
                                                 <ArrowRight className="w-4 h-4" />
                                             </div>
@@ -167,7 +167,7 @@ export default async function CreatorDashboard() {
 
                 {/* Recent Requests */}
                 <div className="mt-20">
-                    <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-10 flex items-center gap-4">
+                    <h2 className="text-xs font-black text-slate-600 uppercase tracking-[0.3em] mb-10 flex items-center gap-4">
                         <div className="w-12 h-[1px] bg-sky-100" />
                         Inbound Requests
                     </h2>
@@ -188,7 +188,7 @@ export default async function CreatorDashboard() {
                                                 </span>
                                                 <h3 className="text-xl font-black text-slate-800 group-hover:text-[#0EA5E9] transition-colors uppercase tracking-tight" dir="auto">{project.title}</h3>
                                             </div>
-                                            <p className="text-slate-500 font-medium line-clamp-1 max-w-2xl text-sm" dir="auto">{project.description}</p>
+                                            <p className="text-slate-700 font-black line-clamp-1 max-w-2xl text-sm" dir="auto">{project.description}</p>
                                         </div>
                                         <div className="flex items-center justify-center w-full md:w-auto text-white font-black text-[10px] uppercase tracking-widest bg-slate-900 group-hover:bg-[#0EA5E9] px-8 py-4 rounded-full transition-all shadow-xl group-hover:shadow-sky-100">
                                             Review Brief
@@ -204,8 +204,8 @@ export default async function CreatorDashboard() {
                                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500">
                                     <Briefcase className="w-8 h-8 text-sky-200" />
                                 </div>
-                                <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">System Status: Active</h3>
-                                <p className="text-slate-500 font-medium max-w-sm mx-auto">
+                                <h3 className="text-2xl font-serif font-black text-slate-900 mb-2 uppercase tracking-tight">System Status: Active</h3>
+                                <p className="text-slate-700 font-black max-w-sm mx-auto">
                                     Your profile is visible to all clients. Inbound requests will be prioritized here.
                                 </p>
                             </div>

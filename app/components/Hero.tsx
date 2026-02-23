@@ -78,8 +78,8 @@ export default function Hero({
                     transition={{ delay: 1, duration: 1 }}
                     className="max-w-2xl px-4"
                 >
-                    <p className="text-[#1E293B]/60 text-lg md:text-2xl font-medium leading-relaxed">
-                        Connecting <span className="text-[#1E293B] font-bold">elite independent talent</span> with creative visionaries. The definitive ecosystem for projects that matter.
+                    <p className="text-[#1E293B]/80 text-lg md:text-2xl font-bold leading-relaxed">
+                        Connecting <span className="text-[#1E293B] font-black">elite independent talent</span> with creative visionaries. The definitive ecosystem for projects that matter.
                     </p>
                 </motion.div>
             </motion.div>
@@ -91,7 +91,7 @@ export default function Hero({
                 transition={{ delay: 2 }}
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20"
             >
-                <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#0EA5E9]/50">Scroll</div>
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0EA5E9]">Scroll</div>
                 <div className="w-px h-16 bg-gradient-to-b from-[#0EA5E9] to-transparent" />
             </motion.div>
         </section>

@@ -33,7 +33,7 @@ export default function Login() {
             <div className="w-full max-w-md relative z-10">
                 <Link
                     href="/join"
-                    className="inline-flex items-center text-slate-400 hover:text-sky-500 transition-colors mb-12 font-black text-[10px] uppercase tracking-widest group"
+                    className="inline-flex items-center text-slate-500 hover:text-sky-600 transition-colors mb-12 font-black text-[10px] uppercase tracking-widest group"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                     Back
@@ -44,7 +44,7 @@ export default function Login() {
                         <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
                             Welcome <br /> <span className="text-[#0EA5E9]">Back.</span>
                         </h1>
-                        <p className="text-slate-500 font-medium text-sm">
+                        <p className="text-slate-600 font-semibold text-sm">
                             Log in to your Workly workspace.
                         </p>
                     </div>
@@ -61,7 +61,7 @@ export default function Login() {
                                 type="email"
                                 placeholder="Email Address"
                                 required
-                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-semibold text-sm"
                             />
                         </div>
                         <div className="relative">
@@ -71,7 +71,7 @@ export default function Login() {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                                 required
-                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 pr-14 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 pr-14 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-semibold text-sm"
                             />
                             <button
                                 type="button"
@@ -93,9 +93,9 @@ export default function Login() {
                     </form>
 
                     <div className="mt-12 text-center pt-8 border-t border-sky-50">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                             New Member?{' '}
-                            <Link href="/join" className="text-[#0EA5E9] hover:underline">
+                            <Link href="/join" className="text-[#0EA5E9] font-black hover:underline">
                                 Request Access
                             </Link>
                         </p>

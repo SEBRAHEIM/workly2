@@ -52,12 +52,12 @@ export default function Categories() {
                                     {cat.title}
                                 </h3>
 
-                                <p className="hidden md:block text-slate-500 text-sm leading-relaxed font-medium mb-8 group-hover:text-slate-700 transition-colors duration-200">
+                                <p className="hidden md:block text-slate-700 text-sm leading-relaxed font-black mb-8 group-hover:text-slate-900 transition-colors duration-200">
                                     {cat.desc}
                                 </p>
 
                                 <div className="mt-auto hidden md:block">
-                                    <div className="flex items-center gap-3 text-[#0EA5E9] font-bold text-[10px] uppercase tracking-widest group-hover:gap-5 transition-all duration-300">
+                                    <div className="flex items-center gap-3 text-[#0EA5E9] font-black text-[10px] uppercase tracking-widest group-hover:gap-5 transition-all duration-300">
                                         Explore Domain
                                         <ArrowRight className="w-4 h-4" />
                                     </div>

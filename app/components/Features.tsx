@@ -111,13 +111,13 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                             </div>
 
                             <h3 className="text-3xl font-black font-serif uppercase tracking-tighter mb-4 text-[#1E293B] group-hover:text-[#0EA5E9] transition-colors">{feature.title}</h3>
-                            <p className={`text-lg font-medium mb-10 transition-colors ${feature.bg ? 'opacity-90 text-white' : 'text-slate-600'}`}>
+                            <p className={`text-lg font-black mb-10 transition-colors ${feature.bg ? 'opacity-100 text-white' : 'text-slate-700'}`}>
                                 {feature.desc}
                             </p>
 
                             <div className="mt-auto flex flex-wrap gap-3">
                                 {feature.details.map((detail, i) => (
-                                    <span key={i} className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] border ${feature.bg ? 'border-white/20 bg-white/10' : 'border-sky-100 bg-white/50 text-slate-400'}`}>
+                                    <span key={i} className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] border ${feature.bg ? 'border-white/40 bg-white/20' : 'border-sky-300 bg-white/80 text-slate-600'}`}>
                                         {detail}
                                     </span>
                                 ))}

@@ -114,7 +114,7 @@ export default function Navbar() {
                                             <Link
                                                 href="/login"
                                                 onClick={() => setIsMenuOpen(false)}
-                                                className="block text-4xl font-sans font-black text-slate-900 hover:text-[#0EA5E9] transition-colors uppercase tracking-tighter"
+                                                className="block text-2xl font-sans font-black text-slate-900 hover:text-[#0EA5E9] transition-colors uppercase tracking-tight"
                                             >
                                                 Login
                                             </Link>

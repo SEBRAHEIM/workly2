@@ -70,7 +70,7 @@ export default async function CreatorGrid({
                             <div className="flex-1 min-w-0 pt-1">
                                 <div className="flex items-center justify-between">
                                     <Link href={profileUrl} className="group/name block truncate">
-                                        <h3 className="font-serif font-black text-lg text-[#1E293B] truncate pr-2 group-hover/name:text-[#0EA5E9] transition-colors">
+                                        <h3 className="font-sans font-black text-xl text-[#1E293B] truncate pr-2 group-hover/name:text-[#0EA5E9] transition-colors tracking-tight uppercase">
                                             {creator.display_name || creator.full_name || 'Creator'}
                                         </h3>
                                     </Link>

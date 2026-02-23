@@ -34,8 +34,8 @@ export default function Signup() {
                         <h1 className="font-sans font-black text-4xl md:text-5xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.95]">
                             Join <br /> <span className="text-[#0EA5E9]">Workly.</span>
                         </h1>
-                        <p className="text-slate-600 font-black text-[11px] md:text-xs uppercase tracking-widest px-4 md:px-0 mt-6 opacity-80">
-                            Join the network for elite clients and creators.
+                        <p className="text-slate-500 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] px-4 md:px-0 mt-8 opacity-70">
+                            Create your workspace and join the collective.
                         </p>
                     </div>
 

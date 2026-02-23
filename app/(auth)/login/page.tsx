@@ -44,8 +44,8 @@ export default function Login() {
                         <h1 className="font-sans font-black text-4xl md:text-5xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.95]">
                             Welcome <br /> <span className="text-[#0EA5E9]">Back.</span>
                         </h1>
-                        <p className="text-slate-600 font-black text-[11px] md:text-xs uppercase tracking-widest mt-6 opacity-30">
-                            Log in to your Workly workspace.
+                        <p className="text-slate-500 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] mt-8 opacity-70">
+                            Access your Workly creative workspace.
                         </p>
                     </div>
 

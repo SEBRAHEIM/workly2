@@ -160,10 +160,10 @@ export default function ClientNavbar() {
 
                             <div className="flex flex-col items-start pt-20 pb-8 border-b border-sky-50 px-8">
                                 <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
-                                    {profile?.full_name || 'Operator'}
+                                    {profile?.full_name || profile?.username || 'Client'}
                                 </h2>
                                 <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
-                                    @{profile?.username || 'registry'}
+                                    @{profile?.username || 'user'}
                                 </p>
                             </div>
 

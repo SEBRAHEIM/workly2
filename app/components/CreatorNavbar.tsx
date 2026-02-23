@@ -120,10 +120,10 @@ export default function CreatorNavbar() {
 
                         <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
                             <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
-                                {profile?.full_name || 'Operator'}
+                                {profile?.full_name || profile?.username || 'Creative'}
                             </h2>
                             <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
-                                @{profile?.username || 'registry'}
+                                @{profile?.username || 'user'}
                             </p>
                             <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
                                 <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />

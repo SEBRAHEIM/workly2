@@ -28,6 +28,7 @@ export const sendEmail = async ({
         const resend = await getResend();
         const data = await resend.emails.send({
             from: 'Workly <notifications@workly.day>',
+            replyTo: 'support@workly.day',
             to: [to],
             subject: subject,
             html: html,

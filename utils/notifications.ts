@@ -81,7 +81,7 @@ export async function createNotification({
 
                 await sendEmail({
                     to: userData.user.email,
-                    subject: title || 'New Notification | Workly',
+                    subject: title || 'Workly Notification',
                     html: emailHtml
                 })
             } catch (err) {

@@ -17,50 +17,50 @@ export type Category = {
 export const categories = [
     {
         icon: FileText,
-        title: 'Editorial & Research',
-        slug: 'editorial-research',
-        desc: 'Advanced academic and professional writing, analysis and research.',
-        fullDesc: 'Expert-led research and critical writing for high-tier academic and professional standards.',
+        title: 'Reports & Essays',
+        slug: 'reports-essays',
+        desc: 'Help with writing assignments and Word documents.',
+        fullDesc: 'Precision academic writing from the world\'s top talent.',
         image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Monitor,
-        title: 'Presentation Design',
-        slug: 'presentation-design',
-        desc: 'High-end slide decks, pitch templates, and visual storytelling.',
-        fullDesc: 'Boutique-quality visual communication that transforms complex ideas into narratives.',
+        title: 'Presentations & PPT',
+        slug: 'presentations-ppt',
+        desc: 'Slides, templates, and class presentations.',
+        fullDesc: 'Captivating visual storytelling that secures high-tier results.',
         image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Users,
-        title: 'Network Management',
-        slug: 'network-management',
-        desc: 'Coordination for complex, multi-stakeholder and group projects.',
-        fullDesc: 'Sophisticated project management and collective coordination for large-scale tasks.',
+        title: 'Group Projects',
+        slug: 'group-projects',
+        desc: 'Case studies and team assignments.',
+        fullDesc: 'Institutional collaboration handled with professional integrity.',
         image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Grid,
-        title: 'Data Intelligence',
-        slug: 'data-intelligence',
-        desc: 'Financial modeling, quantitative analytics and dashboards.',
-        fullDesc: 'Deep-tier quantitative insights and custom financial modeling.',
+        title: 'Excel & Data',
+        slug: 'excel-data',
+        desc: 'Sheets, tables, dashboards, simple calculations.',
+        fullDesc: 'Robust analytics and data modeling for complex requirements.',
         image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: Code,
-        title: 'Product & Tech',
-        slug: 'product-tech',
-        desc: 'Custom software development, automation, and tech architecture.',
-        fullDesc: 'Technical implementation across the modern stack for complex requirements.',
+        title: 'Programming & Tech',
+        slug: 'programming-tech',
+        desc: 'Basic coding tasks and small tech work.',
+        fullDesc: 'Technical implementation across the modern stack.',
         image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800'
     },
     {
         icon: User,
-        title: 'Bespoke Services',
-        slug: 'bespoke-services',
-        desc: 'Tailored support for unique creative and strategic initiatives.',
-        fullDesc: 'Universal white-glove support for specialized boutique requirements.',
+        title: 'Other Tasks',
+        slug: 'other-tasks',
+        desc: 'Anything else required for your course.',
+        fullDesc: 'Universal support for any unique academic or creative initiative.',
         image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800'
     },
 ]

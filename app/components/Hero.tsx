@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import confetti from 'canvas-confetti'
 
-// NEW: Kinetic Sculpture Component - REFINED FOR MINIMALIST SCATTERED LOOK
+// NEW: Kinetic Sculpture Component - OVERHAULED FOR PREMIUM "NICER" BUBBLES
 function KineticSculpture() {
     const meshRef = useRef<THREE.Group>(null)
     const { mouse, viewport } = useThree()
@@ -16,56 +16,54 @@ function KineticSculpture() {
     useFrame((state) => {
         if (!meshRef.current) return
 
-        // Subtle rotation for the whole group
-        meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.05
-        meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.08
+        // Very subtle drift
+        meshRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.1) * 0.05
+        meshRef.current.rotation.y = Math.cos(state.clock.getElapsedTime() * 0.15) * 0.05
 
-        // Subtle mouse tilt
-        const targetX = (mouse.x * viewport.width) / 20
-        const targetY = (mouse.y * viewport.height) / 20
-        meshRef.current.position.x += (targetX - meshRef.current.position.x) * 0.02
-        meshRef.current.position.y += (targetY - meshRef.current.position.y) * 0.02
+        // Magnetic mouse reaction
+        const targetX = (mouse.x * viewport.width) / 15
+        const targetY = (mouse.y * viewport.height) / 15
+        meshRef.current.position.x += (targetX - meshRef.current.position.x) * 0.05
+        meshRef.current.position.y += (targetY - meshRef.current.position.y) * 0.05
     })
 
     return (
         <group ref={meshRef}>
-            {/* The Central Subtle Core - Ultra Glassy */}
-            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-                <mesh position={[0, 0, 0]}>
-                    <icosahedronGeometry args={[2, 2]} />
-                    <meshStandardMaterial
-                        color="#0EA5E9"
-                        transparent
-                        opacity={0.02}
-                        wireframe
-                    />
-                </mesh>
-            </Float>
-
-            {/* Scattered Glass Bubbles - Organic and Soft */}
-            {Array.from({ length: 60 }).map((_, i) => {
+            {/* Scattered Glass & Liquid Bubbles */}
+            {Array.from({ length: 45 }).map((_, i) => {
                 const randomPos: [number, number, number] = [
-                    (Math.random() - 0.5) * 20,
-                    (Math.random() - 0.5) * 20,
-                    (Math.random() - 0.5) * 10
+                    (Math.random() - 0.5) * 25,
+                    (Math.random() - 0.5) * 25,
+                    (Math.random() - 0.5) * 15
                 ]
-                const size = Math.random() * 0.2 + 0.05
+                const size = Math.random() * 0.4 + 0.1
+                const speed = 0.5 + Math.random() * 2
 
                 return (
-                    <Float key={i} speed={Math.random() * 2.5} rotationIntensity={0.5} position={randomPos}>
+                    <Float key={i} speed={speed} rotationIntensity={1} floatIntensity={1} position={randomPos}>
                         <mesh rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}>
-                            <sphereGeometry args={[size, 32, 32]} />
-                            <meshPhysicalMaterial
-                                color={i % 3 === 0 ? "#BAE6FD" : (i % 3 === 1 ? "#FFFFFF" : "#E0F2FE")}
-                                transparent
-                                opacity={0.3}
-                                metalness={0.05}
-                                roughness={0.05}
-                                transmission={0.95}
-                                thickness={0.5}
-                                envMapIntensity={1.5}
-                                ior={1.5}
-                            />
+                            <sphereGeometry args={[size, 64, 64]} />
+                            {i % 4 === 0 ? (
+                                <MeshDistortMaterial
+                                    color="#0EA5E9"
+                                    speed={speed}
+                                    distort={0.4}
+                                    radius={1}
+                                    transparent
+                                    opacity={0.15}
+                                />
+                            ) : (
+                                <meshPhysicalMaterial
+                                    color={i % 2 === 0 ? "#F0F9FF" : "#FFFFFF"}
+                                    transparent
+                                    opacity={0.4}
+                                    metalness={0.1}
+                                    roughness={0}
+                                    transmission={1}
+                                    thickness={1.5}
+                                    ior={1.4}
+                                />
+                            )}
                         </mesh>
                     </Float>
                 )
@@ -79,10 +77,10 @@ function Scene() {
     return (
         <>
             <KineticSculpture />
-            <ambientLight intensity={1.5} />
-            <pointLight position={[10, 10, 10]} intensity={3} color="#BAE6FD" />
-            <spotLight position={[-10, 20, 10]} angle={0.2} penumbra={1} intensity={5} color="#ffffff" castShadow />
-            <directionalLight position={[0, 10, 5]} intensity={1} color="#ffffff" />
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1} color="#0EA5E9" />
+            <spotLight position={[-10, 20, 10]} angle={0.15} penumbra={1} intensity={2} color="#ffffff" castShadow />
+            <directionalLight position={[0, -5, 5]} intensity={0.5} color="#BAE6FD" />
         </>
     )
 }
@@ -105,55 +103,57 @@ export default function Hero({
         offset: ["start start", "end start"]
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
+    const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
 
     useEffect(() => {
         if (titleRef.current) {
             gsap.fromTo(titleRef.current.children,
-                { opacity: 0, y: 100, rotateX: -90 },
-                { opacity: 1, y: 0, rotateX: 0, stagger: 0.1, duration: 1.2, ease: "expo.out", delay: 0.5 }
+                { opacity: 0, scale: 0.95, y: 40 },
+                { opacity: 1, scale: 1, y: 0, stagger: 0.2, duration: 1.5, ease: "power4.out", delay: 0.2 }
             )
         }
     }, [])
 
     return (
-        <section ref={sectionRef} className="relative min-h-[auto] pb-12 md:pb-0 md:min-h-screen flex flex-col items-center justify-start pt-32 md:pt-0 md:justify-center bg-white overflow-hidden">
-            {/* Soft Gradient Overlay */}
-            <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#E0F2FE] via-white to-white" />
+        <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
+            {/* Sophisticated Gradient Mesh Background */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,_#F0F9FF_0%,_#FFFFFF_100%)]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#BAE6FD]/10 blur-[120px] rounded-full animate-pulse" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#0EA5E9]/5 blur-[120px] rounded-full animate-pulse" />
+            </div>
 
             {/* 3D Canvas Layer */}
-            <div className="absolute inset-0 z-10 opacity-80">
-                <Canvas>
-                    <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={50} />
+            <div className="absolute inset-0 z-10 pointer-events-none">
+                <Canvas dpr={[1, 2]}>
+                    <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={45} />
                     <Suspense fallback={null}>
                         <Scene />
-                        <Environment preset="apartment" />
+                        <Environment preset="studio" />
                     </Suspense>
                 </Canvas>
             </div>
 
-            {/* Static Background Accents */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-10 md:top-20 left-10 md:left-20 border-l-[1px] border-t-[1px] border-[#0EA5E9]/10 w-20 h-20 md:w-40 md:h-40" />
-                <div className="absolute bottom-10 md:bottom-20 right-10 md:right-20 border-r-[1px] border-b-[1px] border-[#0EA5E9]/10 w-20 h-20 md:w-40 md:h-40" />
-                <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#0EA5E9 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
-            </div>
+            {/* Subtle Grid Accent */}
+            <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+                style={{ backgroundImage: 'linear-gradient(#0EA5E9 1px, transparent 1px), linear-gradient(90deg, #0EA5E9 1px, transparent 1px)', backgroundSize: '100px 100px' }}
+            />
 
             <motion.div
                 style={{ y, opacity }}
-                className="relative z-20 container mx-auto px-6 flex flex-col items-center text-center"
+                className="relative z-20 container mx-auto px-6 flex flex-col items-center text-center select-none"
             >
                 {/* Headline: WORKLY. CREATIVE. */}
                 {(title || subtitle) && (
-                    <h1 ref={titleRef} className="perspective-1000 mb-6 md:mb-12">
+                    <h1 ref={titleRef} className="mb-12 flex flex-col items-center">
                         {title && (
-                            <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#1E293B] leading-[0.75] tracking-tighter uppercase transition-colors hover:text-[#0EA5E9]">
+                            <span className="block font-sans font-black text-[15vw] md:text-[14rem] text-[#1E293B] leading-none tracking-tight transition-all duration-700 hover:tracking-normal cursor-default">
                                 {title}
                             </span>
                         )}
                         {subtitle && (
-                            <span className="block font-serif font-black text-[12vw] sm:text-7xl md:text-[13rem] text-[#0EA5E9] leading-[0.75] tracking-tighter uppercase mt-2 md:mt-4">
+                            <span className="block font-serif italic text-[14vw] md:text-[13rem] text-[#0EA5E9] leading-none tracking-tighter -mt-4 md:-mt-8">
                                 {subtitle}
                             </span>
                         )}
@@ -162,27 +162,27 @@ export default function Hero({
 
                 {/* Subtext with Group Vision */}
                 <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.8, duration: 1 }}
-                    className="flex flex-col md:flex-row items-center gap-4 md:gap-8 mb-4 md:mb-16 max-w-4xl"
+                    transition={{ delay: 1, duration: 1 }}
+                    className="max-w-2xl px-4"
                 >
-                    <div className="h-[1px] w-12 md:w-24 bg-[#0EA5E9] hidden sm:block" />
-                    <p className="text-[#1E293B]/70 text-sm sm:text-lg md:text-2xl font-medium leading-relaxed md:text-left flex-1 px-4 md:px-0">
-                        The definitive ecosystem for <span className="text-[#0EA5E9] font-black border-b-2 md:border-b-4 border-[#0EA5E9] pb-1 transition-all hover:text-[#1E293B] hover:border-[#1E293B]">independent talent</span> and creative visionaries. Linking elite freelancers with projects that matter.
+                    <p className="text-[#1E293B]/60 text-lg md:text-2xl font-medium leading-relaxed">
+                        Connecting <span className="text-[#1E293B] font-bold">elite independent talent</span> with creative visionaries. The definitive ecosystem for projects that matter.
                     </p>
                 </motion.div>
             </motion.div>
 
-            {/* Scroll Indicator - HIDE ON MOBILE TO REDUCE GAP */}
+            {/* Modern Scroll Indicator */}
             <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-40 hover:opacity-100 transition-opacity z-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2 }}
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20"
             >
-                <div className="w-[1px] h-12 bg-[#0EA5E9]" />
-                <span className="text-[10px] font-black uppercase tracking-widest mt-3 text-[#0EA5E9] vertical-text">Experience</span>
+                <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#0EA5E9]/50">Scroll</div>
+                <div className="w-px h-16 bg-gradient-to-b from-[#0EA5E9] to-transparent" />
             </motion.div>
         </section>
     )

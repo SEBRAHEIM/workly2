@@ -59,8 +59,8 @@ export default function Navbar() {
                 </div>
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <Link href="/" className="text-xl md:text-2xl tracking-[0.4em] text-[#1E293B] font-serif font-black uppercase">
-                        Workly
+                    <Link href="/" className="text-xl md:text-2xl tracking-tighter text-[#1E293B] font-sans font-black">
+                        Workly.
                     </Link>
                 </div>
 

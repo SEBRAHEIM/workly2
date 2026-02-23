@@ -48,11 +48,11 @@ export default function Categories() {
                                     <cat.icon className="w-6 h-6 md:w-8 md:h-8" />
                                 </div>
 
-                                <h3 className="text-xs leading-tight md:text-4xl font-black font-serif text-slate-800 mb-2 md:mb-4 uppercase tracking-tighter group-hover:text-[#0EA5E9] transition-colors duration-200">
+                                <h3 className="text-xs leading-tight md:text-4xl font-black font-sans text-slate-900 mb-2 md:mb-4 uppercase tracking-tighter group-hover:text-[#0EA5E9] transition-colors duration-200">
                                     {cat.title}
                                 </h3>
 
-                                <p className="hidden md:block text-slate-400 text-sm leading-relaxed font-medium mb-12 group-hover:text-slate-600 transition-colors duration-200">
+                                <p className="hidden md:block text-slate-500 text-sm leading-relaxed font-semibold mb-12 group-hover:text-slate-700 transition-colors duration-200">
                                     {cat.desc}
                                 </p>
 

@@ -29,8 +29,8 @@ CREATE POLICY "System can insert notifications" ON notifications
   FOR INSERT WITH CHECK (true); -- Ideally restrictive, but for now open to authenticated creation if needed, or rely on service role. 
 -- Wait, 'true' allows anyone to spam notifications. Let's restrict INSERT to service role only or specific logic.
 -- Since we are using Supabase Client in server actions, it runs as the user.
--- So we need a policy for users to potentially trigger notifs? No, usually notifs comes from ACTIONS on OTHER users (e.g. Student pays -> Creator gets notif).
--- The Creator notif is inserted by the Student's action? YES.
+-- So we need a policy for users to potentially trigger notifs? No, usually notifs comes from ACTIONS on OTHER users (e.g. Client pays -> Creator gets notif).
+-- The Creator notif is inserted by the Client's action? YES.
 -- So we need: "Users can insert notifications for OTHER users" (strictly controlled?) 
 -- OR: "Users can insert notifications" Generally.
 CREATE POLICY "Users can insert notifications" ON notifications FOR INSERT WITH CHECK (auth.uid() = user_id OR true); -- Revisit this. Secure way is triggers or Service Role. 

@@ -206,7 +206,7 @@ export default async function CreatorDashboard() {
                                 </div>
                                 <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">System Status: Active</h3>
                                 <p className="text-slate-500 font-medium max-w-sm mx-auto">
-                                    Your profile is visible to all students. Inbound requests will be prioritized here.
+                                    Your profile is visible to all clients. Inbound requests will be prioritized here.
                                 </p>
                             </div>
 

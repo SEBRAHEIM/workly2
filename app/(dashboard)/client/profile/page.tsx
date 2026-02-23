@@ -2,10 +2,10 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
-import StudentIdentityForm from './StudentIdentityForm'
+import ClientIdentityForm from './ClientIdentityForm'
 import { ShieldCheck } from 'lucide-react'
 
-export default async function StudentProfilePage() {
+export default async function ClientProfilePage() {
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -32,7 +32,7 @@ export default async function StudentProfilePage() {
                     </p>
                 </div>
 
-                <StudentIdentityForm profile={profile} />
+                <ClientIdentityForm profile={profile} />
             </div>
 
             <div className="mt-8 text-center text-xs text-gray-400">

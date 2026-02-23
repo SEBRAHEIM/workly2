@@ -26,7 +26,7 @@ export default async function CreatorGrid({
         user ? supabase
             .from('favorite_creators')
             .select('creator_id')
-            .eq('student_id', user.id) : Promise.resolve({ data: null })
+            .eq('client_id', user.id) : Promise.resolve({ data: null })
     ])
 
     const creators = creatorsResponse.data
@@ -44,7 +44,7 @@ export default async function CreatorGrid({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {creators.map((creator) => {
                 const isFavorite = favoriteIds.has(creator.id)
-                const profileUrl = `/student/creator/${creator.id}`
+                const profileUrl = `/client/creator/${creator.id}`
 
                 return (
                     <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#F0F9FF] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
@@ -81,7 +81,7 @@ export default async function CreatorGrid({
                                     )}
                                 </div>
                                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                    {creator.tagline || 'Student Creator'}
+                                    {creator.tagline || 'Client Creator'}
                                 </p>
                             </div>
                         </div>
@@ -124,7 +124,7 @@ export default async function CreatorGrid({
                                         View Portfolio
                                     </Link>
                                     <Link
-                                        href={`/student/hire/${creator.id}`}
+                                        href={`/client/hire/${creator.id}`}
                                         className="bg-[#0EA5E9] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:shadow-sky-200 active:scale-95 transition-all shadow-xl shadow-sky-100 flex items-center justify-center"
                                     >
                                         Hire Now

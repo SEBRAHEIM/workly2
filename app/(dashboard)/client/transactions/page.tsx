@@ -8,7 +8,7 @@ export default async function Transactions() {
     const { data: transactions } = await supabase
         .from('transactions')
         .select('*')
-        .eq('student_id', user?.id)
+        .eq('client_id', user?.id)
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
 

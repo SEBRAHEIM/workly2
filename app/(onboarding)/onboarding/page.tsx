@@ -12,7 +12,7 @@ const initialState = {
 
 export default function Onboarding() {
     const [state, formAction] = useFormState(completeOnboarding, initialState)
-    const [role, setRole] = useState<'student' | 'creator' | ''>('')
+    const [role, setRole] = useState<'client' | 'creator' | ''>('')
     const [isAdmin, setIsAdmin] = useState(false)
     const [loading, setLoading] = useState(true)
 
@@ -23,7 +23,7 @@ export default function Onboarding() {
             const { data: { user } } = await supabase.auth.getUser()
             if (user?.email === 'workly.day@outlook.com') {
                 setIsAdmin(true)
-                setRole('student') // Doesn't matter, will be 'admin' in action
+                setRole('client') // Doesn't matter, will be 'admin' in action
             }
             setLoading(false)
         }
@@ -60,16 +60,16 @@ export default function Onboarding() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <button
                                         type="button"
-                                        onClick={() => setRole('student')}
-                                        className={`p-8 border rounded-[2rem] flex flex-col items-center text-center transition-all duration-300 touch-manipulation group ${role === 'student'
+                                        onClick={() => setRole('client')}
+                                        className={`p-8 border rounded-[2rem] flex flex-col items-center text-center transition-all duration-300 touch-manipulation group ${role === 'client'
                                             ? 'border-[#0EA5E9] bg-sky-50/50 text-[#0EA5E9] shadow-lg shadow-sky-100'
                                             : 'border-sky-50 bg-white text-slate-400 hover:border-sky-100'
                                             }`}
                                     >
-                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'student' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'client' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
                                             <User size={28} />
                                         </div>
-                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Student</span>
+                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Client</span>
                                         <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Deploy Projects</p>
                                     </button>
                                     <button

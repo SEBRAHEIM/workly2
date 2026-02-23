@@ -23,7 +23,7 @@ export default function UsersModule({ profiles, projects = [], setActiveTab }: {
     })
 
     const getUserProjectCount = (userId: string) => {
-        return projects.filter(p => p.student_id === userId || p.creator_id === userId).length
+        return projects.filter(p => p.client_id === userId || p.creator_id === userId).length
     }
 
     const handleVerify = async (userId: string) => {
@@ -62,8 +62,8 @@ export default function UsersModule({ profiles, projects = [], setActiveTab }: {
                     </div>
                     <div className="w-px h-8 bg-white/10" />
                     <div className="px-4 py-2 text-center">
-                        <div className="text-[8px] text-gray-500 uppercase font-black mb-1">Students</div>
-                        <div className="text-xl font-black text-blue-500">{profiles.filter(p => p.role === 'student').length}</div>
+                        <div className="text-[8px] text-gray-500 uppercase font-black mb-1">Clients</div>
+                        <div className="text-xl font-black text-blue-500">{profiles.filter(p => p.role === 'client').length}</div>
                     </div>
                     <div className="w-px h-8 bg-white/10" />
                     <div className="px-4 py-2 text-center">
@@ -87,7 +87,7 @@ export default function UsersModule({ profiles, projects = [], setActiveTab }: {
                     />
                 </div>
                 <div className="flex gap-2">
-                    {['all', 'student', 'creator', 'admin'].map((role) => (
+                    {['all', 'client', 'creator', 'admin'].map((role) => (
                         <button
                             key={role}
                             onClick={() => setRoleFilter(role)}

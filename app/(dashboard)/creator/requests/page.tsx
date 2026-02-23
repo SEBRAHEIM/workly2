@@ -23,7 +23,7 @@ export default async function CreatorRequests(props: {
         .from('projects')
         .select(`
             *,
-            student:student_id (
+            client:client_id (
                 full_name,
                 username,
                 avatar_url
@@ -100,7 +100,7 @@ export default async function CreatorRequests(props: {
                         </div>
                         <h3 className="text-xl font-bold text-[#1E293B] mb-2">No {tab} requests</h3>
                         <p className="text-gray-500 max-w-sm mx-auto">
-                            {tab === 'active' ? 'Requests from students will appear here.' : `You have no ${tab} requests.`}
+                            {tab === 'active' ? 'Requests from clients will appear here.' : `You have no ${tab} requests.`}
                         </p>
                     </div>
                 </div>

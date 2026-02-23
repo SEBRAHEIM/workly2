@@ -36,7 +36,7 @@ export default function JoinPage() {
                             Workly <br /> <span className="text-[#0EA5E9]">Collective.</span>
                         </h1>
                         <p className="text-slate-500 font-medium text-sm px-4 md:px-0">
-                            Where elite students and visionary creators collaborate.
+                            Where elite clients and visionary creators collaborate.
                         </p>
                     </div>
 

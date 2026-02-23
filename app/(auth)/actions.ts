@@ -80,8 +80,8 @@ export async function login(prevState: any, formData: FormData) {
             .single()
 
         if (profile) {
-            if (profile.role === 'student') {
-                redirect('/student')
+            if (profile.role === 'client') {
+                redirect('/client')
             } else if (profile.role === 'creator') {
                 redirect('/creator')
             }

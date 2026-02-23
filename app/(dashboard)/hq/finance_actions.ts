@@ -42,7 +42,7 @@ export async function recordTransaction(projectId: string) {
         .from('transactions')
         .insert({
             project_id: projectId,
-            student_id: project.student_id,
+            client_id: project.client_id,
             creator_id: project.creator_id,
             gross_amount: split.gross,
             workly_fee_amount: split.worklyFee,

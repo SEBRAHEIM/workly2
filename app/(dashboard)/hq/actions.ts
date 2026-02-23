@@ -96,7 +96,7 @@ export async function forceReleaseFunds(projectId: string) {
 
         await supabaseAdminClient.from('transactions').insert({
             project_id: projectId,
-            student_id: project.student_id,
+            client_id: project.client_id,
             creator_id: project.creator_id,
             gross_amount: gross,
             workly_fee_amount: worklyFee,
@@ -158,7 +158,7 @@ export async function syncProjectPayment(projectId: string) {
 
         await supabaseAdminClient.from('transactions').insert({
             project_id: projectId,
-            student_id: project.student_id,
+            client_id: project.client_id,
             creator_id: project.creator_id,
             gross_amount: gross,
             workly_fee_amount: worklyFee,

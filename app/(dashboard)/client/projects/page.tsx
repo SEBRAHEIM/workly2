@@ -11,7 +11,7 @@ const isRecent = (dateStr: string | null) => {
     return new Date(dateStr) > fortyEightHoursAgo
 }
 
-export default async function StudentProjectsPage(props: {
+export default async function ClientProjectsPage(props: {
     searchParams: Promise<{ tab?: string }>
 }) {
     const searchParams = await props.searchParams
@@ -31,7 +31,7 @@ export default async function StudentProjectsPage(props: {
                 avatar_url
             )
         `)
-        .eq('student_id', user.id)
+        .eq('client_id', user.id)
         .order('created_at', { ascending: false })
 
     if (!projects) return <div>Failed to load projects</div>
@@ -70,15 +70,15 @@ export default async function StudentProjectsPage(props: {
 
                 {/* TABS */}
                 <div className="flex items-center gap-2 mb-12 overflow-x-auto pb-4 scrollbar-hide border-b border-sky-50">
-                    <Link href="/student/projects"
+                    <Link href="/client/projects"
                         className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'active' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
                         Active ({activeProjects.length})
                     </Link>
-                    <Link href="/student/projects?tab=recent"
+                    <Link href="/client/projects?tab=recent"
                         className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'recent' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
                         Recent ({recentProjects.length})
                     </Link>
-                    <Link href="/student/projects?tab=archive"
+                    <Link href="/client/projects?tab=archive"
                         className={`px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all ${tab === 'archive' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-100' : 'bg-white text-slate-400 hover:text-slate-600'}`}>
                         Archive ({archivedProjects.length})
                     </Link>
@@ -103,7 +103,7 @@ export default async function StudentProjectsPage(props: {
                         {currentList.map((project) => (
                             <Link
                                 key={project.id}
-                                href={`/student/projects/${project.id}`}
+                                href={`/client/projects/${project.id}`}
                                 className="block bg-white rounded-[2rem] p-8 border border-sky-50 hover:shadow-2xl hover:shadow-sky-100 transition-all group relative overflow-hidden"
                             >
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10">

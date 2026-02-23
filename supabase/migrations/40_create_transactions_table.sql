@@ -1,7 +1,7 @@
--- Create transactions table for student payments
+-- Create transactions table for client payments
 CREATE TABLE IF NOT EXISTS transactions (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    student_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+    client_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
     creator_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
     project_id uuid REFERENCES projects(id) ON DELETE SET NULL,
     amount numeric(10, 2) NOT NULL,
@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS transactions (
 -- Enable RLS
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 
--- Policies for students
-CREATE POLICY "Students can view their own transactions" ON transactions
-FOR SELECT USING (student_id = auth.uid());
+-- Policies for clients
+CREATE POLICY "Clients can view their own transactions" ON transactions
+FOR SELECT USING (client_id = auth.uid());
 
 -- Policies for creators (only if they are involved)
 CREATE POLICY "Creators can view transactions involving them" ON transactions

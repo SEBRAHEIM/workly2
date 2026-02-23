@@ -49,7 +49,7 @@ function DashboardCard({ val, label, sublabel, href, icon: Icon }: DashboardCard
     )
 }
 
-export default function StudentDashboardOverview({
+export default function ClientDashboardOverview({
     projectCount = 0,
     balance = "AED 0.00"
 }: {
@@ -63,7 +63,7 @@ export default function StudentDashboardOverview({
                     val="Discovery"
                     label="Find Creators"
                     sublabel="Locate top-tier domain experts for your next task."
-                    href="/student/directory"
+                    href="/client/directory"
                     icon={Search}
                 />
             </div>

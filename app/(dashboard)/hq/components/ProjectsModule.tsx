@@ -123,9 +123,9 @@ export default function ProjectsModule({ projects, events = [] }: { projects: an
                                             <div className="flex items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 font-black text-xs border border-blue-500/10">ST</div>
                                                 <div className="min-w-0">
-                                                    <div className="text-gray-400 text-[9px] font-black uppercase tracking-widest mb-0.5">Student</div>
-                                                    <div className="text-white font-bold text-sm truncate">{p.student?.full_name || p.student?.display_name || 'Anonymous'}</div>
-                                                    <div className="text-[10px] text-gray-500 font-mono truncate">{p.student?.email}</div>
+                                                    <div className="text-gray-400 text-[9px] font-black uppercase tracking-widest mb-0.5">Client</div>
+                                                    <div className="text-white font-bold text-sm truncate">{p.client?.full_name || p.client?.display_name || 'Anonymous'}</div>
+                                                    <div className="text-[10px] text-gray-500 font-mono truncate">{p.client?.email}</div>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5">

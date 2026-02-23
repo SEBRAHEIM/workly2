@@ -40,7 +40,7 @@ export default function ProjectPage({
         const fetchData = async () => {
             const { data: { user } } = await supabase.auth.getUser()
             if (!user) {
-                router.push(`/login?next=/student/projects/${encodeURIComponent(id)}`)
+                router.push(`/login?next=/client/projects/${encodeURIComponent(id)}`)
                 return
             }
             setUser(user)
@@ -137,8 +137,8 @@ export default function ProjectPage({
                 projectName={project.title}
                 transactionId={session_id || 'LOCAL-SYNC'}
                 showReceipt={payment === 'success'}
-                studentName={user.user_metadata?.full_name}
-                studentEmail={user.email}
+                clientName={user.user_metadata?.full_name}
+                clientEmail={user.email}
                 creatorName={project?.creator?.full_name || project?.creator?.display_name}
             />
 

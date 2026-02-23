@@ -37,7 +37,7 @@ USING (
   EXISTS (
     SELECT 1 FROM projects 
     WHERE projects.id = project_events.project_id 
-    AND (projects.student_id = auth.uid() OR projects.creator_id = auth.uid())
+    AND (projects.client_id = auth.uid() OR projects.creator_id = auth.uid())
   )
 );
 
@@ -48,6 +48,6 @@ WITH CHECK (
   EXISTS (
     SELECT 1 FROM projects 
     WHERE projects.id = project_events.project_id 
-    AND (projects.student_id = auth.uid() OR projects.creator_id = auth.uid())
+    AND (projects.client_id = auth.uid() OR projects.creator_id = auth.uid())
   )
 );

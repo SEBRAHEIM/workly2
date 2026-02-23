@@ -20,7 +20,7 @@ export const categories = [
         title: 'Reports & Essays',
         slug: 'reports-essays',
         desc: 'Help with writing assignments and Word documents.',
-        fullDesc: 'Precision academic writing from the world\'s top student talent.',
+        fullDesc: 'Precision academic writing from the world\'s top client talent.',
         image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800'
     },
     {

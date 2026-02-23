@@ -10,7 +10,7 @@ ADD COLUMN IF NOT EXISTS completed_projects integer DEFAULT 0;
 -- Projects Table (Negotiation)
 CREATE TABLE IF NOT EXISTS projects (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    student_id uuid REFERENCES profiles(id) NOT NULL,
+    client_id uuid REFERENCES profiles(id) NOT NULL,
     creator_id uuid REFERENCES profiles(id) NOT NULL,
     title text NOT NULL,
     description text NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS offers (
 CREATE TABLE IF NOT EXISTS reviews (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     project_id uuid REFERENCES projects(id) NOT NULL,
-    student_id uuid REFERENCES profiles(id) NOT NULL,
+    client_id uuid REFERENCES profiles(id) NOT NULL,
     creator_id uuid REFERENCES profiles(id) NOT NULL,
     rating integer NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment text,
@@ -56,13 +56,13 @@ CREATE TABLE IF NOT EXISTS portfolio_items (
 -- Projects: Users can see projects they are involved in
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view their own projects" ON projects
-    FOR SELECT USING (auth.uid() = student_id OR auth.uid() = creator_id);
+    FOR SELECT USING (auth.uid() = client_id OR auth.uid() = creator_id);
 
-CREATE POLICY "Students can insert projects" ON projects
-    FOR INSERT WITH CHECK (auth.uid() = student_id);
+CREATE POLICY "Clients can insert projects" ON projects
+    FOR INSERT WITH CHECK (auth.uid() = client_id);
 
 CREATE POLICY "Users can update their own projects" ON projects
-    FOR UPDATE USING (auth.uid() = student_id OR auth.uid() = creator_id);
+    FOR UPDATE USING (auth.uid() = client_id OR auth.uid() = creator_id);
 
 -- Offers: Users can see offers for their projects
 ALTER TABLE offers ENABLE ROW LEVEL SECURITY;
@@ -71,7 +71,7 @@ CREATE POLICY "Users can view offers for their projects" ON offers
         EXISTS (
             SELECT 1 FROM projects 
             WHERE projects.id = offers.project_id 
-            AND (projects.student_id = auth.uid() OR projects.creator_id = auth.uid())
+            AND (projects.client_id = auth.uid() OR projects.creator_id = auth.uid())
         )
     );
 
@@ -80,7 +80,7 @@ CREATE POLICY "Users can insert offers for their projects" ON offers
         EXISTS (
             SELECT 1 FROM projects 
             WHERE projects.id = offers.project_id 
-            AND (projects.student_id = auth.uid() OR projects.creator_id = auth.uid())
+            AND (projects.client_id = auth.uid() OR projects.creator_id = auth.uid())
         )
     );
 
@@ -92,10 +92,10 @@ CREATE POLICY "Portfolio items are public" ON portfolio_items
 CREATE POLICY "Creators can manage their portfolio" ON portfolio_items
     FOR ALL USING (auth.uid() = creator_id);
 
--- Reviews: Public read, Student write (linked to project)
+-- Reviews: Public read, Client write (linked to project)
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Reviews are public" ON reviews
     FOR SELECT USING (true);
 
-CREATE POLICY "Students can write reviews for their completed projects" ON reviews
-    FOR INSERT WITH CHECK (auth.uid() = student_id);
+CREATE POLICY "Clients can write reviews for their completed projects" ON reviews
+    FOR INSERT WITH CHECK (auth.uid() = client_id);

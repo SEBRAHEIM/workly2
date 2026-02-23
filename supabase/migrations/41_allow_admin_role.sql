@@ -4,7 +4,7 @@ DROP CONSTRAINT IF EXISTS profiles_role_check;
 
 ALTER TABLE public.profiles 
 ADD CONSTRAINT profiles_role_check 
-CHECK (role IN ('student', 'creator', 'admin'));
+CHECK (role IN ('client', 'creator', 'admin'));
 
 -- Ensure RLS policies allow admin user to manage profiles (already exists in 28_formalize_admin_role.sql but reinforced here)
 DROP POLICY IF EXISTS "Admins can update all profiles" ON profiles;

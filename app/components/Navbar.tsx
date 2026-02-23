@@ -37,7 +37,7 @@ export default function Navbar() {
                     .select('role')
                     .eq('id', user.id)
                     .single()
-                setRole(data?.role || 'student')
+                setRole(data?.role || 'client')
             }
             setLoading(false)
         }
@@ -67,7 +67,7 @@ export default function Navbar() {
                 <div className="flex items-center">
                     {!loading && (
                         <Link
-                            href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/student') : '/join'}
+                            href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/client') : '/join'}
                             className="bg-[#0EA5E9] text-white px-6 md:px-10 py-2 md:py-3 rounded-full text-xs md:text-sm hover:bg-sky-600 transition-all font-bold shadow-sm hover:shadow-lg active:scale-95 uppercase tracking-widest"
                         >
                             Join
@@ -121,7 +121,7 @@ export default function Navbar() {
                                         )}
 
                                         <Link
-                                            href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/student') : '/join'}
+                                            href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/client') : '/join'}
                                             onClick={() => setIsMenuOpen(false)}
                                             className="block w-full text-center py-3 rounded-full bg-[#0EA5E9] text-white text-sm font-bold hover:bg-sky-600 transition-all shadow-sm active:scale-95 uppercase tracking-widest"
                                         >

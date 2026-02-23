@@ -31,8 +31,8 @@ export async function submitWork(prevState: any, formData: FormData) {
         return { error: 'Failed to submit work. Please try again.', success: false }
     }
 
-    // Notify Student (Email)
-    // In a real implementation, we would fetch the student's email and send a notification here.
+    // Notify Client (Email)
+    // In a real implementation, we would fetch the client's email and send a notification here.
 
     revalidatePath(`/creator/projects/${projectId}`)
     return { success: true, error: '' }

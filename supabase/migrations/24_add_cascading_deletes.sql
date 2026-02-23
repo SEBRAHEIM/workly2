@@ -1,8 +1,8 @@
 -- Migration 24: Add cascading deletes to allow user deletion
 
 -- 1. Projects
-ALTER TABLE projects DROP CONSTRAINT IF EXISTS projects_student_id_fkey;
-ALTER TABLE projects ADD CONSTRAINT projects_student_id_fkey FOREIGN KEY (student_id) REFERENCES profiles(id) ON DELETE CASCADE;
+ALTER TABLE projects DROP CONSTRAINT IF EXISTS projects_client_id_fkey;
+ALTER TABLE projects ADD CONSTRAINT projects_client_id_fkey FOREIGN KEY (client_id) REFERENCES profiles(id) ON DELETE CASCADE;
 
 ALTER TABLE projects DROP CONSTRAINT IF EXISTS projects_creator_id_fkey;
 ALTER TABLE projects ADD CONSTRAINT projects_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES profiles(id) ON DELETE CASCADE;
@@ -15,8 +15,8 @@ ALTER TABLE offers DROP CONSTRAINT IF EXISTS offers_sender_id_fkey;
 ALTER TABLE offers ADD CONSTRAINT offers_sender_id_fkey FOREIGN KEY (sender_id) REFERENCES profiles(id) ON DELETE CASCADE;
 
 -- 3. Reviews
-ALTER TABLE reviews DROP CONSTRAINT IF EXISTS reviews_student_id_fkey;
-ALTER TABLE reviews ADD CONSTRAINT reviews_student_id_fkey FOREIGN KEY (student_id) REFERENCES profiles(id) ON DELETE CASCADE;
+ALTER TABLE reviews DROP CONSTRAINT IF EXISTS reviews_client_id_fkey;
+ALTER TABLE reviews ADD CONSTRAINT reviews_client_id_fkey FOREIGN KEY (client_id) REFERENCES profiles(id) ON DELETE CASCADE;
 
 ALTER TABLE reviews DROP CONSTRAINT IF EXISTS reviews_creator_id_fkey;
 ALTER TABLE reviews ADD CONSTRAINT reviews_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES profiles(id) ON DELETE CASCADE;

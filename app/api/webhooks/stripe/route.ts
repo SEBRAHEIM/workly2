@@ -44,10 +44,10 @@ export async function POST(req: Request) {
                 return new NextResponse('Project not found', { status: 404 })
             }
 
-            // 1.5 Fetch Creator and Student details for SMS/WhatsApp alert
-            const [{ data: creatorProfile }, { data: studentProfile }] = await Promise.all([
+            // 1.5 Fetch Creator and Client details for SMS/WhatsApp alert
+            const [{ data: creatorProfile }, { data: clientProfile }] = await Promise.all([
                 supabaseAdmin.from('profiles').select('whatsapp_phone, display_name, full_name').eq('id', project.creator_id).single(),
-                supabaseAdmin.from('profiles').select('display_name, full_name').eq('id', project.student_id).single()
+                supabaseAdmin.from('profiles').select('display_name, full_name').eq('id', project.client_id).single()
             ])
 
             // 2. Update Funds and Status
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
             const creatorNet = Math.round((gross - worklyFee - stripeFee) * 100) / 100
 
             await supabaseAdmin.from('transactions').insert({
-                student_id: project.student_id,
+                client_id: project.client_id,
                 creator_id: project.creator_id,
                 project_id: projectId,
                 gross_amount: gross,
@@ -90,11 +90,11 @@ export async function POST(req: Request) {
             // 4. Send Notifications
             await Promise.all([
                 createNotification({
-                    userId: project.student_id,
+                    userId: project.client_id,
                     type: 'success',
                     title: 'Payment Successful',
                     message: `Payment successful for "${project.title}". Work has started!`,
-                    link: `/student/projects/${project.id}`
+                    link: `/client/projects/${project.id}`
                 }),
                 createNotification({
                     userId: project.creator_id,
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
                 // WhatsApp Notification
                 creatorProfile?.whatsapp_phone ? notifyCreatorOfNewHire({
                     to: creatorProfile.whatsapp_phone,
-                    studentName: studentProfile?.full_name || studentProfile?.display_name || 'A Student',
+                    clientName: clientProfile?.full_name || clientProfile?.display_name || 'A Client',
                     projectTitle: project.title,
                     tier: project.current_terms?.tier || 'Fixed',
                     price: project.current_price,

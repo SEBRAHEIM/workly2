@@ -18,7 +18,7 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     // Validate inputs
     const isAdmin = user.email === 'workly.day@outlook.com'
 
-    if (!isAdmin && (!role || !['student', 'creator'].includes(role))) {
+    if (!isAdmin && (!role || !['client', 'creator'].includes(role))) {
         return { error: 'Invalid role selected.' }
     }
     if (!username || username.length < 3) {
@@ -53,8 +53,8 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     // Redirect based on role
     if (finalRole === 'admin') {
         redirect('/admin')
-    } else if (finalRole === 'student') {
-        redirect('/student')
+    } else if (finalRole === 'client') {
+        redirect('/client')
     } else {
         redirect('/creator')
     }

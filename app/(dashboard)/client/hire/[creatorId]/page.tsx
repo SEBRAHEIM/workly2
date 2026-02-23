@@ -17,7 +17,7 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
         // Safe redirect
-        return redirect(`/login?next=/student/hire/${encodeURIComponent(creatorId)}`)
+        return redirect(`/login?next=/client/hire/${encodeURIComponent(creatorId)}`)
     }
 
     // Fetch creator details
@@ -50,7 +50,7 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                 <div className="max-w-2xl mx-auto relative z-10">
                     <div className="mb-4">
                         <Link
-                            href={`/student/creator/${creatorId}`}
+                            href={`/client/creator/${creatorId}`}
                             className="inline-flex items-center px-4 py-2 bg-white/60 backdrop-blur-md border border-sky-100 rounded-full text-xs font-bold text-[#0EA5E9] hover:bg-white transition-all shadow-sm"
                         >
                             <ArrowLeft className="w-3.5 h-3.5 mr-2" />

@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
-import { notifyStudentOfWorkSubmitted } from '@/utils/sms'
+import { notifyClientOfWorkSubmitted } from '@/utils/sms'
 import { getStripe } from '@/utils/stripe'
 import { headers } from 'next/headers'
 
@@ -235,7 +235,7 @@ export async function declineProject(projectId: string) {
     // Verify creator owns this project context (is the creator_id)
     const { data: project } = await supabase
         .from('projects')
-        .select('creator_id, student_id, title, funds_status')
+        .select('creator_id, client_id, title, funds_status')
         .eq('id', projectId)
         .single()
 
@@ -265,12 +265,12 @@ export async function declineProject(projectId: string) {
                 await getStripe().refunds.create({
                     payment_intent: paymentIntentId,
                     reason: 'requested_by_customer', // In this case, creator's side refusal
-                    metadata: { projectId, studentId: project.student_id }
+                    metadata: { projectId, clientId: project.client_id }
                 })
 
                 // Record Refund Transaction
                 await supabase.from('transactions').insert({
-                    student_id: project.student_id,
+                    client_id: project.client_id,
                     creator_id: project.creator_id,
                     project_id: projectId,
                     amount: transaction.amount,
@@ -310,22 +310,22 @@ export async function declineProject(projectId: string) {
         payload: { notes: 'Offer declined by Creator', refunded: !!refundResult }
     })
 
-    // Notify Student
-    if (project.student_id) {
+    // Notify Client
+    if (project.client_id) {
         await createNotification({
-            userId: project.student_id,
+            userId: project.client_id,
             type: refundResult ? 'info' : 'error',
             title: refundResult ? 'Project Declined & Refunded' : 'Offer Declined',
             message: refundResult
                 ? `Project Declined & Refunded: ${project.title}. The amount has been sent back to your original payment method.`
                 : `Offer Declined: ${project.title}`,
-            link: `/student/projects/${projectId}`
+            link: `/client/projects/${projectId}`
         })
 
     }
 
     revalidatePath('/creator/requests')
-    revalidatePath(`/student/projects/${projectId}`)
+    revalidatePath(`/client/projects/${projectId}`)
     return { success: true, refunded: !!refundResult }
 }
 
@@ -404,20 +404,20 @@ export async function submitWork(prevState: any, formData: FormData) {
         return { error: 'Please provide a deliverable link or upload a file.' }
     }
 
-    // 3. Fetch Student Info for internal use (notifications)
+    // 3. Fetch Client Info for internal use (notifications)
     const { data: projectCheck } = await createAdminClient()
         .from('projects')
-        .select('student_id, profiles!projects_student_id_fkey(whatsapp_phone, full_name, display_name)')
+        .select('client_id, profiles!projects_client_id_fkey(whatsapp_phone, full_name, display_name)')
         .eq('id', projectId)
         .single()
 
-    const finalStudentPhone = projectCheck?.profiles ? (projectCheck.profiles as any).whatsapp_phone : null
-    const finalStudentName = projectCheck?.profiles ? ((projectCheck.profiles as any).display_name || (projectCheck.profiles as any).full_name || 'Student') : 'Student'
+    const finalClientPhone = projectCheck?.profiles ? (projectCheck.profiles as any).whatsapp_phone : null
+    const finalClientName = projectCheck?.profiles ? ((projectCheck.profiles as any).display_name || (projectCheck.profiles as any).full_name || 'Client') : 'Client'
 
-    // Verify ownership and get student_id/title
+    // Verify ownership and get client_id/title
     const { data: project } = await supabase
         .from('projects')
-        .select('creator_id, student_id, title')
+        .select('creator_id, client_id, title')
         .eq('id', projectId)
         .single()
 
@@ -434,7 +434,7 @@ export async function submitWork(prevState: any, formData: FormData) {
             submission_notes: notes || '',
             submission_file_urls: submissionFileUrls,
             revision_notes: null, // Clear notes after submission
-            waiting_on: project.student_id, // Now waiting on student to review
+            waiting_on: project.client_id, // Now waiting on client to review
             submitted_at: new Date().toISOString()
         })
         .eq('id', projectId)
@@ -452,27 +452,27 @@ export async function submitWork(prevState: any, formData: FormData) {
         payload: { url: finalUrl, notes: notes || '', files: submissionFileUrls }
     })
 
-    // Notify Student
-    if (project.student_id) {
+    // Notify Client
+    if (project.client_id) {
         await createNotification({
-            userId: project.student_id,
+            userId: project.client_id,
             type: 'success',
             title: 'Work Submitted',
             message: `Work Submitted: ${project.title}`,
-            link: `/student/projects/${projectId}`
+            link: `/client/projects/${projectId}`
         })
 
 
         // Background WhatsApp Alert
-        if (finalStudentPhone) {
+        if (finalClientPhone) {
             supabase.from('profiles').select('display_name, full_name').eq('id', user.id).single().then(creatorProfile => {
                 const creatorDisplayName = creatorProfile.data?.display_name || creatorProfile.data?.full_name || 'Your Creator';
-                notifyStudentOfWorkSubmitted({
-                    to: finalStudentPhone,
+                notifyClientOfWorkSubmitted({
+                    to: finalClientPhone,
                     creatorName: creatorDisplayName,
                     projectTitle: project.title,
-                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/student/projects/${projectId}`
-                }).catch(e => console.error('[WHATSAPP] Student notification failed:', e));
+                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/client/projects/${projectId}`
+                }).catch(e => console.error('[WHATSAPP] Client notification failed:', e));
             });
         }
     }
@@ -493,7 +493,7 @@ export async function startProject(projectId: string) {
 
     const { data: project } = await supabase
         .from('projects')
-        .select('creator_id, status, student_id, title')
+        .select('creator_id, status, client_id, title')
         .eq('id', projectId)
         .single()
 
@@ -522,14 +522,14 @@ export async function startProject(projectId: string) {
         payload: { from: project.status, to: 'in_progress', notes: 'Creator started work' }
     })
 
-    // Notify Student
-    if (project.student_id) {
+    // Notify Client
+    if (project.client_id) {
         await createNotification({
-            userId: project.student_id,
+            userId: project.client_id,
             type: 'info',
             title: 'Work Started',
             message: `Work started on: ${project.title}`,
-            link: `/student/projects/${projectId}`
+            link: `/client/projects/${projectId}`
         })
 
     }

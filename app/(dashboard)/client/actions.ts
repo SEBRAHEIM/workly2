@@ -107,7 +107,7 @@ export async function createProject(prevState: any, formData: FormData) {
     const { data, error } = await supabase
         .from('projects')
         .insert({
-            student_id: user.id,
+            client_id: user.id,
             creator_id: creatorId,
             title: title || 'Untitled Project',
             description: description || '',
@@ -162,7 +162,7 @@ export async function createProject(prevState: any, formData: FormData) {
 
     // 8. Create Stripe Checkout Session (Immediate Redirect)
     if (initialPrice <= 0) {
-        return redirect(`/student/projects/${data.id}`)
+        return redirect(`/client/projects/${data.id}`)
     }
 
     let sessionUrl: string | null = null
@@ -217,8 +217,8 @@ export async function createProjectStripeSession(projectId: string, title: strin
             projectId: projectId,
         },
         mode: 'payment',
-        success_url: `${baseUrl}/student/projects/${projectId}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${baseUrl}/student/projects/${projectId}?payment=cancelled`,
+        success_url: `${baseUrl}/client/projects/${projectId}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/client/projects/${projectId}?payment=cancelled`,
     })
 
     return session.url
@@ -234,7 +234,7 @@ export async function payProject(prevState: any, formData: FormData) {
         .from('projects')
         .select('*')
         .eq('id', projectId)
-        .eq('student_id', user.id)
+        .eq('client_id', user.id)
         .single()
 
     if (error || !project) {
@@ -281,7 +281,7 @@ export async function toggleFavorite(creatorId: string, isFavorite: boolean) {
             const { error } = await supabase
                 .from('favorite_creators')
                 .insert({
-                    student_id: user.id,
+                    client_id: user.id,
                     creator_id: creatorId
                 })
 
@@ -294,13 +294,13 @@ export async function toggleFavorite(creatorId: string, isFavorite: boolean) {
             const { error } = await supabase
                 .from('favorite_creators')
                 .delete()
-                .eq('student_id', user.id)
+                .eq('client_id', user.id)
                 .eq('creator_id', creatorId)
 
             if (error) throw error
         }
 
-        revalidatePath('/student/favorites')
+        revalidatePath('/client/favorites')
         return { success: true }
     } catch (error: any) {
         console.error('Toggle favorite error:', error)

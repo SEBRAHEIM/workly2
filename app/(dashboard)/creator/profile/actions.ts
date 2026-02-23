@@ -55,12 +55,12 @@ export async function updateCreatorIdentity(formData: FormData) {
 
     revalidatePath('/creator/profile')
     // Specifically revalidate the paths where this creator's details are shown
-    revalidatePath(`/student/creator/${user.id}`)
-    revalidatePath(`/student/hire/${user.id}`)
+    revalidatePath(`/client/creator/${user.id}`)
+    revalidatePath(`/client/hire/${user.id}`)
 
     // Pattern fallback
-    revalidatePath('/student/creator/[creatorId]', 'layout')
-    revalidatePath('/student/hire/[creatorId]', 'layout')
+    revalidatePath('/client/creator/[creatorId]', 'layout')
+    revalidatePath('/client/hire/[creatorId]', 'layout')
 
     return { success: true }
 }

@@ -18,7 +18,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
         supabase.from('portfolio_items').select('*').eq('creator_id', creatorId),
         supabase.from('creator_services').select('*').eq('creator_id', creatorId),
         supabase.from('reviews')
-            .select('*, student:profiles(display_name, avatar_url)')
+            .select('*, client:profiles(display_name, avatar_url)')
             .eq('creator_id', creatorId)
             .order('created_at', { ascending: false })
     ])
@@ -82,7 +82,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
                         <div className="flex-shrink-0">
                             <Link
-                                href={`/student/hire/${creatorId}`}
+                                href={`/client/hire/${creatorId}`}
                                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0EA5E9] text-white font-bold text-sm rounded-lg hover:bg-[#0284c7] transition-all shadow-sm active:scale-95"
                             >
                                 Hire Me
@@ -92,7 +92,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                     </div>
 
                     <p className="text-sm text-slate-600 font-medium mb-6" dir="auto">
-                        {creator.tagline || 'Student Creator'}
+                        {creator.tagline || 'Client Creator'}
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4 border-t border-slate-50">
@@ -181,7 +181,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                             {Object.entries(service.service_packages).map(([tier, pkg]: [string, any]) => (
                                                 <Link
                                                     key={tier}
-                                                    href={`/student/hire/${creatorId}?category=${slug}&tier=${tier}`}
+                                                    href={`/client/hire/${creatorId}?category=${slug}&tier=${tier}`}
                                                     className="bg-white border border-[#F0F9FF] rounded-xl p-4 shadow-sm hover:border-[#0EA5E9] hover:shadow-md hover:-translate-y-1 transition-all group/tier"
                                                 >
                                                     <div className="flex justify-between items-start mb-2">
@@ -215,7 +215,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
             {/* Reviews Section */}
             <div className="mt-16 border-t border-slate-100 pt-16">
                 <div className="flex items-center justify-between mb-8 px-2">
-                    <h3 className="text-xl font-bold text-[#1E293B]">Student Reviews</h3>
+                    <h3 className="text-xl font-bold text-[#1E293B]">Client Reviews</h3>
                     {reviews.length > 0 && (
                         <div className="flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
                             <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
@@ -231,14 +231,14 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-50">
-                                            {review.student?.avatar_url ? (
-                                                <Image src={review.student.avatar_url} alt="" width={32} height={32} />
+                                            {review.client?.avatar_url ? (
+                                                <Image src={review.client.avatar_url} alt="" width={32} height={32} />
                                             ) : (
                                                 <User className="w-4 h-4 text-slate-300" />
                                             )}
                                         </div>
                                         <div>
-                                            <p className="text-xs font-bold text-slate-900">{review.student?.display_name || 'Anonymous'}</p>
+                                            <p className="text-xs font-bold text-slate-900">{review.client?.display_name || 'Anonymous'}</p>
                                             <p className="text-[9px] text-slate-400 font-medium">Verified Hire</p>
                                         </div>
                                     </div>
@@ -271,14 +271,14 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
             <div className="mt-12 text-center">
                 <h3 className="text-2xl font-serif font-bold text-[#1E293B] mb-4">Ready to work with {creator.display_name}?</h3>
                 <Link
-                    href={`/student/hire/${creatorId}`}
+                    href={`/client/hire/${creatorId}`}
                     className="inline-block px-8 py-4 bg-[#0EA5E9] text-white font-bold text-lg rounded-xl hover:bg-[#2e3b29] transition-all shadow-xl hover:shadow-2xl active:scale-95"
                 >
                     Start a Project
                 </Link>
                 <div className="mt-4 flex items-center justify-center text-xs text-gray-400 gap-2">
                     <ShieldCheck className="w-4 h-4" />
-                    <span>Protected by Student Creator Guarantee</span>
+                    <span>Protected by Client Creator Guarantee</span>
                 </div>
             </div>
 

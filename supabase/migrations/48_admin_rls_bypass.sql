@@ -1,6 +1,6 @@
 -- Standardizing Admin Oversight & Fixing RLS Visibility
 -- This migration ensures the Admin (workly.day@outlook.com) can see everything,
--- bypassing any student/creator specific restrictions.
+-- bypassing any client/creator specific restrictions.
 
 -- 1. Ensure projects are visible to Admin
 DROP POLICY IF EXISTS "Admins can view all projects" ON projects;

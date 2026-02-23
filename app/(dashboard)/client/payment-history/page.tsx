@@ -31,12 +31,12 @@ export default function PaymentHistory() {
                 supabase
                     .from('transactions')
                     .select('*')
-                    .eq('student_id', user.id)
+                    .eq('client_id', user.id)
                     .order('created_at', { ascending: false }),
                 supabase
                     .from('projects')
                     .select('*, creator:creator_id(full_name)')
-                    .eq('student_id', user.id)
+                    .eq('client_id', user.id)
                     .or('funds_status.in.(escrow,released),and(funds_status.eq.pending,status.in.(accepted,in_progress,submitted,completed))')
                     .order('created_at', { ascending: false })
             ])
@@ -190,8 +190,8 @@ export default function PaymentHistory() {
                         second: '2-digit'
                     })}
                     transactionId={selectedReceipt.stripe_session_id || 'LOCAL-SYNC'}
-                    studentName={userProfile?.full_name}
-                    studentEmail={userProfile?.email}
+                    clientName={userProfile?.full_name}
+                    clientEmail={userProfile?.email}
                     creatorName={selectedReceipt.creator_name}
                     onClose={() => setSelectedReceipt(null)}
                 />

@@ -36,7 +36,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                 .from('projects')
                 .select(`
                     *,
-                    student:student_id (
+                    client:client_id (
                         full_name,
                         display_name,
                         username,
@@ -143,17 +143,17 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                                 <div className="flex flex-wrap items-center gap-8 pt-8 border-t border-slate-100">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 overflow-hidden ring-4 ring-white shadow-md">
-                                            {project.student.avatar_url ? (
-                                                <img src={project.student.avatar_url} className="w-full h-full object-cover" />
+                                            {project.client.avatar_url ? (
+                                                <img src={project.client.avatar_url} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center bg-slate-50 uppercase font-black text-slate-300 text-xs">
-                                                    {(project.student.display_name || project.student.full_name || 'U').charAt(0)}
+                                                    {(project.client.display_name || project.client.full_name || 'U').charAt(0)}
                                                 </div>
                                             )}
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Client Operator</p>
-                                            <p className="text-sm font-bold text-slate-900">{project.student.display_name || project.student.full_name}</p>
+                                            <p className="text-sm font-bold text-slate-900">{project.client.display_name || project.client.full_name}</p>
                                         </div>
                                     </div>
 
@@ -234,7 +234,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                                             <span className="text-xs font-black uppercase tracking-widest">Warning</span>
                                         </div>
                                         <p className="text-xs text-white/60 leading-relaxed">
-                                            Do not initiate work. Workspace is awaiting student deposit.
+                                            Do not initiate work. Workspace is awaiting client deposit.
                                         </p>
                                     </div>
                                 )}
@@ -286,7 +286,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                                     <div className="bg-slate-50 border border-slate-100 rounded-[2rem] p-8">
                                         <h3 className="text-lg font-black text-slate-900 mb-2">Deliver Output</h3>
                                         <p className="text-xs text-slate-500 leading-relaxed mb-8">
-                                            Upload your finalized work. The platform will secure your earnings upon student acceptance.
+                                            Upload your finalized work. The platform will secure your earnings upon client acceptance.
                                         </p>
                                         <SubmitWorkForm projectId={project.id} projectTitle={project.title} />
                                     </div>

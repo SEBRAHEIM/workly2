@@ -19,7 +19,7 @@ export default async function FavoritesPage() {
             creator_id,
             profiles:creator_id (id, display_name, full_name, avatar_url, tagline, level, rating_avg, total_reviews)
         `)
-        .eq('student_id', user.id)
+        .eq('client_id', user.id)
 
     // Parse the result to get a list of creators
     const creators = favorites?.map((f: any) => f.profiles) || []
@@ -31,7 +31,7 @@ export default async function FavoritesPage() {
                     <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">
                         Curated <br /> <span className="text-[#0EA5E9]">Talent.</span>
                     </h1>
-                    <p className="text-slate-500 font-medium">Your collection of elite student creators.</p>
+                    <p className="text-slate-500 font-medium">Your collection of elite client creators.</p>
                 </div>
 
                 {creators.length === 0 ? (
@@ -51,7 +51,7 @@ export default async function FavoritesPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {creators.map((creator: any) => {
-                            const profileUrl = `/student/creator/${creator.id}`
+                            const profileUrl = `/client/creator/${creator.id}`
                             return (
                                 <div key={creator.id} className="bg-white rounded-[2rem] p-8 border border-sky-50 shadow-sm hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 relative group flex flex-col h-full overflow-hidden">
                                     {/* Header: Identity - Now clearly interactive */}
@@ -88,7 +88,7 @@ export default async function FavoritesPage() {
 
                                     {/* Tagline */}
                                     <p className="text-slate-500 text-sm font-medium mb-8 line-clamp-2 leading-relaxed h-[2.5rem]">
-                                        {creator.tagline || 'Excellence in student delivery and creative innovation.'}
+                                        {creator.tagline || 'Excellence in client delivery and creative innovation.'}
                                     </p>
 
                                     {/* Spacer */}
@@ -103,7 +103,7 @@ export default async function FavoritesPage() {
                                             View Portfolio
                                         </Link>
                                         <Link
-                                            href={`/student/hire/${creator.id}`}
+                                            href={`/client/hire/${creator.id}`}
                                             className="bg-slate-900 text-white text-center font-black uppercase tracking-widest text-[9px] py-4 rounded-full hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-xl group-hover:shadow-sky-100 flex items-center justify-center"
                                         >
                                             Establish Contract

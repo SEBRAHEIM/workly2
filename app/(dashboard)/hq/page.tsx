@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
     const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse, transactionsResponse, batchesResponse] = await Promise.all([
         supabaseAdminClient
             .from('projects')
-            .select('*, student:student_id(full_name, display_name), creator:creator_id(full_name, display_name, wallet_balance)')
+            .select('*, client:client_id(full_name, display_name), creator:creator_id(full_name, display_name, wallet_balance)')
             .order('created_at', { ascending: false }),
         supabaseAdminClient
             .from('profiles')

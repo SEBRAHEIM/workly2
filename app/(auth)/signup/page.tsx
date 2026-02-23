@@ -35,7 +35,7 @@ export default function Signup() {
                             Join <br /> <span className="text-[#0EA5E9]">Workly.</span>
                         </h1>
                         <p className="text-slate-500 font-medium text-sm">
-                            Join the network for elite students and creators.
+                            Join the network for elite clients and creators.
                         </p>
                     </div>
 

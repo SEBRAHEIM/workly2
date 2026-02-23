@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { updateStudentIdentity } from './actions'
+import { updateClientIdentity } from './actions'
 import { Save } from 'lucide-react'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -11,7 +11,7 @@ interface Props {
     profile: any
 }
 
-export default function StudentIdentityForm({ profile }: Props) {
+export default function ClientIdentityForm({ profile }: Props) {
     const [isSaving, setIsSaving] = useState(false)
     const [phone, setPhone] = useState(profile?.whatsapp_phone || '')
 
@@ -28,7 +28,7 @@ export default function StudentIdentityForm({ profile }: Props) {
                 // Add phone from state
                 if (phone) formData.set('smsPhone', phone)
 
-                const result = await updateStudentIdentity(formData)
+                const result = await updateClientIdentity(formData)
                 setIsSaving(false)
 
                 if (result?.error) {

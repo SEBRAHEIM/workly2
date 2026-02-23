@@ -61,7 +61,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminEmail }: Ad
                 </div>
 
                 <Link
-                    href="/student"
+                    href="/client"
                     className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-white hover:bg-white/5 rounded-xl transition-all"
                 >
                     <LogOut className="w-5 h-5" />

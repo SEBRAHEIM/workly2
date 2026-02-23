@@ -56,18 +56,18 @@ export async function sendSMS({
 }
 
 /**
- * Specifically for notifying creators when a student hires them.
+ * Specifically for notifying creators when a client hires them.
  */
 export async function notifyCreatorOfNewHire({
     to,
-    studentName,
+    clientName,
     projectTitle,
     tier,
     price,
     link
 }: {
     to: string;
-    studentName: string;
+    clientName: string;
     projectTitle: string;
     tier: string;
     price: number | string;
@@ -76,15 +76,15 @@ export async function notifyCreatorOfNewHire({
     console.log(`[SMS DEBUG] Notifying creator ${to} of new hire request...`);
 
     // SMS limit is 160 characters. Keeping it concise.
-    const body = `Workly: ${studentName} hired you for "${projectTitle}" (${tier}). Budget: AED ${price}. View: ${link}`;
+    const body = `Workly: ${clientName} hired you for "${projectTitle}" (${tier}). Budget: AED ${price}. View: ${link}`;
 
     return sendSMS({ to, body });
 }
 
 /**
- * Specifically for notifying students when a creator submits work.
+ * Specifically for notifying clients when a creator submits work.
  */
-export async function notifyStudentOfWorkSubmitted({
+export async function notifyClientOfWorkSubmitted({
     to,
     creatorName,
     projectTitle,
@@ -95,7 +95,7 @@ export async function notifyStudentOfWorkSubmitted({
     projectTitle: string;
     link: string;
 }) {
-    console.log(`[SMS DEBUG] Notifying student ${to} of work submission...`);
+    console.log(`[SMS DEBUG] Notifying client ${to} of work submission...`);
     const body = `Workly: ${creatorName} submitted work for "${projectTitle}". Review: ${link}`;
 
     return sendSMS({ to, body });

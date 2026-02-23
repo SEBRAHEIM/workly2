@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Star } from 'lucide-react'
-import { toggleFavorite } from '@/app/(dashboard)/student/actions'
+import { toggleFavorite } from '@/app/(dashboard)/client/actions'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 

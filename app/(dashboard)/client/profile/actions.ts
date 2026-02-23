@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function updateStudentIdentity(formData: FormData) {
+export async function updateClientIdentity(formData: FormData) {
     const supabase = await createClient()
     const smsPhone = formData.get('smsPhone') as string
     const fullName = formData.get('fullName') as string
@@ -28,8 +28,8 @@ export async function updateStudentIdentity(formData: FormData) {
         return { error: error.message }
     }
 
-    console.log('[SMS DEBUG] Successfully updated student profile')
+    console.log('[SMS DEBUG] Successfully updated client profile')
 
-    revalidatePath('/student/profile')
+    revalidatePath('/client/profile')
     return { success: true }
 }

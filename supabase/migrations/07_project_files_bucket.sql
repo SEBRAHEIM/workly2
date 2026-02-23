@@ -8,7 +8,7 @@ CREATE POLICY "Authenticated Upload Project Files"
 ON storage.objects FOR INSERT
 WITH CHECK ( bucket_id = 'project-files' AND auth.role() = 'authenticated' );
 
--- Policy: Public/Authenticated Read (Students and Creators need to see it)
+-- Policy: Public/Authenticated Read (Clients and Creators need to see it)
 -- For simplicity, we make it public or at least readable by authenticated
 CREATE POLICY "Authenticated Read Project Files"
 ON storage.objects FOR SELECT

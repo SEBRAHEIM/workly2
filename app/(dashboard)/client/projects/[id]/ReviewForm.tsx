@@ -79,7 +79,7 @@ export default function ReviewForm({ projectId, creatorName, onSuccess }: Review
                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Your Experience (Optional)</span>
                     </div>
                     <textarea
-                        placeholder="Tell other students about the quality of work and communication..."
+                        placeholder="Tell other clients about the quality of work and communication..."
                         dir="auto"
                         className="w-full p-5 rounded-2xl border border-slate-100 text-sm focus:ring-4 focus:ring-sky-500/10 focus:border-[#0EA5E9] outline-none h-32 bg-slate-50/50 transition-all placeholder:text-slate-300"
                         value={comment}

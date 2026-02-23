@@ -70,7 +70,7 @@ export default function RequestCard({ req }: RequestCardProps) {
     })
 
     const handleDecline = async () => {
-        if (!confirm('Are you sure you want to decline this request? The student will be notified.')) return
+        if (!confirm('Are you sure you want to decline this request? The client will be notified.')) return
 
         setIsDeclining(true)
         const result = await declineProject(req.id)
@@ -109,15 +109,15 @@ export default function RequestCard({ req }: RequestCardProps) {
                 <div className="flex-1">
                     <div className="flex items-center mb-4">
                         <div className="w-10 h-10 rounded-full bg-[#f0f0f0] mr-3 overflow-hidden">
-                            {req.student?.avatar_url ? (
-                                <img src={req.student.avatar_url} alt="Student" className="w-full h-full object-cover" />
+                            {req.client?.avatar_url ? (
+                                <img src={req.client.avatar_url} alt="Client" className="w-full h-full object-cover" />
                             ) : (
                                 <User className="w-6 h-6 m-2 text-gray-400" />
                             )}
                         </div>
                         <div>
-                            <p className="font-bold text-[#1E293B]">{req.student?.full_name || req.student?.username || 'Unknown Student'}</p>
-                            <p className="text-xs text-gray-400 uppercase tracking-wider">Student</p>
+                            <p className="font-bold text-[#1E293B]">{req.client?.full_name || req.client?.username || 'Unknown Client'}</p>
+                            <p className="text-xs text-gray-400 uppercase tracking-wider">Client</p>
                         </div>
                         <div className="ml-auto md:hidden">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${req.status === 'requested' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}`}>
@@ -266,7 +266,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                             </p>
                             <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-xl text-sm font-bold inline-block">
-                                Waiting for Student Payment...
+                                Waiting for Client Payment...
                             </div>
                         </div>
                     ) : ['accepted', 'agreed', 'in_progress', 'revision_requested'].includes(req.status) ? (
@@ -289,7 +289,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-xl text-left">
                                     <p className="text-[10px] text-orange-700 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
                                         <MessageSquare className="w-3 h-3" />
-                                        Revision Notes from Student
+                                        Revision Notes from Client
                                     </p>
                                     <p className="text-xs text-orange-800 leading-relaxed italic">{req.revision_notes}</p>
                                 </div>
@@ -368,7 +368,7 @@ export default function RequestCard({ req }: RequestCardProps) {
 
                                 <textarea
                                     name="notes"
-                                    placeholder="Add notes for the student..."
+                                    placeholder="Add notes for the client..."
                                     className="w-full p-3 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none h-20 resize-none"
                                 ></textarea>
                                 <p className="text-[10px] text-red-500 font-bold uppercase tracking-tight flex items-center gap-1">
@@ -394,7 +394,7 @@ export default function RequestCard({ req }: RequestCardProps) {
                             {req.status === 'submitted' ? (
                                 <div className="mt-2 bg-blue-50 p-4 rounded-xl border border-blue-100 text-blue-800 text-sm">
                                     <p className="font-bold mb-1">Work Submitted!</p>
-                                    <p className="opacity-80">Waiting for student approval.</p>
+                                    <p className="opacity-80">Waiting for client approval.</p>
                                 </div>
                             ) : (
                                 <p className="text-xs text-green-600 mt-4">This project is verified and complete.</p>

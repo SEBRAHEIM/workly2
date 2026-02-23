@@ -229,7 +229,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
 • Feature 2
 ✅ Guarantee"
                                 />
-                                <p className="text-[10px] text-slate-400 font-medium mt-3 italic">Be specific about what the student receives in this tier.</p>
+                                <p className="text-[10px] text-slate-400 font-medium mt-3 italic">Be specific about what the client receives in this tier.</p>
                             </div>
                         </div>
                     </div>

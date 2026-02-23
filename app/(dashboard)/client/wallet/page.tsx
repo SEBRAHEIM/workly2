@@ -1,7 +1,7 @@
 import { Wallet, Plus, CreditCard } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
-export default async function StudentWallet() {
+export default async function ClientWallet() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -14,7 +14,7 @@ export default async function StudentWallet() {
     const { data: transactions } = await supabase
         .from('transactions')
         .select('*')
-        .eq('student_id', user?.id)
+        .eq('client_id', user?.id)
         .eq('type', 'refund')
         .order('created_at', { ascending: false })
 

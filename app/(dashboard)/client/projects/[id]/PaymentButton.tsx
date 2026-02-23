@@ -1,7 +1,7 @@
 'use client'
 
 import { Shield, Loader2, AlertTriangle } from 'lucide-react'
-import { payProject } from '@/app/(dashboard)/student/actions'
+import { payProject } from '@/app/(dashboard)/client/actions'
 import { useActionState } from 'react'
 
 const initialState = { message: '' }

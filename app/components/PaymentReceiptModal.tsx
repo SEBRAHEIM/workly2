@@ -12,8 +12,8 @@ export default function PaymentReceiptModal({
     transactionId,
     showReceipt = false,
     onClose,
-    studentName,
-    studentEmail,
+    clientName,
+    clientEmail,
     creatorName
 }: {
     amount: number
@@ -22,8 +22,8 @@ export default function PaymentReceiptModal({
     transactionId: string
     showReceipt?: boolean
     onClose?: () => void
-    studentName?: string
-    studentEmail?: string
+    clientName?: string
+    clientEmail?: string
     creatorName?: string
 }) {
     const router = useRouter()
@@ -113,8 +113,8 @@ export default function PaymentReceiptModal({
                             <div className="grid grid-cols-2 gap-y-4 text-sm mb-6">
                                 <div>
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Billed To</p>
-                                    <p className="font-bold text-[#1E293B]">{studentName || 'Student Account'}</p>
-                                    <p className="text-[10px] text-gray-500">{studentEmail}</p>
+                                    <p className="font-bold text-[#1E293B]">{clientName || 'Client Account'}</p>
+                                    <p className="text-[10px] text-gray-500">{clientEmail}</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Payment Method</p>

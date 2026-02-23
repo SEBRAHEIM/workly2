@@ -60,8 +60,8 @@ export async function createCheckoutSession(prevState: any, formData: FormData) 
             automatic_payment_methods: {
                 enabled: true,
             },
-            success_url: `${baseUrl}/student/projects/${project.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${baseUrl}/student/projects/${project.id}?payment=cancelled`,
+            success_url: `${baseUrl}/client/projects/${project.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${baseUrl}/client/projects/${project.id}?payment=cancelled`,
         } as any)
 
         if (!session.url) {
@@ -96,9 +96,9 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
 
     if (!project) throw new Error('Project not found')
 
-    // SECURITY: Only the Student can release funds
-    if (project.student_id !== user.id) {
-        throw new Error('Unauthorized: Only the student can release funds.')
+    // SECURITY: Only the Client can release funds
+    if (project.client_id !== user.id) {
+        throw new Error('Unauthorized: Only the client can release funds.')
     }
 
     const creatorId = project.creator_id
@@ -111,7 +111,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
         const commissionAmount = amount * commissionRate
         const creatorEarnings = amount - commissionAmount
 
-        // Use ADMIN client to update creator wallet (Student doesn't have permissions)
+        // Use ADMIN client to update creator wallet (Client doesn't have permissions)
         const adminSupabase = createAdminClient()
         const { data: creator, error: fetchError } = await adminSupabase
             .from('profiles')
@@ -171,7 +171,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
         project_id: projectId,
         type: 'completed',
         actor_id: user.id,
-        payload: { notes: 'Project approved and completed by Student' }
+        payload: { notes: 'Project approved and completed by Client' }
     })
 
     // Notify Creator
@@ -184,7 +184,7 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
     })
 
 
-    revalidatePath(`/student/projects/${projectId}`)
+    revalidatePath(`/client/projects/${projectId}`)
 }
 
 export async function requestRevision(projectId: string, notes: string) {
@@ -207,7 +207,7 @@ export async function requestRevision(projectId: string, notes: string) {
         .single()
 
     if (!project) throw new Error('Project not found')
-    if (project.student_id !== user.id) throw new Error('Unauthorized')
+    if (project.client_id !== user.id) throw new Error('Unauthorized')
 
     // 2. Check Revision Limit
     const revisionsUsed = project.revisions_used || 0
@@ -253,7 +253,7 @@ export async function requestRevision(projectId: string, notes: string) {
     })
 
 
-    revalidatePath(`/student/projects/${projectId}`)
+    revalidatePath(`/client/projects/${projectId}`)
     return { success: true }
 }
 
@@ -275,7 +275,7 @@ export async function reportProject(projectId: string, reason: string) {
             reported_issue: reason
         })
         .eq('id', projectId)
-        .eq('student_id', user.id)
+        .eq('client_id', user.id)
 
     if (error) return { error: 'Failed to submit report' }
 
@@ -284,13 +284,13 @@ export async function reportProject(projectId: string, reason: string) {
         project_id: projectId,
         type: 'message_sent', // Generic for now
         actor_id: user.id,
-        payload: { report: reason, note: 'PROJECT REPORTED BY STUDENT' }
+        payload: { report: reason, note: 'PROJECT REPORTED BY CLIENT' }
     })
 
     // 4. Notification for admin could be added here
     // For now, it's just in the DB as requested
 
-    revalidatePath(`/student/projects/${projectId}`)
+    revalidatePath(`/client/projects/${projectId}`)
     return { success: true }
 }
 
@@ -308,7 +308,7 @@ export async function submitReview(projectId: string, rating: number, comment: s
         .single()
 
     if (!project) throw new Error('Project not found')
-    if (project.student_id !== user.id) throw new Error('Unauthorized')
+    if (project.client_id !== user.id) throw new Error('Unauthorized')
     if (project.status !== 'completed') throw new Error('Project must be completed to leave a review')
 
     // 2. Insert Review (Trigger will update profile stats)
@@ -316,7 +316,7 @@ export async function submitReview(projectId: string, rating: number, comment: s
         .from('reviews')
         .insert({
             project_id: projectId,
-            student_id: user.id,
+            client_id: user.id,
             creator_id: project.creator_id,
             rating: rating,
             comment: comment.trim() || null
@@ -327,7 +327,7 @@ export async function submitReview(projectId: string, rating: number, comment: s
         return { error: 'Failed to submit review' }
     }
 
-    revalidatePath(`/student/projects/${projectId}`)
-    revalidatePath(`/student/creator/${project.creator_id}`)
+    revalidatePath(`/client/projects/${projectId}`)
+    revalidatePath(`/client/creator/${project.creator_id}`)
     return { success: true }
 }

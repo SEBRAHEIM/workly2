@@ -55,29 +55,25 @@ export async function createNotification({
                 }
 
                 const emailHtml = `
-                    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff; border: 1px solid #f0f0f0; border-radius: 16px; color: #1a1a1a;">
-                        <div style="margin-bottom: 32px;">
-                            <span style="background-color: #0EA5E9; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;">Workly Update</span>
-                        </div>
-                        
-                        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; color: #0f172a;">${title || 'New Notification'}</h2>
-                        <p style="font-size: 16px; line-height: 1.6; color: #475569; margin-bottom: 32px;">${message}</p>
+                    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; color: #1a1a1a;">
+                        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #0f172a;">${title || 'New Notification'}</h2>
+                        <p style="font-size: 15px; line-height: 1.5; color: #334155; margin-bottom: 32px;">${message}</p>
                         
                         ${link ? `
-                            <div style="margin-bottom: 48px;">
+                            <div style="margin-bottom: 40px;">
                                 <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://workly.day'}${link}" 
-                                   style="background-color: #0f172a; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 12px; font-size: 14px; font-weight: 700; display: inline-block;">
-                                    Terminal Access
+                                   style="background-color: #020617; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600; display: inline-block;">
+                                    View Update
                                 </a>
                             </div>
                         ` : ''}
                         
-                        <div style="padding-top: 32px; border-top: 1px solid #f1f5f9; margin-top: 48px;">
-                            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 8px; font-weight: 500;">
-                                You're receiving this because something important happened on your Workly account.
+                        <div style="padding-top: 24px; border-top: 1px solid #e2e8f0; margin-top: 40px;">
+                            <p style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
+                                Workly Platforms &bull; Dubai, UAE
                             </p>
                             <p style="font-size: 11px; color: #94a3b8;">
-                                <strong>Workly Platforms</strong> &bull; Dubai, UAE &bull; <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://workly.day'}/settings" style="color: #0EA5E9; text-decoration: none;">Preference Center</a>
+                                To manage these alerts, visit your <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://workly.day'}/settings" style="color: #0EA5E9; text-decoration: none;">Preference Center</a>.
                             </p>
                         </div>
                     </div>

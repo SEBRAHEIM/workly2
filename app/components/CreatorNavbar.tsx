@@ -122,7 +122,7 @@ export default function CreatorNavbar() {
                             <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
                                 {profile?.full_name || profile?.username || 'Creative'}
                             </h2>
-                            <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
+                            <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
                                 @{profile?.username || 'user'}
                             </p>
                             <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
@@ -144,47 +144,47 @@ export default function CreatorNavbar() {
 
                         <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                             <div className="px-6 mb-8">
-                                <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.3em] mb-6">Workspace</h3>
+                                <h3 className="text-[12px] font-black text-slate-800 uppercase tracking-[0.3em] mb-6">Workspace</h3>
                                 <div className="space-y-2">
                                     <Link
                                         href="/creator"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
-                                            <Layout size={18} />
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Layout size={20} />
                                         </div>
-                                        <span className="font-bold text-sm">Dashboard</span>
+                                        <span className="text-sm uppercase tracking-widest">Dashboard</span>
                                     </Link>
                                     <Link
                                         href="/creator/requests"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
-                                            <Briefcase size={18} />
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Briefcase size={20} />
                                         </div>
-                                        <span className="font-bold text-sm">Active Work</span>
+                                        <span className="text-sm uppercase tracking-widest">Active Work</span>
                                     </Link>
                                     <Link
                                         href="/creator/requests?tab=completed"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
-                                            <Clock size={18} />
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Clock size={20} />
                                         </div>
-                                        <span className="font-bold text-sm">Project History</span>
+                                        <span className="text-sm uppercase tracking-widest">Project History</span>
                                     </Link>
                                     <Link
                                         href="/creator/wallet"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
-                                            <Wallet size={18} />
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Wallet size={20} />
                                         </div>
-                                        <span className="font-bold text-sm">Payout</span>
+                                        <span className="text-sm uppercase tracking-widest">Payout</span>
                                     </Link>
                                 </div>
                             </div>

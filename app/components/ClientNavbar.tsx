@@ -162,54 +162,54 @@ export default function ClientNavbar() {
                                 <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
                                     {profile?.full_name || profile?.username || 'Client'}
                                 </h2>
-                                <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
+                                <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
                                     @{profile?.username || 'user'}
                                 </p>
                             </div>
 
                             <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                                 <div className="px-6 mb-8">
-                                    <h3 className="text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4">Workspace</h3>
-                                    <div className="space-y-1">
+                                    <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Workspace</h3>
+                                    <div className="space-y-2">
                                         <Link
                                             href="/client"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <LayoutDashboard size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <LayoutDashboard size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Dashboard</span>
+                                            <span className="text-xs uppercase tracking-widest">Dashboard</span>
                                         </Link>
                                         <Link
                                             href="/client/profile"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <User size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <User size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Profile Settings</span>
+                                            <span className="text-xs uppercase tracking-widest">Profile Settings</span>
                                         </Link>
                                         <Link
                                             href="/client/projects"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <Briefcase size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <Briefcase size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Projects</span>
+                                            <span className="text-xs uppercase tracking-widest">Projects</span>
                                         </Link>
                                         <Link
                                             href="/client/compress-files"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-500 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-500 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <Zap size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <Zap size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Shrink Projects</span>
+                                            <span className="text-xs uppercase tracking-widest">Shrink Projects</span>
                                         </Link>
                                     </div>
                                 </div>
@@ -217,10 +217,10 @@ export default function ClientNavbar() {
                                 <div className="px-6 mb-10">
                                     <button
                                         onClick={() => setCategoriesOpen(!categoriesOpen)}
-                                        className="w-full flex items-center justify-between text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4 hover:text-[#0EA5E9] transition-colors"
+                                        className="w-full flex items-center justify-between text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6 hover:text-[#0EA5E9] transition-colors"
                                     >
                                         Categories
-                                        <ChevronRight size={12} className={`transition-transform duration-200 ${categoriesOpen ? 'rotate-90' : ''}`} />
+                                        <ChevronRight size={14} className={`transition-transform duration-200 ${categoriesOpen ? 'rotate-90' : ''}`} />
                                     </button>
 
                                     {categoriesOpen && (
@@ -234,12 +234,12 @@ export default function ClientNavbar() {
                                                     key={cat.slug}
                                                     href={`/category/${cat.slug}`}
                                                     onClick={() => setIsMenuOpen(false)}
-                                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-sky-50 transition-all group"
+                                                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-sky-50 transition-all group font-black"
                                                 >
-                                                    <div className="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
-                                                        <cat.icon size={12} />
+                                                    <div className="w-9 h-9 rounded-xl bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
+                                                        <cat.icon size={16} />
                                                     </div>
-                                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 group-hover:text-slate-900 transition-colors">
+                                                    <span className="text-xs uppercase tracking-widest text-slate-600 group-hover:text-slate-900 transition-colors">
                                                         {cat.title}
                                                     </span>
                                                 </Link>
@@ -248,28 +248,28 @@ export default function ClientNavbar() {
                                     )}
                                 </div>
 
-                                <div className="px-6 mb-8">
-                                    <h3 className="text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4">Financials</h3>
+                                <div className="px-6 mb-8 mt-4">
+                                    <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Financials</h3>
                                     <div className="space-y-1">
                                         <Link
                                             href="/client/wallet"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <Wallet size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <Wallet size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">Refunds</span>
+                                            <span className="text-xs uppercase tracking-widest">Refunds</span>
                                         </Link>
                                         <Link
                                             href="/client/payment-history"
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-2 rounded-xl text-slate-500 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all"
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-500 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mr-3 text-[#0EA5E9]">
-                                                <Clock size={14} />
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <Clock size={18} />
                                             </div>
-                                            <span className="font-black text-[9px] uppercase tracking-widest">History</span>
+                                            <span className="text-xs uppercase tracking-widest">History</span>
                                         </Link>
                                     </div>
                                 </div>
@@ -280,10 +280,10 @@ export default function ClientNavbar() {
                                     onClick={handleSignOut}
                                     className="w-full flex items-center p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all group"
                                 >
-                                    <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center mr-3 group-hover:bg-red-100 transition-colors">
-                                        <LogOut size={16} />
+                                    <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
+                                        <LogOut size={20} />
                                     </div>
-                                    <span className="font-black text-[10px] uppercase tracking-widest">Establish Exit</span>
+                                    <span className="font-black text-xs uppercase tracking-widest">Establish Exit</span>
                                 </button>
                             </div>
                         </div>

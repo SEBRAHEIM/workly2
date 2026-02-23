@@ -64,7 +64,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                             </h1>
                             <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
                                 {creator.username && (
-                                    <span className="text-xs font-medium text-slate-400">
+                                    <span className="text-xs font-black text-slate-800">
                                         @{creator.username}
                                     </span>
                                 )}
@@ -91,22 +91,22 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                         </div>
                     </div>
 
-                    <p className="text-sm text-slate-600 font-medium mb-6" dir="auto">
+                    <p className="text-sm text-slate-900 font-black mb-6" dir="auto">
                         {creator.tagline || 'Client Creator'}
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4 border-t border-slate-50">
                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Rating</span>
+                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-wider">Rating</span>
                             <div className="flex items-center gap-1">
-                                <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                                <span className="text-sm font-bold text-slate-900">{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'}</span>
-                                <span className="text-[10px] text-slate-400 font-medium">({creator.total_reviews || 0})</span>
+                                <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                                <span className="text-sm font-black text-slate-900">{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'}</span>
+                                <span className="text-[10px] text-slate-500 font-black">({creator.total_reviews || 0})</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed</span>
-                            <span className="text-sm font-bold text-slate-900">{creator.completed_projects || 0} Projects</span>
+                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-wider">Completed</span>
+                            <span className="text-sm font-black text-slate-900">{creator.completed_projects || 0} Projects</span>
                         </div>
                     </div>
                 </div>
@@ -115,8 +115,8 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
             {/* Bio */}
             {creator.bio && (
                 <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm mb-12">
-                    <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4">About Me</h3>
-                    <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">
+                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">About Me</h3>
+                    <p className="text-slate-800 text-sm font-black leading-relaxed whitespace-pre-wrap" dir="auto">
                         {creator.bio}
                     </p>
                 </div>
@@ -143,7 +143,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                     <div className="flex items-center justify-between mb-2 px-2">
                                         <div className="flex items-center gap-2">
                                             <div className="flex items-center gap-2 flex-wrap">
-                                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{category.title}</span>
+                                                <span className="text-sm font-black text-slate-800 uppercase tracking-widest">{category.title}</span>
                                                 {creator.languages && creator.languages.length > 0 && (
                                                     <div className="flex gap-1 items-center">
                                                         {creator.languages.map((lang: string) => {
@@ -269,7 +269,7 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
             {/* Footer Hire CTA */}
             <div className="mt-12 text-center">
-                <h3 className="text-2xl font-serif font-bold text-[#1E293B] mb-4">Ready to work with {creator.display_name}?</h3>
+                <h3 className="text-2xl font-sans font-black text-[#1E293B] mb-4">Ready to work with {creator.display_name}?</h3>
                 <Link
                     href={`/client/hire/${creatorId}`}
                     className="inline-block px-8 py-4 bg-[#0EA5E9] text-white font-bold text-lg rounded-xl hover:bg-[#2e3b29] transition-all shadow-xl hover:shadow-2xl active:scale-95"

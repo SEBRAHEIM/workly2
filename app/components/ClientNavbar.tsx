@@ -159,17 +159,17 @@ export default function ClientNavbar() {
                             </button>
 
                             <div className="flex flex-col items-start pt-20 pb-8 border-b border-sky-50 px-8">
-                                <h2 className="font-serif text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
                                     {profile?.full_name || 'Operator'}
                                 </h2>
-                                <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] opacity-80">
+                                <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
                                     @{profile?.username || 'registry'}
                                 </p>
                             </div>
 
                             <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                                 <div className="px-6 mb-8">
-                                    <h3 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4">Workspace</h3>
+                                    <h3 className="text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4">Workspace</h3>
                                     <div className="space-y-1">
                                         <Link
                                             href="/client"
@@ -217,7 +217,7 @@ export default function ClientNavbar() {
                                 <div className="px-6 mb-10">
                                     <button
                                         onClick={() => setCategoriesOpen(!categoriesOpen)}
-                                        className="w-full flex items-center justify-between text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4 hover:text-[#0EA5E9] transition-colors"
+                                        className="w-full flex items-center justify-between text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4 hover:text-[#0EA5E9] transition-colors"
                                     >
                                         Categories
                                         <ChevronRight size={12} className={`transition-transform duration-200 ${categoriesOpen ? 'rotate-90' : ''}`} />
@@ -249,7 +249,7 @@ export default function ClientNavbar() {
                                 </div>
 
                                 <div className="px-6 mb-8">
-                                    <h3 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4">Financials</h3>
+                                    <h3 className="text-[9px] font-black text-slate-800 uppercase tracking-[0.4em] mb-4">Financials</h3>
                                     <div className="space-y-1">
                                         <Link
                                             href="/client/wallet"

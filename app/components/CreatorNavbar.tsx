@@ -91,7 +91,7 @@ export default function CreatorNavbar() {
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
                     <Link href="/creator" className="group flex items-center gap-3">
-                        <span className="text-xl tracking-[0.4em] text-slate-900 font-serif font-black uppercase">
+                        <span className="text-xl tracking-[0.4em] text-slate-900 font-sans font-black uppercase">
                             Workly
                         </span>
                     </Link>
@@ -119,15 +119,15 @@ export default function CreatorNavbar() {
                         </button>
 
                         <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
-                            <h2 className="font-serif text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                            <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
                                 {profile?.full_name || 'Operator'}
                             </h2>
-                            <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] opacity-80 mb-4">
+                            <p className="text-[9px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
                                 @{profile?.username || 'registry'}
                             </p>
                             <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
-                                <Star className="w-3 h-3 text-sky-400 fill-sky-400 mr-2" />
-                                <span className="text-xs font-black text-slate-700">{profile?.rating_avg || '0.0'}</span>
+                                <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />
+                                <span className="text-xs font-black text-slate-900">{profile?.rating_avg || '0.0'}</span>
                             </div>
 
                             <Link
@@ -144,7 +144,7 @@ export default function CreatorNavbar() {
 
                         <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                             <div className="px-6 mb-8">
-                                <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6">Workspace</h3>
+                                <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.3em] mb-6">Workspace</h3>
                                 <div className="space-y-2">
                                     <Link
                                         href="/creator"

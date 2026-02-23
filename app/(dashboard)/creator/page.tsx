@@ -49,10 +49,10 @@ export default async function CreatorDashboard() {
                         <div className="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
                             <Briefcase className="w-8 h-8 text-[#0EA5E9]" />
                         </div>
-                        <h1 className="text-5xl font-serif font-black text-slate-900 mb-4 tracking-tighter uppercase leading-none">
+                        <h1 className="text-5xl font-sans font-black text-slate-900 mb-4 tracking-tighter uppercase leading-none">
                             Welcome, <br /> <span className="text-[#0EA5E9]">Creator.</span>
                         </h1>
-                        <p className="text-xl text-slate-700 max-w-xl mx-auto font-black leading-relaxed">
+                        <p className="text-xl text-slate-900 max-w-xl mx-auto font-black leading-relaxed">
                             To start receiving project requests and receive payouts, establish your digital profile.
                         </p>
                     </div>
@@ -204,8 +204,8 @@ export default async function CreatorDashboard() {
                                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500">
                                     <Briefcase className="w-8 h-8 text-sky-200" />
                                 </div>
-                                <h3 className="text-2xl font-serif font-black text-slate-900 mb-2 uppercase tracking-tight">System Status: Active</h3>
-                                <p className="text-slate-700 font-black max-w-sm mx-auto">
+                                <h3 className="text-2xl font-sans font-black text-slate-900 mb-2 uppercase tracking-tight">System Status: Active</h3>
+                                <p className="text-slate-900 font-black max-w-sm mx-auto">
                                     Your profile is visible to all clients. Inbound requests will be prioritized here.
                                 </p>
                             </div>

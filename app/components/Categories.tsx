@@ -58,7 +58,7 @@ export default function Categories() {
 
                                 <div className="mt-auto hidden md:block">
                                     <div className="flex items-center gap-4 text-slate-900 font-black text-[10px] uppercase tracking-widest group-hover:text-[#0EA5E9] transition-colors duration-200">
-                                        Explore Domain
+                                        Discover Sector
                                         <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-200" />
                                     </div>
                                 </div>

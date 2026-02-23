@@ -43,7 +43,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-sky-400">Official Category</span>
                             </div>
 
-                            <h1 className="font-serif text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none mb-6">
+                            <h1 className="font-sans text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none mb-6">
                                 {category.title.split(' ')[0]} <br />
                                 <span className="text-[#0EA5E9]">{category.title.split(' ').slice(1).join(' ') || 'Services.'}</span>
                             </h1>

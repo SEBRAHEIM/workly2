@@ -32,10 +32,10 @@ export default function JoinPage() {
 
                 <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                        <h1 className="font-sans font-black text-5xl md:text-6xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.9]">
                             Workly <br /> <span className="text-[#0EA5E9]">Collective.</span>
                         </h1>
-                        <p className="text-slate-500 font-medium text-sm px-4 md:px-0">
+                        <p className="text-slate-600 font-black text-sm px-4 md:px-0 mt-4 leading-relaxed">
                             Where elite clients and visionary creators collaborate.
                         </p>
                     </div>

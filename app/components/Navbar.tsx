@@ -114,7 +114,7 @@ export default function Navbar() {
                                             <Link
                                                 href="/login"
                                                 onClick={() => setIsMenuOpen(false)}
-                                                className="block text-3xl font-serif font-black text-slate-800 hover:text-[#0EA5E9] transition-colors"
+                                                className="block text-4xl font-sans font-black text-slate-900 hover:text-[#0EA5E9] transition-colors uppercase tracking-tighter"
                                             >
                                                 Login
                                             </Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
                                         <Link
                                             href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/client') : '/join'}
                                             onClick={() => setIsMenuOpen(false)}
-                                            className="block w-full text-center py-3 rounded-full bg-[#0EA5E9] text-white text-sm font-bold hover:bg-sky-600 transition-all shadow-sm active:scale-95 uppercase tracking-widest"
+                                            className="block w-full text-center py-5 rounded-full bg-[#0EA5E9] text-white text-[10px] font-black hover:bg-sky-600 transition-all shadow-xl shadow-sky-100 active:scale-95 uppercase tracking-widest mt-4"
                                         >
                                             {role ? 'Dashboard' : 'Join'}
                                         </Link>
@@ -131,7 +131,7 @@ export default function Navbar() {
 
                                     {/* Categories Section */}
                                     <div>
-                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-6 flex items-center gap-2">
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-800 mb-6 flex items-center gap-2">
                                             <div className="w-4 h-[1px] bg-sky-300" />
                                             Categories
                                         </h3>
@@ -146,7 +146,7 @@ export default function Navbar() {
                                                     <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center text-[#0EA5E9] group-hover:bg-[#0EA5E9] group-hover:text-white transition-colors">
                                                         <cat.icon size={16} />
                                                     </div>
-                                                    <span className="text-sm font-black text-slate-700 group-hover:text-slate-900 transition-colors">
+                                                    <span className="text-sm font-black text-slate-800 group-hover:text-slate-900 transition-colors">
                                                         {cat.title}
                                                     </span>
                                                 </Link>

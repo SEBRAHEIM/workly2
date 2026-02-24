@@ -182,7 +182,7 @@ export default function ProjectPage({
                                         <div className="w-4 h-[1px] bg-sky-500/30"></div>
                                         Active Brief
                                     </div>
-                                    <h1 className="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter" dir="auto">
+                                    <h1 className="text-4xl md:text-5xl font-sans font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter uppercase" dir="auto">
                                         {project.title}
                                     </h1>
                                     <div className="flex flex-wrap items-center gap-6">
@@ -269,7 +269,7 @@ export default function ProjectPage({
                                 <div className="space-y-2 mb-10">
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Total Contract Value</p>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl md:text-5xl font-serif font-black">AED {displayPrice}</span>
+                                        <span className="text-4xl md:text-5xl font-sans font-black tracking-tighter">AED {displayPrice}</span>
                                         <span className="text-xs font-bold text-sky-400 tracking-widest uppercase">Escrowed</span>
                                     </div>
                                 </div>

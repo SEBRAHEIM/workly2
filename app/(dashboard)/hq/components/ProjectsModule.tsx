@@ -58,7 +58,7 @@ export default function ProjectsModule({ projects, events = [] }: { projects: an
             {/* Header */}
             <div className="flex justify-between items-end">
                 <div>
-                    <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">Order Stream</h2>
+                    <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">Order Stream</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Full visibility of all interactions</p>
                 </div>
                 <div className="text-right">

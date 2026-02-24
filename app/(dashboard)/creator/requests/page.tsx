@@ -73,7 +73,7 @@ export default async function CreatorRequests(props: {
     return (
         <div className="p-8 max-w-6xl mx-auto min-h-screen">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-4xl font-serif font-bold text-[#0EA5E9]">Project Orders</h1>
+                <h1 className="text-4xl font-sans font-black font-bold text-[#0EA5E9]">Project Orders</h1>
             </div>
 
             {/* TABS */}

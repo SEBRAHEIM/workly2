@@ -134,7 +134,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
-                        <h3 className="text-xl font-serif font-black text-slate-900 uppercase tracking-tighter">
+                        <h3 className="text-xl font-sans font-black font-black text-slate-900 uppercase tracking-tighter">
                             Package Architecture: {getCategoryTitle(selectedCategory)}
                         </h3>
                         <p className="text-xs text-slate-500 font-medium mt-1">Configure all three tiers to activate this service segment.</p>

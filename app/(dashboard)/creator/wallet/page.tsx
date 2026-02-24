@@ -52,7 +52,7 @@ export default async function CreatorWallet() {
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
+                    <h1 className="text-5xl md:text-7xl font-sans font-black font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
                         Treasury & <br /> <span className="text-[#0EA5E9]">Payouts.</span>
                     </h1>
                 </div>
@@ -63,8 +63,8 @@ export default async function CreatorWallet() {
                         <div className="relative z-10 flex flex-col h-full">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 block">Liquid Balance</span>
                             <div className="flex items-baseline gap-3 mb-10">
-                                <span className="text-2xl font-serif font-bold text-sky-400">AED</span>
-                                <span className="text-7xl md:text-8xl font-serif font-black tracking-tighter transition-transform duration-700 group-hover:scale-105 inline-block">
+                                <span className="text-2xl font-sans font-black font-bold text-sky-400">AED</span>
+                                <span className="text-7xl md:text-8xl font-sans font-black font-black tracking-tighter transition-transform duration-700 group-hover:scale-105 inline-block">
                                     {profile?.wallet_balance?.toFixed(2) || '0.00'}
                                 </span>
                             </div>
@@ -129,7 +129,7 @@ export default async function CreatorWallet() {
                                     <div className="text-right">
                                         <div className="mb-2">
                                             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5">Debit</p>
-                                            <p className="font-serif font-black text-slate-900 text-xl tracking-tighter">- AED {w.amount.toFixed(2)}</p>
+                                            <p className="font-sans font-black font-black text-slate-900 text-xl tracking-tighter">- AED {w.amount.toFixed(2)}</p>
                                         </div>
                                         <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${w.status === 'pending' ? 'bg-amber-50/50 border-amber-100 text-amber-600' :
                                             w.status === 'completed' ? 'bg-sky-50/50 border-sky-100 text-sky-600' : 'bg-red-50/50 border-red-100 text-red-600'

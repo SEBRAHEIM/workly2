@@ -118,29 +118,37 @@ export default function CreatorNavbar() {
                             <X className="w-6 h-6 text-slate-400" />
                         </button>
 
-                        <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
-                            <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
-                                {profile?.full_name || profile?.username || 'Creative'}
-                            </h2>
-                            <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
-                                @{profile?.username || 'user'}
-                            </p>
-                            <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
-                                <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />
-                                <span className="text-xs font-black text-slate-900">{profile?.rating_avg || '0.0'}</span>
-                            </div>
-
-                            <Link
-                                href="/creator/profile"
-                                onClick={() => setIsMenuOpen(false)}
-                                className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all border border-transparent hover:border-sky-100 mb-2"
-                            >
-                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
-                                    <User size={18} />
+                        {user && (
+                            <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
+                                <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                    {profile?.full_name || profile?.username || 'Creative'}
+                                </h2>
+                                <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
+                                    @{profile?.username || 'user'}
+                                </p>
+                                <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
+                                    <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />
+                                    <span className="text-xs font-black text-slate-900">{profile?.rating_avg || '0.0'}</span>
                                 </div>
-                                <span className="font-bold text-sm">Profile Settings</span>
-                            </Link>
-                        </div>
+
+                                <Link
+                                    href="/creator/profile"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all border border-transparent hover:border-sky-100 mb-2"
+                                >
+                                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100">
+                                        <User size={18} />
+                                    </div>
+                                    <span className="font-bold text-sm">Profile Settings</span>
+                                </Link>
+                            </div>
+                        )}
+
+                        {!user && (
+                            <div className="pt-16 pb-8 px-8">
+                                {/* Padding for guest view */}
+                            </div>
+                        )}
 
                         <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                             <div className="px-6 mb-8">
@@ -191,17 +199,19 @@ export default function CreatorNavbar() {
 
                         </div>
 
-                        <div className="p-6 border-t border-sky-50">
-                            <button
-                                onClick={handleSignOut}
-                                className="w-full flex items-center p-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all group"
-                            >
-                                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
-                                    <LogOut size={18} />
-                                </div>
-                                <span className="font-bold text-sm">Establish Exit</span>
-                            </button>
-                        </div>
+                        {user && (
+                            <div className="p-6 border-t border-sky-50">
+                                <button
+                                    onClick={handleSignOut}
+                                    className="w-full flex items-center p-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all group"
+                                >
+                                    <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
+                                        <LogOut size={18} />
+                                    </div>
+                                    <span className="font-bold text-sm">Establish Exit</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

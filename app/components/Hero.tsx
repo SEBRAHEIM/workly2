@@ -63,7 +63,7 @@ export default function Hero({
                             </span>
                         )}
                         {subtitle && (
-                            <span className="block font-serif italic text-[14vw] md:text-[13rem] text-[#0EA5E9] leading-none tracking-tighter -mt-4 md:-mt-8">
+                            <span className="block font-sans font-black text-[14vw] md:text-[13rem] text-[#0EA5E9] leading-none tracking-tighter -mt-4 md:-mt-8">
                                 {subtitle}
                             </span>
                         )}

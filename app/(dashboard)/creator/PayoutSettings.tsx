@@ -66,7 +66,7 @@ export default function PayoutSettings({ profile }: PayoutSettingsProps) {
                 {selectedMethod === 'bank' ? (
                     <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-[#F0F9FF] shadow-sm">
                         <div className="mb-8">
-                            <h3 className="text-2xl font-serif font-black text-[#0EA5E9] mb-2">UAE Bank Details</h3>
+                            <h3 className="text-2xl font-sans font-black font-black text-[#0EA5E9] mb-2">UAE Bank Details</h3>
                             <p className="text-gray-500 font-medium italic text-sm">Funds will be manually transferred to your UAE bank account.</p>
                         </div>
                         <BankPayoutForm profile={profile} />
@@ -74,7 +74,7 @@ export default function PayoutSettings({ profile }: PayoutSettingsProps) {
                 ) : (
                     <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-[#F0F9FF] shadow-sm">
                         <div className="mb-8">
-                            <h3 className="text-2xl font-serif font-black text-[#0EA5E9] mb-2">PayPal Details</h3>
+                            <h3 className="text-2xl font-sans font-black font-black text-[#0EA5E9] mb-2">PayPal Details</h3>
                             <p className="text-gray-500 font-medium italic text-sm">Funds will be manually transferred to your PayPal account.</p>
                         </div>
                         <PayPalPayoutForm profile={profile} />

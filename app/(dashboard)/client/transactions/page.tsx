@@ -14,7 +14,7 @@ export default async function Transactions() {
 
     return (
         <div className="p-8 max-w-4xl mx-auto">
-            <h1 className="text-4xl font-serif font-bold text-[#0EA5E9] mb-6">Pending Transactions</h1>
+            <h1 className="text-4xl font-sans font-black font-bold text-[#0EA5E9] mb-6">Pending Transactions</h1>
 
             <div className="bg-white rounded-3xl border border-[#F0F9FF] shadow-sm overflow-hidden min-h-[400px]">
                 {transactions && transactions.length > 0 ? (

@@ -33,9 +33,9 @@ export default function Login() {
             <div className="w-full max-w-md relative z-10">
                 <Link
                     href="/join"
-                    className="inline-flex items-center text-slate-500 hover:text-sky-600 transition-colors mb-12 font-black text-[10px] uppercase tracking-widest group"
+                    className="inline-flex items-center px-6 py-3 bg-white border border-slate-100 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-sky-500 hover:bg-slate-50 active:scale-95 transition-all shadow-sm group mb-12"
                 >
-                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" />
                     Back
                 </Link>
 

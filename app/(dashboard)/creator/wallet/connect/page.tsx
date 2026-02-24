@@ -19,7 +19,7 @@ export default function ConnectWallet() {
                     <div className="w-16 h-16 bg-[#0EA5E9] rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
                         <AEDIcon className="w-8 h-8 text-[#0EA5E9]" />
                     </div>
-                    <h1 className="font-serif font-bold text-4xl text-[#0EA5E9] mb-3">
+                    <h1 className="font-sans font-black font-bold text-4xl text-[#0EA5E9] mb-3">
                         Set up your Payouts
                     </h1>
                     <p className="text-gray-500 text-lg">

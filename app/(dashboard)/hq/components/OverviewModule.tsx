@@ -22,7 +22,7 @@ export default function OverviewModule({ projects, profiles, stats, withdrawals 
             {/* ... header ... */}
             <div className="flex justify-between items-end">
                 <div>
-                    <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">System Health</h2>
+                    <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">System Health</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Real-time platform overview</p>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">

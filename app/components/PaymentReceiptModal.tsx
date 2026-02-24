@@ -106,7 +106,7 @@ export default function PaymentReceiptModal({
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 no-print">
                             <Check className="w-8 h-8" />
                         </div>
-                        <h2 className="text-2xl font-serif font-bold text-[#1E293B] mb-1">Payment Successful</h2>
+                        <h2 className="text-2xl font-sans font-black font-bold text-[#1E293B] mb-1">Payment Successful</h2>
                         <p className="text-gray-500 text-sm mb-6">Thank you for your payment!</p>
 
                         <div className="w-full border-t border-b border-dashed border-gray-300 py-6 mb-6 text-left">
@@ -147,8 +147,8 @@ export default function PaymentReceiptModal({
                             </div>
 
                             <div className="mt-6 pt-6 border-t border-gray-100 flex justify-between items-center">
-                                <span className="text-lg font-serif font-black text-[#1E293B]">Total Paid</span>
-                                <span className="text-2xl font-serif font-black text-[#0EA5E9]">AED {amount.toFixed(2)}</span>
+                                <span className="text-lg font-sans font-black font-black text-[#1E293B]">Total Paid</span>
+                                <span className="text-2xl font-sans font-black font-black text-[#0EA5E9]">AED {amount.toFixed(2)}</span>
                             </div>
 
                             <div className="flex justify-between text-[10px] text-gray-400 mt-6 pt-4 border-t border-gray-100 uppercase tracking-widest font-black">

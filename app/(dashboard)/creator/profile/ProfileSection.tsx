@@ -27,7 +27,7 @@ export default function ProfileSection({ title, summary, isOpen, isCompleted, on
                         {isCompleted ? <CheckCircle className="w-5 h-5 md:w-6 md:h-6" /> : <Circle className="w-5 h-5 md:w-6 md:h-6" />}
                     </div>
                     <div>
-                        <h2 className={`text-xl md:text-2xl font-serif font-bold transition-colors ${isOpen ? 'text-[#0EA5E9]' : 'text-[#1E293B]'
+                        <h2 className={`text-xl md:text-2xl font-sans font-black font-bold transition-colors ${isOpen ? 'text-[#0EA5E9]' : 'text-[#1E293B]'
                             }`}>
                             {title}
                         </h2>

@@ -76,7 +76,7 @@ export default function FinancesModule({ projects, stats, withdrawals = [], tran
             {/* Header */}
             <div className="flex justify-between items-end">
                 <div>
-                    <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">Platform Economics</h2>
+                    <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">Platform Economics</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Revenue flow and treasury management</p>
                 </div>
                 <button className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-200 transition-all">

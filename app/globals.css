@@ -3,7 +3,7 @@
 :root {
   --background: #FFFFFF;
   --foreground: #1E293B;
-  --font-serif: var(--font-instrument);
+  --font-serif: var(--font-outfit);
   --font-sans: var(--font-outfit);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -14,8 +14,8 @@
 
 @theme inline {
   --font-sans: var(--font-outfit);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument);
+  --font-mono: var(--font-geist_mono);
+  --font-serif: var(--font-outfit);
 
   --color-cream: #FFFFFF;
   /* Pure White background */

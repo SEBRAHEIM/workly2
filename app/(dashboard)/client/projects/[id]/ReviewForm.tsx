@@ -45,7 +45,7 @@ export default function ReviewForm({ projectId, creatorName, onSuccess }: Review
                 <div className="w-16 h-16 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-sky-100">
                     <Star className="w-8 h-8 text-[#0EA5E9] fill-[#0EA5E9]" />
                 </div>
-                <h3 className="font-serif font-black text-2xl text-slate-900 mb-2 uppercase tracking-tight">Review {creatorName}</h3>
+                <h3 className="font-sans font-black font-black text-2xl text-slate-900 mb-2 uppercase tracking-tight">Review {creatorName}</h3>
                 <p className="text-slate-500 text-sm font-medium">Your feedback helps maintain the high quality of our platform.</p>
             </div>
 

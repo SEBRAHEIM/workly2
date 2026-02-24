@@ -24,7 +24,7 @@ export default async function ClientWallet() {
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12">
-                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none">
+                    <h1 className="text-5xl md:text-7xl font-sans font-black text-slate-900 tracking-tighter uppercase leading-none">
                         Refund <br /> <span className="text-[#0EA5E9]">History.</span>
                     </h1>
                 </div>
@@ -34,8 +34,8 @@ export default async function ClientWallet() {
                         <div className="relative z-10 h-full flex flex-col">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 block">Total Refunded to You</span>
                             <div className="flex items-baseline gap-3 mb-10">
-                                <span className="text-2xl font-serif font-bold text-sky-400">AED</span>
-                                <span className="text-7xl md:text-8xl font-serif font-black tracking-tighter">
+                                <span className="text-2xl font-sans font-black text-sky-400">AED</span>
+                                <span className="text-7xl md:text-8xl font-sans font-black tracking-tighter">
                                     {totalRefunded.toFixed(2)}
                                 </span>
                             </div>
@@ -102,7 +102,7 @@ export default async function ClientWallet() {
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1">Refunded</p>
-                                                        <p className="font-serif font-black text-slate-900 text-xl tracking-tighter">+ AED {t.amount.toFixed(2)}</p>
+                                                        <p className="font-sans font-black text-slate-900 text-xl tracking-tighter">+ AED {t.amount.toFixed(2)}</p>
                                                     </div>
                                                 </div>
                                             ))}

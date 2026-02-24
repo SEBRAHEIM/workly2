@@ -20,7 +20,7 @@ export default function ModerationModule({ projects, profiles, events = [] }: { 
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* ... header ... */}
             <div>
-                <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">Justice & Security</h2>
+                <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">Justice & Security</h2>
                 <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Dispute arbitration and platform safety</p>
             </div>
 

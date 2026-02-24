@@ -42,10 +42,7 @@ export default function Onboarding() {
             <div className="w-full max-w-xl relative z-10">
                 <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
-                            <span className="text-white font-serif font-black text-3xl">W</span>
-                        </div>
-                        <h1 className="font-serif font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+                        <h1 className="font-sans font-black font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-none">
                             Identity <br /> <span className="text-[#0EA5E9]">Setup.</span>
                         </h1>
                         <p className="text-slate-500 font-medium text-sm">
@@ -69,7 +66,7 @@ export default function Onboarding() {
                                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'client' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
                                             <User size={28} />
                                         </div>
-                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Client</span>
+                                        <span className="font-sans font-black font-black uppercase tracking-tight text-xl">Client</span>
                                         <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Deploy Projects</p>
                                     </button>
                                     <button
@@ -83,7 +80,7 @@ export default function Onboarding() {
                                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${role === 'creator' ? 'bg-[#0EA5E9] text-white shadow-lg shadow-sky-200' : 'bg-sky-50 text-sky-300'}`}>
                                             <PenTool size={28} />
                                         </div>
-                                        <span className="font-serif font-black uppercase tracking-tight text-xl">Creator</span>
+                                        <span className="font-sans font-black font-black uppercase tracking-tight text-xl">Creator</span>
                                         <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Execution Elite</p>
                                     </button>
                                 </div>
@@ -95,7 +92,7 @@ export default function Onboarding() {
                                     <div className="w-16 h-16 bg-[#0EA5E9] text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-sky-200">
                                         <Shield size={32} />
                                     </div>
-                                    <h3 className="font-serif font-black text-2xl text-slate-900 mb-2 uppercase tracking-tight">Root Admin</h3>
+                                    <h3 className="font-sans font-black font-black text-2xl text-slate-900 mb-2 uppercase tracking-tight">Root Admin</h3>
                                     <p className="text-[#0EA5E9] text-[10px] font-black uppercase tracking-widest">Master Authority Granted</p>
                                 </div>
                                 <input type="hidden" name="role" value="admin" />

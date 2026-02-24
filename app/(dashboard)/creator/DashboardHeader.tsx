@@ -11,7 +11,7 @@ export default function DashboardHeader() {
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-sky-400">Creator Control Plane</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-[0.9] mb-4">
+            <h1 className="text-5xl md:text-7xl font-sans font-black text-slate-900 tracking-tighter uppercase leading-[0.9] mb-4">
                 Dashboard <br /> <span className="text-[#0EA5E9]">Overview.</span>
             </h1>
             <p className="text-slate-500 font-medium">Monitoring your professional trajectory and active project flow.</p>

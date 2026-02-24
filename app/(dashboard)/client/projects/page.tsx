@@ -63,7 +63,7 @@ export default async function ClientProjectsPage(props: {
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12">
-                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none">
+                    <h1 className="text-5xl md:text-7xl font-sans font-black text-slate-900 tracking-tighter uppercase leading-none">
                         Our <br /> <span className="text-[#0EA5E9]">Projects.</span>
                     </h1>
                 </div>
@@ -88,7 +88,7 @@ export default async function ClientProjectsPage(props: {
                 {currentList.length === 0 ? (
                     <div className="bg-sky-50 rounded-3xl p-16 text-center border border-sky-100">
                         <Briefcase className="w-16 h-16 text-sky-200 mx-auto mb-6" />
-                        <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2">No {tab} projects found</h3>
+                        <h3 className="text-2xl font-sans font-black text-slate-900 mb-2 uppercase tracking-tighter">No {tab} projects found</h3>
                         {tab === 'active' && (
                             <Link
                                 href="/"
@@ -133,7 +133,7 @@ export default async function ClientProjectsPage(props: {
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Contract Value</p>
                                         <div className="flex items-baseline md:justify-end gap-1">
                                             <span className="text-xs font-bold text-sky-400 uppercase">AED</span>
-                                            <span className="text-3xl font-serif font-black text-slate-900">
+                                            <span className="text-3xl font-sans font-black text-slate-900 tracking-tighter">
                                                 {project.current_price || '0.00'}
                                             </span>
                                         </div>

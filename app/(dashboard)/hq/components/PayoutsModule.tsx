@@ -71,7 +71,7 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                    <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">Payout Requests</h2>
+                    <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">Payout Requests</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Manage creator withdrawals</p>
                 </div>
 
@@ -235,7 +235,7 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
                         <div className="w-16 h-16 bg-white/5 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
                             <CreditCard className="w-8 h-8 text-gray-600" />
                         </div>
-                        <h3 className="text-xl font-serif font-black text-white uppercase italic tracking-tighter">No requests found</h3>
+                        <h3 className="text-xl font-sans font-black font-black text-white uppercase italic tracking-tighter">No requests found</h3>
                         <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-2">All quiet in the financial sector</p>
                     </div>
                 )}

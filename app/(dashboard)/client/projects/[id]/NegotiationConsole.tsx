@@ -96,7 +96,7 @@ export default function NegotiationConsole({
                 <div className="inline-flex items-center justify-center p-2 rounded-full bg-[#F0F9FF] mb-3">
                     <TrendingUp className="w-4 h-4 text-[#0EA5E9]" />
                 </div>
-                <h3 className="text-3xl font-serif font-bold text-[#0EA5E9] mb-1">
+                <h3 className="text-3xl font-sans font-black font-bold text-[#0EA5E9] mb-1">
                     AED {currentPrice || '0.00'}
                 </h3>
                 <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">

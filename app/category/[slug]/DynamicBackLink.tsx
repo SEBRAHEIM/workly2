@@ -9,9 +9,9 @@ export default function DynamicBackLink() {
     return (
         <button
             onClick={() => router.back()}
-            className="inline-flex items-center px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-white/70 hover:text-white hover:bg-white/10 transition-all touch-manipulation group"
+            className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/20 active:scale-95 transition-all touch-manipulation group shadow-lg shadow-black/20"
         >
-            <ArrowLeft className="w-3.5 h-3.5 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" />
             Back
         </button>
     )

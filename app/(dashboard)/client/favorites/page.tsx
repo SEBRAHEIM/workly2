@@ -28,7 +28,7 @@ export default async function FavoritesPage() {
         <div className="min-h-screen bg-white pb-20 pt-24 md:pt-32">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="mb-12">
-                    <h1 className="text-5xl md:text-7xl font-serif font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">
+                    <h1 className="text-5xl md:text-7xl font-sans font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">
                         Curated <br /> <span className="text-[#0EA5E9]">Talent.</span>
                     </h1>
                     <p className="text-slate-500 font-medium">Your collection of elite client creators.</p>
@@ -39,7 +39,7 @@ export default async function FavoritesPage() {
                         <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
                             <User className="w-8 h-8 text-sky-200" />
                         </div>
-                        <h2 className="text-3xl font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">No favorites yet</h2>
+                        <h2 className="text-3xl font-sans font-black text-slate-900 mb-2 uppercase tracking-tighter">No favorites yet</h2>
                         <p className="text-slate-500 mb-10 max-w-sm mx-auto font-medium">Star creators you like to save them here for quick access.</p>
                         <Link
                             href="/"

@@ -26,7 +26,7 @@ export default async function CreatorHistory() {
 
     return (
         <div className="p-8 max-w-6xl mx-auto min-h-screen pt-24 md:pt-32">
-            <h1 className="text-4xl font-serif font-black text-slate-900 tracking-tighter uppercase mb-6 leading-none">
+            <h1 className="text-4xl font-sans font-black font-black text-slate-900 tracking-tighter uppercase mb-6 leading-none">
                 Transaction <span className="text-[#0EA5E9]">History.</span>
             </h1>
 
@@ -75,7 +75,7 @@ export default async function CreatorHistory() {
                                                 </div>
                                             </td>
                                             <td className="px-8 py-6">
-                                                <p className="text-base font-serif font-black text-slate-900 tracking-tighter">
+                                                <p className="text-base font-sans font-black font-black text-slate-900 tracking-tighter">
                                                     AED {tx.creator_net_amount?.toFixed(2)}
                                                 </p>
                                             </td>

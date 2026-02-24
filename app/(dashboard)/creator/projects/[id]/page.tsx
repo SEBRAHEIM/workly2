@@ -136,7 +136,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                             </div>
 
                             <div className="relative z-10">
-                                <h1 className="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-8 uppercase tracking-tighter leading-tight" dir="auto">
+                                <h1 className="text-4xl md:text-5xl font-sans font-black font-black text-slate-900 mb-8 uppercase tracking-tighter leading-tight" dir="auto">
                                     {project.title}
                                 </h1>
 
@@ -221,7 +221,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                                 <div className="mb-10">
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Project Payout</p>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-5xl font-serif font-black">AED {project.current_price}</span>
+                                        <span className="text-5xl font-sans font-black font-black">AED {project.current_price}</span>
                                     </div>
                                 </div>
 

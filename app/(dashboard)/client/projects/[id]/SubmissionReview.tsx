@@ -110,7 +110,7 @@ export default function SubmissionReview({
                 <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6">
                     <Check className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-serif font-black mb-2 uppercase tracking-tight">Project Completed</h3>
+                <h3 className="text-2xl font-sans font-black font-black mb-2 uppercase tracking-tight">Project Completed</h3>
                 <p className="text-white/70 text-sm font-medium leading-relaxed">
                     Transfer successful. The creator has received their earnings.
                 </p>

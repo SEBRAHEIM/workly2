@@ -72,7 +72,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                         viewport={{ once: true }}
                         className="max-w-4xl"
                     >
-                        <h2 className="font-serif font-black text-5xl md:text-9xl text-[#0EA5E9] leading-[0.8] tracking-tighter uppercase mb-10">
+                        <h2 className="font-sans font-black text-5xl md:text-9xl text-[#0EA5E9] leading-[0.8] tracking-tighter uppercase mb-10">
                             The New <br /> <span className="text-slate-800">Standard.</span>
                         </h2>
                         <div className="h-[2px] w-full bg-sky-100 mb-10 overflow-hidden">
@@ -110,7 +110,7 @@ export default function Features({ hideCta = false }: FeaturesProps) {
                                 <ArrowRight className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 text-[#0EA5E9]" />
                             </div>
 
-                            <h3 className="text-3xl font-black font-serif uppercase tracking-tighter mb-4 text-[#1E293B] group-hover:text-[#0EA5E9] transition-colors">{feature.title}</h3>
+                            <h3 className="text-3xl font-black font-sans uppercase tracking-tighter mb-4 text-[#1E293B] group-hover:text-[#0EA5E9] transition-colors">{feature.title}</h3>
                             <p className={`text-lg font-black mb-10 transition-colors ${feature.bg ? 'opacity-100 text-white' : 'text-slate-700'}`}>
                                 {feature.desc}
                             </p>

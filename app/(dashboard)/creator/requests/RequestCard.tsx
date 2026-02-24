@@ -211,7 +211,7 @@ export default function RequestCard({ req }: RequestCardProps) {
 
                             <div className="bg-white p-4 rounded-xl border border-[#F0F9FF] mb-4 text-center">
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Total Order Price</p>
-                                <p className="text-3xl font-serif font-bold text-[#0EA5E9]">
+                                <p className="text-3xl font-sans font-black text-[#0EA5E9] tracking-tighter">
                                     AED {req.current_price ? Number(req.current_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                                 </p>
                                 <p className="text-[10px] text-gray-500 mt-1 uppercase font-medium">

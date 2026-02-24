@@ -50,9 +50,6 @@ function VerifyContent() {
             <div className="w-full max-w-md relative z-10">
                 <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-sky-100/50 border border-sky-100 mx-auto">
                     <div className="text-center mb-10">
-                        <div className="w-16 h-16 bg-[#0EA5E9] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-sky-200">
-                            <span className="text-white font-serif font-black text-3xl">W</span>
-                        </div>
                         <h1 className="font-sans font-black text-4xl text-slate-900 mb-3 tracking-tighter uppercase leading-[0.95]">
                             Identity <br /> <span className="text-[#0EA5E9]">Verify.</span>
                         </h1>
@@ -71,7 +68,7 @@ function VerifyContent() {
                                 required
                                 pattern="[0-9]{6}"
                                 maxLength={6}
-                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-5 text-slate-900 text-center text-3xl tracking-[0.4em] font-serif font-black focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all placeholder:tracking-normal"
+                                className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-5 text-slate-900 text-center text-3xl tracking-[0.4em] font-sans font-black font-black focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all placeholder:tracking-normal"
                                 placeholder="000000"
                             />
                         </div>
@@ -107,7 +104,7 @@ function VerifyContent() {
 export default function Verify() {
     return (
         <div className="min-h-screen bg-white">
-            <Suspense fallback={<div className="flex items-center justify-center h-screen font-serif font-black text-sky-400 animate-pulse uppercase tracking-widest">Initialising Verify Layer...</div>}>
+            <Suspense fallback={<div className="flex items-center justify-center h-screen font-sans font-black font-black text-sky-400 animate-pulse uppercase tracking-widest">Initialising Verify Layer...</div>}>
                 <VerifyContent />
             </Suspense>
         </div>

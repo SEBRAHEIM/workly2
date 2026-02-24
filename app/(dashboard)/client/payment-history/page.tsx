@@ -92,7 +92,7 @@ export default function PaymentHistory() {
 
     return (
         <div className="p-8 max-w-4xl mx-auto">
-            <h1 className="text-4xl font-serif font-bold text-[#0EA5E9] mb-2">Payment History</h1>
+            <h1 className="text-4xl font-sans font-black font-bold text-[#0EA5E9] mb-2">Payment History</h1>
             <p className="text-gray-400 font-medium mb-8 text-sm">Official logs of all secure escrow payments.</p>
 
             <div className="bg-white rounded-3xl border border-[#F0F9FF] shadow-xl shadow-sky-900/5 overflow-hidden">
@@ -143,7 +143,7 @@ export default function PaymentHistory() {
                                                 </div>
                                                 <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-4 md:pt-0">
                                                     <div className="text-left md:text-right">
-                                                        <p className="font-serif font-black text-2xl text-[#1E293B]">AED {t.amount.toFixed(2)}</p>
+                                                        <p className="font-sans font-black font-black text-2xl text-[#1E293B]">AED {t.amount.toFixed(2)}</p>
                                                         <div className={`flex items-center md:justify-end gap-1.5 text-[9px] font-black uppercase tracking-widest mt-0.5 ${t.status === 'completed' ? 'text-green-600' : 'text-orange-600'}`}>
                                                             <div className={`w-1.5 h-1.5 rounded-full ${t.status === 'completed' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-orange-500 animate-pulse'}`} />
                                                             {t.status === 'completed' ? 'Verified Payment' : 'Processing Ledger'}
@@ -169,7 +169,7 @@ export default function PaymentHistory() {
                             <div className="w-20 h-20 bg-[#F0F9FF] rounded-full flex items-center justify-center mx-auto mb-6 text-gray-200">
                                 <CreditCard className="w-10 h-10" />
                             </div>
-                            <h3 className="text-2xl font-serif font-bold text-[#1E293B] mb-2">No payment history yet</h3>
+                            <h3 className="text-2xl font-sans font-black font-bold text-[#1E293B] mb-2">No payment history yet</h3>
                             <p className="text-gray-500 max-w-sm mx-auto text-sm">Once you pay for your first project, it will show up here with a detailed receipt.</p>
                         </div>
                     )}

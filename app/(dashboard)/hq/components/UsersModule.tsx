@@ -51,7 +51,7 @@ export default function UsersModule({ profiles, projects = [], setActiveTab }: {
             {/* ... stats code ... */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                    <h2 className="text-3xl font-serif font-black text-white tracking-tight uppercase">User Directory</h2>
+                    <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">User Directory</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Manage platform inhabitants</p>
                 </div>
 

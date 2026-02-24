@@ -158,14 +158,22 @@ export default function ClientNavbar() {
                                 <X className="w-6 h-6 text-slate-400" />
                             </button>
 
-                            <div className="flex flex-col items-start pt-20 pb-8 border-b border-sky-50 px-8">
-                                <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
-                                    {profile?.full_name || profile?.username || 'Client'}
-                                </h2>
-                                <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
-                                    @{profile?.username || 'user'}
-                                </p>
-                            </div>
+                            {user && (
+                                <div className="flex flex-col items-start pt-20 pb-8 border-b border-sky-50 px-8">
+                                    <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                        {profile?.full_name || profile?.username || 'Client'}
+                                    </h2>
+                                    <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em]">
+                                        @{profile?.username || 'user'}
+                                    </p>
+                                </div>
+                            )}
+
+                            {!user && (
+                                <div className="pt-20 pb-8 px-8">
+                                    {/* Placeholder or just padding when not logged in to maintain close button position */}
+                                </div>
+                            )}
 
                             <div className="flex-1 overflow-y-auto overscroll-contain py-8 touch-pan-y scrollbar-hide">
                                 <div className="px-6 mb-8">
@@ -275,17 +283,19 @@ export default function ClientNavbar() {
                                 </div>
                             </div>
 
-                            <div className="p-6 border-t border-sky-50">
-                                <button
-                                    onClick={handleSignOut}
-                                    className="w-full flex items-center p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all group"
-                                >
-                                    <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
-                                        <LogOut size={20} />
-                                    </div>
-                                    <span className="font-black text-xs uppercase tracking-widest">Establish Exit</span>
-                                </button>
-                            </div>
+                            {user && (
+                                <div className="p-6 border-t border-sky-50">
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="w-full flex items-center p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all group"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
+                                            <LogOut size={20} />
+                                        </div>
+                                        <span className="font-black text-xs uppercase tracking-widest">Establish Exit</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )

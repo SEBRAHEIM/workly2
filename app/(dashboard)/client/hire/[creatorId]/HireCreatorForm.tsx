@@ -123,7 +123,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                         {selectedService.pricing_mode === 'fixed' && (
                             <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-sky-50 shadow-sm shadow-sky-100/20">
                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Fixed Rate</span>
-                                <span className="text-lg font-serif font-bold text-[#0EA5E9]">AED {selectedService.base_price}</span>
+                                <span className="text-lg font-sans font-bold text-[#0EA5E9]">AED {selectedService.base_price}</span>
                             </div>
                         )}
 
@@ -158,7 +158,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                             </div>
 
                                             <p className="text-xs font-black text-slate-800 uppercase tracking-tight mb-1">{pkg.title}</p>
-                                            <p className="text-lg font-serif font-black text-[#0EA5E9] mb-4">AED {pkg.price}</p>
+                                            <p className="text-lg font-sans font-black text-[#0EA5E9] mb-4">AED {pkg.price}</p>
 
                                             <div className="mt-auto space-y-2 border-t border-slate-50 pt-4">
                                                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">

@@ -79,7 +79,7 @@ function VerifyContent() {
                             type="submit"
                             className="w-full rounded-full bg-[#0EA5E9] px-4 py-4 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 mt-4 shadow-lg shadow-sky-100"
                         >
-                            Authorize session
+                            Verify
                         </button>
                     </form>
 

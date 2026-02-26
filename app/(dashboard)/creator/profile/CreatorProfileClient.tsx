@@ -54,6 +54,10 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
         setOpenSection('pricing')
     }
 
+    const handlePayoutSave = () => {
+        setOpenSection(null)
+    }
+
     // Pricing typically doesn't have a "Save & Continue" that we hook into easily unless we update the form to accept a callback.
     // For now, the user manually closes or we can update `PricingForm` to take `onSuccess` too.
     // Let's just let them click.
@@ -192,7 +196,7 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
                     isCompleted={!!(profile?.bank_iban || profile?.paypal_email)}
                     onToggle={() => setOpenSection(openSection === 'payouts' as any ? null : 'payouts' as any)}
                 >
-                    <PayoutSettings profile={profile} />
+                    <PayoutSettings profile={profile} onSuccess={handlePayoutSave} />
                 </ProfileSection>
             </div>
         </div>

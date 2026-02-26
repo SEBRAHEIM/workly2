@@ -7,9 +7,10 @@ import PayPalPayoutForm from './profile/PayPalPayoutForm'
 
 interface PayoutSettingsProps {
     profile: any
+    onSuccess?: () => void
 }
 
-export default function PayoutSettings({ profile }: PayoutSettingsProps) {
+export default function PayoutSettings({ profile, onSuccess }: PayoutSettingsProps) {
     const [selectedMethod, setSelectedMethod] = useState<'bank' | 'paypal'>(
         profile?.payout_preference === 'paypal' ? 'paypal' : 'bank'
     )
@@ -77,7 +78,7 @@ export default function PayoutSettings({ profile }: PayoutSettingsProps) {
                             <h3 className="text-2xl font-sans font-black font-black text-[#0EA5E9] mb-2">PayPal Details</h3>
                             <p className="text-gray-500 font-medium italic text-sm">Funds will be manually transferred to your PayPal account.</p>
                         </div>
-                        <PayPalPayoutForm profile={profile} />
+                        <PayPalPayoutForm profile={profile} onSuccess={onSuccess} />
                     </div>
                 )}
             </div>

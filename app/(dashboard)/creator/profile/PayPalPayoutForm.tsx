@@ -6,8 +6,14 @@ import { updatePayPalDetails } from '../actions'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
 
-export default function PayPalPayoutForm({ profile }: { profile: any }) {
+interface PayPalPayoutFormProps {
+    profile: any
+    onSuccess?: () => void
+}
+
+export default function PayPalPayoutForm({ profile, onSuccess }: PayPalPayoutFormProps) {
     const [state, formAction, isPending] = useActionState(updatePayPalDetails, null)
+    const [showConfirm, setShowConfirm] = useState(false)
 
     const [clientError, setClientError] = useState('')
 
@@ -15,11 +21,13 @@ export default function PayPalPayoutForm({ profile }: { profile: any }) {
         if (state?.success) {
             toast.success('PayPal details updated successfully')
             setClientError('')
+            setShowConfirm(false)
+            if (onSuccess) onSuccess()
         }
         if (state?.error) {
             toast.error(state.error)
         }
-    }, [state])
+    }, [state, onSuccess])
 
     const handleSubmit = (formData: FormData) => {
         setClientError('')
@@ -49,27 +57,30 @@ export default function PayPalPayoutForm({ profile }: { profile: any }) {
                             defaultValue={profile?.paypal_email || ''}
                             required
                             placeholder="your-paypal@example.com"
+                            onChange={() => setShowConfirm(true)}
                             className="w-full bg-[#F9F8F4] border border-[#F0F9FF] rounded-2xl py-4 pl-12 pr-4 text-[#1E293B] font-bold focus:outline-none focus:border-[#0EA5E9] focus:bg-white transition-all placeholder:text-gray-400 placeholder:font-medium"
                         />
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#0EA5E9] block ml-1">
-                        Confirm PayPal Email
-                    </label>
-                    <div className="relative group">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#0EA5E9] transition-colors" />
-                        <input
-                            type="email"
-                            name="confirm_paypal_email"
-                            defaultValue=""
-                            required
-                            placeholder="Confirm your paypal email"
-                            className="w-full bg-[#F9F8F4] border border-[#F0F9FF] rounded-2xl py-4 pl-12 pr-4 text-[#1E293B] font-bold focus:outline-none focus:border-[#0EA5E9] focus:bg-white transition-all placeholder:text-gray-400 placeholder:font-medium"
-                        />
+                {showConfirm && (
+                    <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-300">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-[#0EA5E9] block ml-1">
+                            Confirm PayPal Email
+                        </label>
+                        <div className="relative group">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#0EA5E9] transition-colors" />
+                            <input
+                                type="email"
+                                name="confirm_paypal_email"
+                                defaultValue=""
+                                required
+                                placeholder="Confirm your paypal email"
+                                className="w-full bg-[#F9F8F4] border border-[#F0F9FF] rounded-2xl py-4 pl-12 pr-4 text-[#1E293B] font-bold focus:outline-none focus:border-[#0EA5E9] focus:bg-white transition-all placeholder:text-gray-400 placeholder:font-medium"
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {clientError && (

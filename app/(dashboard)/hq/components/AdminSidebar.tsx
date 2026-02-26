@@ -29,7 +29,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminEmail }: Ad
                     <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)]">
                         <Shield className="w-5 h-5 text-white" />
                     </div>
-                    <span className="font-sans font-black font-black text-white tracking-widest uppercase text-xl">Workly</span>
+                    <span className="font-sans font-black font-black text-white tracking-tighter text-xl">Workly.</span>
                 </div>
                 <div className="text-[10px] text-red-500 font-bold tracking-[0.3em] uppercase opacity-80">
                     God Mode

@@ -93,8 +93,8 @@ export default function ClientNavbar() {
                         </button>
 
                         <Link href="/client" className="flex items-center">
-                            <span className="text-xl tracking-tight text-slate-900 font-bold">
-                                Workly
+                            <span className="text-xl tracking-tighter text-slate-900 font-black">
+                                Workly.
                             </span>
                         </Link>
                     </div>

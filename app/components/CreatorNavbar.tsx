@@ -91,8 +91,8 @@ export default function CreatorNavbar() {
 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
                     <Link href="/creator" className="group flex items-center gap-3">
-                        <span className="text-xl tracking-[0.4em] text-slate-900 font-sans font-black uppercase">
-                            Workly
+                        <span className="text-xl md:text-2xl tracking-tighter text-[#1E293B] font-sans font-black">
+                            Workly.
                         </span>
                     </Link>
                 </div>

@@ -36,10 +36,7 @@ export default async function CreatorProfilePage() {
                     <h1 className="text-3xl md:text-4xl font-sans font-black text-[#0EA5E9] mb-2 uppercase tracking-tighter">Editor Profile</h1>
                     <p className="text-sm md:text-base text-gray-500">Manage your identity and expertise.</p>
                 </div>
-                <div className="bg-white px-4 py-2 rounded-xl border border-[#F0F9FF] shadow-sm flex items-center">
-                    <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
-                    <span className="font-bold text-[#1E293B]">Level {profile?.level || 1}</span>
-                </div>
+
             </div>
 
             {/* Client Component handles the accordion flow */}

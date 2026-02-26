@@ -145,7 +145,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                     <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <div className="text-xs text-amber-800 leading-relaxed font-medium">
                         <strong>Pricing Transparency:</strong> Workly charges a flat <strong>20% commission</strong> on all earnings.
-                        This covers your platform access, marketing, and secure Stripe payment processing.
+                        This covers your platform access and marketing.
                         You will see your net payout estimate below the price input.
                     </div>
                 </div>
@@ -203,7 +203,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Time (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Turnaround (Days)</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].turnaround || 2}
@@ -215,7 +215,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                 </div>
                                 <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
                                     <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
-                                    Revision time is the number of days you have to complete a requested change round.
+                                    Turnaround time is the number of days you have to complete this tier.
                                 </p>
                             </div>
                             <div>

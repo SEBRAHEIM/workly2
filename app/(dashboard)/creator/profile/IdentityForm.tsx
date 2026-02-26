@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { updateCreatorIdentity } from './actions'
 import { Save, Check, AlertTriangle } from 'lucide-react'
-import PhoneInput from 'react-phone-number-input'
-import 'react-phone-number-input/style.css'
+
 import { toast } from 'sonner'
 import { containsContactInfo } from '@/utils/content-safety'
 
@@ -16,12 +15,9 @@ interface Props {
 export default function IdentityForm({ profile, onSuccess }: Props) {
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState('')
-    const [phone, setPhone] = useState(profile?.whatsapp_phone || '')
+    const [error, setError] = useState('')
 
-    // Sync state if profile update comes from outside (prop change)
-    useEffect(() => {
-        setPhone(profile?.whatsapp_phone || '')
-    }, [profile?.whatsapp_phone])
+
 
     return (
         <form
@@ -41,8 +37,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     return
                 }
 
-                // Add phone from state
-                if (phone) formData.set('smsPhone', phone)
+
 
                 const result = await updateCreatorIdentity(formData)
                 setIsSaving(false)
@@ -51,9 +46,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     setError(result.error)
                     toast.error(result.error)
                 } else {
-                    toast.success('Identity saved successfully!', {
-                        description: phone ? `SMS notifications enabled for ${phone}` : 'Identity details updated.'
-                    })
+                    toast.success('Identity saved successfully!')
                     if (onSuccess) onSuccess()
                 }
             }}
@@ -122,40 +115,7 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 <p className="text-xs text-gray-400 mt-2">One line describing what you do.</p>
             </div>
 
-            {/* SMS Phone */}
-            <div>
-                <label className="block text-sm font-bold text-[#1E293B] mb-2">SMS Phone Number</label>
-                <div className="flex gap-2 isolate">
-                    <div className="flex-1 sms-phone-wrapper">
-                        <PhoneInput
-                            international
-                            defaultCountry="AE"
-                            value={phone}
-                            onChange={(val) => setPhone(val || '')}
-                            placeholder="e.g. +971 50 123 4567"
-                            className="w-full bg-white border border-gray-200 rounded-xl p-3 text-base focus-within:ring-2 focus-within:ring-[#0EA5E9] focus-within:border-transparent transition-all h-[58px]"
-                        />
-                    </div>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">Pick your country and enter your number. <strong>Important:</strong> Click "Save Identity" to enable SMS alerts for your projects.</p>
 
-                <style jsx global>{`
-                    .sms-phone-wrapper .PhoneInputInput {
-                        background: transparent;
-                        border: none !important;
-                        outline: none !important;
-                        padding: 0 10px;
-                        font-size: 1rem;
-                    }
-                    .sms-phone-wrapper .PhoneInputCountry {
-                        margin-right: 10px;
-                        padding-left: 5px;
-                    }
-                    .sms-phone-wrapper .PhoneInputCountrySelect {
-                        cursor: pointer;
-                    }
-                `}</style>
-            </div>
 
             {/* Working Languages */}
             <div>

@@ -15,8 +15,7 @@ export async function updateCreatorIdentity(formData: FormData) {
     const displayName = formData.get('displayName') as string
     const fullName = formData.get('fullName') as string
     const username = formData.get('username') as string
-    const tagline = formData.get('tagline') as string
-    const smsPhone = formData.get('smsPhone') as string
+
     const languages = formData.getAll('languages') as string[]
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -40,7 +39,6 @@ export async function updateCreatorIdentity(formData: FormData) {
             full_name: fullName,
             username: username,
             tagline: tagline,
-            whatsapp_phone: smsPhone,
             languages: languages
         })
         .eq('id', user.id)

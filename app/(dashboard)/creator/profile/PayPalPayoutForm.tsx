@@ -63,9 +63,9 @@ export default function PayPalPayoutForm({ profile }: { profile: any }) {
                         <input
                             type="email"
                             name="confirm_paypal_email"
-                            defaultValue={profile?.paypal_email || ''}
+                            defaultValue=""
                             required
-                            placeholder="your-paypal@example.com"
+                            placeholder="Confirm your paypal email"
                             className="w-full bg-[#F9F8F4] border border-[#F0F9FF] rounded-2xl py-4 pl-12 pr-4 text-[#1E293B] font-bold focus:outline-none focus:border-[#0EA5E9] focus:bg-white transition-all placeholder:text-gray-400 placeholder:font-medium"
                         />
                     </div>

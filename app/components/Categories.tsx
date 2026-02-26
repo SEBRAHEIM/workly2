@@ -58,7 +58,7 @@ export default function Categories() {
 
                                 <div className="mt-auto hidden md:block">
                                     <div className="flex items-center gap-3 text-[#0EA5E9] font-black text-[10px] uppercase tracking-widest group-hover:gap-5 transition-all duration-300">
-                                        Explore Domain
+                                        Explore Category
                                         <ArrowRight className="w-4 h-4" />
                                     </div>
                                 </div>

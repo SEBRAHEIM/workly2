@@ -203,7 +203,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Turnaround (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].turnaround || 2}
@@ -215,7 +215,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                 </div>
                                 <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
                                     <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
-                                    Turnaround is the total number of days for delivery, so the client knows when to expect the project.
+                                    Specify the total number of days required to complete and deliver this package to the client.
                                 </p>
                             </div>
                             <div>

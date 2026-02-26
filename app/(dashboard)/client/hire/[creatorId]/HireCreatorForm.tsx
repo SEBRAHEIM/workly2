@@ -167,7 +167,7 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                                 </div>
                                                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                                                     <Clock className="w-3 h-3 text-sky-400" />
-                                                    {pkg.turnaround || 2} Days Delivery
+                                                    {pkg.turnaround || 2} Days Delivery Time
                                                 </div>
                                             </div>
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Menu, X, Bell, User, LogOut, ChevronRight, Search, Filter, LayoutDashboard, Briefcase, Upload, Star, Wallet, Clock, CreditCard, Shield, Zap } from 'lucide-react'
+import { Menu, X, Bell, User, LogOut, ChevronRight, Search, Filter, LayoutDashboard, Briefcase, Upload, Star, Wallet, Clock, CreditCard, Shield, Zap, LifeBuoy } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 import NotificationBell from './NotificationBell'
@@ -278,6 +278,22 @@ export default function ClientNavbar() {
                                                 <Clock size={18} />
                                             </div>
                                             <span className="text-xs uppercase tracking-widest">History</span>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                <div className="px-6 mb-8 mt-4">
+                                    <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Support</h3>
+                                    <div className="space-y-1">
+                                        <Link
+                                            href="mailto:support@workly.day"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        >
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <LifeBuoy size={18} />
+                                            </div>
+                                            <span className="text-xs uppercase tracking-widest">Get Help</span>
                                         </Link>
                                     </div>
                                 </div>

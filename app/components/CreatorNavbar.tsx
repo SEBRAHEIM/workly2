@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield, Download, Settings } from 'lucide-react'
+import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield, Download, Settings, LifeBuoy } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 

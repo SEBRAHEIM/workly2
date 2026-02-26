@@ -55,7 +55,7 @@ export default function Signup() {
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Secure Password"
+                                placeholder="Password"
                                 required
                                 className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 pr-14 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
                             />

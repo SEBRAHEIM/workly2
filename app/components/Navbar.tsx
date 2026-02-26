@@ -110,15 +110,7 @@ export default function Navbar() {
                                 <div className="px-6 space-y-8">
                                     {/* Action Section */}
                                     <div className="space-y-4">
-                                        {!loading && !role && (
-                                            <Link
-                                                href="/login"
-                                                onClick={() => setIsMenuOpen(false)}
-                                                className="block text-2xl font-sans font-black text-slate-900 hover:text-[#0EA5E9] transition-colors uppercase tracking-tight"
-                                            >
-                                                Login
-                                            </Link>
-                                        )}
+
 
                                         <Link
                                             href={role ? (role === 'admin' ? '/hq' : role === 'creator' ? '/creator' : '/client') : '/join'}

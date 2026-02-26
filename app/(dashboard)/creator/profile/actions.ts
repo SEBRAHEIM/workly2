@@ -110,6 +110,8 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
         const fileExt = file.name.split('.').pop()
         const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
+        console.log('[PORTFOLIO UPLOAD] Starting storage upload:', fileName)
+
         // Convert File to ArrayBuffer for upload
         const arrayBuffer = await file.arrayBuffer()
         const buffer = new Uint8Array(arrayBuffer)
@@ -118,14 +120,16 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
             .storage
             .from('portfolio')
             .upload(fileName, buffer, {
-                contentType: file.type,
+                contentType: file.type || 'application/octet-stream',
                 upsert: false
             })
 
         if (uploadError) {
-            console.error('Portfolio Upload Storage Error:', uploadError)
+            console.error('[PORTFOLIO UPLOAD] Storage Error:', uploadError)
             return { error: `Storage error: ${uploadError.message}` }
         }
+
+        console.log('[PORTFOLIO UPLOAD] Storage Success, getting public URL')
 
         // 2. Get Public URL
         const { data: { publicUrl } } = supabase
@@ -139,6 +143,8 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
             return { error: `Description validation failed: ${descCheck.reason}. Contact info is not allowed in portfolio items.` }
         }
 
+        console.log('[PORTFOLIO UPLOAD] Inserting DB record for category:', categorySlug)
+
         const { error: dbError } = await supabase
             .from('portfolio_items')
             .insert({
@@ -150,10 +156,11 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
             })
 
         if (dbError) {
-            console.error('Portfolio Upload Database Error:', dbError)
+            console.error('[PORTFOLIO UPLOAD] Database Error:', dbError)
             return { error: `Database error: ${dbError.message}` }
         }
 
+        console.log('[PORTFOLIO UPLOAD] Success! Revalidating path.')
         revalidatePath('/creator/profile')
         return { success: true, error: '' }
     } catch (e: any) {

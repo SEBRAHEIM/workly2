@@ -157,15 +157,15 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
 
         if (dbError) {
             console.error('[PORTFOLIO UPLOAD] Database Error:', dbError)
-            return { error: `Database error: ${dbError.message}` }
+            return { success: false, error: `Database error: ${dbError.message}` }
         }
 
         console.log('[PORTFOLIO UPLOAD] Success! Revalidating path.')
         revalidatePath('/creator/profile')
         return { success: true, error: '' }
     } catch (e: any) {
-        console.error('Portfolio Upload Fatal Error:', e)
-        return { error: e.message || 'An unexpected error occurred during upload.' }
+        console.error('[PORTFOLIO UPLOAD] Fatal Error:', e)
+        return { success: false, error: e.message || 'An unexpected error occurred during upload.' }
     }
 }
 

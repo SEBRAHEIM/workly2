@@ -20,7 +20,7 @@ export default async function AdminDashboard() {
 
     // 3. Comprehensive Data Fetching (Using Admin Client for God Mode)
     const supabaseAdminClient = createAdminClient()
-    const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse, transactionsResponse, batchesResponse] = await Promise.all([
+    const [projectsResponse, profilesResponse, withdrawalsResponse, eventsResponse, transactionsResponse, batchesResponse, ticketsResponse] = await Promise.all([
         supabaseAdminClient
             .from('projects')
             .select('*, client:client_id(full_name, display_name), creator:creator_id(full_name, display_name, wallet_balance)')
@@ -45,11 +45,16 @@ export default async function AdminDashboard() {
         supabaseAdminClient
             .from('payout_batches')
             .select('*')
+            .order('created_at', { ascending: false }),
+        supabaseAdminClient
+            .from('support_tickets')
+            .select('*, profiles(full_name, display_name, username, email)')
             .order('created_at', { ascending: false })
     ])
 
     if (projectsResponse.error) console.error('[HQ] Projects Error:', projectsResponse.error.message)
     if (profilesResponse.error) console.error('[HQ] Profiles Error:', profilesResponse.error.message)
+    if (ticketsResponse.error) console.error('[HQ] Tickets Error:', ticketsResponse.error.message)
 
     const projects = projectsResponse.data || []
     const profiles = profilesResponse.data || []
@@ -57,6 +62,7 @@ export default async function AdminDashboard() {
     const events = eventsResponse.data || []
     const transactions = transactionsResponse.data || []
     const payoutBatches = batchesResponse.data || []
+    const tickets = ticketsResponse.data || []
 
     // 4. Calculate Comprehensive Stats
     const stats = {
@@ -74,6 +80,7 @@ export default async function AdminDashboard() {
         events,
         transactions,
         payoutBatches,
+        tickets,
         stats
     }
 

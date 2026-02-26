@@ -1,9 +1,9 @@
 'use client'
 
-import { Shield, LayoutDashboard, Users, Briefcase, Wallet, Scale, Settings, LogOut, CreditCard } from 'lucide-react'
+import { Shield, LayoutDashboard, Users, Briefcase, Wallet, Scale, Settings, LogOut, CreditCard, LifeBuoy } from 'lucide-react'
 import Link from 'next/link'
 
-type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts'
+type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts' | 'support'
 
 interface AdminSidebarProps {
     activeTab: Tab
@@ -19,6 +19,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, adminEmail }: Ad
         { id: 'finances', label: 'Financials', icon: Wallet },
         { id: 'payouts', label: 'Payout Requests', icon: CreditCard },
         { id: 'moderation', label: 'Moderation', icon: Scale },
+        { id: 'support', label: 'Tickets', icon: LifeBuoy },
     ]
 
     return (

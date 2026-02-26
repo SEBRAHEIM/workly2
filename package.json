@@ -21,6 +21,7 @@
     "@types/three": "^0.182.0",
     "browser-image-compression": "^2.0.2",
     "canvas-confetti": "^1.9.4",
+    "date-fns": "^4.1.0",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.25.0",
     "gsap": "^3.14.2",

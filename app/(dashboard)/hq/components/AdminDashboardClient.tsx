@@ -8,8 +8,9 @@ import ProjectsModule from './ProjectsModule'
 import FinancesModule from './FinancesModule'
 import ModerationModule from './ModerationModule'
 import PayoutsModule from './PayoutsModule'
+import SupportModule from './SupportModule'
 
-type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts'
+type Tab = 'overview' | 'users' | 'projects' | 'finances' | 'moderation' | 'payouts' | 'support'
 
 interface AdminDashboardClientProps {
     user: any
@@ -20,6 +21,7 @@ interface AdminDashboardClientProps {
         events: any[]
         transactions: any[]
         payoutBatches: any[]
+        tickets: any[]
         stats: {
             totalUsers: number
             totalRevenue: number
@@ -78,6 +80,11 @@ export default function AdminDashboardClient({ user, initialData }: AdminDashboa
                             projects={initialData.projects}
                             profiles={initialData.profiles}
                             events={initialData.events}
+                        />
+                    )}
+                    {activeTab === 'support' && (
+                        <SupportModule
+                            tickets={initialData.tickets}
                         />
                     )}
                 </div>

@@ -2,8 +2,10 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, Plus, CheckCircle, AlertTriangle, FileText } from 'lucide-react'
+import { ChevronDown, Plus, CheckCircle, AlertTriangle, FileText, Trash2 } from 'lucide-react'
 import PortfolioUploadForm from './PortfolioUploadForm'
+import { deletePortfolioItem } from './actions'
+import { toast } from 'sonner'
 
 interface PortfolioItem {
     id: string
@@ -24,6 +26,25 @@ interface Props {
 export default function PortfolioCategoryAccordion({ category, items, readOnly = false }: Props) {
     const [isOpen, setIsOpen] = useState(readOnly)
     const [showUpload, setShowUpload] = useState(false)
+    const [isDeleting, setIsDeleting] = useState<string | null>(null)
+
+    const handleDelete = async (itemId: string) => {
+        if (!confirm('Are you sure you want to remove this work sample?')) return
+
+        setIsDeleting(itemId)
+        try {
+            const result = await deletePortfolioItem(itemId)
+            if (result?.error) {
+                toast.error(result.error)
+            } else {
+                toast.success('Professional work sample removed.')
+            }
+        } catch (error) {
+            toast.error('Failed to delete item.')
+        } finally {
+            setIsDeleting(null)
+        }
+    }
 
     const hasItems = items && items.length > 0
 
@@ -115,6 +136,25 @@ export default function PortfolioCategoryAccordion({ category, items, readOnly =
                                             )}
                                             <span className="text-xs bg-white/20 px-2 py-1 rounded">Click to View</span>
                                         </a>
+
+                                        {/* Delete Button (Only if NOT readOnly) */}
+                                        {!readOnly && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    handleDelete(item.id)
+                                                }}
+                                                disabled={isDeleting === item.id}
+                                                className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600 z-20 shadow-lg disabled:opacity-50"
+                                                title="Remove item"
+                                            >
+                                                {isDeleting === item.id ? (
+                                                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                                ) : (
+                                                    <Trash2 className="w-4 h-4" />
+                                                )}
+                                            </button>
+                                        )}
                                     </div>
                                 ))}
                             </div>

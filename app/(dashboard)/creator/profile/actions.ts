@@ -162,6 +162,66 @@ export async function uploadPortfolioItem(prevState: any, formData: FormData) {
     }
 }
 
+// Delete Portfolio Item
+export async function deletePortfolioItem(itemId: string) {
+    try {
+        const supabase = await createClient()
+
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return { error: 'Unauthorized' }
+
+        // 1. Get the item to find the image URL
+        const { data: item, error: fetchError } = await supabase
+            .from('portfolio_items')
+            .select('image_url, creator_id')
+            .eq('id', itemId)
+            .single()
+
+        if (fetchError || !item) {
+            return { error: 'Item not found.' }
+        }
+
+        if (item.creator_id !== user.id) {
+            return { error: 'You do not have permission to delete this item.' }
+        }
+
+        // 2. Extract storage path from public URL
+        // URL format: .../storage/v1/object/public/portfolio/USER_ID/FILENAME
+        const urlParts = item.image_url.split('/portfolio/')
+        if (urlParts.length > 1) {
+            const storagePath = urlParts[1]
+
+            // 3. Delete from Storage
+            const { error: storageError } = await supabase
+                .storage
+                .from('portfolio')
+                .remove([storagePath])
+
+            if (storageError) {
+                console.error('Storage deletion error:', storageError)
+                // We'll continue even if storage delete fails to keep DB clean
+            }
+        }
+
+        // 4. Delete from Database
+        const { error: dbError } = await supabase
+            .from('portfolio_items')
+            .delete()
+            .eq('id', itemId)
+            .eq('creator_id', user.id)
+
+        if (dbError) {
+            return { error: `Database error: ${dbError.message}` }
+        }
+
+        revalidatePath('/creator/profile')
+        return { success: true }
+    } catch (e: any) {
+        console.error('Portfolio Deletion Fatal Error:', e)
+        return { error: e.message || 'An unexpected error occurred.' }
+    }
+}
+
 // Update Creator Pricing
 export async function updateCreatorPricing(formData: FormData) {
     const supabase = await createClient()

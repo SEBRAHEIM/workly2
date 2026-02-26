@@ -67,7 +67,7 @@ export default function Onboarding() {
                                             <User size={28} />
                                         </div>
                                         <span className="font-sans font-black font-black uppercase tracking-tight text-xl">Client</span>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Deploy Projects</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Project Requester</p>
                                     </button>
                                     <button
                                         type="button"
@@ -81,7 +81,7 @@ export default function Onboarding() {
                                             <PenTool size={28} />
                                         </div>
                                         <span className="font-sans font-black font-black uppercase tracking-tight text-xl">Creator</span>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Execution Elite</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest mt-2 opacity-60 group-hover:opacity-100 transition-opacity">Project Specialist</p>
                                     </button>
                                 </div>
                                 <input type="hidden" name="role" value={role} />
@@ -102,7 +102,7 @@ export default function Onboarding() {
                         <div className="space-y-6 pt-4">
                             <div>
                                 <label htmlFor="username" className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">
-                                    Terminal Handle
+                                    Username
                                 </label>
                                 <input
                                     id="username"
@@ -110,20 +110,20 @@ export default function Onboarding() {
                                     type="text"
                                     required
                                     className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
-                                    placeholder="unique_handle"
+                                    placeholder="username"
                                 />
                             </div>
 
                             <div>
                                 <label htmlFor="fullName" className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">
-                                    Registry Name
+                                    Full Name
                                 </label>
                                 <input
                                     id="fullName"
                                     name="fullName"
                                     type="text"
                                     className="w-full rounded-2xl border border-sky-100 bg-sky-50/30 px-6 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all font-medium text-sm"
-                                    placeholder="Operator Name"
+                                    placeholder="Name"
                                 />
                             </div>
                         </div>
@@ -137,7 +137,7 @@ export default function Onboarding() {
                             className="w-full rounded-full bg-[#0EA5E9] px-6 py-5 text-white font-black text-[10px] uppercase tracking-widest hover:bg-sky-600 hover:shadow-2xl hover:shadow-sky-100 active:scale-[0.98] transition-all duration-300 shadow-xl shadow-sky-100 disabled:opacity-50 mt-4"
                             disabled={!role && !isAdmin}
                         >
-                            {isAdmin ? 'Deploy Admin Identity' : 'Secure Access'}
+                            {isAdmin ? 'Deploy Admin Identity' : 'Continue'}
                         </button>
                     </form>
                 </div>

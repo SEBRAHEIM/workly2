@@ -199,6 +199,16 @@ export default function CreatorNavbar() {
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Profile</span>
                                     </Link>
+                                    <Link
+                                        href="/creator/settings"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Shield size={20} />
+                                        </div>
+                                        <span className="text-sm uppercase tracking-widest">Account</span>
+                                    </Link>
                                 </div>
                             </div>
 

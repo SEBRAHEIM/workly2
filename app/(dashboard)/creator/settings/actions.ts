@@ -6,21 +6,43 @@ import { redirect } from 'next/navigation'
 
 export async function updatePassword(prevState: any, formData: FormData) {
     const supabase = await createClient()
-    const password = formData.get('password') as string
+    const currentPassword = formData.get('currentPassword') as string
+    const newPassword = formData.get('newPassword') as string
     const confirmPassword = formData.get('confirmPassword') as string
 
-    if (!password || password.length < 6) {
-        return { error: 'Password must be at least 6 characters long.' }
+    if (!newPassword || newPassword.length < 6) {
+        return { error: 'New password must be at least 6 characters long.' }
     }
 
-    if (password !== confirmPassword) {
-        return { error: 'Passwords do not match.' }
+    if (newPassword !== confirmPassword) {
+        return { error: 'New passwords do not match.' }
     }
 
-    const { error } = await supabase.auth.updateUser({ password })
+    // 1. Verify Current Password
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user || !user.email) return { error: 'Unauthorized' }
 
-    if (error) {
-        return { error: error.message }
+    if (!currentPassword) {
+        return { error: 'Current password is required.' }
+    }
+
+    // Attempt to sign in with the current password to verify it
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword
+    })
+
+    if (signInError) {
+        return { error: 'Current password is incorrect.' }
+    }
+
+    // 2. Update to New Password
+    const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
+    })
+
+    if (updateError) {
+        return { error: updateError.message }
     }
 
     return { success: true }

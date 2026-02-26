@@ -20,10 +20,8 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
 
     return (
         <form
+            className="space-y-6 font-outfit"
             action={async (formData) => {
-                setError('')
-                setIsSaving(true)
-
                 setError('')
                 setIsSaving(true)
 
@@ -39,8 +37,6 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     return
                 }
 
-
-
                 const result = await updateCreatorIdentity(formData)
                 setIsSaving(false)
 
@@ -52,7 +48,6 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                     if (onSuccess) onSuccess()
                 }
             }}
-            className="space-y-6"
         >
             {/* Full Name */}
             <div>

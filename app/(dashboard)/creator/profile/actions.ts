@@ -15,6 +15,7 @@ export async function updateCreatorIdentity(formData: FormData) {
     const displayName = formData.get('displayName') as string
     const fullName = formData.get('fullName') as string
     const username = formData.get('username') as string
+    const tagline = formData.get('tagline') as string
 
     const languages = formData.getAll('languages') as string[]
 
@@ -29,7 +30,7 @@ export async function updateCreatorIdentity(formData: FormData) {
         return { error: `Validation failed: ${bioCheck.reason || taglineCheck.reason}. Sharing contact info is strictly prohibited.` }
     }
 
-    console.log('[SMS DEBUG] Updating profile for user:', user.id, { smsPhone })
+    console.log('[SMS DEBUG] Updating profile for user:', user.id)
 
     const { error } = await supabase
         .from('profiles')

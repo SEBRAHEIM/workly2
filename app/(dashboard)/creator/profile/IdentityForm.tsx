@@ -15,7 +15,6 @@ interface Props {
 export default function IdentityForm({ profile, onSuccess }: Props) {
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState('')
-    const [error, setError] = useState('')
 
 
 

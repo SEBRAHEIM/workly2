@@ -212,6 +212,22 @@ export default function CreatorNavbar() {
                                 </div>
                             </div>
 
+                            <div className="px-6 mb-8">
+                                <h3 className="text-[12px] font-black text-slate-800 uppercase tracking-[0.3em] mb-6">Support</h3>
+                                <div className="space-y-2">
+                                    <Link
+                                        href="mailto:support@workly.day"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <LifeBuoy size={20} />
+                                        </div>
+                                        <span className="text-sm uppercase tracking-widest">Get Help</span>
+                                    </Link>
+                                </div>
+                            </div>
+
                         </div>
 
                         {user && (

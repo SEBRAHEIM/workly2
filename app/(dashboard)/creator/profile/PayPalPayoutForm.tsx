@@ -19,7 +19,7 @@ export default function PayPalPayoutForm({ profile }: { profile: any }) {
     }, [state])
 
     return (
-        <form action={formAction} className="space-y-6">
+        <form action={formAction} className="space-y-6 font-outfit">
             <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-[#0EA5E9] block ml-1">
                     PayPal Email Address

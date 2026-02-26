@@ -31,22 +31,38 @@ export default function BankPayoutForm({ profile }: BankPayoutFormProps) {
     }
 
     const uaeBanks = [
+        "Abu Dhabi Commercial Bank (ADCB)",
+        "Abu Dhabi Islamic Bank (ADIB)",
+        "Ajman Bank",
+        "Al Hilal Bank",
+        "Al Maryah Community Bank",
+        "Al Masraf (Arab Bank for Investment and Foreign Trade)",
+        "Arab Bank",
+        "Bank of Sharjah",
+        "Citibank",
+        "Commercial Bank International (CBI)",
+        "Commercial Bank of Dubai (CBD)",
+        "Dubai Islamic Bank (DIB)",
+        "Emirates Islamic Bank",
         "Emirates NBD",
         "First Abu Dhabi Bank (FAB)",
-        "Abu Dhabi Commercial Bank (ADCB)",
+        "Habib Bank AG Zurich",
+        "HSBC",
+        "Invest Bank",
         "Mashreq Bank",
-        "Dubai Islamic Bank",
-        "Abu Dhabi Islamic Bank (ADIB)",
-        "Commercial Bank of Dubai (CBD)",
-        "RakBank",
+        "National Bank of Fujairah (NBF)",
+        "National Bank of Umm Al Qaiwain (NBQ)",
+        "RakBank (National Bank of Ras Al Khaimah)",
+        "Sharjah Islamic Bank (SIB)",
+        "Standard Chartered",
+        "United Arab Bank (UAB)",
         "Wio Bank",
-        "Al Maryah Community Bank",
         "Zand Bank",
         "Other"
     ]
 
     return (
-        <form action={handleSubmit} onChange={() => setHasChanges(true)} className="space-y-6">
+        <form action={handleSubmit} onChange={() => setHasChanges(true)} className="space-y-6 font-outfit">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Bank Name */}
                 <div className="space-y-2">

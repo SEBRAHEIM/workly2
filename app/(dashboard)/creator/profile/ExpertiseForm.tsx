@@ -26,7 +26,7 @@ export default function ExpertiseForm({ savedSpecializations, onSuccess }: Exper
                     if (onSuccess) onSuccess()
                 }
             }}
-            className=""
+            className="font-outfit"
         >
             <p className="text-gray-500 mb-6 text-sm">
                 Select the categories you want to receive requests for.

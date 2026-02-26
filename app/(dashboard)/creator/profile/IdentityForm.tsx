@@ -24,6 +24,9 @@ export default function IdentityForm({ profile, onSuccess }: Props) {
                 setError('')
                 setIsSaving(true)
 
+                setError('')
+                setIsSaving(true)
+
                 // Client-side quick check
                 const bio = formData.get('bio') as string
                 const tagline = formData.get('tagline') as string

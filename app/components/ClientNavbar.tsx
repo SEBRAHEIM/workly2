@@ -286,7 +286,7 @@ export default function ClientNavbar() {
                                     <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Support</h3>
                                     <div className="space-y-1">
                                         <Link
-                                            href="mailto:support@workly.day"
+                                            href="/client/support"
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
                                         >

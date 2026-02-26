@@ -14,7 +14,7 @@ export default function Footer() {
                         <span className="hover:text-slate-600 cursor-pointer transition-colors">Privacy</span>
                         <span className="hover:text-slate-600 cursor-pointer transition-colors">Terms</span>
                         <div className="w-1 h-1 bg-slate-300 rounded-full" />
-                        <span>© 2024 Workly Global</span>
+                        <span>© 2026 Workly</span>
                     </div>
                 </div>
             </div>

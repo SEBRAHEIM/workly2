@@ -7,8 +7,8 @@ import { Plus, AlertCircle } from 'lucide-react'
 import { categories } from '@/app/data/categories'
 
 type State = {
-    error?: string
-    success?: boolean
+    error: string
+    success: boolean
 }
 
 const initialState: State = {
@@ -70,7 +70,7 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                         setClientError('File is too large (max 10MB)')
                         return
                     }
-                    formAction(formData)
+                    ; (formAction as any)(formData)
                 }}
                 className="grid grid-cols-1 gap-4"
             >

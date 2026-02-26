@@ -1,10 +1,9 @@
 'use client'
 
 import { useFormStatus } from 'react-dom'
-import { useFormState } from 'react-dom'
+import { useActionState, useRef, useEffect, useState } from 'react'
 import { uploadPortfolioItem } from './actions'
 import { Plus, AlertCircle } from 'lucide-react'
-import { useRef, useEffect } from 'react'
 import { categories } from '@/app/data/categories'
 
 type State = {
@@ -43,7 +42,8 @@ type Props = {
 }
 
 export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
-    const [state, formAction] = useFormState(uploadPortfolioItem, initialState)
+    const [state, formAction] = useActionState(uploadPortfolioItem, initialState)
+    const [clientError, setClientError] = useState('')
     const formRef = useRef<HTMLFormElement>(null)
 
     useEffect(() => {
@@ -61,7 +61,19 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                 </h3>
             )}
 
-            <form ref={formRef} action={formAction} className="grid grid-cols-1 gap-4">
+            <form
+                ref={formRef}
+                action={(formData) => {
+                    setClientError('')
+                    const file = formData.get('image') as File
+                    if (file && file.size > 10 * 1024 * 1024) {
+                        setClientError('File is too large (max 10MB)')
+                        return
+                    }
+                    formAction(formData)
+                }}
+                className="grid grid-cols-1 gap-4"
+            >
                 {/* User requested to remove Title requirement - we auto-fill it */}
                 <input type="hidden" name="title" value="Work Sample" />
 
@@ -72,6 +84,7 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                         name="categorySlug"
                         required
                         className="w-full bg-white border-none rounded-xl p-4 text-base focus:ring-1 focus:ring-[#0EA5E9]"
+                        onChange={() => setClientError('')}
                     >
                         <option value="">Select Category...</option>
                         {categories.map(c => (
@@ -85,12 +98,13 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                     rows={2}
                     dir="auto"
                     className="w-full bg-white border-none rounded-xl p-4 text-base focus:ring-1 focus:ring-[#0EA5E9] resize-none"
+                    onChange={() => setClientError('')}
                 />
 
-                {state?.error && (
+                {(state?.error || clientError) && (
                     <div className="text-red-500 text-sm flex items-center bg-red-50 p-3 rounded-lg border border-red-100">
                         <AlertCircle className="w-4 h-4 mr-2" />
-                        {state.error}
+                        {clientError || state?.error}
                     </div>
                 )}
 
@@ -99,6 +113,7 @@ export default function PortfolioUploadForm({ forcedCategorySlug }: Props) {
                         type="file"
                         name="image"
                         required
+                        onChange={() => setClientError('')}
                         className="w-full text-base text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1E293B]/5 file:text-[#1E293B] hover:file:bg-[#1E293B]/10"
                     />
                     <SubmitButton />

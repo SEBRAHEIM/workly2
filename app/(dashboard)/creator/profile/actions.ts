@@ -84,70 +84,82 @@ export async function updateCreatorSpecializations(formData: FormData) {
 
 // Upload Portfolio Item
 export async function uploadPortfolioItem(prevState: any, formData: FormData) {
-    const supabase = await createClient()
+    try {
+        const supabase = await createClient()
 
-    const title = formData.get('title') as string
-    const description = formData.get('description') as string
-    const categorySlug = formData.get('categorySlug') as string
-    const file = formData.get('image') as File
+        const title = formData.get('title') as string
+        const description = formData.get('description') as string
+        const categorySlug = formData.get('categorySlug') as string
+        const file = formData.get('image') as File
 
-    if (!file || file.size === 0) {
-        return { error: 'Please select an image to upload.' }
+        if (!file || file.size === 0) {
+            return { error: 'Please select an image to upload.' }
+        }
+
+        // Limit file size to 10MB to prevent server-side timeout/memory issues
+        if (file.size > 10 * 1024 * 1024) {
+            return { error: 'File is too large. Maximum size is 10MB.' }
+        }
+
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+            return { error: 'You must be logged in to upload portfolio items.' }
+        }
+
+        // 1. Upload File to Supabase Storage
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+
+        // Convert File to ArrayBuffer for upload
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = new Uint8Array(arrayBuffer)
+
+        const { error: uploadError } = await supabase
+            .storage
+            .from('portfolio')
+            .upload(fileName, buffer, {
+                contentType: file.type,
+                upsert: false
+            })
+
+        if (uploadError) {
+            console.error('Portfolio Upload Storage Error:', uploadError)
+            return { error: `Storage error: ${uploadError.message}` }
+        }
+
+        // 2. Get Public URL
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from('portfolio')
+            .getPublicUrl(fileName)
+
+        // 3. Insert Record
+        const descCheck = containsContactInfo(description)
+        if (descCheck.hasContactInfo) {
+            return { error: `Description validation failed: ${descCheck.reason}. Contact info is not allowed in portfolio items.` }
+        }
+
+        const { error: dbError } = await supabase
+            .from('portfolio_items')
+            .insert({
+                creator_id: user.id,
+                category_slug: categorySlug,
+                title,
+                description,
+                image_url: publicUrl
+            })
+
+        if (dbError) {
+            console.error('Portfolio Upload Database Error:', dbError)
+            return { error: `Database error: ${dbError.message}` }
+        }
+
+        revalidatePath('/creator/profile')
+        return { success: true, error: '' }
+    } catch (e: any) {
+        console.error('Portfolio Upload Fatal Error:', e)
+        return { error: e.message || 'An unexpected error occurred during upload.' }
     }
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('Unauthorized')
-
-    // 1. Upload File to Supabase Storage
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-
-    // Convert File to ArrayBuffer for upload
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = new Uint8Array(arrayBuffer)
-
-    const { error: uploadError } = await supabase
-        .storage
-        .from('portfolio')
-        .upload(fileName, buffer, {
-            contentType: file.type,
-            upsert: false
-        })
-
-    if (uploadError) {
-        console.error('Upload error:', uploadError)
-        return { error: 'Failed to upload image. Please try again.' }
-    }
-
-    // 2. Get Public URL
-    const { data: { publicUrl } } = supabase
-        .storage
-        .from('portfolio')
-        .getPublicUrl(fileName)
-
-    // 3. Insert Record
-    const descCheck = containsContactInfo(description)
-    if (descCheck.hasContactInfo) {
-        return { error: `Description validation failed: ${descCheck.reason}. Contact info is not allowed in portfolio items.` }
-    }
-
-    const { error } = await supabase
-        .from('portfolio_items')
-        .insert({
-            creator_id: user.id,
-            category_slug: categorySlug,
-            title,
-            description,
-            image_url: publicUrl
-        })
-
-    if (error) {
-        console.error('Database error:', error)
-        return { error: 'Failed to save portfolio item details.' }
-    }
-
-    revalidatePath('/creator/profile')
-    return { success: true }
 }
 
 // Update Creator Pricing

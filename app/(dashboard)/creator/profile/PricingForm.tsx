@@ -224,10 +224,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                     value={packages[activeTab].description}
                                     onChange={(val) => updatePackage(activeTab, 'description', val)}
                                     compact={true}
-                                    placeholder="List features, deliverables, and important details...
-• Feature 1
-• Feature 2
-✅ Guarantee"
+                                    placeholder="List what the client will receive..."
                                 />
                                 <p className="text-[10px] text-slate-400 font-medium mt-3 italic">Be specific about what the client receives in this tier.</p>
                             </div>

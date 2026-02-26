@@ -6,16 +6,9 @@ import { Markdown } from 'tiptap-markdown'
 import Placeholder from '@tiptap/extension-placeholder'
 import {
     List,
-    Check,
-    ArrowRight,
-    AlertCircle,
     Info,
-    ShieldCheck,
     Bold as BoldIcon,
     Italic as ItalicIcon,
-    FileText,
-    Clock,
-    Target,
 } from 'lucide-react'
 import { useEffect } from 'react'
 
@@ -99,30 +92,7 @@ export default function FormattedTextarea({
         editor.chain().focus().insertContent(symbol).run()
     }
 
-    const iconTools = [
-        { icon: Check, action: () => insertIcon('✅ '), label: 'Checkmark' },
-        { icon: ArrowRight, action: () => insertIcon('→ '), label: 'Arrow' },
-        { icon: ShieldCheck, action: () => insertIcon('🛡️ '), label: 'Guarantee' },
-        { icon: FileText, action: () => insertIcon('📄 '), label: 'Deliverable' },
-        { icon: Clock, action: () => insertIcon('🕒 '), label: 'Timeline' },
-        { icon: Target, action: () => insertIcon('🎯 '), label: 'Milestone' },
-        { icon: AlertCircle, action: () => insertIcon('⚠️ '), label: 'Note' },
-    ]
 
-    const presets = [
-        {
-            name: 'Deliverables',
-            content: '\n\n**WHAT YOU WILL GET:**\n• Item 1\n• Item 2\n• Item 3'
-        },
-        {
-            name: 'Requirements',
-            content: '\n\n**WHAT I NEED FROM YOU:**\n• Requirement 1\n• Requirement 2'
-        },
-        {
-            name: 'Workflow',
-            content: '\n\n**MY PROCESS:**\n1. Research → 2. Draft → 3. Final Review'
-        }
-    ]
 
     return (
         <div className={className}>
@@ -146,36 +116,6 @@ export default function FormattedTextarea({
                     </div>
 
                     <div className="w-px h-4 bg-gray-300 mx-1" />
-
-                    <div className="flex items-center gap-0.5">
-                        {iconTools.map((tool, index) => (
-                            <button
-                                key={index}
-                                type="button"
-                                onClick={tool.action}
-                                className="p-1.5 rounded-lg text-gray-400 hover:text-[#0EA5E9] hover:bg-white transition-all hover:shadow-sm"
-                                title={tool.label}
-                            >
-                                <tool.icon className="w-3.5 h-3.5" />
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="w-px h-4 bg-gray-300 mx-1 hidden md:block" />
-
-                    <div className="flex items-center gap-1 ml-auto">
-                        {!compact && <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mr-1 opacity-60">Presets:</span>}
-                        {presets.map((preset, idx) => (
-                            <button
-                                key={idx}
-                                type="button"
-                                onClick={() => editor.chain().focus().insertContent(preset.content).run()}
-                                className="px-2 py-1 bg-white border border-gray-200 rounded-md text-[9px] font-bold text-gray-500 hover:border-[#0EA5E9] hover:text-[#0EA5E9] transition-all"
-                            >
-                                + {preset.name}
-                            </button>
-                        ))}
-                    </div>
                 </div>
 
                 {/* Editor Surface */}

@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield, Download, Settings, LifeBuoy } from 'lucide-react'
+import { Menu, X, Upload, Star, Wallet, Clock, CreditCard, LogOut, User, Layout, Briefcase, Shield, Download, Settings, LifeBuoy, Power, PowerOff, Loader2 } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import { updateBusyStatus } from '../(dashboard)/creator/profile/actions'
+import { toast } from 'sonner'
 
 type Profile = {
     username: string
@@ -20,13 +23,29 @@ import { categories } from '../data/categories'
 
 export default function CreatorNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [profile, setProfile] = useState<Profile | null>(null)
+    const [profile, setProfile] = useState<any | null>(null)
     const [user, setUser] = useState<any>(null)
+    const [isBusy, setIsBusy] = useState(false)
+    const [isToggling, setIsToggling] = useState(false)
     const router = useRouter()
     const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
+
+    const handleToggleBusy = async () => {
+        if (!user) return
+        setIsToggling(true)
+        const newStatus = !isBusy
+        const result = await updateBusyStatus(newStatus)
+        if (result.success) {
+            setIsBusy(newStatus)
+            toast.success(newStatus ? "Availability: Busy" : "Availability: Accepting Orders")
+        } else {
+            toast.error("Failed to update status")
+        }
+        setIsToggling(false)
+    }
 
     useEffect(() => {
         if (isMenuOpen) {
@@ -63,6 +82,7 @@ export default function CreatorNavbar() {
 
                 if (data) {
                     setProfile(data)
+                    setIsBusy(data.is_busy || false)
                 }
             }
         }
@@ -97,7 +117,37 @@ export default function CreatorNavbar() {
                     </Link>
                 </div>
 
-                <div className="flex items-center justify-end min-w-[120px] gap-4">
+                <div className="flex items-center justify-end min-w-[120px] gap-2 md:gap-4">
+                    {user && (
+                        <div className="flex items-center gap-2 mr-2 md:mr-0">
+                            {/* Desktop Label */}
+                            <span className={`hidden md:block text-[9px] font-black uppercase tracking-widest ${isBusy ? 'text-rose-500' : 'text-sky-400'}`}>
+                                {isBusy ? 'Busy' : 'Active'}
+                            </span>
+
+                            <button
+                                onClick={handleToggleBusy}
+                                disabled={isToggling}
+                                className={`relative w-12 h-6 md:w-14 md:h-7 rounded-full transition-all duration-500 p-1 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'
+                                    }`}
+                                title={isBusy ? 'Accepting Orders' : 'Go Busy'}
+                            >
+                                <motion.div
+                                    animate={{ x: isBusy ? 1 : (typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 28) }}
+                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                    className="w-4 h-4 md:w-5 md:h-5 bg-white rounded-full shadow-sm flex items-center justify-center"
+                                >
+                                    {isToggling ? (
+                                        <Loader2 className="w-2.5 h-2.5 animate-spin text-slate-400" />
+                                    ) : isBusy ? (
+                                        <PowerOff className="w-2.5 h-2.5 text-slate-300" />
+                                    ) : (
+                                        <Power className="w-2.5 h-2.5 text-[#0EA5E9]" />
+                                    )}
+                                </motion.div>
+                            </button>
+                        </div>
+                    )}
                     {user && <NotificationBell userId={user.id} />}
                 </div>
             </nav>

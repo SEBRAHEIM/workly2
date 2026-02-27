@@ -10,9 +10,8 @@ import ExpertiseForm from './ExpertiseForm'
 import PricingForm from './PricingForm'
 import PortfolioCategoryAccordion from './PortfolioCategoryAccordion'
 import { categories as allCategories } from '@/app/data/categories'
-import { Briefcase, Power, PowerOff, Loader2 } from 'lucide-react'
+import { Briefcase } from 'lucide-react'
 import PayoutSettings from '../PayoutSettings'
-import { updateBusyStatus } from './actions'
 
 interface Props {
     profile: any
@@ -21,27 +20,6 @@ interface Props {
 }
 
 export default function CreatorProfileClient({ profile, portfolioItems, services }: Props) {
-    const [isBusy, setIsBusy] = useState(profile?.is_busy || false)
-    const [isToggling, setIsToggling] = useState(false)
-
-    const handleToggleBusy = async () => {
-        setIsToggling(true)
-        const newStatus = !isBusy
-        const result = await updateBusyStatus(newStatus)
-        if (result.success) {
-            setIsBusy(newStatus)
-            toast.success(newStatus ? "Availability: Busy" : "Availability: Accepting Orders")
-        } else {
-            toast.error("Failed to update status")
-        }
-        setIsToggling(false)
-    }
-    // Determine initial step based on completion
-    // 1. Identity: Display Name && Bio
-    // 2. Expertise: Specializations length > 0
-    // 3. Pricing: Always available (defaults exist)
-    // 4. Portfolio
-
     const hasIdentity = !!(profile?.display_name && profile?.bio)
     const hasExpertise = !!(profile?.specializations && profile.specializations.length > 0)
     // We consider pricing "done" if there is a mode set, which is default. 
@@ -75,10 +53,6 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
         setOpenSection(null)
     }
 
-    // Pricing typically doesn't have a "Save & Continue" that we hook into easily unless we update the form to accept a callback.
-    // For now, the user manually closes or we can update `PricingForm` to take `onSuccess` too.
-    // Let's just let them click.
-
     // Summary Helpers
     const identitySummary = hasIdentity
         ? `${profile.display_name} • ${profile.tagline || 'No tagline'}`
@@ -98,53 +72,6 @@ export default function CreatorProfileClient({ profile, portfolioItems, services
 
     return (
         <div className="space-y-6">
-            {/* Availability Toggle */}
-            <div className={`p-6 md:p-8 rounded-[2rem] border transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-6 ${isBusy
-                ? 'bg-slate-50 border-slate-200'
-                : 'bg-gradient-to-r from-sky-50 to-blue-50 border-sky-100 shadow-sm shadow-sky-100/50'
-                }`}>
-                <div className="flex items-center gap-5">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all duration-500 ${isBusy
-                        ? 'bg-white border-slate-200 text-slate-400'
-                        : 'bg-white border-sky-200 text-[#0EA5E9] shadow-md shadow-sky-100'
-                        }`}>
-                        {isBusy ? <PowerOff className="w-7 h-7" /> : <Power className="w-7 h-7" />}
-                    </div>
-                    <div>
-                        <h3 className={`text-xl font-black uppercase tracking-tight ${isBusy ? 'text-slate-500' : 'text-slate-900'}`}>
-                            {isBusy ? 'Currently Busy' : 'Accepting Orders'}
-                        </h3>
-                        <p className={`text-sm font-medium ${isBusy ? 'text-slate-400' : 'text-sky-600/70'}`}>
-                            {isBusy
-                                ? 'Your packages are hidden from clients.'
-                                : 'You are visible and ready for new projects.'}
-                        </p>
-                    </div>
-                </div>
-
-                <button
-                    onClick={handleToggleBusy}
-                    disabled={isToggling}
-                    className={`relative w-20 h-10 rounded-full transition-all duration-500 p-1.5 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'
-                        }`}
-                    title={isBusy ? 'Turn On' : 'Turn Off'}
-                >
-                    <motion.div
-                        animate={{ x: isBusy ? 2 : 40 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="w-7 h-7 bg-white rounded-full shadow-lg flex items-center justify-center"
-                    >
-                        {isToggling ? (
-                            <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-                        ) : isBusy ? (
-                            <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-                        ) : (
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#0EA5E9]" />
-                        )}
-                    </motion.div>
-                </button>
-            </div>
-
             {/* 1. Identity Section */}
             <ProfileSection
                 title="1. Identity"

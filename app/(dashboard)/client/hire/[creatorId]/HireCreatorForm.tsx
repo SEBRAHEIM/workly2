@@ -231,6 +231,16 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                                 )}
                             </div>
                         )}
+                        <div className="grid grid-cols-2 gap-2 mt-4">
+                            <div className="bg-sky-50/50 p-2.5 rounded-xl border border-sky-100/50 flex items-center gap-2">
+                                <Zap className="w-3 h-3 text-sky-400 shrink-0" />
+                                <span className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Delivery: Initial Submission</span>
+                            </div>
+                            <div className="bg-amber-50/50 p-2.5 rounded-xl border border-amber-100/50 flex items-center gap-2">
+                                <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                                <span className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Revision: Starts after request</span>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

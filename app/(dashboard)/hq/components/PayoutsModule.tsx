@@ -27,7 +27,7 @@ export default function PayoutsModule({ withdrawals }: { withdrawals: any[] }) {
         setIsProcessing(id)
         try {
             await completeWithdrawal(id)
-            toast.success('Payout marked as complete. Creator will see "Money on the way".')
+            toast.success('Payout marked as complete. Creator will see "Money Sent".')
         } catch (error: any) {
             toast.error(error.message || 'Failed to complete payout')
         } finally {

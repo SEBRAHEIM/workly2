@@ -8,6 +8,7 @@ import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
 import { notifyClientOfWorkSubmitted } from '@/utils/sms'
 import { getStripe } from '@/utils/stripe'
+import { sendEmail } from '@/utils/send-email'
 import { headers } from 'next/headers'
 
 // Stripe Connect actions
@@ -118,7 +119,7 @@ export async function updatePayPalDetails(prevState: any, formData: FormData) {
     return { success: true }
 }
 
-export async function requestPayPalPayout() {
+export async function requestPayPalPayout(amount: number) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
@@ -134,15 +135,15 @@ export async function requestPayPalPayout() {
     }
 
     const balance = profile.wallet_balance || 0
-    if (balance <= 0) {
-        return { error: 'No funds available to withdraw' }
+    if (amount <= 0 || amount > balance) {
+        return { error: 'Invalid withdrawal amount or Insufficient funds' }
     }
 
     try {
         // 1. Log the paypal withdrawal request as 'pending'
         const { error: withdrawalError } = await supabase.from('withdrawals').insert({
             creator_id: user.id,
-            amount: balance,
+            amount: amount,
             method: 'paypal',
             status: 'pending',
             details: {
@@ -153,13 +154,29 @@ export async function requestPayPalPayout() {
 
         if (withdrawalError) throw withdrawalError
 
-        // 2. Deduct from local wallet
+        // 2. Deduct only the requested amount from local wallet
         const { error: balanceError } = await supabase
             .from('profiles')
-            .update({ wallet_balance: 0 })
+            .update({ wallet_balance: balance - amount })
             .eq('id', user.id)
 
         if (balanceError) throw balanceError
+
+        // 3. Notify Admin via Email
+        await sendEmail({
+            to: 'workly.day@outlook.com',
+            subject: `🚨 New Withdrawal Request: ${profile.paypal_email}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px;">
+                    <h2 style="color: #0EA5E9;">New Payout Request (PayPal)</h2>
+                    <p><strong>Creator ID:</strong> ${user.id}</p>
+                    <p><strong>Amount:</strong> AED ${amount.toFixed(2)}</p>
+                    <p><strong>Method:</strong> PayPal</p>
+                    <p><strong>PayPal Email:</strong> ${profile.paypal_email}</p>
+                    <p>Please log in to the <a href="https://workly.day/hq">HQ Dashboard</a> to process this payout.</p>
+                </div>
+            `
+        })
 
         revalidatePath('/creator/wallet')
         return { success: true }
@@ -169,7 +186,7 @@ export async function requestPayPalPayout() {
     }
 }
 
-export async function requestManualPayout() {
+export async function requestManualPayout(amount: number) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
@@ -185,15 +202,15 @@ export async function requestManualPayout() {
     }
 
     const balance = profile.wallet_balance || 0
-    if (balance <= 0) {
-        return { error: 'No funds available to withdraw' }
+    if (amount <= 0 || amount > balance) {
+        return { error: 'Invalid withdrawal amount or Insufficient funds' }
     }
 
     try {
         // 1. Log the manual withdrawal request as 'pending'
         const { error: withdrawalError } = await supabase.from('withdrawals').insert({
             creator_id: user.id,
-            amount: balance,
+            amount: amount,
             method: 'bank',
             status: 'pending',
             details: {
@@ -206,13 +223,31 @@ export async function requestManualPayout() {
 
         if (withdrawalError) throw withdrawalError
 
-        // 2. Deduct from local wallet
+        // 2. Deduct only requested amount from local wallet
         const { error: balanceError } = await supabase
             .from('profiles')
-            .update({ wallet_balance: 0 })
+            .update({ wallet_balance: balance - amount })
             .eq('id', user.id)
 
         if (balanceError) throw balanceError
+
+        // 3. Notify Admin via Email
+        await sendEmail({
+            to: 'workly.day@outlook.com',
+            subject: `🚨 New Withdrawal Request: ${profile.bank_account_name}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px;">
+                    <h2 style="color: #0EA5E9;">New Payout Request (Bank)</h2>
+                    <p><strong>Creator ID:</strong> ${user.id}</p>
+                    <p><strong>Amount:</strong> AED ${amount.toFixed(2)}</p>
+                    <p><strong>Method:</strong> Manual Bank Transfer</p>
+                    <p><strong>Account Name:</strong> ${profile.bank_account_name}</p>
+                    <p><strong>IBAN:</strong> ${profile.bank_iban}</p>
+                    <p><strong>Bank:</strong> ${profile.bank_name}</p>
+                    <p>Please log in to the <a href="https://workly.day/hq">HQ Dashboard</a> to process this payout.</p>
+                </div>
+            `
+        })
 
         revalidatePath('/creator/wallet')
         return { success: true }

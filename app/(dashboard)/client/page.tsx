@@ -10,8 +10,7 @@ export const dynamic = 'force-dynamic'
 export default async function ClientDashboard() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) redirect('/login')
+    if (!user) return null // Handled by middleware redirect
 
     // Parallel fetching for dashboard stats
     const [profileResponse, projectsResponse] = await Promise.all([

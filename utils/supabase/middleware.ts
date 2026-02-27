@@ -34,13 +34,58 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith('/login') &&
-        !request.nextUrl.pathname.startsWith('/auth')
-    ) {
-        // no user, potentially redirect to login
-        // allow public access to auth pages
+    // Protected routes pattern
+    const isCreatorRoute = request.nextUrl.pathname.startsWith('/creator')
+    const isClientRoute = request.nextUrl.pathname.startsWith('/client')
+    const isHqRoute = request.nextUrl.pathname.startsWith('/hq')
+    const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
+    const isProtectedRoute = isCreatorRoute || isClientRoute || isHqRoute || isOnboardingRoute
+
+    if (!user && isProtectedRoute) {
+        // no user, redirect to login
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        url.searchParams.set('redirectedFrom', request.nextUrl.pathname)
+        return NextResponse.redirect(url)
+    }
+
+    // Role-based redirection for authenticated users
+    if (user && isProtectedRoute) {
+        // Fetch profile to check role
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+
+        const role = profile?.role
+
+        // 1. If no profile exists, send to onboarding (unless already there)
+        if (!profile && !isOnboardingRoute) {
+            return NextResponse.redirect(new URL('/onboarding', request.url))
+        }
+
+        // 2. HQ is strictly for Admins
+        if (isHqRoute && role !== 'admin') {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+
+        // 3. Admin visiting Creator or Client dashboard -> Redirect to /hq
+        if ((isCreatorRoute || isClientRoute) && role === 'admin') {
+            return NextResponse.redirect(new URL('/hq', request.url))
+        }
+
+        // 4. Creator dashboard is for Creators ONLY
+        if (isCreatorRoute && role !== 'creator') {
+            if (role === 'client') return NextResponse.redirect(new URL('/client', request.url))
+            return NextResponse.redirect(new URL('/onboarding', request.url))
+        }
+
+        // 5. Client dashboard is for Clients ONLY
+        if (isClientRoute && role !== 'client') {
+            if (role === 'creator') return NextResponse.redirect(new URL('/creator', request.url))
+            return NextResponse.redirect(new URL('/onboarding', request.url))
+        }
     }
 
     return supabaseResponse

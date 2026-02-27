@@ -134,8 +134,8 @@ export default async function CreatorWallet() {
                                         <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${w.status === 'pending' ? 'bg-amber-50/50 border-amber-100 text-amber-600' :
                                             w.status === 'completed' ? 'bg-sky-50/50 border-sky-100 text-sky-600' : 'bg-red-50/50 border-red-100 text-red-600'
                                             }`}>
-                                            {w.status === 'pending' ? 'pending (3-7 days)' :
-                                                w.status === 'completed' ? 'money on the way' :
+                                            {w.status === 'pending' ? 'Pending Processing' :
+                                                w.status === 'completed' ? 'Money Sent' :
                                                     w.status}
                                         </span>
                                     </div>

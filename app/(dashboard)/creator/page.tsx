@@ -9,8 +9,7 @@ export default async function CreatorDashboard() {
     const supabase = await createClient()
     // Parallel fetch for user auth and base profile data
     const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) return <div>Please log in</div>
+    if (!user) return null // Handled by middleware redirect
 
     // 2. Parallel fetch for all dashboard requirements
     const [profileRes, portfolioRes, projectsRes] = await Promise.all([

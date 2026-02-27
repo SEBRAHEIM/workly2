@@ -148,6 +148,19 @@ export async function releaseFunds(projectId: string, _amountArgsIgnored: number
                 return { error: 'Financial transfer failed. Please contact support.' }
             }
 
+            // 1.1 Update or Create Transaction entry for ledger
+            // This marks the funds as having cleared into the creator's wallet
+            await adminSupabase
+                .from('transactions')
+                .update({
+                    status: 'paid',
+                    workly_fee_amount: commissionAmount,
+                    creator_net_amount: creatorEarnings,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('project_id', projectId)
+                .eq('type', 'payment')
+
             transferSuccess = true
         }
     }

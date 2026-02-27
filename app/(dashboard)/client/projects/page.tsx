@@ -20,6 +20,7 @@ export default async function ClientProjectsPage() {
             )
         `)
         .eq('client_id', user.id)
+        .neq('funds_status', 'unpaid')
         .order('created_at', { ascending: false })
 
     if (!projects) return <div>Failed to load projects</div>

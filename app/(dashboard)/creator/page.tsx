@@ -18,6 +18,7 @@ export default async function CreatorDashboard() {
         supabase.from('projects')
             .select('*')
             .eq('creator_id', user.id)
+            .neq('funds_status', 'unpaid')
             .order('created_at', { ascending: false })
             .limit(50)
     ])

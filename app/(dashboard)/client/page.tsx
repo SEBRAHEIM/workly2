@@ -15,7 +15,7 @@ export default async function ClientDashboard() {
     // Parallel fetching for dashboard stats
     const [profileResponse, projectsResponse] = await Promise.all([
         supabase.from('profiles').select('full_name, username, wallet_balance').eq('id', user.id).single(),
-        supabase.from('projects').select('id', { count: 'exact', head: true }).eq('client_id', user.id).in('status', ['pending', 'countered', 'negotiating', 'requested', 'accepted', 'in_progress'])
+        supabase.from('projects').select('id', { count: 'exact', head: true }).eq('client_id', user.id).neq('funds_status', 'unpaid').in('status', ['pending', 'countered', 'negotiating', 'requested', 'accepted', 'in_progress'])
     ])
 
     const profile = profileResponse.data

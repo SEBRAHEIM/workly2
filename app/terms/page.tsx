@@ -21,7 +21,8 @@ export default function TermsPage() {
             bullets: [
                 "Fees: Workly charges a standard commission of 20% on the total contract value.",
                 "Release: Funds are released to the creator upon client approval of the final deliverable.",
-                "Auto-Release: If a client takes no action for 3 days after submission, funds are auto-released."
+                "Auto-Release: If a client takes no action for 3 days after submission, funds are auto-released.",
+                "Late Delivery Policy: If a creator fails to provide the first submission by the agreed deadline, the client is entitled to a 100% refund of the escrowed funds upon request."
             ]
         },
         {

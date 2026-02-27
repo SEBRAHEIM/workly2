@@ -178,6 +178,23 @@ export async function requestPayPalPayout(amount: number) {
             `
         })
 
+        // 4. Notify Creator via Email
+        await sendEmail({
+            to: user.email!,
+            subject: `📬 Payout Request Received: AED ${amount.toFixed(2)}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #0EA5E9;">Payout Request Received</h2>
+                    <p>Hello,</p>
+                    <p>We've received your request to withdraw <strong>AED ${amount.toFixed(2)}</strong> via <strong>PayPal</strong> (${profile.paypal_email}).</p>
+                    <p>Our team is now processing your request. You can expect the funds to arrive in your account within <strong>3-7 business days</strong>.</p>
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+                    <p style="font-size: 12px; color: #666;">If you didn't request this withdrawal, please contact our support team immediately.</p>
+                    <p style="font-size: 12px; color: #666;">Best regards,<br />The Workly Team</p>
+                </div>
+            `
+        })
+
         revalidatePath('/creator/wallet')
         return { success: true }
     } catch (err: any) {
@@ -245,6 +262,23 @@ export async function requestManualPayout(amount: number) {
                     <p><strong>IBAN:</strong> ${profile.bank_iban}</p>
                     <p><strong>Bank:</strong> ${profile.bank_name}</p>
                     <p>Please log in to the <a href="https://workly.day/hq">HQ Dashboard</a> to process this payout.</p>
+                </div>
+            `
+        })
+
+        // 4. Notify Creator via Email
+        await sendEmail({
+            to: user.email!,
+            subject: `📬 Payout Request Received: AED ${amount.toFixed(2)}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #0EA5E9;">Payout Request Received</h2>
+                    <p>Hello,</p>
+                    <p>We've received your request to withdraw <strong>AED ${amount.toFixed(2)}</strong> via <strong>Bank Transfer</strong> to <strong>${profile.bank_name}</strong> (IBAN: ${profile.bank_iban}).</p>
+                    <p>Our team is now processing your request. You can expect the funds to arrive in your account within <strong>3-7 business days</strong>.</p>
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+                    <p style="font-size: 12px; color: #666;">If you didn't request this withdrawal, please contact our support team immediately.</p>
+                    <p style="font-size: 12px; color: #666;">Best regards,<br />The Workly Team</p>
                 </div>
             `
         })

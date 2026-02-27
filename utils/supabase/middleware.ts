@@ -51,18 +51,24 @@ export async function updateSession(request: NextRequest) {
 
     // Role-based redirection for authenticated users
     if (user && isProtectedRoute) {
-        // Fetch profile to check role
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
+        // Fast path: Check user metadata first (if available)
+        const metadataRole = user.app_metadata?.role || user.user_metadata?.role
 
-        const role = profile?.role
+        // If we have the role in metadata, use it. Otherwise, fallback to DB but skip if redundant.
+        let role = metadataRole
 
-        // 1. If no profile exists, send to onboarding (unless already there)
-        if (!profile && !isOnboardingRoute) {
-            return NextResponse.redirect(new URL('/onboarding', request.url))
+        if (!role) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .single()
+            role = profile?.role
+
+            // If no profile exists, send to onboarding
+            if (!profile && !isOnboardingRoute) {
+                return NextResponse.redirect(new URL('/onboarding', request.url))
+            }
         }
 
         // 2. HQ is strictly for Admins
@@ -78,13 +84,13 @@ export async function updateSession(request: NextRequest) {
         // 4. Creator dashboard is for Creators ONLY
         if (isCreatorRoute && role !== 'creator') {
             if (role === 'client') return NextResponse.redirect(new URL('/client', request.url))
-            return NextResponse.redirect(new URL('/onboarding', request.url))
+            if (!isOnboardingRoute) return NextResponse.redirect(new URL('/onboarding', request.url))
         }
 
         // 5. Client dashboard is for Clients ONLY
         if (isClientRoute && role !== 'client') {
             if (role === 'creator') return NextResponse.redirect(new URL('/creator', request.url))
-            return NextResponse.redirect(new URL('/onboarding', request.url))
+            if (!isOnboardingRoute) return NextResponse.redirect(new URL('/onboarding', request.url))
         }
     }
 

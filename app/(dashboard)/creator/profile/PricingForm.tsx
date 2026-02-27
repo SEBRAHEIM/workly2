@@ -223,10 +223,16 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
-                                    Specify the total number of days required to complete and deliver this package to the client.
-                                </p>
+                                <div className="space-y-2">
+                                    <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-sky-50/30 p-3 rounded-lg border border-sky-100/50">
+                                        <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
+                                        <strong>Initial Delivery:</strong> Days required for your first submission.
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-amber-50/30 p-3 rounded-lg border border-amber-100/50">
+                                        <Zap className="w-3 h-3 text-amber-400 inline mr-1 mb-0.5" />
+                                        <strong>Revision Time:</strong> A fresh deadline that starts only after the client requests a revision. Every cycle follows your chosen days.
+                                    </p>
+                                </div>
                             </div>
                             <div>
                                 <FormattedTextarea

@@ -1,7 +1,7 @@
 'use client'
 
 import { createProject } from '../../actions'
-import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Zap, ArrowRight, PowerOff } from 'lucide-react'
+import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Sparkles, ArrowRight, PowerOff, Info, CheckCircle2 } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 import { useState, useActionState, useEffect } from 'react'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
@@ -188,7 +188,7 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
 
                                             <div className="mt-auto space-y-2 border-t border-slate-50 pt-4">
                                                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    <Zap className="w-3 h-3 text-sky-400" />
+                                                    <CheckCircle2 className="w-3 h-3 text-sky-400" />
                                                     {pkg.revisions} Revisions
                                                 </div>
                                                 <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -233,11 +233,11 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                         )}
                         <div className="grid grid-cols-2 gap-2 mt-4">
                             <div className="bg-sky-50/50 p-2.5 rounded-xl border border-sky-100/50 flex items-center gap-2">
-                                <Zap className="w-3 h-3 text-sky-400 shrink-0" />
+                                <Info className="w-3 h-3 text-sky-400 shrink-0" />
                                 <span className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Delivery: Initial Submission</span>
                             </div>
                             <div className="bg-amber-50/50 p-2.5 rounded-xl border border-amber-100/50 flex items-center gap-2">
-                                <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                                <Info className="w-3 h-3 text-amber-400 shrink-0" />
                                 <span className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Revision: Starts after request</span>
                             </div>
                         </div>
@@ -312,7 +312,7 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
             {/* Validation warning if packages mode but nothing selected */}
             {selectedService?.pricing_mode === 'packages' && !selectedPackage && (
                 <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-pulse">
-                    <Zap className="w-5 h-5 text-amber-500 shrink-0" />
+                    <Info className="w-5 h-5 text-amber-500 shrink-0" />
                     <span className="text-xs font-black uppercase tracking-tight">Please select a package tier above to continue.</span>
                 </div>
             )}

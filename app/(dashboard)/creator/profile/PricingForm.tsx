@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Briefcase, MessageSquare, Zap, AlertCircle } from 'lucide-react'
+import { Check, Briefcase, MessageSquare, Sparkles, AlertCircle, Info } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 import { toast } from 'sonner'
 import { updateCreatorPricing } from './actions'
@@ -225,11 +225,11 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                 </div>
                                 <div className="space-y-2">
                                     <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-sky-50/30 p-3 rounded-lg border border-sky-100/50">
-                                        <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
+                                        <Info className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />
                                         <strong>Initial Delivery:</strong> Days required for your first submission.
                                     </p>
                                     <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-amber-50/30 p-3 rounded-lg border border-amber-100/50">
-                                        <Zap className="w-3 h-3 text-amber-400 inline mr-1 mb-0.5" />
+                                        <Info className="w-3 h-3 text-amber-400 inline mr-1 mb-0.5" />
                                         <strong>Revision Time:</strong> A fresh deadline that starts only after the client requests a revision. Every cycle follows your chosen days.
                                     </p>
                                 </div>
@@ -254,7 +254,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                         disabled={loading}
                         className="w-full md:w-auto bg-[#0EA5E9] text-white px-10 py-5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-sky-100 active:scale-95 touch-manipulation"
                     >
-                        {loading ? <Zap className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                        {loading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> : <Check className="w-4 h-4" />}
                         Save All 3 Tiers for {getCategoryTitle(selectedCategory)}
                     </button>
                 </div>

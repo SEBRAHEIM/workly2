@@ -191,9 +191,9 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                                                     <Zap className="w-3 h-3 text-sky-400" />
                                                     {pkg.revisions} Revisions
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    <Clock className="w-3 h-3 text-sky-400" />
-                                                    {pkg.revisionTurnaround || 1} Days Revision Time
+                                                <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                    <span>Revision Time (Days)</span>
+                                                    <span className="text-[#0EA5E9]">{pkg.revisionTurnaround || 1}</span>
                                                 </div>
                                                 <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest ${isTooSlow ? 'text-amber-600' : 'text-slate-400'}`}>
                                                     <Clock className={`w-3 h-3 ${isTooSlow ? 'text-amber-500' : 'text-sky-400'}`} />

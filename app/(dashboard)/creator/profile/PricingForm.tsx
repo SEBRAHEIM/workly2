@@ -203,7 +203,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Turnaround (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Time (Days)</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].revisionTurnaround || 1}

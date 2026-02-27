@@ -242,21 +242,12 @@ export default function RequestCard({ req }: RequestCardProps) {
                                                 toast.success('Work started! Let\'s go.')
                                             }
                                         }}
-                                        className="w-full bg-[#0EA5E9] text-white font-bold py-3 rounded-xl hover:bg-[#2D3828] transition-colors flex items-center justify-center gap-2"
+                                        className="w-full bg-[#0EA5E9] text-white font-black py-4 rounded-2xl hover:bg-[#2088c2] transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2 active:scale-[0.98]"
                                     >
-                                        <Briefcase className="w-4 h-4" />
+                                        <Briefcase className="w-5 h-5" />
                                         Confirm & Start Project
                                     </button>
                                 )}
-
-                                <button
-                                    type="button"
-                                    onClick={handleDecline}
-                                    disabled={isDeclining}
-                                    className="w-full text-red-500 font-bold py-3 text-sm hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center gap-2"
-                                >
-                                    {isDeclining ? 'Declining...' : <><XCircle className="w-4 h-4" /> Decline Order</>}
-                                </button>
                             </div>
                         </>
                     ) : ['negotiating', 'pending', 'countered'].includes(req.status) ? (

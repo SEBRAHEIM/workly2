@@ -118,36 +118,6 @@ export default function CreatorNavbar() {
                 </div>
 
                 <div className="flex items-center justify-end min-w-[120px] gap-2 md:gap-4">
-                    {user && (
-                        <div className="flex items-center gap-2 mr-2 md:mr-0">
-                            {/* Desktop Label */}
-                            <span className={`hidden md:block text-[9px] font-black uppercase tracking-widest ${isBusy ? 'text-rose-500' : 'text-sky-400'}`}>
-                                {isBusy ? 'Busy' : 'Active'}
-                            </span>
-
-                            <button
-                                onClick={handleToggleBusy}
-                                disabled={isToggling}
-                                className={`relative w-12 h-6 md:w-14 md:h-7 rounded-full transition-all duration-500 p-1 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'
-                                    }`}
-                                title={isBusy ? 'Accepting Orders' : 'Go Busy'}
-                            >
-                                <motion.div
-                                    animate={{ x: isBusy ? 1 : (typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 28) }}
-                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                    className="w-4 h-4 md:w-5 md:h-5 bg-white rounded-full shadow-sm flex items-center justify-center"
-                                >
-                                    {isToggling ? (
-                                        <Loader2 className="w-2.5 h-2.5 animate-spin text-slate-400" />
-                                    ) : isBusy ? (
-                                        <PowerOff className="w-2.5 h-2.5 text-slate-300" />
-                                    ) : (
-                                        <Power className="w-2.5 h-2.5 text-[#0EA5E9]" />
-                                    )}
-                                </motion.div>
-                            </button>
-                        </div>
-                    )}
                     {user && <NotificationBell userId={user.id} />}
                 </div>
             </nav>
@@ -168,20 +138,57 @@ export default function CreatorNavbar() {
                             <X className="w-6 h-6 text-slate-400" />
                         </button>
 
-                        {user && (
-                            <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
-                                <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
-                                    {profile?.full_name || profile?.username || 'Creative'}
-                                </h2>
-                                <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
-                                    @{profile?.username || 'user'}
-                                </p>
-                                <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100 mb-6">
-                                    <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />
-                                    <span className="text-xs font-black text-slate-900">{profile?.rating_avg || '0.0'}</span>
+                        <div className="flex flex-col items-start pt-16 pb-8 border-b border-sky-50 px-8">
+                            {/* Availability Section - Sidebar Top */}
+                            <div className={`w-full p-4 rounded-2xl border mb-6 transition-all duration-500 ${isBusy
+                                ? 'bg-slate-50 border-slate-200'
+                                : 'bg-gradient-to-br from-sky-50 to-blue-50 border-sky-100 shadow-sm shadow-sky-100/30'
+                                }`}>
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full animate-pulse ${isBusy ? 'bg-slate-300' : 'bg-[#0EA5E9]'}`} />
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${isBusy ? 'text-slate-400' : 'text-[#0EA5E9]'}`}>
+                                            {isBusy ? 'Busy Mode' : 'Accepting Orders'}
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={handleToggleBusy}
+                                        disabled={isToggling}
+                                        className={`relative w-10 h-5 rounded-full transition-all duration-500 p-1 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'}`}
+                                    >
+                                        <motion.div
+                                            animate={{ x: isBusy ? 0 : 20 }}
+                                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                            className="w-3 h-3 bg-white rounded-full shadow-sm flex items-center justify-center"
+                                        >
+                                            {isToggling ? (
+                                                <Loader2 className="w-2 h-2 animate-spin text-slate-400" />
+                                            ) : isBusy ? (
+                                                <PowerOff className="w-2 h-2 text-slate-300" />
+                                            ) : (
+                                                <Power className="w-2 h-2 text-[#0EA5E9]" />
+                                            )}
+                                        </motion.div>
+                                    </button>
                                 </div>
+                                <p className={`text-[10px] font-medium leading-tight ${isBusy ? 'text-slate-400' : 'text-sky-600/70'}`}>
+                                    {isBusy
+                                        ? 'Your packages are currently hidden from prospective clients.'
+                                        : 'You are visible and appearing in search results for clients.'}
+                                </p>
                             </div>
-                        )}
+
+                            <h2 className="font-sans text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 leading-none">
+                                {profile?.full_name || profile?.username || 'Creative'}
+                            </h2>
+                            <p className="text-[11px] font-black text-[#0EA5E9] uppercase tracking-[0.2em] mb-4">
+                                @{profile?.username || 'user'}
+                            </p>
+                            <div className="flex items-center px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100">
+                                <Star className="w-3 h-3 text-sky-500 fill-sky-500 mr-2" />
+                                <span className="text-xs font-black text-slate-900">{profile?.rating_avg || '0.0'}</span>
+                            </div>
+                        </div>
 
                         {!user && (
                             <div className="pt-16 pb-8 px-8">

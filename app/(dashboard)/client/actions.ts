@@ -97,7 +97,7 @@ export async function createProject(prevState: any, formData: FormData) {
             if (pkg) {
                 initialPrice = pkg.price || 0
                 totalRevisions = pkg.revisions || 0
-                revisionTurnaround = pkg.turnaround || 2
+                revisionTurnaround = pkg.revisionTurnaround || 2
             }
         }
     }

@@ -18,9 +18,9 @@ interface PricingFormProps {
 type PricingMode = 'fixed' | 'negotiable' | 'packages'
 
 const DEFAULT_PACKAGES = {
-    basic: { title: 'Basic', price: 50, description: '', revisions: 1, turnaround: 2 },
-    standard: { title: 'Standard', price: 100, description: '', revisions: 2, turnaround: 2 },
-    premium: { title: 'Premium', price: 200, description: '', revisions: 3, turnaround: 2 }
+    basic: { title: 'Basic', price: 50, description: '', revisions: 1, turnaround: 2, revisionTurnaround: 1 },
+    standard: { title: 'Standard', price: 100, description: '', revisions: 2, turnaround: 2, revisionTurnaround: 1 },
+    premium: { title: 'Premium', price: 200, description: '', revisions: 3, turnaround: 2, revisionTurnaround: 1 }
 }
 
 export default function PricingForm({ profile, services, specializations }: PricingFormProps) {
@@ -203,15 +203,25 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Turnaround (Days)</label>
                                         <input
                                             type="number"
-                                            value={packages[activeTab].turnaround || 2}
-                                            onChange={(e) => updatePackage(activeTab, 'turnaround', Number(e.target.value))}
-                                            className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
-                                            placeholder="2"
+                                            value={packages[activeTab].revisionTurnaround || 1}
+                                            onChange={(e) => updatePackage(activeTab, 'revisionTurnaround', Number(e.target.value))}
+                                            className="w-full p-3 rounded-xl border border-[#0EA5E9]/20 bg-sky-50/10 text-sm font-bold text-slate-900 focus:outline-none focus:border-[#0EA5E9] transition-all"
+                                            placeholder="1"
                                         />
                                     </div>
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
+                                    <input
+                                        type="number"
+                                        value={packages[activeTab].turnaround || 2}
+                                        onChange={(e) => updatePackage(activeTab, 'turnaround', Number(e.target.value))}
+                                        className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
+                                        placeholder="2"
+                                    />
                                 </div>
                                 <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
                                     <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />

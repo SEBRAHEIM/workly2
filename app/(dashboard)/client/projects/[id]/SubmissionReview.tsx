@@ -14,6 +14,7 @@ interface SubmissionReviewProps {
     creatorId: string
     creatorName?: string
     currentPrice: number
+    revisionTurnaround?: number
     submissionUrl: string | null
     submissionNotes: string | null
     revisionsTotal: number
@@ -27,6 +28,7 @@ export default function SubmissionReview({
     creatorId,
     creatorName = 'the Creator',
     currentPrice,
+    revisionTurnaround = 1,
     submissionUrl,
     submissionNotes,
     revisionsTotal,
@@ -254,7 +256,7 @@ export default function SubmissionReview({
                             <div className="flex items-center justify-center gap-2 opacity-40">
                                 <div className="h-[1px] w-8 bg-slate-900"></div>
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em]">
-                                    {revisionsUsed} / {revisionsTotal} Credits Used
+                                    {revisionsUsed} / {revisionsTotal} Credits • {revisionTurnaround} Day{revisionTurnaround > 1 ? 's' : ''} Turnaround
                                 </span>
                                 <div className="h-[1px] w-8 bg-slate-900"></div>
                             </div>

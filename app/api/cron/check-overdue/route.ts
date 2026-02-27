@@ -13,37 +13,45 @@ export async function GET(request: Request) {
 
     const supabase = createAdminClient()
 
-    // Find in-progress projects that are past their due date and haven't notified admin yet
+    // Find projects that are overdue (either main deadline or revision deadline)
     const { data: projects, error } = await supabase
         .from('projects')
         .select(`
             id,
             title,
+            status,
             due_date,
+            revision_due_date,
             client:client_id(email, full_name),
             creator:creator_id(email, full_name)
         `)
-        .eq('status', 'in_progress')
-        .lt('due_date', new Date().toISOString())
+        .or(`status.eq.in_progress,status.eq.revision_requested`)
         .eq('admin_notified_overdue', false)
 
     if (error) {
-        console.error('Error fetching overdue projects:', error)
+        console.error('Error fetching projects for overdue check:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    if (!projects || projects.length === 0) {
+    // Filter manually for date logic as complex OR/LT logic in one query is tricky in Supabase without RPC
+    const now = new Date().toISOString()
+    const overdueProjects = (projects || []).filter(p => {
+        if (p.status === 'in_progress' && p.due_date && p.due_date < now) return true
+        if (p.status === 'revision_requested' && p.revision_due_date && p.revision_due_date < now) return true
+        return false
+    })
+
+    if (overdueProjects.length === 0) {
         return NextResponse.json({ message: 'No overdue projects found' })
     }
 
     const results = []
 
-    for (const project of projects) {
+    for (const project of overdueProjects) {
+        const p = project as any
         const adminEmail = process.env.ADMIN_EMAIL || 'support@workly.day'
-
-        // Use any to bypass TS issues with nested select if they occur, 
-        // but cast to any to be safe with Supabase generated types if present
-        const p = project as any;
+        const isRevisionOverdue = p.status === 'revision_requested'
+        const deadline = isRevisionOverdue ? p.revision_due_date : p.due_date
 
         const emailContent = `
             <div style="font-family: sans-serif; padding: 20px; color: #334155; line-height: 1.5;">
@@ -53,7 +61,8 @@ export async function GET(request: Request) {
                 
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 20px 0;">
                     <p style="margin: 0 0 10px 0;"><strong>Project Title:</strong> ${p.title}</p>
-                    <p style="margin: 0 0 10px 0;"><strong>Original Deadline:</strong> ${new Date(p.due_date).toLocaleDateString()} ${new Date(p.due_date).toLocaleTimeString()}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Issue:</strong> <span style="color: #ef4444; font-weight: 800; text-transform: uppercase;">${isRevisionOverdue ? 'Overdue Revision' : 'Overdue Initial Delivery'}</span></p>
+                    <p style="margin: 0 0 10px 0;"><strong>Missed Deadline:</strong> ${deadline ? new Date(deadline).toLocaleDateString() + ' ' + new Date(deadline).toLocaleTimeString() : 'N/A'}</p>
                     <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 15px 0;">
                     <p style="margin: 0 0 10px 0;"><strong>Creator:</strong> ${p.creator?.full_name || 'N/A'} (${p.creator?.email || 'N/A'})</p>
                     <p style="margin: 0 0 10px 0;"><strong>Client:</strong> ${p.client?.full_name || 'N/A'} (${p.client?.email || 'N/A'})</p>
@@ -112,7 +121,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
         success: true,
-        processed_overdue_count: projects.length,
+        processed_overdue_count: overdueProjects.length,
         purged_unpaid_count: purgedCount || 0,
         results
     })

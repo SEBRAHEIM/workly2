@@ -265,7 +265,12 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                                             animate={{ opacity: 1, height: 'auto' }}
                                             className="bg-amber-50 border border-amber-100 rounded-3xl p-6 mb-8"
                                         >
-                                            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-3">Revision Directive</p>
+                                            <div className="flex justify-between items-center mb-3">
+                                                <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Revision Directive</p>
+                                                <div className="px-2 py-0.5 bg-amber-100 rounded text-[9px] font-black text-amber-600 uppercase">
+                                                    {project.revision_turnaround || 1} Day Turnaround
+                                                </div>
+                                            </div>
                                             <p className="text-xs text-amber-800 leading-relaxed italic mb-4" dir="auto">"{project.revision_notes}"</p>
                                             <div className="flex items-center gap-4">
                                                 <div className="flex-1 h-1 bg-amber-100 rounded-full overflow-hidden">

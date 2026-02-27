@@ -266,10 +266,10 @@ export default function ProjectPage({
                                         <div className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_10px_#38bdf8]" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-sky-400">Financial Trust</span>
                                     </div>
-                                    {project.due_date && (
+                                    {((project.status === 'revision_requested' && project.revision_due_date) || project.due_date) && (
                                         <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold uppercase tracking-tighter">
                                             <Clock className="w-3.5 h-3.5 text-rose-500" />
-                                            {new Date(project.due_date).toLocaleDateString()}
+                                            {new Date(project.status === 'revision_requested' && project.revision_due_date ? project.revision_due_date : project.due_date).toLocaleDateString()}
                                         </div>
                                     )}
                                 </div>
@@ -338,6 +338,7 @@ export default function ProjectPage({
                                                 creatorId={project.creator_id}
                                                 creatorName={project?.creator?.display_name || project?.creator?.full_name}
                                                 currentPrice={displayPrice}
+                                                revisionTurnaround={project.revision_turnaround}
                                                 submissionUrl={project.submission_url}
                                                 submissionNotes={project.submission_notes}
                                                 revisionsTotal={project.revisions_total || 0}

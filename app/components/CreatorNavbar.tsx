@@ -34,17 +34,31 @@ export default function CreatorNavbar() {
     )
 
     const handleToggleBusy = async () => {
-        if (!user) return
-        setIsToggling(true)
+        if (isToggling) return
+
+        // Optimistic Update
+        const previousStatus = isBusy
         const newStatus = !isBusy
-        const result = await updateBusyStatus(newStatus)
-        if (result.success) {
-            setIsBusy(newStatus)
-            toast.success(newStatus ? "Availability: Busy" : "Availability: Accepting Orders")
-        } else {
+        setIsBusy(newStatus)
+        setIsToggling(true)
+
+        try {
+            const result = await updateBusyStatus(newStatus)
+            if (result.error) {
+                // Rollback on error
+                setIsBusy(previousStatus)
+                toast.error(result.error)
+            } else {
+                toast.success(newStatus ? "Busy Mode Active" : "Accepting Orders")
+                router.refresh()
+            }
+        } catch (error) {
+            // Rollback on crash
+            setIsBusy(previousStatus)
             toast.error("Failed to update status")
+        } finally {
+            setIsToggling(false)
         }
-        setIsToggling(false)
     }
 
     useEffect(() => {

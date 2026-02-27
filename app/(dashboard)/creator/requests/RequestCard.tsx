@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { User, Clock, Download, ChevronDown, ChevronUp, XCircle, Trash2, Upload, File as FileIcon, Loader2, Zap, Shield, FileText, Check, MessageSquare, Briefcase, AlertTriangle } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
-import { declineProject, deleteProject, submitWork, startProject } from '../actions'
+import { deleteProject, submitWork, startProject } from '../actions'
 import { toast } from 'sonner'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
 import { useDropzone } from 'react-dropzone'
@@ -18,7 +19,10 @@ interface RequestCardProps {
 
 export default function RequestCard({ req }: RequestCardProps) {
     const [isExpanded, setIsExpanded] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isDeclining, setIsDeclining] = useState(false)
+    const [isStarting, setIsStarting] = useState(false)
+    const router = useRouter()
     const [isDeleting, setIsDeleting] = useState(false)
     const [offerPrice, setOfferPrice] = useState<number>(req.current_price || 0)
 
@@ -68,19 +72,6 @@ export default function RequestCard({ req }: RequestCardProps) {
         multiple: false,
         disabled: uploading
     })
-
-    const handleDecline = async () => {
-        if (!confirm('Are you sure you want to decline this request? The client will be notified.')) return
-
-        setIsDeclining(true)
-        const result = await declineProject(req.id)
-        if (result.error) {
-            toast.error(result.error)
-            setIsDeclining(false)
-        } else {
-            toast.success('Request declined and moved to Recent history.')
-        }
-    }
 
     const handleDelete = async () => {
         if (!confirm('Are you sure you want to PERMANENTLY delete this project? This cannot be undone.')) return
@@ -234,18 +225,28 @@ export default function RequestCard({ req }: RequestCardProps) {
                                 {req.funds_status !== 'unpaid' && (req.status === 'requested' || req.status === 'accepted') && (
                                     <button
                                         type="button"
+                                        disabled={isStarting}
                                         onClick={async () => {
+                                            setIsStarting(true)
+                                            // We don't change req.status optimistically here because it's passed from parent
+                                            // but we show the spinner instantly
                                             const res = await startProject(req.id)
                                             if (res.error) {
                                                 toast.error(res.error)
+                                                setIsStarting(false)
                                             } else {
                                                 toast.success('Work started! Let\'s go.')
+                                                // router.refresh() will update the status
                                             }
                                         }}
-                                        className="w-full bg-[#0EA5E9] text-white font-black py-4 md:py-5 rounded-2xl hover:bg-[#2088c2] transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2 active:scale-[0.95] select-none touch-manipulation"
+                                        className="w-full bg-[#0EA5E9] text-white font-black py-4 md:py-5 rounded-2xl hover:bg-[#2088c2] transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2 active:scale-[0.95] select-none touch-manipulation disabled:opacity-70"
                                     >
-                                        <Briefcase className="w-5 h-5 md:w-6 md:h-6" />
-                                        <span className="text-base md:text-lg">Confirm & Start Project</span>
+                                        {isStarting ? (
+                                            <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        ) : (
+                                            <Briefcase className="w-5 h-5 md:w-6 md:h-6" />
+                                        )}
+                                        <span className="text-base md:text-lg">{isStarting ? 'Starting...' : 'Confirm & Start Project'}</span>
                                     </button>
                                 )}
                             </div>

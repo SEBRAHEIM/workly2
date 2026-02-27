@@ -4,16 +4,16 @@ VALUES ('profiles', 'profiles', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Policy: Public can view profiles images
-CREATE POLICY "Public Access"
+CREATE POLICY "Profiles Public Access"
 ON storage.objects FOR SELECT
 USING ( bucket_id = 'profiles' );
 
 -- Policy: Authenticated users can upload to profiles
-CREATE POLICY "Authenticated Upload"
+CREATE POLICY "Profiles Authenticated Upload"
 ON storage.objects FOR INSERT
 WITH CHECK ( bucket_id = 'profiles' AND auth.role() = 'authenticated' );
 
 -- Policy: Users can delete their own files
-CREATE POLICY "Owner Delete"
+CREATE POLICY "Profiles Owner Delete"
 ON storage.objects FOR DELETE
 USING ( bucket_id = 'profiles' AND auth.uid() = owner );

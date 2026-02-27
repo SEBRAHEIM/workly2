@@ -308,7 +308,7 @@ export default function ClientNavbar() {
                                         <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
                                             <LogOut size={20} />
                                         </div>
-                                        <span className="font-black text-xs uppercase tracking-widest">Establish Exit</span>
+                                        <span className="font-black text-xs uppercase tracking-widest">Logout</span>
                                     </button>
                                 </div>
                             )}

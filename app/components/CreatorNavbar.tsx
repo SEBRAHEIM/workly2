@@ -310,7 +310,7 @@ export default function CreatorNavbar() {
                                     <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mr-4 group-hover:bg-red-100 transition-colors">
                                         <LogOut size={18} />
                                     </div>
-                                    <span className="font-bold text-sm">Establish Exit</span>
+                                    <span className="font-bold text-sm">Logout</span>
                                 </button>
                             </div>
                         )}

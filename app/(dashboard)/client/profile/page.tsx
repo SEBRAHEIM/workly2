@@ -25,12 +25,6 @@ export default async function ClientProfilePage() {
             </div>
 
             <div className="bg-white rounded-[2rem] p-8 border border-[#F0F9FF] shadow-xl">
-                <div className="mb-6 pb-6 border-b border-[#F0F9FF]">
-                    <h3 className="text-xl font-bold text-[#1E293B] mb-2">Notification Settings</h3>
-                    <p className="text-gray-500 text-sm">
-                        SMS alerts help you stay updated while you're away from your computer.
-                    </p>
-                </div>
 
                 <ClientIdentityForm profile={profile} />
             </div>

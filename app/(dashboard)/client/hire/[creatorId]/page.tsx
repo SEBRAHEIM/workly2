@@ -94,6 +94,7 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
                         }>
                             <HireCreatorForm
                                 creatorId={creatorId}
+                                isBusy={!!creator.is_busy}
                                 specializations={specializations}
                                 services={services || []}
                                 languages={creator.languages || []}

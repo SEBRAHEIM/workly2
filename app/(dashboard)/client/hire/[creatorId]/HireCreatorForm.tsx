@@ -1,7 +1,7 @@
 'use client'
 
 import { createProject } from '../../actions'
-import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Zap, ArrowRight } from 'lucide-react'
+import { AlertTriangle, MessageSquare, Briefcase, Check, Clock, Zap, ArrowRight, PowerOff } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 import { useState, useActionState, useEffect } from 'react'
 import MarkdownRenderer from '@/app/components/MarkdownRenderer'
@@ -43,12 +43,13 @@ const initialState = {
 
 interface HireCreatorFormProps {
     creatorId: string
+    isBusy: boolean
     specializations: string[]
     services: any[]
     languages: string[]
 }
 
-export default function HireCreatorForm({ creatorId, specializations, services, languages }: HireCreatorFormProps) {
+export default function HireCreatorForm({ creatorId, isBusy, specializations, services, languages }: HireCreatorFormProps) {
     const [state, formAction, isPending] = useActionState(createProject, initialState)
     const [dueDate, setDueDate] = useState<string>('')
     const [files, setFiles] = useState<string[]>([])
@@ -148,16 +149,17 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
 
                                     const packageTurnaround = pkg.turnaround || 2
                                     const isTooSlow = daysAvailable < packageTurnaround
+                                    const isDisabled = isBusy || isTooSlow
 
                                     return (
                                         <button
                                             key={tier}
                                             type="button"
-                                            disabled={isTooSlow}
+                                            disabled={isDisabled}
                                             onClick={() => setSelectedPackage(tier)}
                                             className={`relative p-5 rounded-2xl border-2 text-left transition-all duration-300 flex flex-col h-full ${selectedPackage === tier
                                                 ? 'border-[#0EA5E9] bg-white shadow-xl shadow-sky-100 ring-4 ring-sky-500/5'
-                                                : isTooSlow
+                                                : isDisabled
                                                     ? 'border-slate-100 bg-slate-50 opacity-40 grayscale cursor-not-allowed'
                                                     : 'border-slate-100 bg-white hover:border-[#0EA5E9]/30'
                                                 }`}
@@ -302,15 +304,37 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
             )}
 
             <div className="pt-2">
-                <SubmitButton
-                    isPending={isPending}
-                    price={selectedService?.pricing_mode === 'fixed'
-                        ? selectedService.base_price
-                        : selectedPackage
-                            ? selectedService?.service_packages?.[selectedPackage]?.price
-                            : 0
-                    }
-                />
+                {isBusy ? (
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center">
+                        <PowerOff className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                        <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Creator Currently Busy</h3>
+                        <p className="text-[10px] text-slate-500 font-medium">This editor is not accepting new orders at the moment. Please check back later!</p>
+                    </div>
+                ) : (
+                    <button
+                        type="submit"
+                        disabled={isPending || (selectedService?.pricing_mode === 'packages' && !selectedPackage)}
+                        className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-slate-200 flex items-center justify-center gap-2"
+                    >
+                        {isPending ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                Processing...
+                            </>
+                        ) : (
+                            <>
+                                <AEDIcon className="w-4 h-4" />
+                                Confirm & Pay AED {
+                                    selectedService?.pricing_mode === 'fixed'
+                                        ? selectedService.base_price
+                                        : selectedPackage
+                                            ? selectedService.service_packages[selectedPackage].price
+                                            : 0
+                                }
+                            </>
+                        )}
+                    </button>
+                )}
             </div>
         </motion.form>
     )

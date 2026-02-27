@@ -302,3 +302,22 @@ export async function updateCreatorPricing(formData: FormData) {
     revalidatePath('/creator/profile')
     return { success: true }
 }
+
+export async function updateBusyStatus(isBusy: boolean) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Unauthorized')
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ is_busy: isBusy })
+        .eq('id', user.id)
+
+    if (error) return { error: error.message }
+
+    revalidatePath('/creator/profile')
+    revalidatePath(`/client/creator/${user.id}`)
+    revalidatePath(`/client/hire/${user.id}`)
+
+    return { success: true }
+}

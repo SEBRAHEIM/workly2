@@ -64,8 +64,14 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                             </h1>
                             <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
                                 {creator.username && (
-                                    <span className="text-xs font-black text-slate-800">
+                                    <span className="text-[10px] font-black text-slate-800">
                                         @{creator.username}
+                                    </span>
+                                )}
+                                {creator.is_busy && (
+                                    <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-rose-100 text-rose-600 rounded-full border border-rose-200 flex items-center gap-1">
+                                        <div className="w-1 h-1 rounded-full bg-rose-600 animate-pulse" />
+                                        Currently Busy
                                     </span>
                                 )}
                                 {creator.languages && creator.languages.length > 0 && (
@@ -82,11 +88,13 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
                         <div className="flex-shrink-0">
                             <Link
-                                href={`/client/hire/${creatorId}`}
-                                className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0EA5E9] text-white font-bold text-sm rounded-lg hover:bg-[#0284c7] transition-all shadow-sm active:scale-95"
+                                href={creator.is_busy ? '#' : `/client/hire/${creatorId}`}
+                                className={`inline-flex items-center gap-2 px-6 py-2.5 font-bold text-sm rounded-lg transition-all shadow-sm active:scale-95 ${creator.is_busy
+                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed pointer-events-none border border-slate-200'
+                                    : 'bg-[#0EA5E9] text-white hover:bg-[#0284c7]'}`}
                             >
-                                Hire Me
-                                <ArrowRight size={16} />
+                                {creator.is_busy ? 'Currently Busy' : 'Hire Me'}
+                                {!creator.is_busy && <ArrowRight size={16} />}
                             </Link>
                         </div>
                     </div>
@@ -181,8 +189,10 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                             {Object.entries(service.service_packages).map(([tier, pkg]: [string, any]) => (
                                                 <Link
                                                     key={tier}
-                                                    href={`/client/hire/${creatorId}?category=${slug}&tier=${tier}`}
-                                                    className="bg-white border border-[#F0F9FF] rounded-xl p-4 shadow-sm hover:border-[#0EA5E9] hover:shadow-md hover:-translate-y-1 transition-all group/tier"
+                                                    href={creator.is_busy ? '#' : `/client/hire/${creatorId}?category=${slug}&tier=${tier}`}
+                                                    className={`bg-white border rounded-xl p-4 shadow-sm transition-all group/tier ${creator.is_busy
+                                                        ? 'border-slate-100 opacity-50 grayscale cursor-not-allowed pointer-events-none'
+                                                        : 'border-[#F0F9FF] hover:border-[#0EA5E9] hover:shadow-md hover:-translate-y-1'}`}
                                                 >
                                                     <div className="flex justify-between items-start mb-2">
                                                         <span className={`text-[9px] font-black uppercase px-2 py-1 rounded-lg ${tier === 'basic' ? 'bg-blue-50 text-blue-600' :
@@ -191,13 +201,13 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
                                                             }`}>
                                                             {tier}
                                                         </span>
-                                                        <span className="text-sm font-black text-[#0EA5E9]">AED {pkg.price}</span>
+                                                        <span className={`text-sm font-black ${creator.is_busy ? 'text-slate-400' : 'text-[#0EA5E9]'}`}>AED {pkg.price}</span>
                                                     </div>
-                                                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-tight mb-2 group-hover/tier:text-[#0EA5E9] transition-colors">{pkg.title}</h4>
+                                                    <h4 className={`text-xs font-black uppercase tracking-tight mb-2 transition-colors ${creator.is_busy ? 'text-slate-400' : 'text-slate-800 group-hover/tier:text-[#0EA5E9]'}`}>{pkg.title}</h4>
                                                     <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed mb-4">{pkg.description}</p>
-                                                    <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#0EA5E9] uppercase tracking-widest pt-2 border-t border-slate-50">
-                                                        Select Package
-                                                        <ArrowRight size={10} className="group-hover/tier:translate-x-1 transition-transform" />
+                                                    <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest pt-2 border-t border-slate-50 ${creator.is_busy ? 'text-slate-300' : 'text-[#0EA5E9]'}`}>
+                                                        {creator.is_busy ? 'Busy' : 'Select Package'}
+                                                        {!creator.is_busy && <ArrowRight size={10} className="group-hover/tier:translate-x-1 transition-transform" />}
                                                     </div>
                                                 </Link>
                                             ))}
@@ -269,12 +279,16 @@ export default async function CreatorProfileView({ params }: { params: Promise<{
 
             {/* Footer Hire CTA */}
             <div className="mt-12 text-center">
-                <h3 className="text-2xl font-sans font-black text-[#1E293B] mb-4">Ready to work with {creator.display_name}?</h3>
+                <h3 className="text-2xl font-sans font-black text-[#1E293B] mb-4">
+                    {creator.is_busy ? `${creator.display_name} is currently busy` : `Ready to work with ${creator.display_name}?`}
+                </h3>
                 <Link
-                    href={`/client/hire/${creatorId}`}
-                    className="inline-block px-8 py-4 bg-[#0EA5E9] text-white font-bold text-lg rounded-xl hover:bg-[#2e3b29] transition-all shadow-xl hover:shadow-2xl active:scale-95"
+                    href={creator.is_busy ? '#' : `/client/hire/${creatorId}`}
+                    className={`inline-block px-8 py-4 font-bold text-lg rounded-xl transition-all shadow-xl active:scale-95 ${creator.is_busy
+                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed pointer-events-none border border-slate-200'
+                        : 'bg-[#0EA5E9] text-white hover:bg-[#2e3b29] hover:shadow-2xl'}`}
                 >
-                    Start a Project
+                    {creator.is_busy ? 'Not Accepting Orders' : 'Start a Project'}
                 </Link>
                 <div className="mt-4 flex items-center justify-center text-xs text-gray-400 gap-2">
                     <ShieldCheck className="w-4 h-4" />

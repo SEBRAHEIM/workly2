@@ -219,7 +219,7 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                                     >
                                         <div className="flex items-center gap-2 mb-4">
                                             <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center border border-sky-100 shadow-sm">
-                                                <Zap className="w-3.5 h-3.5 text-[#0EA5E9]" />
+                                                <Sparkles className="w-3.5 h-3.5 text-[#0EA5E9]" />
                                             </div>
                                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Deliverables</span>
                                         </div>

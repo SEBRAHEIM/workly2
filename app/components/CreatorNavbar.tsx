@@ -154,19 +154,19 @@ export default function CreatorNavbar() {
                                     <button
                                         onClick={handleToggleBusy}
                                         disabled={isToggling}
-                                        className={`relative w-10 h-5 rounded-full transition-all duration-500 p-1 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'}`}
+                                        className={`relative w-14 h-7 rounded-full transition-all duration-500 p-1 flex items-center ${isBusy ? 'bg-slate-200' : 'bg-[#0EA5E9]'} active:scale-95`}
                                     >
                                         <motion.div
-                                            animate={{ x: isBusy ? 0 : 20 }}
+                                            animate={{ x: isBusy ? 0 : 28 }}
                                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                            className="w-3 h-3 bg-white rounded-full shadow-sm flex items-center justify-center"
+                                            className="w-5 h-5 bg-white rounded-full shadow-sm flex items-center justify-center"
                                         >
                                             {isToggling ? (
-                                                <Loader2 className="w-2 h-2 animate-spin text-slate-400" />
+                                                <Loader2 className="w-3 h-3 animate-spin text-slate-400" />
                                             ) : isBusy ? (
-                                                <PowerOff className="w-2 h-2 text-slate-300" />
+                                                <PowerOff className="w-3 h-3 text-slate-300" />
                                             ) : (
-                                                <Power className="w-2 h-2 text-[#0EA5E9]" />
+                                                <Power className="w-3 h-3 text-[#0EA5E9]" />
                                             )}
                                         </motion.div>
                                     </button>
@@ -203,40 +203,40 @@ export default function CreatorNavbar() {
                                     <Link
                                         href="/creator"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <Layout size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Layout size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Dashboard</span>
                                     </Link>
                                     <Link
                                         href="/creator/requests"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <Briefcase size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Briefcase size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Active Work</span>
                                     </Link>
                                     <Link
                                         href="/creator/requests?tab=completed"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <Clock size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Clock size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Project History</span>
                                     </Link>
                                     <Link
                                         href="/creator/wallet"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <Wallet size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Wallet size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Payout</span>
                                     </Link>
@@ -249,20 +249,20 @@ export default function CreatorNavbar() {
                                     <Link
                                         href="/creator/profile"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <User size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <User size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Profile</span>
                                     </Link>
                                     <Link
                                         href="/creator/settings"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="w-full flex items-center p-3 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        className="w-full flex items-center p-4 rounded-2xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black active:scale-[0.96] select-none"
                                     >
-                                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
-                                            <Shield size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mr-4 shadow-sm border border-sky-100 text-[#0EA5E9]">
+                                            <Shield size={24} />
                                         </div>
                                         <span className="text-sm uppercase tracking-widest">Account</span>
                                     </Link>

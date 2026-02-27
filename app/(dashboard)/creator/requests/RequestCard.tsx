@@ -242,10 +242,10 @@ export default function RequestCard({ req }: RequestCardProps) {
                                                 toast.success('Work started! Let\'s go.')
                                             }
                                         }}
-                                        className="w-full bg-[#0EA5E9] text-white font-black py-4 rounded-2xl hover:bg-[#2088c2] transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2 active:scale-[0.98]"
+                                        className="w-full bg-[#0EA5E9] text-white font-black py-4 md:py-5 rounded-2xl hover:bg-[#2088c2] transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2 active:scale-[0.95] select-none touch-manipulation"
                                     >
-                                        <Briefcase className="w-5 h-5" />
-                                        Confirm & Start Project
+                                        <Briefcase className="w-5 h-5 md:w-6 md:h-6" />
+                                        <span className="text-base md:text-lg">Confirm & Start Project</span>
                                     </button>
                                 )}
                             </div>

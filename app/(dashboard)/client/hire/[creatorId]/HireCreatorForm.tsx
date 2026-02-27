@@ -157,7 +157,7 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                                             type="button"
                                             disabled={isDisabled}
                                             onClick={() => setSelectedPackage(tier)}
-                                            className={`relative p-5 rounded-2xl border-2 text-left transition-all duration-300 flex flex-col h-full ${selectedPackage === tier
+                                            className={`relative p-5 md:p-6 rounded-2xl border-2 text-left transition-all duration-300 flex flex-col h-full active:scale-[0.97] select-none touch-manipulation ${selectedPackage === tier
                                                 ? 'border-[#0EA5E9] bg-white shadow-xl shadow-sky-100 ring-4 ring-sky-500/5'
                                                 : isDisabled
                                                     ? 'border-slate-100 bg-slate-50 opacity-40 grayscale cursor-not-allowed'
@@ -314,7 +314,7 @@ export default function HireCreatorForm({ creatorId, isBusy, specializations, se
                     <button
                         type="submit"
                         disabled={isPending || (selectedService?.pricing_mode === 'packages' && !selectedPackage)}
-                        className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-slate-200 flex items-center justify-center gap-2"
+                        className="w-full h-16 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-slate-800 active:scale-[0.95] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-slate-200 flex items-center justify-center gap-2 select-none touch-manipulation"
                     >
                         {isPending ? (
                             <>

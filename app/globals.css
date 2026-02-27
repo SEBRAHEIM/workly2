@@ -55,32 +55,20 @@ html {
 
 /* Ensure large enough tap targets and uniform behavior */
 button,
-a {
+a,
+[role="button"] {
   touch-action: manipulation;
   cursor: pointer;
-}
-
-/* Prevent iOS auto-zoom on input focusing */
-input,
-select,
-textarea {
-  font-size: 16px !important;
-  touch-action: manipulation;
-}
-
-/* Optimize mobile interactions */
-a,
-button,
-input,
-select,
-textarea {
-  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Global active state for buttons if not overridden */
-button:active {
-  transform: scale(0.98);
-  transition: transform 0.05s;
+button:active,
+a:active,
+[role="button"]:active {
+  transform: scale(0.96);
+  transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .transition-fast {

@@ -16,6 +16,8 @@ export async function updateCreatorIdentity(formData: FormData) {
     const fullName = formData.get('fullName') as string
     const username = formData.get('username') as string
     const tagline = formData.get('tagline') as string
+    const avatarUrl = formData.get('avatarUrl') as string
+    const bannerUrl = formData.get('bannerUrl') as string
 
     const languages = formData.getAll('languages') as string[]
 
@@ -40,7 +42,9 @@ export async function updateCreatorIdentity(formData: FormData) {
             full_name: fullName,
             username: username,
             tagline: tagline,
-            languages: languages
+            languages: languages,
+            avatar_url: avatarUrl,
+            banner_url: bannerUrl
         })
         .eq('id', user.id)
 
@@ -49,19 +53,51 @@ export async function updateCreatorIdentity(formData: FormData) {
         return { error: error.message }
     }
 
-    console.log('[SMS DEBUG] Successfully updated profile')
-    console.log('[SMS DEBUG] Service Role Key present:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
-
     revalidatePath('/creator/profile')
-    // Specifically revalidate the paths where this creator's details are shown
     revalidatePath(`/client/creator/${user.id}`)
     revalidatePath(`/client/hire/${user.id}`)
-
-    // Pattern fallback
     revalidatePath('/client/creator/[creatorId]', 'layout')
     revalidatePath('/client/hire/[creatorId]', 'layout')
+    revalidatePath('/category/[slug]', 'page')
 
     return { success: true }
+}
+
+export async function uploadProfileImage(formData: FormData) {
+    try {
+        const supabase = await createClient()
+        const file = formData.get('image') as File
+        const type = formData.get('type') as 'avatar' | 'banner'
+
+        if (!file || file.size === 0) return { error: 'No file selected' }
+        if (file.size > 5 * 1024 * 1024) return { error: 'File too large (max 5MB)' }
+
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return { error: 'Unauthorized' }
+
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${user.id}/${type}-${Date.now()}.${fileExt}`
+
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = new Uint8Array(arrayBuffer)
+
+        const { error: uploadError } = await supabase.storage
+            .from('profiles')
+            .upload(fileName, buffer, {
+                contentType: file.type,
+                upsert: true
+            })
+
+        if (uploadError) return { error: uploadError.message }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('profiles')
+            .getPublicUrl(fileName)
+
+        return { success: true, url: publicUrl }
+    } catch (e: any) {
+        return { error: e.message }
+    }
 }
 
 export async function updateCreatorSpecializations(formData: FormData) {

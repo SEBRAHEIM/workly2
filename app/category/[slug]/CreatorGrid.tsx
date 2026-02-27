@@ -20,7 +20,7 @@ export default async function CreatorGrid({
     const [creatorsResponse, favoritesResponse] = await Promise.all([
         supabase
             .from('profiles')
-            .select('id, display_name, full_name, avatar_url, tagline, level, languages, rating_avg, total_reviews')
+            .select('id, display_name, full_name, avatar_url, banner_url, tagline, level, languages, rating_avg, total_reviews')
             .not('display_name', 'is', null)
             .contains('specializations', categorySlug ? [categorySlug] : []),
         user ? supabase
@@ -41,96 +41,116 @@ export default async function CreatorGrid({
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {creators.map((creator) => {
                 const isFavorite = favoriteIds.has(creator.id)
                 const profileUrl = `/client/creator/${creator.id}`
 
                 return (
-                    <div key={creator.id} className="bg-white rounded-2xl p-5 border border-[#F0F9FF] shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col h-full">
+                    <div key={creator.id} className="bg-white rounded-[24px] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-sky-100/50 transition-all duration-500 relative group flex flex-col h-full overflow-hidden">
 
-                        {/* Header: Identity - Now clearly interactive */}
-                        <div className="flex items-start gap-4 mb-4 relative z-20">
-                            <Link href={profileUrl} className="flex-shrink-0 group/avatar">
-                                <div className="w-14 h-14 rounded-2xl bg-[#F0F9FF] flex items-center justify-center border-2 border-white shadow-sm overflow-hidden text-center group-hover/avatar:scale-105 group-hover/avatar:shadow-md transition-all relative">
-                                    {creator.avatar_url ? (
-                                        <Image
-                                            src={creator.avatar_url}
-                                            alt={creator.display_name || ''}
-                                            fill
-                                            className="object-cover"
-                                            sizes="56px"
-                                        />
-                                    ) : (
-                                        <User className="w-6 h-6 text-sky-200" />
-                                    )}
+                        {/* Banner Section */}
+                        <div className="relative h-24 overflow-hidden bg-slate-100">
+                            {creator.banner_url ? (
+                                <Image
+                                    src={creator.banner_url}
+                                    alt="banner"
+                                    fill
+                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                            ) : (
+                                <div className="absolute inset-0 bg-gradient-to-br from-sky-400 to-blue-600 opacity-80" />
+                            )}
+                            {/* Favorite Button Overlay */}
+                            {user && (
+                                <div className="absolute top-3 right-3 z-30">
+                                    <FavoriteButton creatorId={creator.id} initialIsFavorite={isFavorite} />
                                 </div>
-                            </Link>
+                            )}
+                        </div>
 
-                            <div className="flex-1 min-w-0 pt-1">
-                                <div className="flex items-center justify-between">
-                                    <Link href={profileUrl} className="group/name block truncate">
-                                        <h3 className="font-sans font-black text-xl text-[#1E293B] truncate pr-2 group-hover/name:text-[#0EA5E9] transition-colors tracking-tight uppercase">
-                                            {creator.display_name || creator.full_name || 'Creator'}
-                                        </h3>
-                                    </Link>
-                                    {user && (
-                                        <div className="flex-shrink-0">
-                                            <FavoriteButton creatorId={creator.id} initialIsFavorite={isFavorite} />
+                        {/* Profile Content Container */}
+                        <div className="px-5 pb-5 pt-0 flex flex-col flex-1 relative">
+                            {/* Overlapping Avatar */}
+                            <div className="relative -mt-10 mb-3 z-20 inline-block w-fit">
+                                <Link href={profileUrl} className="block group/avatar">
+                                    <div className="w-20 h-20 rounded-[22px] bg-white p-1 shadow-lg group-hover/avatar:scale-105 transition-transform duration-300">
+                                        <div className="w-full h-full rounded-[18px] bg-slate-50 overflow-hidden relative border border-slate-100">
+                                            {creator.avatar_url ? (
+                                                <Image
+                                                    src={creator.avatar_url}
+                                                    alt={creator.display_name || ''}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center">
+                                                    <User className="w-8 h-8 text-sky-200" />
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                    {creator.tagline || 'Client Creator'}
+                                    </div>
+                                </Link>
+                            </div>
+
+                            {/* Identity */}
+                            <div className="mb-4">
+                                <Link href={profileUrl} className="group/name inline-block max-w-full">
+                                    <h3 className="font-sans font-black text-xl text-slate-900 truncate group-hover/name:text-[#0EA5E9] transition-colors tracking-tighter uppercase leading-tight">
+                                        {creator.display_name || creator.full_name || 'Creator'}
+                                    </h3>
+                                </Link>
+                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-0.5 line-clamp-1">
+                                    {creator.tagline || 'Expert Creative'}
                                 </p>
                             </div>
-                        </div>
 
-                        {/* Metadata Row */}
-                        <div className="flex flex-wrap items-center gap-2 mb-6 pt-4 border-t border-slate-50 relative z-20">
-                            <div className="flex items-center gap-1.5 bg-amber-50 text-amber-600 text-[9px] font-black uppercase px-2 py-1 rounded-lg border border-amber-100">
-                                <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                                <span>{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'} ({creator.total_reviews || 0})</span>
+                            {/* Metadata / Trust Row */}
+                            <div className="flex flex-wrap items-center gap-2 mb-6">
+                                <div className="flex items-center gap-1.5 bg-amber-50/50 text-amber-600 text-[9px] font-black uppercase px-2.5 py-1 rounded-full border border-amber-100/50 backdrop-blur-sm">
+                                    <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+                                    <span>{creator.rating_avg ? creator.rating_avg.toFixed(1) : '0.0'} ({creator.total_reviews || 0})</span>
+                                </div>
+                                {creator.languages && creator.languages.length > 0 && (
+                                    <div className="flex gap-1 items-center">
+                                        {creator.languages.map((lang: string) => {
+                                            const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ع' : lang.substring(0, 2).toUpperCase()
+                                            return (
+                                                <span key={lang} className="text-[9px] font-black uppercase px-2 py-1 bg-slate-50 text-slate-400 rounded-full border border-slate-100">
+                                                    {displayAbbr}
+                                                </span>
+                                            )
+                                        })}
+                                    </div>
+                                )}
                             </div>
-                            {creator.languages && creator.languages.length > 0 && (
-                                <div className="flex gap-1 items-center">
-                                    {creator.languages.map((lang: string) => {
-                                        const displayAbbr = lang === 'English' ? 'EN' : lang === 'العربية' ? 'ع' : lang.substring(0, 2).toUpperCase()
-                                        return (
-                                            <span key={lang} className="text-[9px] font-black uppercase px-2 py-1 bg-sky-50 text-[#0EA5E9] rounded-lg border border-sky-100">
-                                                {displayAbbr}
-                                            </span>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </div>
 
-                        {/* Actions */}
-                        <div className="mt-auto space-y-2 relative z-20">
-                            {!user ? (
-                                <Link
-                                    href="/join"
-                                    className="block w-full bg-[#1E293B] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-xl shadow-slate-100"
-                                >
-                                    Join to Contact
-                                </Link>
-                            ) : (
-                                <div className="grid grid-cols-2 gap-2">
+                            {/* Actions */}
+                            <div className="mt-auto pt-4 border-t border-slate-50">
+                                {!user ? (
                                     <Link
-                                        href={profileUrl}
-                                        className="bg-white text-[#1E293B] border border-slate-100 text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-slate-50 hover:border-[#0EA5E9]/30 active:scale-95 transition-all flex items-center justify-center shadow-sm"
+                                        href="/join"
+                                        className="block w-full bg-slate-900 text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-[#0EA5E9] active:scale-95 transition-all shadow-xl shadow-slate-100"
                                     >
-                                        View Portfolio
+                                        Join to Contact
                                     </Link>
-                                    <Link
-                                        href={`/client/hire/${creator.id}`}
-                                        className="bg-[#0EA5E9] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:shadow-sky-200 active:scale-95 transition-all shadow-xl shadow-sky-100 flex items-center justify-center"
-                                    >
-                                        Hire Now
-                                    </Link>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <Link
+                                            href={profileUrl}
+                                            className="bg-slate-50 text-slate-600 border border-slate-100 text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-white hover:border-[#0EA5E9]/30 active:scale-95 transition-all flex items-center justify-center"
+                                        >
+                                            Portfolio
+                                        </Link>
+                                        <Link
+                                            href={`/client/hire/${creator.id}`}
+                                            className="bg-[#0EA5E9] text-white text-center font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:shadow-lg hover:shadow-sky-200 active:scale-95 transition-all shadow-xl shadow-sky-100 flex items-center justify-center gap-2"
+                                        >
+                                            Hire
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )

@@ -86,6 +86,13 @@ export default function OverviewModule({ projects, profiles, stats, withdrawals 
                             onClick={() => setActiveTab('moderation')}
                         />
                         <AlertItem
+                            label="Overdue Projects"
+                            count={projects.filter(p => p.status === 'in_progress' && p.due_date && new Date(p.due_date) < new Date()).length}
+                            description="Deadlines passed without submission"
+                            severity="high"
+                            onClick={() => setActiveTab('projects')}
+                        />
+                        <AlertItem
                             label="Verification Queue"
                             count={profiles.filter(p => p.role === 'creator' && !p.is_verified).length}
                             description="New creators pending setup"

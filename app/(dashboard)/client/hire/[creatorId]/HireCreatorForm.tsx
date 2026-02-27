@@ -50,6 +50,7 @@ interface HireCreatorFormProps {
 
 export default function HireCreatorForm({ creatorId, specializations, services, languages }: HireCreatorFormProps) {
     const [state, formAction, isPending] = useActionState(createProject, initialState)
+    const [dueDate, setDueDate] = useState<string>('')
     const [files, setFiles] = useState<string[]>([])
     const [description, setDescription] = useState('')
 
@@ -72,6 +73,18 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
         }
     }, [selectedCategory, services, urlCategory])
 
+    // Calculate days available between today and selected deadline
+    const getDaysAvailable = () => {
+        if (!dueDate) return Infinity
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const selected = new Date(dueDate)
+        selected.setHours(0, 0, 0, 0)
+        const diffTime = selected.getTime() - today.getTime()
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    }
+
+    const daysAvailable = getDaysAvailable()
 
     return (
         <motion.form
@@ -133,14 +146,20 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                     const pkg = selectedService.service_packages[tier]
                                     if (!pkg) return null
 
+                                    const packageTurnaround = pkg.turnaround || 2
+                                    const isTooSlow = daysAvailable < packageTurnaround
+
                                     return (
                                         <button
                                             key={tier}
                                             type="button"
+                                            disabled={isTooSlow}
                                             onClick={() => setSelectedPackage(tier)}
                                             className={`relative p-5 rounded-2xl border-2 text-left transition-all duration-300 flex flex-col h-full ${selectedPackage === tier
                                                 ? 'border-[#0EA5E9] bg-white shadow-xl shadow-sky-100 ring-4 ring-sky-500/5'
-                                                : 'border-slate-100 bg-white hover:border-[#0EA5E9]/30'
+                                                : isTooSlow
+                                                    ? 'border-slate-100 bg-slate-50 opacity-40 grayscale cursor-not-allowed'
+                                                    : 'border-slate-100 bg-white hover:border-[#0EA5E9]/30'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-4">
@@ -155,6 +174,11 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                                         <Check className="w-3 h-3" />
                                                     </div>
                                                 )}
+                                                {isTooSlow && (
+                                                    <div className="p-1 bg-amber-500 rounded-lg text-white" title="Too slow for your deadline">
+                                                        <AlertTriangle className="w-3 h-3" />
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <p className="text-xs font-black text-slate-800 uppercase tracking-tight mb-1">{pkg.title}</p>
@@ -165,9 +189,9 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                                                     <Zap className="w-3 h-3 text-sky-400" />
                                                     {pkg.revisions} Revisions
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    <Clock className="w-3 h-3 text-sky-400" />
-                                                    {pkg.turnaround || 2} Days Delivery Time
+                                                <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest ${isTooSlow ? 'text-amber-600' : 'text-slate-400'}`}>
+                                                    <Clock className={`w-3 h-3 ${isTooSlow ? 'text-amber-500' : 'text-sky-400'}`} />
+                                                    {packageTurnaround} Days Delivery Time
                                                 </div>
                                             </div>
 
@@ -237,6 +261,11 @@ export default function HireCreatorForm({ creatorId, specializations, services, 
                             name="dueDate"
                             required
                             min={new Date().toISOString().split('T')[0]}
+                            value={dueDate}
+                            onChange={(e) => {
+                                setDueDate(e.target.value)
+                                setSelectedPackage(null) // Reset package to force valid selection for new deadline
+                            }}
                             className="w-full bg-slate-50 border-none rounded-lg p-2.5 text-slate-900 focus:ring-1 focus:ring-[#0EA5E9] outline-none transition-all duration-200 text-[11px] font-bold"
                         />
                     </div>

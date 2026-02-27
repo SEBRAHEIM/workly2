@@ -138,6 +138,24 @@ export async function POST(req: Request) {
         } catch (accountError: any) {
             console.error(`[STRIPE WEBHOOK] Account Update Error: ${accountError.message}`)
         }
+    } else if (event.type === 'checkout.session.expired') {
+        const projectId = session.metadata?.projectId
+
+        if (projectId) {
+            try {
+                // User wants "unpaid work" deleted completely.
+                const { error: deleteError } = await supabaseAdmin
+                    .from('projects')
+                    .delete()
+                    .eq('id', projectId)
+                    .eq('funds_status', 'unpaid') // SAFETY: Only delete if still unpaid
+
+                if (deleteError) throw deleteError
+                console.log(`[STRIPE WEBHOOK] Deleted project ${projectId} due to session expiration`)
+            } catch (err: any) {
+                console.error(`[STRIPE WEBHOOK] Error deleting project ${projectId}: ${err.message}`)
+            }
+        }
     }
 
     return new NextResponse('ok', { status: 200 })

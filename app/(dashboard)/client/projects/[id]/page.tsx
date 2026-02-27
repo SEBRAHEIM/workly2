@@ -4,7 +4,7 @@
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, use } from 'react'
-import { releaseFunds } from '../actions'
+import { releaseFunds, deleteProject } from '../actions'
 import { User, FileText, Check, MessageSquare, Clock, Shield, Briefcase, Download, AlertTriangle, ChevronRight, Star } from 'lucide-react'
 import AEDIcon from '@/app/components/AEDIcon'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -90,6 +90,14 @@ export default function ProjectPage({
             setEvents(eventsResponse.data || [])
             setReview(reviewResponse.data)
             setLoading(false)
+
+            // Check for payment cancellation to auto-purge
+            if (payment === 'cancelled') {
+                console.log('[PAYMENT CANCELLED] Purging project:', id)
+                await deleteProject(id)
+                router.push('/client')
+                return
+            }
 
             // Lazy Auto-Release for Submitted projects (3-day rule)
             if (projectResponse.data.status === 'submitted' && projectResponse.data.submitted_at) {

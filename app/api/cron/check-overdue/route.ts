@@ -94,9 +94,26 @@ export async function GET(request: Request) {
         }
     }
 
+    // --- NEW: Purge Stale Unpaid Projects ---
+    // User wants "unpaid work" deleted completely. 
+    // We purge anything 'unpaid' created more than 2 hours ago.
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    const { error: purgeError, count: purgedCount } = await supabase
+        .from('projects')
+        .delete({ count: 'exact' })
+        .eq('funds_status', 'unpaid')
+        .lt('created_at', twoHoursAgo)
+
+    if (purgeError) {
+        console.error('Error purging stale projects:', purgeError)
+    } else {
+        console.log(`Successfully purged ${purgedCount} stale unpaid projects`)
+    }
+
     return NextResponse.json({
         success: true,
-        processed_count: projects.length,
+        processed_overdue_count: projects.length,
+        purged_unpaid_count: purgedCount || 0,
         results
     })
 }

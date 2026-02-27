@@ -346,3 +346,27 @@ export async function submitReview(projectId: string, rating: number, comment: s
     revalidatePath(`/client/creator/${project.creator_id}`)
     return { success: true }
 }
+
+export async function deleteProject(projectId: string) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) throw new Error('Unauthorized')
+
+    // User wants "unpaid work" deleted completely.
+    // This is called when the client cancels payment or Stripe session expires.
+    const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', projectId)
+        .eq('client_id', user.id)
+        .eq('funds_status', 'unpaid')
+
+    if (error) {
+        console.error('Delete project error:', error)
+        return { success: false, message: error.message }
+    }
+
+    revalidatePath('/client/projects')
+    return { success: true }
+}

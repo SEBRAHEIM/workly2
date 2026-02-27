@@ -194,7 +194,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revisions</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 h-6 flex items-end">Revisions</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].revisions}
@@ -203,7 +203,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revision Time (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 h-6 flex items-end">Revision Days</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].revisionTurnaround || 1}
@@ -213,7 +213,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 h-6 flex items-end">Delivery Days</label>
                                         <input
                                             type="number"
                                             value={packages[activeTab].turnaround || 2}

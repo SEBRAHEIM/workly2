@@ -192,7 +192,7 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                     />
                                     <EarningsBreakdown price={packages[activeTab].price} compact />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Revisions</label>
                                         <input
@@ -212,16 +212,16 @@ export default function PricingForm({ profile, services, specializations }: Pric
                                             placeholder="1"
                                         />
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
-                                    <input
-                                        type="number"
-                                        value={packages[activeTab].turnaround || 2}
-                                        onChange={(e) => updatePackage(activeTab, 'turnaround', Number(e.target.value))}
-                                        className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
-                                        placeholder="2"
-                                    />
+                                    <div>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Delivery Time (Days)</label>
+                                        <input
+                                            type="number"
+                                            value={packages[activeTab].turnaround || 2}
+                                            onChange={(e) => updatePackage(activeTab, 'turnaround', Number(e.target.value))}
+                                            className="w-full p-3 rounded-xl border border-sky-50 bg-white text-sm font-bold text-slate-700 outline-none"
+                                            placeholder="2"
+                                        />
+                                    </div>
                                 </div>
                                 <p className="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
                                     <Zap className="w-3 h-3 text-sky-400 inline mr-1 mb-0.5" />

@@ -190,16 +190,6 @@ export default function ClientNavbar() {
                                             <span className="text-xs uppercase tracking-widest">Dashboard</span>
                                         </Link>
                                         <Link
-                                            href="/client/profile"
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
-                                        >
-                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
-                                                <User size={18} />
-                                            </div>
-                                            <span className="text-xs uppercase tracking-widest">Profile Settings</span>
-                                        </Link>
-                                        <Link
                                             href="/client/projects"
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
@@ -260,16 +250,6 @@ export default function ClientNavbar() {
                                     <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Financials</h3>
                                     <div className="space-y-1">
                                         <Link
-                                            href="/client/wallet"
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
-                                        >
-                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
-                                                <Wallet size={18} />
-                                            </div>
-                                            <span className="text-xs uppercase tracking-widest">Refunds</span>
-                                        </Link>
-                                        <Link
                                             href="/client/payment-history"
                                             onClick={() => setIsMenuOpen(false)}
                                             className="w-full flex items-center p-3 rounded-xl text-slate-500 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
@@ -285,6 +265,26 @@ export default function ClientNavbar() {
                                 <div className="px-6 mb-8 mt-4">
                                     <h3 className="text-[10px] font-black text-slate-800 uppercase tracking-[0.4em] mb-6">Support</h3>
                                     <div className="space-y-1">
+                                        <Link
+                                            href="/client/profile"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        >
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <User size={18} />
+                                            </div>
+                                            <span className="text-xs uppercase tracking-widest">Profile Settings</span>
+                                        </Link>
+                                        <Link
+                                            href="/client/settings"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex items-center p-3 rounded-xl text-slate-600 hover:text-[#0EA5E9] hover:bg-sky-50 transition-all font-black"
+                                        >
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center mr-4 text-[#0EA5E9]">
+                                                <Shield size={18} />
+                                            </div>
+                                            <span className="text-xs uppercase tracking-widest">Account Settings</span>
+                                        </Link>
                                         <Link
                                             href="/client/support"
                                             onClick={() => setIsMenuOpen(false)}

@@ -130,7 +130,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                     {/* Left Column (8 units) */}
                     <div className="lg:col-span-8 space-y-8">
                         {/* Title Section */}
-                        <div className="bg-white rounded-[2.5rem] p-10 border border-slate-200/60 shadow-xl shadow-slate-200/40 relative overflow-hidden">
+                        <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-200/60 shadow-xl shadow-slate-200/40 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-[0.03]">
                                 <Briefcase className="w-48 h-48 text-slate-900" />
                             </div>
@@ -170,7 +170,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                         </div>
 
                         {/* Briefing Card */}
-                        <div className="bg-white rounded-[2.5rem] p-10 border border-slate-200/60 shadow-sm">
+                        <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-200/60 shadow-sm">
                             <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-sky-500" />
                                 Mission Details
@@ -203,7 +203,7 @@ export default function CreatorProjectPage({ params }: { params: Promise<{ id: s
                     {/* Right Column (4 units) */}
                     <div className="lg:col-span-4 space-y-8">
                         {/* Financial Hub */}
-                        <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden group">
+                        <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-10 text-white shadow-2xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <AEDIcon className="w-32 h-32 text-sky-400" />
                             </div>

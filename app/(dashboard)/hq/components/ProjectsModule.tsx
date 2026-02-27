@@ -102,8 +102,8 @@ export default function ProjectsModule({ projects, events = [] }: { projects: an
 
                     return (
                         <div key={p.id} className="bg-[#111111] border border-white/5 rounded-[2.5rem] hover:border-white/10 transition-all group overflow-hidden">
-                            <div className="p-8">
-                                <div className="flex flex-col xl:flex-row justify-between gap-10">
+                            <div className="p-6 md:p-8">
+                                <div className="flex flex-col xl:flex-row justify-between gap-6 md:gap-10">
                                     {/* Entity Info */}
                                     <div className="flex-1 space-y-6">
                                         <div className="flex items-center gap-4">
@@ -156,7 +156,7 @@ export default function ProjectsModule({ projects, events = [] }: { projects: an
                                     </div>
 
                                     {/* Financial Summary */}
-                                    <div className="xl:text-right flex flex-row xl:flex-col justify-between items-center xl:items-end gap-4 border-t xl:border-t-0 xl:border-l border-white/5 pt-8 xl:pt-0 xl:pl-10 min-w-[200px]">
+                                    <div className="xl:text-right flex flex-col md:flex-row xl:flex-col justify-between items-start md:items-center xl:items-end gap-6 border-t xl:border-t-0 xl:border-l border-white/5 pt-6 xl:pt-0 xl:pl-10 min-w-[200px]">
                                         <div>
                                             <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Contract Value</div>
                                             <div className="text-3xl font-black text-white">AED {p.current_price || '0.00'}</div>
@@ -177,7 +177,7 @@ export default function ProjectsModule({ projects, events = [] }: { projects: an
                                     </div>
 
                                     {/* Action Tools */}
-                                    <div className="flex flex-row xl:flex-col gap-2 border-t xl:border-t-0 xl:border-l border-white/5 pt-8 xl:pt-0 xl:pl-10 justify-center">
+                                    <div className="flex flex-wrap md:flex-row xl:flex-col gap-3 border-t xl:border-t-0 xl:border-l border-white/5 pt-6 xl:pt-0 xl:pl-10 justify-start xl:justify-center">
                                         <Link href={`/creator/projects/${p.id}`} target="_blank">
                                             <ProjectAction icon={Eye} label="God View" color="text-blue-500 hover:bg-blue-500/10 border-blue-500/20" />
                                         </Link>

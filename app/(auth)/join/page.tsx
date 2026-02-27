@@ -52,11 +52,15 @@ export default function JoinPage() {
                     </div>
 
                     <div className="mt-12 text-center pt-8 border-t border-sky-50">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
                             Member?{' '}
                             <Link href="/login" className="text-[#0EA5E9] hover:underline">
                                 Sign In
                             </Link>
+                        </p>
+                        <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest px-4 leading-relaxed mt-6">
+                            By joining, you agree to our <br />
+                            <Link href="/terms" className="text-[#0EA5E9] hover:underline font-black">Terms of Service</Link> and <Link href="/privacy" className="text-[#0EA5E9] hover:underline font-black">Privacy Policy</Link>.
                         </p>
                     </div>
                 </div>

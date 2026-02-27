@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { createNotification } from '@/utils/notifications'
 import { containsContactInfo } from '@/utils/content-safety'
-import { notifyClientOfWorkSubmitted } from '@/utils/sms'
 import { getStripe } from '@/utils/stripe'
 import { sendEmail } from '@/utils/send-email'
 import { headers } from 'next/headers'
@@ -476,12 +475,9 @@ export async function submitWork(prevState: any, formData: FormData) {
     // 3. Fetch Client Info for internal use (notifications)
     const { data: projectCheck } = await createAdminClient()
         .from('projects')
-        .select('client_id, profiles!projects_client_id_fkey(whatsapp_phone, full_name, display_name)')
+        .select('client_id')
         .eq('id', projectId)
         .single()
-
-    const finalClientPhone = projectCheck?.profiles ? (projectCheck.profiles as any).whatsapp_phone : null
-    const finalClientName = projectCheck?.profiles ? ((projectCheck.profiles as any).display_name || (projectCheck.profiles as any).full_name || 'Client') : 'Client'
 
     // Verify ownership and get client_id/title
     const { data: project } = await supabase
@@ -532,18 +528,6 @@ export async function submitWork(prevState: any, formData: FormData) {
         })
 
 
-        // Background WhatsApp Alert
-        if (finalClientPhone) {
-            supabase.from('profiles').select('display_name, full_name').eq('id', user.id).single().then(creatorProfile => {
-                const creatorDisplayName = creatorProfile.data?.display_name || creatorProfile.data?.full_name || 'Your Creator';
-                notifyClientOfWorkSubmitted({
-                    to: finalClientPhone,
-                    creatorName: creatorDisplayName,
-                    projectTitle: project.title,
-                    link: `${process.env.NEXT_PUBLIC_BASE_URL}/client/projects/${projectId}`
-                }).catch(e => console.error('[WHATSAPP] Client notification failed:', e));
-            });
-        }
     }
 
     revalidatePath('/creator/requests')

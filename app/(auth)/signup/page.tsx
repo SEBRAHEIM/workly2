@@ -76,6 +76,11 @@ export default function Signup() {
                         >
                             Create Account
                         </button>
+
+                        <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest text-center mt-6 px-4 leading-relaxed">
+                            By creating an account, you agree to our <br />
+                            <Link href="/terms" className="text-[#0EA5E9] hover:underline font-black">Terms of Service</Link> and <Link href="/privacy" className="text-[#0EA5E9] hover:underline font-black">Privacy Policy</Link>.
+                        </p>
                     </form>
 
                     <div className="mt-12 text-center pt-8 border-t border-sky-50">

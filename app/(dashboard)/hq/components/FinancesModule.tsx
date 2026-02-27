@@ -79,14 +79,14 @@ export default function FinancesModule({ projects, stats, withdrawals = [], tran
                     <h2 className="text-3xl font-sans font-black font-black text-white tracking-tight uppercase">Platform Economics</h2>
                     <p className="text-gray-500 font-medium tracking-widest text-[10px] uppercase mt-2">Revenue flow and treasury management</p>
                 </div>
-                <button className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-200 transition-all">
+                <button className="flex items-center gap-2 px-4 md:px-6 py-3 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-200 transition-all">
                     <Download className="w-4 h-4" /> Export Ledger
                 </button>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* 1. Ledger Summary */}
-                <div className="lg:col-span-2 bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 overflow-hidden relative">
+                <div className="lg:col-span-2 bg-[#111111] border border-white/5 rounded-[2.5rem] p-6 md:p-10 overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 blur-[100px] rounded-full -mr-20 -mt-20" />
 
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-10 flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function FinancesModule({ projects, stats, withdrawals = [], tran
             {/* 3. Payout Batches & Settlements */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Per-Creator Dues */}
-                <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8">
+                <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] p-6 md:p-8">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8 flex justify-between items-center">
                         <span className="flex items-center gap-2"><DollarSign className="w-4 h-4 text-emerald-500" /> Pending Settlements</span>
                         <span className="text-gray-500">{Object.keys(creatorAggregates).length} Creators</span>
@@ -212,7 +212,7 @@ export default function FinancesModule({ projects, stats, withdrawals = [], tran
                 </div>
 
                 {/* Recent Payout Batches */}
-                <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8">
+                <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] p-6 md:p-8">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8 flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-orange-500" /> Payout Audit Logs
                     </h3>

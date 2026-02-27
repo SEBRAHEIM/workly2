@@ -5,7 +5,6 @@ import { revalidatePath } from 'next/cache'
 
 export async function updateClientIdentity(formData: FormData) {
     const supabase = await createClient()
-    const smsPhone = formData.get('smsPhone') as string
     const fullName = formData.get('fullName') as string
     const username = formData.get('username') as string
     const displayName = formData.get('displayName') as string
@@ -16,7 +15,6 @@ export async function updateClientIdentity(formData: FormData) {
     const { error } = await supabase
         .from('profiles')
         .update({
-            whatsapp_phone: smsPhone,
             full_name: fullName,
             username: username,
             display_name: displayName

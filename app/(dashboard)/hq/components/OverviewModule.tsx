@@ -101,34 +101,36 @@ export default function OverviewModule({ projects, profiles, stats, withdrawals 
                         <Activity className="w-4 h-4" />
                         Live Pulse
                     </h3>
-                    <div className="bg-[#111111] border border-white/5 rounded-3xl overflow-hidden">
-                        <table className="w-full text-left text-sm">
-                            <thead>
-                                <tr className="border-b border-white/5 bg-white/5">
-                                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Event</th>
-                                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Entity</th>
-                                    <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {allEvents.slice(0, 10).map((event) => (
-                                    <tr key={event.id} className="hover:bg-white/5 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-2 h-2 rounded-full ${event.color} shadow-[0_0_5px_rgba(59,130,246,0.3)]`} />
-                                                <span className="font-bold text-gray-300">{event.type}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-gray-500 truncate block max-w-[200px]">{event.title}</span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right font-mono text-gray-600 text-[10px]">
-                                            {isMounted ? new Date(event.date).toLocaleTimeString() : '...'}
-                                        </td>
+                    <div className="bg-[#111111] border border-white/5 rounded-3xl overflow-x-auto overflow-y-hidden">
+                        <div className="min-w-[600px] lg:min-w-0">
+                            <table className="w-full text-left text-sm">
+                                <thead>
+                                    <tr className="border-b border-white/5 bg-white/5">
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Event</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Entity</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Time</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y divide-white/5">
+                                    {allEvents.slice(0, 10).map((event) => (
+                                        <tr key={event.id} className="hover:bg-white/5 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-2 h-2 rounded-full ${event.color} shadow-[0_0_5px_rgba(59,130,246,0.3)]`} />
+                                                    <span className="font-bold text-gray-300">{event.type}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className="text-gray-500 truncate block max-w-[200px]">{event.title}</span>
+                                            </td>
+                                            <td className="px-6 py-4 text-right font-mono text-gray-600 text-[10px]">
+                                                {isMounted ? new Date(event.date).toLocaleTimeString() : '...'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

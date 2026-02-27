@@ -318,8 +318,8 @@ export default function ProjectPage({
                                         </motion.div>
                                     )}
 
-                                    {/* Review Needed State */}
-                                    {(project.status === 'submitted' || (project.status === 'completed' && !review)) && (
+                                    {/* Review & Management Section */}
+                                    {(project.status === 'submitted' || project.status === 'completed' || project.status === 'revision_requested') && (
                                         <motion.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
@@ -335,6 +335,7 @@ export default function ProjectPage({
                                                 revisionsTotal={project.revisions_total || 0}
                                                 revisionsUsed={project.revisions_used || 0}
                                                 initialIsCompleted={project.status === 'completed'}
+                                                review={review}
                                             />
                                         </motion.div>
                                     )}

@@ -8,7 +8,6 @@ import { createNotification } from '@/utils/notifications'
 // import { sendEmail } from '@/utils/send-email' // Keep disabled for now/static
 
 import { containsContactInfo } from '@/utils/content-safety'
-import { notifyCreatorOfNewHire } from '@/utils/sms'
 import { getStripe } from '@/utils/stripe'
 
 import { after } from 'next/server'
@@ -40,7 +39,7 @@ export async function createProject(prevState: any, formData: FormData) {
         (pricingType === 'fixed' || pricingType === 'packages')
             ? supabase.from('creator_services').select('*').eq('creator_id', creatorId).eq('category_slug', categorySlug).single()
             : Promise.resolve({ data: null, error: null }),
-        createAdminClient().from('profiles').select('whatsapp_phone, display_name, full_name').eq('id', creatorId).single()
+        createAdminClient().from('profiles').select('display_name, full_name').eq('id', creatorId).single()
     ])
 
     const { data: { user } } = userResponse

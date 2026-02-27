@@ -19,6 +19,7 @@ interface SubmissionReviewProps {
     revisionsTotal: number
     revisionsUsed: number
     initialIsCompleted?: boolean
+    review?: any
 }
 
 export default function SubmissionReview({
@@ -30,7 +31,8 @@ export default function SubmissionReview({
     submissionNotes,
     revisionsTotal,
     revisionsUsed,
-    initialIsCompleted = false
+    initialIsCompleted = false,
+    review
 }: SubmissionReviewProps) {
     const [isRevising, setIsRevising] = useState(false)
     const [revisionNotes, setRevisionNotes] = useState('')
@@ -88,13 +90,57 @@ export default function SubmissionReview({
         }
     }
 
+    if (review) {
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/40 relative overflow-hidden group"
+            >
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Check className="w-32 h-32 text-[#0EA5E9]" />
+                </div>
+                <div className="relative z-10 text-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 rounded-full mb-6 border border-emerald-100/50">
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Project Finalized</span>
+                    </div>
+
+                    <div className="flex justify-center gap-1 mb-6">
+                        {[...Array(5)].map((_, i) => (
+                            <Star
+                                key={i}
+                                size={20}
+                                className={`${i < review.rating ? 'fill-[#0EA5E9] text-[#0EA5E9]' : 'text-slate-100 fill-slate-50'}`}
+                            />
+                        ))}
+                    </div>
+
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">Your Assessment</h3>
+                    {review.comment ? (
+                        <p className="text-slate-500 text-sm leading-relaxed italic max-w-md mx-auto">
+                            "{review.comment}"
+                        </p>
+                    ) : (
+                        <p className="text-slate-400 text-sm italic">No written feedback provided.</p>
+                    )}
+                </div>
+            </motion.div>
+        )
+    }
+
     if (isCompleted && showReview) {
         return (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
                 <ReviewForm
                     projectId={projectId}
                     creatorName={creatorName}
-                    onSuccess={() => setShowReview(false)}
+                    onSuccess={() => {
+                        setIsCompleted(true)
+                        setShowReview(false)
+                        // In a real app, we'd probably trigger a re-fetch here
+                        window.location.reload()
+                    }}
                 />
             </motion.div>
         )
@@ -105,14 +151,15 @@ export default function SubmissionReview({
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-emerald-500 rounded-[2rem] p-8 text-white shadow-xl shadow-emerald-500/20 text-center flex flex-col items-center"
+                className="bg-emerald-500 rounded-[2.5rem] p-6 md:p-10 text-white shadow-xl shadow-emerald-500/30 text-center flex flex-col items-center group relative overflow-hidden"
             >
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6">
-                    <Check className="w-8 h-8 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-[1.5rem] flex items-center justify-center mb-6 relative z-10">
+                    <Check className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-sans font-black font-black mb-2 uppercase tracking-tight">Project Completed</h3>
-                <p className="text-white/70 text-sm font-medium leading-relaxed">
-                    Transfer successful. The creator has received their earnings.
+                <h3 className="text-2xl font-sans font-black mb-3 uppercase tracking-tight relative z-10">Project Completed</h3>
+                <p className="text-white/80 text-sm font-medium leading-relaxed max-w-xs relative z-10">
+                    The creative cycle is complete. The creator has been compensated.
                 </p>
             </motion.div>
         )
@@ -120,7 +167,7 @@ export default function SubmissionReview({
 
     return (
         <div className="space-y-6">
-            <div className="bg-white rounded-[2rem] p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40">
+            <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40">
                 <div className="flex items-center gap-4 mb-8">
                     <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center">
                         <Upload className="w-6 h-6 text-indigo-500" />
@@ -195,7 +242,7 @@ export default function SubmissionReview({
                                     className="w-full font-black uppercase tracking-[0.2em] text-[10px] py-4 rounded-2xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center justify-center gap-2"
                                 >
                                     <RefreshCw className="w-3.5 h-3.5" />
-                                    Request Course Correction
+                                    Require Revisions
                                 </button>
                             ) : (
                                 <div className="p-4 bg-rose-50 rounded-2xl border border-rose-100 flex items-center justify-center gap-2 text-rose-500">
@@ -222,10 +269,10 @@ export default function SubmissionReview({
                         >
                             <div className="flex justify-between items-center mb-6">
                                 <h4 className="font-black text-amber-600 text-[10px] uppercase tracking-widest flex items-center gap-2">
-                                    <RefreshCw className="w-4 h-4" /> Revision Directive
+                                    <RefreshCw className="w-4 h-4" /> Revision Brief
                                 </h4>
                                 <button onClick={() => setIsRevising(false)} className="text-amber-400 hover:text-amber-600">
-                                    <ChevronUp className="w-5 h-5" />
+                                    <ChevronUp className="w-5 h-5 transition-transform group-hover:-translate-y-1" />
                                 </button>
                             </div>
 
@@ -257,6 +304,6 @@ export default function SubmissionReview({
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+        </div >
     )
 }

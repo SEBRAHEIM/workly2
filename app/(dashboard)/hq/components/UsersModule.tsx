@@ -103,144 +103,146 @@ export default function UsersModule({ profiles, projects = [], setActiveTab }: {
             </div>
 
             {/* Table */}
-            <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] overflow-hidden">
-                <table className="w-full text-left text-sm border-collapse">
-                    <thead>
-                        <tr className="border-b border-white/5 bg-white/5">
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">User</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Activity</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Role</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Status</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Joined</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/[0.02]">
-                        {filteredProfiles.map((p) => (
-                            <tr key={p.id} className="hover:bg-white/[0.02] transition-colors group">
-                                <td className="px-8 py-5">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform">
-                                            {p.avatar_url ? (
-                                                <img src={p.avatar_url} alt="" className="w-full h-full object-cover" />
-                                            ) : (
-                                                <User className="w-6 h-6 text-gray-400" />
-                                            )}
-                                            {p.is_verified && (
-                                                <div className="absolute -top-1 -right-1 p-1 bg-blue-500 rounded-full shadow-lg">
-                                                    <UserCheck className="w-2.5 h-2.5 text-white" />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <div className="font-bold text-white flex items-center gap-2">
-                                                {p.full_name || p.display_name || p.username || 'Anonymous'}
-                                                {p.status === 'suspended' && <span className="text-[8px] bg-red-500/20 text-red-500 px-2 py-0.5 rounded-full uppercase font-black border border-red-500/20">Suspended</span>}
-                                            </div>
-                                            <div className="text-[10px] text-gray-500 flex items-center gap-1.5 mt-0.5 font-medium">
-                                                <Mail className="w-3 h-3" /> {p.email}
-                                            </div>
-
-                                            {p.role === 'creator' && (
-                                                <div className="mt-3 p-3 bg-white/[0.02] rounded-xl border border-white/5 space-y-2">
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="text-[7px] text-gray-500 uppercase font-black tracking-widest">Payout Identity</div>
-                                                        <span className={`text-[7px] font-black uppercase px-2 py-0.5 rounded-full ${p.payout_preference ? 'bg-green-500/10 text-green-500' : 'bg-gray-500/10 text-gray-500'}`}>
-                                                            {p.payout_preference || 'None'}
-                                                        </span>
-                                                    </div>
-
-                                                    {p.payout_preference === 'bank' && (
-                                                        <div className="grid grid-cols-1 gap-1">
-                                                            <div className="text-[9px] text-gray-300 font-bold tracking-tight truncate">{p.bank_account_name}</div>
-                                                            <div className="text-[8px] text-blue-400 font-mono tracking-tighter truncate">{p.bank_iban}</div>
-                                                            <div className="text-[7px] text-gray-600 uppercase font-black tracking-widest">{p.bank_name}</div>
-                                                        </div>
-                                                    )}
-
-                                                    {p.payout_preference === 'paypal' && (
-                                                        <div className="text-[9px] text-blue-400 font-mono tracking-tighter truncate">
-                                                            {p.paypal_email || 'Email Missing'}
-                                                        </div>
-                                                    )}
-
-                                                    {!p.payout_preference && (
-                                                        <div className="text-[8px] text-gray-600 italic">No payout methods configured.</div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-5">
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xl font-black text-white">{getUserProjectCount(p.id)}</span>
-                                            <span className="text-[8px] text-gray-500 uppercase font-black tracking-[0.2em]">Projects</span>
-                                        </div>
-                                        <div className="w-24 h-1 bg-white/5 rounded-full overflow-hidden">
-                                            <div className="h-full bg-red-600 rounded-full" style={{ width: `${Math.min(getUserProjectCount(p.id) * 10, 100)}%` }} />
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-5">
-                                    <div
-                                        onClick={() => setActiveTab('projects')}
-                                        className="space-y-2 cursor-pointer group/activity"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xl font-black text-white group-hover/activity:text-red-500 transition-colors">{getUserProjectCount(p.id)}</span>
-                                            <span className="text-[8px] text-gray-500 uppercase font-black tracking-[0.2em]">Projects</span>
-                                        </div>
-                                        <div className="w-24 h-1 bg-white/5 rounded-full overflow-hidden">
-                                            <div className="h-full bg-red-600 rounded-full transition-all duration-1000" style={{ width: `${Math.min(getUserProjectCount(p.id) * 10, 100)}%` }} />
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-5 text-[10px] font-black uppercase tracking-widest">
-                                    <span className={`${p.role === 'admin' ? 'text-red-500' : p.role === 'creator' ? 'text-blue-400' : 'text-green-500'}`}>
-                                        {p.role}
-                                    </span>
-                                </td>
-                                <td className="px-8 py-5">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${p.status === 'suspended' ? 'bg-red-500' : 'bg-green-500 animate-pulse'}`} />
-                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.status || 'active'}</span>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-5 text-gray-500 text-[10px] font-medium">
-                                    <span className="flex items-center gap-1 font-mono tracking-tighter">
-                                        <Calendar className="w-3 h-3" />
-                                        {isMounted && p.created_at ? new Date(p.created_at).toLocaleDateString() : '...'}
-                                    </span>
-                                </td>
-                                <td className="px-8 py-5 text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                        {!p.is_verified && (
-                                            <button
-                                                onClick={() => handleVerify(p.id)}
-                                                className="p-2 hover:bg-blue-500/10 rounded-lg text-gray-500 hover:text-blue-500 transition-all group/btn" title="Verify User"
-                                            >
-                                                <UserCheck className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                                            </button>
-                                        )}
-                                        {p.status !== 'suspended' && (
-                                            <button
-                                                onClick={() => handleSuspend(p.id)}
-                                                className="p-2 hover:bg-red-500/10 rounded-lg text-gray-500 hover:text-red-500 transition-all group/btn" title="Suspend User"
-                                            >
-                                                <ShieldAlert className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                                            </button>
-                                        )}
-                                        <button className="p-2 hover:bg-white/5 rounded-lg text-gray-500 transition-all">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </td>
+            <div className="bg-[#111111] border border-white/5 rounded-[2.5rem] overflow-x-auto overflow-y-hidden">
+                <div className="min-w-[800px] lg:min-w-0">
+                    <table className="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr className="border-b border-white/5 bg-white/5">
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">User</th>
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Activity</th>
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Role</th>
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Status</th>
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Joined</th>
+                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-white/[0.02]">
+                            {filteredProfiles.map((p) => (
+                                <tr key={p.id} className="hover:bg-white/[0.02] transition-colors group">
+                                    <td className="px-8 py-5">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform">
+                                                {p.avatar_url ? (
+                                                    <img src={p.avatar_url} alt="" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User className="w-6 h-6 text-gray-400" />
+                                                )}
+                                                {p.is_verified && (
+                                                    <div className="absolute -top-1 -right-1 p-1 bg-blue-500 rounded-full shadow-lg">
+                                                        <UserCheck className="w-2.5 h-2.5 text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-white flex items-center gap-2">
+                                                    {p.full_name || p.display_name || p.username || 'Anonymous'}
+                                                    {p.status === 'suspended' && <span className="text-[8px] bg-red-500/20 text-red-500 px-2 py-0.5 rounded-full uppercase font-black border border-red-500/20">Suspended</span>}
+                                                </div>
+                                                <div className="text-[10px] text-gray-500 flex items-center gap-1.5 mt-0.5 font-medium">
+                                                    <Mail className="w-3 h-3" /> {p.email}
+                                                </div>
+
+                                                {p.role === 'creator' && (
+                                                    <div className="mt-3 p-3 bg-white/[0.02] rounded-xl border border-white/5 space-y-2">
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="text-[7px] text-gray-500 uppercase font-black tracking-widest">Payout Identity</div>
+                                                            <span className={`text-[7px] font-black uppercase px-2 py-0.5 rounded-full ${p.payout_preference ? 'bg-green-500/10 text-green-500' : 'bg-gray-500/10 text-gray-500'}`}>
+                                                                {p.payout_preference || 'None'}
+                                                            </span>
+                                                        </div>
+
+                                                        {p.payout_preference === 'bank' && (
+                                                            <div className="grid grid-cols-1 gap-1">
+                                                                <div className="text-[9px] text-gray-300 font-bold tracking-tight truncate">{p.bank_account_name}</div>
+                                                                <div className="text-[8px] text-blue-400 font-mono tracking-tighter truncate">{p.bank_iban}</div>
+                                                                <div className="text-[7px] text-gray-600 uppercase font-black tracking-widest">{p.bank_name}</div>
+                                                            </div>
+                                                        )}
+
+                                                        {p.payout_preference === 'paypal' && (
+                                                            <div className="text-[9px] text-blue-400 font-mono tracking-tighter truncate">
+                                                                {p.paypal_email || 'Email Missing'}
+                                                            </div>
+                                                        )}
+
+                                                        {!p.payout_preference && (
+                                                            <div className="text-[8px] text-gray-600 italic">No payout methods configured.</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-5">
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xl font-black text-white">{getUserProjectCount(p.id)}</span>
+                                                <span className="text-[8px] text-gray-500 uppercase font-black tracking-[0.2em]">Projects</span>
+                                            </div>
+                                            <div className="w-24 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                <div className="h-full bg-red-600 rounded-full" style={{ width: `${Math.min(getUserProjectCount(p.id) * 10, 100)}%` }} />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-5">
+                                        <div
+                                            onClick={() => setActiveTab('projects')}
+                                            className="space-y-2 cursor-pointer group/activity"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xl font-black text-white group-hover/activity:text-red-500 transition-colors">{getUserProjectCount(p.id)}</span>
+                                                <span className="text-[8px] text-gray-500 uppercase font-black tracking-[0.2em]">Projects</span>
+                                            </div>
+                                            <div className="w-24 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                <div className="h-full bg-red-600 rounded-full transition-all duration-1000" style={{ width: `${Math.min(getUserProjectCount(p.id) * 10, 100)}%` }} />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-5 text-[10px] font-black uppercase tracking-widest">
+                                        <span className={`${p.role === 'admin' ? 'text-red-500' : p.role === 'creator' ? 'text-blue-400' : 'text-green-500'}`}>
+                                            {p.role}
+                                        </span>
+                                    </td>
+                                    <td className="px-8 py-5">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${p.status === 'suspended' ? 'bg-red-500' : 'bg-green-500 animate-pulse'}`} />
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.status || 'active'}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-5 text-gray-500 text-[10px] font-medium">
+                                        <span className="flex items-center gap-1 font-mono tracking-tighter">
+                                            <Calendar className="w-3 h-3" />
+                                            {isMounted && p.created_at ? new Date(p.created_at).toLocaleDateString() : '...'}
+                                        </span>
+                                    </td>
+                                    <td className="px-8 py-5 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            {!p.is_verified && (
+                                                <button
+                                                    onClick={() => handleVerify(p.id)}
+                                                    className="p-2 hover:bg-blue-500/10 rounded-lg text-gray-500 hover:text-blue-500 transition-all group/btn" title="Verify User"
+                                                >
+                                                    <UserCheck className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                                                </button>
+                                            )}
+                                            {p.status !== 'suspended' && (
+                                                <button
+                                                    onClick={() => handleSuspend(p.id)}
+                                                    className="p-2 hover:bg-red-500/10 rounded-lg text-gray-500 hover:text-red-500 transition-all group/btn" title="Suspend User"
+                                                >
+                                                    <ShieldAlert className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                                                </button>
+                                            )}
+                                            <button className="p-2 hover:bg-white/5 rounded-lg text-gray-500 transition-all">
+                                                <MoreHorizontal className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {filteredProfiles.length === 0 && (
                     <div className="py-20 text-center">
                         <User className="w-12 h-12 text-gray-800 mx-auto mb-4 opacity-20" />

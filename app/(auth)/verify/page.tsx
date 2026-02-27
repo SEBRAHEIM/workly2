@@ -83,6 +83,33 @@ function VerifyContent() {
                         </button>
                     </form>
 
+                    {/* Junk Folder & Future Delivery Guide */}
+                    <div className="mt-8 bg-sky-50/50 border border-sky-100 rounded-3xl p-6">
+                        <div className="flex items-start gap-4 mb-4">
+                            <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center shrink-0">
+                                <span className="text-[14px]">🔐</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-sky-800 uppercase tracking-widest mb-1">Finding the code</p>
+                                <p className="text-[11px] font-medium text-sky-700/80 leading-relaxed">
+                                    The verification code is sent from <strong>no-reply@workly.day</strong>. If you don't see it, please check your <strong>Junk/Spam</strong> folder.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4 pt-4 border-t border-sky-100">
+                            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                                <span className="text-[14px]">💰</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-amber-800 uppercase tracking-widest mb-1">Guaranteeing Future Payouts</p>
+                                <p className="text-[11px] font-medium text-amber-700/80 leading-relaxed">
+                                    We've also sent an <u>Inbox Guarantee</u> email from <strong>notifications@workly.day</strong>. Mark it as <strong>"Not Junk"</strong> to ensure you receive future payments!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="mt-12 text-center pt-8 border-t border-sky-50">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                             Code expired?{' '}

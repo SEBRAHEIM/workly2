@@ -29,7 +29,6 @@ export default async function HireCreatorPage({ params }: { params: Promise<{ cr
 
     console.log('[SMS DEBUG] Hire Page Fetching Creator:', creatorId, {
         found: !!creator,
-        phone: creator?.whatsapp_phone,
         name: creator?.full_name
     })
     const { data: services } = await supabase

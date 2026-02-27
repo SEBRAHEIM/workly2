@@ -6,13 +6,17 @@ export async function createNotification({
     type = 'info',
     title,
     message,
-    link
+    link,
+    customEmailHtml,
+    skipEmail
 }: {
     userId: string
     type?: 'info' | 'success' | 'warning' | 'error'
     title?: string
     message: string
     link?: string
+    customEmailHtml?: string
+    skipEmail?: boolean
 }) {
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
         console.error('CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing from environment variables.')
@@ -41,6 +45,8 @@ export async function createNotification({
         // Note: We don't await this to keep the application responsive, but we do catch errors.
         (async () => {
             try {
+                if (skipEmail) return;
+
                 if (!process.env.RESEND_API_KEY) {
                     console.warn('NOTICE: RESEND_API_KEY is missing. Skipping email notification. Please configure this in Vercel/Environment to enable emails.')
                     return
@@ -54,7 +60,7 @@ export async function createNotification({
                     return
                 }
 
-                const emailHtml = `
+                const emailHtml = customEmailHtml || `
                     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; color: #1a1a1a;">
                         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #0f172a;">${title || 'New Notification'}</h2>
                         <p style="font-size: 15px; line-height: 1.5; color: #334155; margin-bottom: 32px;">${message}</p>

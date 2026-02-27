@@ -2,7 +2,6 @@ import { headers } from 'next/headers'
 import { getStripe } from '@/utils/stripe'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { NextResponse } from 'next/server'
-import { notifyCreatorOfNewHire } from '@/utils/sms'
 import { createNotification } from '@/utils/notifications'
 
 
@@ -46,7 +45,7 @@ export async function POST(req: Request) {
 
             // 1.5 Fetch Creator and Client details for SMS/WhatsApp alert
             const [{ data: creatorProfile }, { data: clientProfile }] = await Promise.all([
-                supabaseAdmin.from('profiles').select('whatsapp_phone, display_name, full_name').eq('id', project.creator_id).single(),
+                supabaseAdmin.from('profiles').select('display_name, full_name').eq('id', project.creator_id).single(),
                 supabaseAdmin.from('profiles').select('display_name, full_name').eq('id', project.client_id).single()
             ])
 
@@ -103,15 +102,6 @@ export async function POST(req: Request) {
                     message: `New Paid Order (Secure Escrow): "${project.title}". You can start working now.`,
                     link: `/creator/requests`
                 }),
-                // WhatsApp Notification
-                creatorProfile?.whatsapp_phone ? notifyCreatorOfNewHire({
-                    to: creatorProfile.whatsapp_phone,
-                    clientName: clientProfile?.full_name || clientProfile?.display_name || 'A Client',
-                    projectTitle: project.title,
-                    tier: project.current_terms?.tier || 'Fixed',
-                    price: project.current_price,
-                    link: `https://workly.day/creator/requests`
-                }).catch(e => console.error('[SMS] Webhook alert failed:', e)) : Promise.resolve()
             ])
 
 

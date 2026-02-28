@@ -136,12 +136,8 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     const supabase = await createClient()
     const email = formData.get('email') as string
 
-    // Use the dynamic origin from headers to ensure correct domain in the reset link
-    const { headers } = await import('next/headers')
-    const headerList = await headers()
-    const host = headerList.get('host')
-    const protocol = host?.includes('localhost') ? 'http' : 'https'
-    const siteUrl = `${protocol}://${host}`
+    // Stable Site URL for production links
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://workly.day'
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
@@ -151,7 +147,7 @@ export async function forgotPassword(prevState: any, formData: FormData) {
         return { error: error.message }
     }
 
-    return { success: "Password reset link sent to your email." }
+    return { success: "Check your email for the reset link! 📩" }
 }
 
 export async function updatePassword(prevState: any, formData: FormData) {

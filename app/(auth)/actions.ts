@@ -131,3 +131,38 @@ export async function login(prevState: any, formData: FormData) {
 
     redirect('/')
 }
+
+export async function forgotPassword(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+    const email = formData.get('email') as string
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
+    })
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    return { success: "Password reset link sent to your email." }
+}
+
+export async function updatePassword(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+    const password = formData.get('password') as string
+    const confirmPassword = formData.get('confirmPassword') as string
+
+    if (password !== confirmPassword) {
+        return { error: "Passwords do not match." }
+    }
+
+    const { error } = await supabase.auth.updateUser({
+        password: password
+    })
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    redirect('/login?message=Password updated successfully.')
+}

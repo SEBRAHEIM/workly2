@@ -58,6 +58,15 @@ export default function Login() {
                         </div>
                     )}
 
+                    {/* Error Notification from URL */}
+                    {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('error') && (
+                        <div className="mb-6 bg-red-50 border border-red-100 rounded-2xl p-4">
+                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center">
+                                {new URLSearchParams(window.location.search).get('error')}
+                            </p>
+                        </div>
+                    )}
+
                     <div className="pt-4">
                         {/* No social login, just email form below */}
                     </div>

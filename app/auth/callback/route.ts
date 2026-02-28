@@ -10,20 +10,18 @@ export async function GET(request: Request) {
     if (code) {
         const supabase = await createClient()
         const { error } = await supabase.auth.exchangeCodeForSession(code)
+
         if (!error) {
-            const forwardedHost = request.headers.get('x-forwarded-host') // i.e. vercel.com
-            const isLocalEnv = process.env.NODE_ENV === 'development'
-            if (isLocalEnv) {
-                // we can skip localized URLs in dev
-                return NextResponse.redirect(`${origin}${next}`)
-            } else if (forwardedHost) {
-                return NextResponse.redirect(`https://${forwardedHost}${next}`)
-            } else {
-                return NextResponse.redirect(`${origin}${next}`)
-            }
+            // Success: Redirect to the intended page
+            const redirectUrl = new URL(next, origin)
+            return NextResponse.redirect(redirectUrl)
         }
+
+        // Error exchanging code: Log and redirect to login with error
+        console.error('[AUTH CALLBACK] Code exchange error:', error)
+        return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)
     }
 
-    // return the user to an error page with instructions
-    return NextResponse.redirect(`${origin}/login?error=Could not authenticate user`)
+    // No code: Redirect to login
+    return NextResponse.redirect(`${origin}/login?error=Invalid session link`)
 }

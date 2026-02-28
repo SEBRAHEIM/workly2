@@ -4,8 +4,9 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url)
     const code = searchParams.get('code')
-    // if "next" is in param, use it as the redirect URL
-    const next = searchParams.get('next') ?? '/'
+    // Supabase often adds 'next' or 'type' to the callback
+    const next = searchParams.get('next')
+    const type = searchParams.get('type')
 
     // Always use the production site URL to ensure cookies are set on the correct domain
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || origin
@@ -15,8 +16,13 @@ export async function GET(request: Request) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
-            // Success: Redirect to the intended page
-            const redirectUrl = new URL(next, siteUrl)
+            // Success: Determine the destination. 
+            // If it's a recovery flow (forgot password), force /reset-password
+            const destination = (type === 'recovery' || next === '/reset-password')
+                ? '/reset-password'
+                : (next ?? '/')
+
+            const redirectUrl = new URL(destination, siteUrl)
             return NextResponse.redirect(redirectUrl)
         }
 

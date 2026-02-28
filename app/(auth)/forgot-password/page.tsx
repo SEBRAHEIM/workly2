@@ -39,9 +39,9 @@ export default function ForgotPassword() {
                     </div>
 
                     <form action={formAction} className="flex flex-col space-y-4">
-                        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-2">
-                            <p className="text-amber-700 text-[9px] font-black uppercase tracking-wider leading-tight text-center">
-                                ⚠️ IMPORTANT: Open the email link in the SAME browser (Safari/Chrome) you are using right now.
+                        <div className="bg-sky-50/50 border border-sky-100/50 rounded-2xl p-4 mb-2 text-center">
+                            <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.15em] leading-relaxed">
+                                Note: for a secure reset, please open the link in the same browser you're using now.
                             </p>
                         </div>
                         <div>

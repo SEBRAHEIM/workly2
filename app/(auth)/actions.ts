@@ -139,8 +139,12 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     // Stable Site URL for production links
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://workly.day'
 
+    // Properly encode the callback + next destination for production reliability
+    const redirectTo = new URL(`${siteUrl}/auth/callback`)
+    redirectTo.searchParams.set('next', '/reset-password')
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
+        redirectTo: redirectTo.toString(),
     })
 
     if (error) {

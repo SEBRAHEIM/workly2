@@ -136,8 +136,15 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     const supabase = await createClient()
     const email = formData.get('email') as string
 
+    // Use the dynamic origin from headers to ensure correct domain in the reset link
+    const { headers } = await import('next/headers')
+    const headerList = await headers()
+    const host = headerList.get('host')
+    const protocol = host?.includes('localhost') ? 'http' : 'https'
+    const siteUrl = `${protocol}://${host}`
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
+        redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
     })
 
     if (error) {

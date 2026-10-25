@@ -1,3 +1,6 @@
+// Signed-in and auth pages depend on the request (cookies, Supabase), so render them per request rather than at build time
+export const dynamic = 'force-dynamic'
+
 import ClientNavbar from '@/app/components/ClientNavbar'
 
 export default function ClientLayout({

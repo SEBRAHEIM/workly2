@@ -1,6 +1,7 @@
 import Header from './components/landing/Header'
 import Hero from './components/landing/Hero'
-import { Services, Showcase, Bento, Process, Industries } from './components/landing/Sections'
+import { Marquee, Services, Showcase, Bento, Process, Industries } from './components/landing/Sections'
+import Reveal from './components/landing/Reveal'
 import { Inquiry, Footer } from './components/landing/Inquiry'
 import Work from './components/landing/Work'
 import { Why, Faq } from './components/landing/Trust'
@@ -39,7 +40,9 @@ export default async function Home() {
   return (
     <main className="landing min-h-screen bg-white pb-6 font-[family-name:var(--font-inter)] font-normal text-[#151515]">
       <Header accountHref={accountHref} />
+      <Reveal />
       <Hero />
+      <Marquee />
       <Services />
       <Work />
       <Showcase />

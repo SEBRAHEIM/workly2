@@ -42,7 +42,7 @@ export function Inquiry() {
 
     return (
         <section id="inquiry" className="mx-auto max-w-[1400px] scroll-mt-20 px-3 pt-20 md:px-6 md:pt-28">
-            <div className="grid gap-8 rounded-[28px] bg-[#f4f4f0] p-5 md:grid-cols-[1fr_1.3fr] md:gap-12 md:rounded-[36px] md:p-12">
+            <div data-reveal className="grid gap-8 rounded-[28px] bg-[#f4f4f0] p-5 md:grid-cols-[1fr_1.3fr] md:gap-12 md:rounded-[36px] md:p-12">
                 <div>
                     <h2 className="text-[34px] font-light leading-[1.05] tracking-tight md:text-[52px]">
                         Tell Us What<br />You <Em>Need</Em>
@@ -108,7 +108,7 @@ const footerCols = [
 export function Footer() {
     return (
         <footer className="mx-auto max-w-[1400px] px-4 pt-20 md:px-6 md:pt-28">
-            <div className="flex flex-col items-center text-center">
+            <div data-reveal className="flex flex-col items-center text-center">
                 <p className="text-[34px] font-light leading-[1.05] tracking-tight md:text-[56px]">
                     Let&apos;s Build <Em>Something</Em><br />Worth Visiting
                 </p>

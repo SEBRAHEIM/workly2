@@ -122,7 +122,7 @@ const concepts = [
 export default function Work() {
     return (
         <section id="work" className="mx-auto max-w-[1400px] scroll-mt-20 px-4 pt-20 md:px-6 md:pt-28">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+            <div data-reveal className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
                 <h2 className="text-[34px] font-light leading-[1.05] tracking-tight md:text-[52px]">
                     What We <Em>Build</Em>
                 </h2>
@@ -131,8 +131,8 @@ export default function Work() {
                 </p>
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
-                {concepts.map(({ tag, title, url, Site }) => (
-                    <a key={tag} href="#inquiry" className="group block rounded-[28px] bg-[#f4f4f0] p-3 pb-4 md:p-4">
+                {concepts.map(({ tag, title, url, Site }, i) => (
+                    <a key={tag} href="#inquiry" data-reveal style={{ ['--rd' as string]: `${i * 0.12}s` }} className="group block rounded-[28px] bg-[#f4f4f0] p-3 pb-4 md:p-4">
                         <Browser url={url}><Site /></Browser>
                         <div className="mt-4 flex items-end justify-between gap-3 px-1">
                             <div>

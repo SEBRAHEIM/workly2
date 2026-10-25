@@ -1,16 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, ArrowUpRight, Calendar, Code2, Layers, Play, Search, Sparkles } from 'lucide-react'
-import { Chip, Em, IMG, Photo, Pill } from './ui'
+import { ArrowRight, ArrowUpRight, Calendar, Check, Code2, Layers, Search, ShoppingBag, Sparkles } from 'lucide-react'
+import { Chip, Em, Pill } from './ui'
+import { ArtFashion, BuildingSite, CodeThumb, Landscape } from './Art'
 
 // Six-armed asterisk from the reference, carrying the "it's time / to launch" message
 function Asterisk() {
     return (
         <svg viewBox="0 0 100 100" className="size-24 md:size-32" aria-hidden>
-            {[0, 60, 120].map((r) => (
-                <rect key={r} x="38" y="2" width="24" height="96" rx="12" fill="white" transform={`rotate(${r} 50 50)`} />
-            ))}
+            <g className="landing-spin" style={{ transformOrigin: '50px 50px' }}>
+                {[0, 60, 120].map((r) => (
+                    <rect key={r} x="38" y="2" width="24" height="96" rx="12" fill="white" transform={`rotate(${r} 50 50)`} />
+                ))}
+            </g>
             <path d="M34 50h30m-7-7 7 7-7 7" stroke="#151515" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     )
@@ -28,13 +31,8 @@ export default function Hero() {
     return (
         <section className="mx-auto max-w-[1400px] px-3 md:px-6">
             <div className="relative h-[620px] overflow-hidden rounded-[28px] md:h-[680px] md:rounded-[36px]">
-                <Photo
-                    src={IMG('photo-1497366216548-37526070297c', 2000)}
-                    alt="Bright, calm studio workspace"
-                    tint="from-[#7fa9b3] via-[#a9c2bf] to-[#d8b99c]"
-                    className="absolute inset-0"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#5f8f9a]/35 via-transparent to-[#3d3a33]/25" />
+                <Landscape />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#5f8f9a]/30 via-transparent to-[#3d3a33]/15" />
 
                 {/* Headline */}
                 <div className="relative z-10 flex flex-col items-center px-4 pt-14 text-center text-white md:pt-16">
@@ -47,10 +45,20 @@ export default function Hero() {
                 </div>
 
                 {/* Floating labels */}
-                <Chip label="Design" className="left-[5%] top-[46%] md:left-[7%] md:top-[14%]" />
-                <Chip label="Develop" className="right-[5%] top-[46%] md:left-[27%] md:right-auto md:top-[42%]" />
-                <Chip label="Launch" className="hidden md:flex md:right-[27%] md:top-[46%]" />
-                <Chip label="Support" className="hidden md:flex md:right-[7%] md:top-[14%]" />
+                <Chip label="Design" className="landing-bob left-[5%] top-[46%] md:left-[7%] md:top-[14%]" />
+                <Chip label="Develop" className="landing-bob right-[5%] top-[46%] [--d:1.2s] md:left-[27%] md:right-auto md:top-[42%]" />
+                <Chip label="Launch" className="landing-bob hidden [--d:2s] md:flex md:right-[27%] md:top-[46%]" />
+                <Chip label="Support" className="landing-bob hidden [--d:.6s] md:flex md:right-[7%] md:top-[14%]" />
+
+                {/* Notification toasts drifting over the landscape, like the cabins in a field */}
+                <div className="landing-bob absolute left-[9%] top-[60%] z-10 hidden items-center gap-2 rounded-2xl bg-white/90 py-2 pl-2 pr-3 text-[11px] shadow-md backdrop-blur [--d:.8s] lg:flex">
+                    <span className="grid size-7 place-items-center rounded-full bg-[#DDF5A9]"><Check size={13} /></span>
+                    <span className="leading-tight">Booking confirmed<br /><span className="text-[10px] text-[#8a8a85]">Table for 4 · 8:00 pm</span></span>
+                </div>
+                <div className="landing-bob absolute right-[9%] top-[30%] z-10 hidden items-center gap-2 rounded-2xl bg-white/90 py-2 pl-2 pr-3 text-[11px] shadow-md backdrop-blur [--d:2.4s] lg:flex">
+                    <span className="grid size-7 place-items-center rounded-full bg-[#151515] text-white"><ShoppingBag size={12} /></span>
+                    <span className="leading-tight">New order #1042<br /><span className="text-[10px] text-[#8a8a85]">AED 240 · Paid</span></span>
+                </div>
 
                 {/* Centre message */}
                 <div className="absolute left-1/2 top-[64%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 text-white [text-shadow:0_1px_8px_rgba(0,0,0,.25)] md:top-[66%] md:gap-4">
@@ -86,10 +94,10 @@ export default function Hero() {
                         <div className="flex gap-1 bg-[#f4f4f0] px-2 py-1.5">
                             {[0, 1, 2].map((i) => <span key={i} className="size-1.5 rounded-full bg-black/15" />)}
                         </div>
-                        <div className="relative h-24">
-                            <Photo src={IMG('photo-1555396273-367ea4eb4db5', 500)} alt="Restaurant website preview" className="absolute inset-0" />
-                            <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[10px]">
-                                your site <Play size={9} fill="currentColor" />
+                        <div className="relative h-28">
+                            <BuildingSite />
+                            <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-[#151515] px-2.5 py-1 text-[10px] text-white">
+                                <span className="art-pulse size-1.5 rounded-full bg-[#C8EE7E]" /> building
                             </span>
                         </div>
                     </div>
@@ -99,7 +107,7 @@ export default function Hero() {
             {/* Strip below hero */}
             <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1.2fr_1fr]">
                 <div className="flex items-center gap-3 rounded-[20px] p-2 ring-1 ring-black/5">
-                    <Photo src={IMG('photo-1498050108023-c5249f4df085', 400)} alt="Code on a laptop" className="h-14 w-24 shrink-0 rounded-2xl" />
+                    <div className="h-14 w-24 shrink-0 overflow-hidden rounded-2xl"><CodeThumb /></div>
                     <p className="flex-1 text-[11px] leading-tight text-[#8a8a85]">Custom<br />Responsive<br />Yours</p>
                     <span className="grid size-10 place-items-center rounded-full ring-1 ring-black/10"><Code2 size={16} /></span>
                 </div>
@@ -127,7 +135,7 @@ export default function Hero() {
                 <a href="#industries" className="flex items-center justify-between gap-3 rounded-[20px] p-2 pl-4 ring-1 ring-black/5">
                     <p className="min-w-0 text-[12px] leading-tight">Websites for every<br />industry and idea</p>
                     <div className="flex shrink-0 items-center gap-1">
-                        <Photo src={IMG('photo-1441986300917-64674bd600d8', 200)} alt="" className="h-9 w-14 rounded-full" />
+                        <div className="relative h-9 w-14 overflow-hidden rounded-full [&>div]:!p-1 [&>div]:!pt-1"><ArtFashion /></div>
                         <span className="grid h-9 w-14 place-items-center rounded-full ring-1 ring-black/15"><ArrowRight size={15} /></span>
                     </div>
                 </a>

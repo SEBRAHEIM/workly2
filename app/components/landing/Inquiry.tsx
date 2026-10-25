@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Check, Loader2 } from 'lucide-react'
+import { Check, ChevronDown, Loader2 } from 'lucide-react'
 import { submitInquiry } from '@/app/actions/inquiry'
 import { Em, Pill } from './ui'
 
@@ -10,6 +10,18 @@ const types = ['Business website', 'Online store', 'Booking system', 'Web applic
 const budgets = ['Under AED 5,000', 'AED 5,000 – 15,000', 'AED 15,000 – 40,000', 'AED 40,000+', 'Not sure yet']
 
 const field = 'w-full rounded-2xl bg-white px-4 py-3 text-sm outline-none ring-1 ring-black/5 placeholder:text-[#a5a5a0] focus:ring-[#151515]'
+
+function Select({ id, name, placeholder, options }: { id: string; name: string; placeholder: string; options: string[] }) {
+    return (
+        <div className="relative">
+            <select id={id} name={name} defaultValue="" className={`${field} appearance-none pr-10`}>
+                <option value="" disabled>{placeholder}</option>
+                {options.map((o) => <option key={o}>{o}</option>)}
+            </select>
+            <ChevronDown size={15} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" />
+        </div>
+    )
+}
 
 export function Inquiry() {
     const [state, action, pending] = useActionState(submitInquiry, null)
@@ -61,14 +73,8 @@ export function Inquiry() {
                         <input name="company_site" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
                         <input id="inq-name" name="name" required placeholder="Your name" className={field} />
                         <input id="inq-email" name="email" type="email" required placeholder="Email address" className={field} />
-                        <select id="inq-type" name="project_type" defaultValue="" className={`${field} text-[#151515]`}>
-                            <option value="" disabled>What do you need?</option>
-                            {types.map((t) => <option key={t}>{t}</option>)}
-                        </select>
-                        <select id="inq-budget" name="budget" defaultValue="" className={field}>
-                            <option value="" disabled>Estimated budget</option>
-                            {budgets.map((b) => <option key={b}>{b}</option>)}
-                        </select>
+                        <Select id="inq-type" name="project_type" placeholder="What do you need?" options={types} />
+                        <Select id="inq-budget" name="budget" placeholder="Estimated budget" options={budgets} />
                         <textarea
                             id="inq-message"
                             ref={messageRef}
@@ -93,22 +99,48 @@ export function Inquiry() {
     )
 }
 
+const footerCols = [
+    { title: 'Services', links: [['Website design', '#services'], ['Online stores', '#stores'], ['Booking systems', '#services'], ['Web applications', '#services'], ['Maintenance', '#services']] },
+    { title: 'Workly', links: [['What we build', '#work'], ['Process', '#process'], ['Industries', '#industries'], ['FAQ', '#faq']] },
+    { title: 'Clients', links: [['Start a project', '#inquiry'], ['Client login', '/login'], ['Privacy', '/privacy'], ['Terms', '/terms']] },
+]
+
 export function Footer() {
     return (
-        <footer className="mx-auto max-w-[1400px] px-4 pt-20 md:px-6">
+        <footer className="mx-auto max-w-[1400px] px-4 pt-20 md:px-6 md:pt-28">
             <div className="flex flex-col items-center text-center">
-                <p className="text-[30px] font-light leading-[1.05] tracking-tight md:text-[48px]">
+                <p className="text-[34px] font-light leading-[1.05] tracking-tight md:text-[56px]">
                     Let&apos;s Build <Em>Something</Em><br />Worth Visiting
                 </p>
                 <Pill href="#inquiry" className="mt-6">Start a project</Pill>
             </div>
-            <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-black/5 py-6 text-[11px] text-[#8a8a85] md:flex-row">
-                <span>© 2026 Workly · workly.day</span>
-                <nav className="flex gap-5">
-                    <Link href="/privacy" className="hover:text-[#151515]">Privacy</Link>
-                    <Link href="/terms" className="hover:text-[#151515]">Terms</Link>
-                    <Link href="/login" className="hover:text-[#151515]">Client login</Link>
-                </nav>
+            <div className="mt-16 grid gap-10 border-t border-black/10 pt-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+                <div>
+                    <p className="text-[15px] font-medium tracking-tight">Workly</p>
+                    <p className="mt-2 max-w-xs text-xs leading-relaxed text-[#8a8a85]">
+                        Custom websites, online stores, booking systems and web applications, designed and built for businesses of every kind.
+                    </p>
+                </div>
+                <div className="grid grid-cols-3 gap-6 md:contents">
+                    {footerCols.map((c) => (
+                        <div key={c.title}>
+                            <p className="text-[11px] text-[#a5a5a0]">{c.title}</p>
+                            <ul className="mt-3 space-y-2 text-xs">
+                                {c.links.map(([label, href]) => (
+                                    <li key={label}>
+                                        {href.startsWith('/')
+                                            ? <Link href={href} className="transition-colors hover:text-[#8a8a85]">{label}</Link>
+                                            : <a href={href} className="transition-colors hover:text-[#8a8a85]">{label}</a>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-black/5 py-6 text-[11px] text-[#8a8a85] md:flex-row">
+                <span>© 2026 Workly. All rights reserved.</span>
+                <span>workly.day</span>
             </div>
         </footer>
     )

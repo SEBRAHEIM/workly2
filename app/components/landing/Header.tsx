@@ -9,6 +9,7 @@ const links = [
     { href: '#work', label: 'What we build' },
     { href: '#process', label: 'Process' },
     { href: '#industries', label: 'Industries' },
+    { href: '#faq', label: 'FAQ' },
 ]
 
 export default function Header({ accountHref }: { accountHref: string | null }) {

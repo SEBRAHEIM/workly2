@@ -2,7 +2,23 @@ import Header from './components/landing/Header'
 import Hero from './components/landing/Hero'
 import { Services, Showcase, Bento, Process, Industries } from './components/landing/Sections'
 import { Inquiry, Footer } from './components/landing/Inquiry'
+import Work from './components/landing/Work'
+import { Why, Faq } from './components/landing/Trust'
 import { createClient } from '@/utils/supabase/server'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Workly | Custom Websites, Online Stores & Web Apps',
+  description: 'Workly designs and builds custom websites, e-commerce stores, booking systems and web applications for businesses of every kind. Tell us what you need and we build it for you.',
+  metadataBase: new URL('https://workly.day'),
+  openGraph: {
+    title: 'Workly | Custom Websites, Crafted Just for You',
+    description: 'Custom websites, online stores, booking systems and web apps, designed and built by the Workly team.',
+    url: 'https://workly.day',
+    siteName: 'Workly',
+    type: 'website',
+  },
+}
 
 async function getAccountHref() {
   try {
@@ -25,10 +41,13 @@ export default async function Home() {
       <Header accountHref={accountHref} />
       <Hero />
       <Services />
+      <Work />
       <Showcase />
       <Bento />
+      <Why />
       <Process />
       <Industries />
+      <Faq />
       <Inquiry />
       <Footer />
     </main>

@@ -56,7 +56,7 @@ export function Services() {
                     </div>
                 </div>
 
-                <div ref={rail} className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:px-0">
+                <div ref={rail} className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:px-0">
                     {services.map((s, i) => (
                         <article key={s.title} className="w-[240px] shrink-0 snap-start md:w-[260px]">
                             <Photo src={IMG(s.img, 600)} alt={s.title} tint={`${tints[i % tints.length]}`} className="h-[170px] rounded-[22px]" />
@@ -72,7 +72,7 @@ export function Services() {
 
 export function Showcase() {
     return (
-        <section id="work" className="mx-auto grid max-w-[1400px] scroll-mt-20 items-center gap-6 px-4 pt-20 md:grid-cols-2 md:gap-10 md:px-6 md:pt-28">
+        <section id="stores" className="mx-auto grid max-w-[1400px] scroll-mt-20 items-center gap-6 px-4 pt-20 md:grid-cols-2 md:gap-10 md:px-6 md:pt-28">
             <div className="grid gap-3 sm:grid-cols-[1.1fr_1fr]">
                 <div className="relative">
                     <Photo src={IMG('photo-1495474472287-4d71bcdd2085', 800)} alt="Coffee shop counter" tint="from-[#e9d8c8] to-[#cfe0dc]" className="h-[260px] rounded-[24px]" />
@@ -163,7 +163,7 @@ export function Bento() {
                     { label: 'Automotive', img: 'photo-1503376780353-7e6692767b70', tint: 'from-[#d6dfe6] to-[#ede3d6]' },
                     { label: 'Artists & creatives', img: 'photo-1513364776144-60967b0f800f', tint: 'from-[#dfe6d1] to-[#f0e2d2]' },
                 ].map((c, i) => (
-                    <div key={c.label} className={`relative h-[200px] ${i > 1 ? 'hidden md:block' : ''} ${i === 0 ? 'md:col-span-2' : ''}`}>
+                    <div key={c.label} className={`relative h-[200px] ${i > 1 ? 'hidden md:block' : ''} `}>
                         <Photo src={IMG(c.img, 700)} alt={c.label} tint={`${c.tint}`} className="absolute inset-0 rounded-[24px]" />
                         <span className="absolute left-3 top-3 rounded-full bg-[#DDF5A9] px-3 py-1 text-[11px]">{c.label}</span>
                         <RoundArrow href="#industries" className="absolute bottom-3 right-3" />

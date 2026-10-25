@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 
 export const IMG = (id: string, w = 1200) =>
@@ -24,11 +24,19 @@ export function Photo({
     tint?: string
 }) {
     const [failed, setFailed] = useState(false)
+    const img = useRef<HTMLImageElement>(null)
+    // An image can fail before hydration attaches onError, so check once on mount too
+    useEffect(() => {
+        const el = img.current
+        if (el && el.complete && el.naturalWidth === 0) setFailed(true)
+    }, [])
+    const position = /\b(absolute|fixed)\b/.test(className) ? '' : 'relative'
     return (
-        <div className={`relative overflow-hidden bg-gradient-to-br ${tint} ${className}`}>
+        <div className={`${position} overflow-hidden bg-gradient-to-br ${tint} ${className}`}>
             {!failed && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
+                    ref={img}
                     src={src}
                     alt={alt}
                     loading="lazy"

@@ -31,18 +31,19 @@ export default function Hero() {
                 <Photo
                     src={IMG('photo-1497366216548-37526070297c', 2000)}
                     alt="Bright, calm studio workspace"
+                    tint="from-[#7fa9b3] via-[#a9c2bf] to-[#d8b99c]"
                     className="absolute inset-0"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#9fc4c9]/45 via-transparent to-[#e9dccb]/25" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#5f8f9a]/35 via-transparent to-[#3d3a33]/25" />
 
                 {/* Headline */}
                 <div className="relative z-10 flex flex-col items-center px-4 pt-14 text-center text-white md:pt-16">
-                    <h1 className="text-[34px] font-light leading-[1.05] tracking-tight drop-shadow-sm md:text-[76px]">
+                    <h1 className="landing-rise text-[34px] font-light leading-[1.05] tracking-tight drop-shadow-sm md:text-[76px]">
                         Custom Websites.
                         <br />
                         <Em>Crafted</Em> Just for You
                     </h1>
-                    <Pill href="#inquiry" className="mt-6">Start a project</Pill>
+                    <Pill href="#inquiry" className="landing-rise mt-6 [animation-delay:.15s]">Start a project</Pill>
                 </div>
 
                 {/* Floating labels */}
@@ -59,7 +60,7 @@ export default function Hero() {
                 </div>
 
                 {/* Bottom-left consultation card */}
-                <div className="absolute bottom-3 left-3 z-10 flex items-center gap-3 rounded-[22px] bg-white/90 p-3 pr-4 shadow-lg backdrop-blur md:bottom-5 md:left-5 md:gap-4 md:p-4">
+                <div className="landing-rise absolute bottom-3 left-3 z-10 flex items-center gap-3 rounded-[22px] [animation-delay:.35s] bg-white/90 p-3 pr-4 shadow-lg backdrop-blur md:bottom-5 md:left-5 md:gap-4 md:p-4">
                     <div className="relative grid size-16 place-items-center rounded-full md:size-20" style={{ background: 'conic-gradient(#C8EE7E 0 100%, #eee 0)' }}>
                         <div className="grid size-[54px] place-items-center rounded-full bg-white text-center leading-none md:size-[68px]">
                             <div>
@@ -77,7 +78,7 @@ export default function Hero() {
                 </div>
 
                 {/* Bottom-right browser preview card */}
-                <div className="absolute bottom-5 right-5 z-10 hidden w-60 rounded-[22px] bg-white/90 p-3 shadow-lg backdrop-blur md:block">
+                <div className="landing-rise absolute bottom-5 right-5 z-10 hidden w-60 [animation-delay:.45s] rounded-[22px] bg-white/90 p-3 shadow-lg backdrop-blur md:block">
                     <div className="flex items-center justify-between px-1 pb-2 text-[11px]">
                         live preview <ArrowUpRight size={13} />
                     </div>
@@ -124,8 +125,8 @@ export default function Hero() {
                 </form>
 
                 <a href="#industries" className="flex items-center justify-between gap-3 rounded-[20px] p-2 pl-4 ring-1 ring-black/5">
-                    <p className="text-[12px] leading-tight">Websites for every<br />industry and idea</p>
-                    <div className="flex items-center gap-1">
+                    <p className="min-w-0 text-[12px] leading-tight">Websites for every<br />industry and idea</p>
+                    <div className="flex shrink-0 items-center gap-1">
                         <Photo src={IMG('photo-1441986300917-64674bd600d8', 200)} alt="" className="h-9 w-14 rounded-full" />
                         <span className="grid h-9 w-14 place-items-center rounded-full ring-1 ring-black/15"><ArrowRight size={15} /></span>
                     </div>

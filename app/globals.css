@@ -79,3 +79,7 @@ a:active,
 .pb-safe {
   padding-bottom: var(--safe-area-inset-bottom);
 }
+/* Landing page: let Tailwind weight utilities win over the global p/span weight */
+.landing :where(p, span, input, textarea, select) {
+  font-weight: revert-layer;
+}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ArrowRight, ArrowUpRight, Calendar, Code2, Layers, Play, Search, Sparkles } from 'lucide-react'
-import { Chip, Em, IMG, Photo, Pill, RoundArrow } from './ui'
+import { Chip, Em, IMG, Photo, Pill } from './ui'
 
 // Six-armed asterisk from the reference, carrying the "it's time / to launch" message
 function Asterisk() {
@@ -37,7 +37,7 @@ export default function Hero() {
 
                 {/* Headline */}
                 <div className="relative z-10 flex flex-col items-center px-4 pt-14 text-center text-white md:pt-16">
-                    <h1 className="text-[42px] font-light leading-[1.02] tracking-tight drop-shadow-sm md:text-[76px]">
+                    <h1 className="text-[34px] font-light leading-[1.05] tracking-tight drop-shadow-sm md:text-[76px]">
                         Custom Websites.
                         <br />
                         <Em>Crafted</Em> Just for You
@@ -46,13 +46,13 @@ export default function Hero() {
                 </div>
 
                 {/* Floating labels */}
-                <Chip label="Design" className="left-[6%] top-[38%] md:left-[7%] md:top-[14%]" />
-                <Chip label="Develop" className="right-[6%] top-[38%] md:left-[27%] md:right-auto md:top-[42%]" />
+                <Chip label="Design" className="left-[5%] top-[46%] md:left-[7%] md:top-[14%]" />
+                <Chip label="Develop" className="right-[5%] top-[46%] md:left-[27%] md:right-auto md:top-[42%]" />
                 <Chip label="Launch" className="hidden md:flex md:right-[27%] md:top-[46%]" />
                 <Chip label="Support" className="hidden md:flex md:right-[7%] md:top-[14%]" />
 
                 {/* Centre message */}
-                <div className="absolute left-1/2 top-[57%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 text-white md:top-[66%] md:gap-4">
+                <div className="absolute left-1/2 top-[64%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 text-white [text-shadow:0_1px_8px_rgba(0,0,0,.25)] md:top-[66%] md:gap-4">
                     <span className="w-20 text-right text-xs leading-tight md:text-sm">It&apos;s time<br />to launch</span>
                     <Asterisk />
                     <span className="w-20 text-xs leading-tight md:text-sm">your idea<br />online</span>
@@ -128,7 +128,6 @@ export default function Hero() {
                     <div className="flex items-center gap-1">
                         <Photo src={IMG('photo-1441986300917-64674bd600d8', 200)} alt="" className="h-9 w-14 rounded-full" />
                         <span className="grid h-9 w-14 place-items-center rounded-full ring-1 ring-black/15"><ArrowRight size={15} /></span>
-                        <RoundArrow href="#industries" className="hidden lg:grid" />
                     </div>
                 </a>
             </div>

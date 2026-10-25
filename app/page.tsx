@@ -1,5 +1,7 @@
 import Header from './components/landing/Header'
 import Hero from './components/landing/Hero'
+import { Services, Showcase, Bento, Process, Industries } from './components/landing/Sections'
+import { Inquiry, Footer } from './components/landing/Inquiry'
 import { createClient } from '@/utils/supabase/server'
 
 async function getAccountHref() {
@@ -22,6 +24,13 @@ export default async function Home() {
     <main className="landing min-h-screen bg-white pb-6 font-[family-name:var(--font-inter)] font-normal text-[#151515]">
       <Header accountHref={accountHref} />
       <Hero />
+      <Services />
+      <Showcase />
+      <Bento />
+      <Process />
+      <Industries />
+      <Inquiry />
+      <Footer />
     </main>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 
 export const IMG = (id: string, w = 1200) =>
@@ -23,27 +23,24 @@ export function Photo({
     className?: string
     tint?: string
 }) {
-    const [failed, setFailed] = useState(false)
     const img = useRef<HTMLImageElement>(null)
     // An image can fail before hydration attaches onError, so check once on mount too
     useEffect(() => {
         const el = img.current
-        if (el && el.complete && el.naturalWidth === 0) setFailed(true)
+        if (el && el.complete && el.naturalWidth === 0) el.style.display = 'none'
     }, [])
     const position = /\b(absolute|fixed)\b/.test(className) ? '' : 'relative'
     return (
         <div className={`${position} overflow-hidden bg-gradient-to-br ${tint} ${className}`}>
-            {!failed && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                    ref={img}
-                    src={src}
-                    alt={alt}
-                    loading="lazy"
-                    onError={() => setFailed(true)}
-                    className="absolute inset-0 h-full w-full object-cover saturate-[.8] sepia-[.12] brightness-[1.04]"
-                />
-            )}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+                ref={img}
+                src={src}
+                alt={alt}
+                loading="lazy"
+                onError={(e) => { e.currentTarget.style.display = 'none' }}
+                className="absolute inset-0 h-full w-full object-cover saturate-[.8] sepia-[.12] brightness-[1.04]"
+            />
         </div>
     )
 }

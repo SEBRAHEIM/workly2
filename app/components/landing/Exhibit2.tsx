@@ -94,7 +94,7 @@ export function DotTransition() {
                     <WorklyLogo className="size-16 md:size-20" />
                 </div>
                 <div
-                    className="absolute inset-0 bg-[#0b4a36]"
+                    className="absolute inset-0 bg-[#5bbcf0]"
                     style={{ clipPath: 'circle(calc(var(--g, 0) * 150vmax) at 50% 84%)' }}
                 >
                     <div className="grid h-full place-items-center" style={{ opacity: 'calc(var(--g, 0) * 2 - 1)' }}>
@@ -113,11 +113,11 @@ function StudioMark({ size = 'size-[260px] md:size-[340px]' }: { size?: string }
         <div className={`relative ${size}`}>
             <svg viewBox="0 0 200 200" className="landing-spin absolute inset-0 h-full w-full [animation-duration:30s]">
                 <defs><path id={`${id}-en`} d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0" /></defs>
-                <text fill="#f6e3c3" fontSize="10.5" className="font-[family-name:var(--font-unbounded)] uppercase">
+                <text fill="#0b2540" fontSize="10.5" className="font-[family-name:var(--font-unbounded)] uppercase">
                     <textPath href={`#${id}-en`} textLength="486" lengthAdjust="spacing">Websites · Stores · Apps · Made by Workly ·</textPath>
                 </text>
             </svg>
-            <WorklyLogo className="absolute inset-[29%] text-[#d4ff3f]" />
+            <WorklyLogo className="absolute inset-[29%] text-[#ffffff]" />
         </div>
     )
 }
@@ -135,7 +135,7 @@ function Contours() {
     })
     return (
         <svg viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
-            {rings.map((d, i) => <path key={i} d={d} fill="none" stroke="#2c7a5c" strokeWidth="1.2" opacity={0.55 - i * 0.02} />)}
+            {rings.map((d, i) => <path key={i} d={d} fill="none" stroke="#9ad8f8" strokeWidth="1.2" opacity={0.55 - i * 0.02} />)}
         </svg>
     )
 }
@@ -153,35 +153,35 @@ const services = [
 /* WORLD 4 — Creative graphic studio. Green, lime and cream; contour lines; geometric type. */
 export function Studio() {
     return (
-        <section id="services" className="relative -mt-px scroll-mt-16 overflow-hidden bg-[#0b4a36] pb-28 pt-10 font-[family-name:var(--font-unbounded)] text-[#f6e3c3] md:pb-40">
+        <section id="services" className="relative -mt-px scroll-mt-16 overflow-hidden bg-[#5bbcf0] pb-28 pt-10 font-[family-name:var(--font-unbounded)] text-[#0b2540] md:pb-40">
             <Contours />
             {/* Oversized dark letters behind everything */}
-            <WorklyLogo className="pointer-events-none absolute -right-[18vw] top-20 w-[85vw] max-w-[1100px] rotate-12 text-[#0e573f] md:top-0 md:w-[70vw]" />
+            <WorklyLogo className="pointer-events-none absolute -right-[18vw] top-20 w-[85vw] max-w-[1100px] rotate-12 text-[#4cb0e8] md:top-0 md:w-[70vw]" />
 
             <div className="relative mx-auto max-w-[1300px] px-4 md:px-10">
                 <div className="flex items-start justify-between">
-                    <span className="inline-block bg-[#d4ff3f] px-4 py-2 text-[13px] font-black uppercase tracking-tight text-[#0b4a36] [clip-path:polygon(0_0,82%_0,100%_38%,100%_100%,0_100%)] md:text-base">Workly studio</span>
-                    <span className="text-right text-[10px] uppercase leading-relaxed tracking-[0.2em] text-[#f6e3c3]/60 md:text-[11px]">What we do<br />07 services</span>
+                    <span className="inline-block bg-[#ffffff] px-4 py-2 text-[13px] font-black uppercase tracking-tight text-[#0b2540] [clip-path:polygon(0_0,82%_0,100%_38%,100%_100%,0_100%)] md:text-base">Workly studio</span>
+                    <span className="text-right text-[10px] uppercase leading-relaxed tracking-[0.2em] text-[#0b2540]/60 md:text-[11px]">What we do<br />07 services</span>
                 </div>
 
                 <div className="mt-14 grid items-center gap-10 md:mt-20 md:grid-cols-[1.25fr_1fr]">
                     <h2 className="text-[clamp(2.6rem,7.5vw,6.6rem)] font-black uppercase leading-[0.9] tracking-[-0.04em]">
-                        Made to<br /><span className="text-[#d4ff3f]">stand</span><br />out.
+                        Made to<br /><span className="text-[#ffffff]">stand</span><br />out.
                     </h2>
                     <div className="relative mx-auto md:mx-0">
                         <div className="rotate-[-4deg] transition-transform duration-500 hover:rotate-0">
                             <Screen url="orbit.studio" className="aspect-[16/10] w-[min(86vw,460px)] rounded-xl shadow-[0_30px_70px_-20px_rgba(0,0,0,.55)]"><SiteAgency /></Screen>
                         </div>
-                        <span className="absolute -bottom-5 -left-3 rounded-full bg-[#f6e3c3] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#0b4a36]">Concept · Creative agency</span>
+                        <span className="absolute -bottom-5 -left-3 rounded-full bg-[#0b2540] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#5bbcf0]">Concept · Creative agency</span>
                     </div>
                 </div>
 
                 <ul className="mt-20 md:mt-28">
                     {services.map((s, i) => (
-                        <li key={s.name} className="group flex items-center gap-4 border-t border-dashed border-[#e8894a]/50 py-5 last:border-b md:gap-8 md:py-7">
-                            <span className={`size-8 shrink-0 bg-[#d4ff3f] transition-transform duration-500 group-hover:rotate-90 md:size-12 ${s.shape} ${i % 3 === 1 ? 'bg-[#f6e3c3]' : ''}`} />
+                        <li key={s.name} className="group flex items-center gap-4 border-t border-dashed border-[#0b2540]/50 py-5 last:border-b md:gap-8 md:py-7">
+                            <span className={`size-8 shrink-0 bg-[#ffffff] transition-transform duration-500 group-hover:rotate-90 md:size-12 ${s.shape} ${i % 3 === 1 ? 'bg-[#0b2540]' : ''}`} />
                             <span className="flex-1 text-[clamp(1.05rem,3.4vw,2.6rem)] font-bold uppercase leading-[1.05] tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-2">{s.name}</span>
-                            <span className="hidden max-w-[220px] font-[family-name:var(--font-geist-mono)] text-[11px] leading-snug text-[#f6e3c3]/60 md:block">{s.note}</span>
+                            <span className="hidden max-w-[220px] font-[family-name:var(--font-geist-mono)] text-[11px] leading-snug text-[#0b2540]/60 md:block">{s.note}</span>
                         </li>
                     ))}
                 </ul>
@@ -189,7 +189,7 @@ export function Studio() {
                 <div className="mt-20 flex flex-col items-center gap-6 md:flex-row md:justify-between">
                     <StudioMark size="size-[180px]" />
                     <p className="max-w-md text-center text-[clamp(1.2rem,2.6vw,1.9rem)] font-bold uppercase leading-tight tracking-tight md:text-right">
-                        Not one style.<br /><span className="text-[#d4ff3f]">Every</span> style.
+                        Not one style.<br /><span className="text-[#ffffff]">Every</span> style.
                     </p>
                 </div>
             </div>

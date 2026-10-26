@@ -30,7 +30,7 @@ export function Gallery() {
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-[linear-gradient(transparent,rgba(255,255,255,.035)),repeating-linear-gradient(90deg,rgba(255,255,255,.05)_0_1px,transparent_1px_80px)] [mask-image:linear-gradient(transparent,#000)]" />
 
                 <div className="relative z-10 flex items-start justify-between px-4 pt-20 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.25em] text-white/50 md:px-10 md:pt-24 md:text-[11px]">
-                    <span>The exhibition<br />Hall 05</span>
+                    <span />
                     <span className="text-right">{String(N).padStart(2, '0')} concept websites<br />by Workly</span>
                 </div>
                 <h2 className="relative z-10 mt-4 px-4 text-center text-[clamp(1.9rem,5.4vw,4.6rem)] font-extralight uppercase leading-[0.95] tracking-[0.06em] md:mt-2">
@@ -129,7 +129,6 @@ export function Collage() {
             <div className="relative mx-auto max-w-[1300px] px-4 md:px-10">
                 <div className="flex items-start justify-between text-[10px] uppercase leading-[1.15] tracking-[0.18em] text-[#f2efe8]/80 md:text-xs">
                     <span>Workly<br />Creative<br />Studio</span>
-                    <span className="rounded-full bg-[#f2efe8]/10 px-3 py-1.5 tracking-normal">Campaign 06</span>
                 </div>
 
                 {/* Headline: English line over a heavy yellow bar, Arabic set large beside it */}

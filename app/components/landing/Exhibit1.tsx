@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, Check } from 'lucide-react'
 import { useScrollVar } from './useScrollVar'
 import { Screen, SiteAgency, SiteBooking, SiteHotel, SiteLuxury, SiteStore } from './Mockups'
@@ -18,6 +18,20 @@ export function Cinematic() {
         el.style.setProperty('--c', ramp(p, 0.42, 0.72).toFixed(3)) // screen content becomes world 2
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
+
+    // The screens start just below the call-to-action, whatever the viewport height
+    const intro = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const el = intro.current
+        const root = wrap.current
+        if (!el || !root) return
+        const place = () => root.style.setProperty('--st', `${el.offsetTop + el.offsetHeight + 32}px`)
+        place()
+        const ro = new ResizeObserver(place)
+        ro.observe(el)
+        window.addEventListener('resize', place)
+        return () => { ro.disconnect(); window.removeEventListener('resize', place) }
+    }, [])
 
     const move = (e: React.PointerEvent) => {
         if (e.pointerType !== 'mouse') return
@@ -40,9 +54,9 @@ export function Cinematic() {
                 <div className="grain pointer-events-none absolute inset-0 opacity-[.07]" />
 
                 {/* Headline */}
-                <div className="relative z-10 flex flex-col items-center px-4 pt-[18svh] text-center text-white md:pt-[15svh]" style={{ transform: 'translateY(calc(var(--a, 0) * -30svh))', opacity: 'calc(1 - var(--a, 0) * 1.4)' }}>
+                <div ref={intro} className="relative z-10 flex flex-col items-center px-4 pt-[max(88px,15svh)] text-center text-white md:pt-[max(96px,12svh)]" style={{ transform: 'translateY(calc(var(--a, 0) * -30svh))', opacity: 'calc(1 - var(--a, 0) * 1.4)' }}>
                     <p className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.35em] text-white/50 md:text-[11px]">Workly · A website studio</p>
-                    <h1 className="mt-5 font-[family-name:var(--font-fraunces)] text-[clamp(2.9rem,9.5vw,8.8rem)] font-light leading-[0.92] tracking-[-0.035em]">
+                    <h1 className="mt-5 font-[family-name:var(--font-fraunces)] text-[clamp(2.6rem,min(9.5vw,13svh),8.8rem)] font-light leading-[0.92] tracking-[-0.035em]">
                         Your idea deserves<br />a <em className="font-normal">website.</em>
                     </h1>
                     <p className="mt-5 max-w-md text-sm text-white/60 md:text-base">We design and build websites, online stores and web apps. No two alike.</p>
@@ -55,7 +69,7 @@ export function Cinematic() {
                 </div>
 
                 {/* Stage: a curved wall of screens */}
-                <div className="absolute inset-x-0 bottom-0 top-[64svh] [perspective:1600px] md:top-[60svh]">
+                <div className="absolute inset-x-0 bottom-0 [perspective:1600px]" style={{ top: 'var(--st, 64svh)' }}>
                     {side.map(({ Site, url, dark, x, glow }) => (
                         <div
                             key={url}
@@ -77,7 +91,7 @@ export function Cinematic() {
                 <div
                     className="absolute left-1/2 z-20 overflow-hidden shadow-[0_50px_140px_-30px_rgba(201,192,255,.45)]"
                     style={{
-                        top: 'calc(64svh * (1 - var(--e, 0)))',
+                        top: 'calc(var(--st, 64svh) * (1 - var(--e, 0)))',
                         width: 'calc(min(64vw, 560px) + (100vw - min(64vw, 560px)) * var(--e, 0))',
                         height: 'calc(min(64vw, 560px) * 0.62 + (100svh - min(64vw, 560px) * 0.62) * var(--e, 0))',
                         transform: 'translateX(-50%) translateY(calc(var(--my, 0) * -8px * (1 - var(--e, 0))))',

@@ -52,7 +52,7 @@ function Page({ children, className = '' }: { children: React.ReactNode; classNa
 }
 
 /* Photograph with a tinted fallback so a slow or failed load never leaves a hole */
-function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style }: { id: string; className?: string; tint?: string; style?: React.CSSProperties }) {
+function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style, zoom = false }: { id: string; className?: string; tint?: string; style?: React.CSSProperties; zoom?: boolean }) {
     // Hidden until it has really loaded (also covers loads that finish before hydration)
     const img = useRef<HTMLImageElement>(null)
     useEffect(() => {
@@ -60,7 +60,7 @@ function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style }: { id: string; 
         if (el?.complete && el.naturalWidth > 0) el.style.opacity = '1'
     }, [])
     return (
-        <div className={`relative overflow-hidden ${tint} ${className}`}>
+        <div className={`${/\babsolute\b/.test(className) ? '' : 'relative'} overflow-hidden ${tint} ${className}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
                 src={`https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=70`}
@@ -69,11 +69,44 @@ function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style }: { id: string; 
                 decoding="async"
                 ref={img}
                 onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
-                className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+                className={`absolute inset-0 h-full w-full object-cover opacity-0 transition-[opacity,scale] duration-700 hover:scale-[1.05] ${zoom ? 'mk-zoom' : ''}`}
                 style={style}
             />
         </div>
     )
+}
+
+/* Hero photos crossfade and drift, like a video background (three slides, 15s loop) */
+function Slides({ ids, className = '', tint = 'bg-[#d9d4cb]' }: { ids: [string, string, string]; className?: string; tint?: string }) {
+    return (
+        <div className={`overflow-hidden ${tint} ${className}`}>
+            {ids.map((id, i) => <Ph key={id} id={id} zoom className="mk-slide absolute inset-0" tint="bg-transparent" style={{ animationDelay: `${i * 5}s` }} />)}
+        </div>
+    )
+}
+
+/* Live-activity pop-up that slides in and out on a loop */
+function Toast({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+    return (
+        <div className={`mk-toast absolute z-20 flex items-center gap-[1cqw] rounded-[1.2cqw] bg-white px-[1.6cqw] py-[1.1cqw] text-[1.2cqw] text-[#111] shadow-[0_1cqw_3cqw_rgba(0,0,0,.18)] ${className}`} style={{ animationDelay: `${delay}s` }}>
+            {children}
+        </div>
+    )
+}
+
+/* A real ticking countdown */
+function Countdown({ className = '' }: { className?: string }) {
+    const [left, setLeft] = useState(2 * 3600 + 14 * 60 + 9)
+    useEffect(() => {
+        const t = setInterval(() => setLeft((s) => (s > 0 ? s - 1 : 2 * 3600 + 14 * 60 + 9)), 1000)
+        return () => clearInterval(t)
+    }, [])
+    const f = (n: number) => String(n).padStart(2, '0')
+    return <span className={`tabular-nums ${className}`}>{f(Math.floor(left / 3600))}:{f(Math.floor((left % 3600) / 60))}:{f(left % 60)}</span>
+}
+
+function Live({ className = '' }: { className?: string }) {
+    return <span className={`relative inline-flex size-[0.9cqw] ${className}`}><span className="absolute inset-0 animate-ping rounded-full bg-current opacity-60" /><span className="relative size-full rounded-full bg-current" /></span>
 }
 
 function Stars({ n = 5, className = '' }: { n?: number; className?: string }) {
@@ -116,7 +149,9 @@ export function SiteStore() {
                     </div>
                     <div className="relative flex-1 overflow-hidden rounded-[2cqw] bg-[#c6ff3d]">
                         <span className="absolute left-[2cqw] top-[1.6cqw] z-10 rounded-full bg-[#0f0f0f] px-[1.4cqw] py-[0.4cqw] text-[1.1cqw] text-[#c6ff3d]">NEW DROP</span>
-                        <Ph id="photo-1542291026-7eec264c27ff" className="absolute inset-0" tint="bg-[#c6ff3d]" style={{ mixBlendMode: 'multiply' }} />
+                        <Ph id="photo-1542291026-7eec264c27ff" zoom className="absolute inset-0" tint="bg-[#c6ff3d]" style={{ mixBlendMode: 'multiply' }} />
+                        <span className="absolute bottom-[1.6cqw] left-[2cqw] z-10 flex items-center gap-[0.8cqw] rounded-full bg-white/90 px-[1.2cqw] py-[0.4cqw] text-[1.1cqw]"><Live className="text-[#e5484d]" />18 people viewing</span>
+                        <Toast className="bottom-[1.6cqw] right-[1.6cqw]" delay={1}><Ph id="photo-1542291026-7eec264c27ff" className="size-[3.6cqw] rounded-[0.6cqw]" tint="bg-[#c6ff3d]" /><span><b>Hamad in Abu Dhabi</b><br /><span className="text-black/50">bought Volt Runner 2 · 2 min ago</span></span></Toast>
                     </div>
                 </div>
                 <div className="flex flex-col justify-center gap-[1.4cqw]">
@@ -130,7 +165,7 @@ export function SiteStore() {
                         <span className="flex-1 rounded-full bg-[#0f0f0f] py-[1.4cqw] text-center text-[1.6cqw] font-semibold text-white">Add to bag</span>
                         <span className="grid size-[5.2cqw] place-items-center rounded-full border border-black/15"><Heart className="size-[2cqw]" /></span>
                     </div>
-                    <p className="text-[1.2cqw] text-[#2f7d32]">● In stock · order in 3h 20m for delivery tomorrow</p>
+                    <p className="flex items-center gap-[0.8cqw] text-[1.2cqw] text-[#2f7d32]"><Live />In stock · launch price ends in <Countdown className="font-bold" /></p>
                 </div>
             </div>
             <div className="grid grid-cols-3 gap-[2cqw] border-y border-black/5 bg-white px-[4cqw] py-[2.2cqw] text-[1.3cqw]">
@@ -205,7 +240,7 @@ export function SiteLuxury() {
                     <p className="mt-[2cqw] max-w-[30cqw] text-[1.4cqw] leading-relaxed text-[#e9dcc0]/60">Hand-set diamonds in 18k gold, finished in our Dubai atelier by master setters.</p>
                     <span className="mt-[3cqw] flex gap-[3cqw] text-[1.3cqw] uppercase tracking-[0.25em]"><span className="border-b border-[#c9a96a] pb-[0.4cqw]">Discover</span><span className="text-[#e9dcc0]/50">Watch the film ▸</span></span>
                 </div>
-                <Ph id="photo-1605100804763-247f67b3557e" tint="bg-[#2a2217]" />
+                <Slides ids={['photo-1605100804763-247f67b3557e', 'photo-1599643478518-a784e5dc4c8f', 'photo-1515562141207-7a88fb7ce338']} className="relative" tint="bg-[#2a2217]" />
             </div>
             <div className="px-[5cqw] py-[4cqw]">
                 <div className="flex items-end justify-between">
@@ -259,7 +294,8 @@ export function SiteHotel() {
     return (
         <Page className="bg-[#f2e8d9] text-[#3a2a1c]">
             <div className="relative flex h-[50cqw] shrink-0 flex-col">
-                <Ph id="photo-1509316785289-025f5b846b35" className="absolute inset-0" tint="bg-gradient-to-b from-[#f6b984] to-[#a8573a]" />
+                <Slides ids={['photo-1509316785289-025f5b846b35', 'photo-1566073771259-6a8506099945', 'photo-1582719478250-c89cae4dc85b']} className="absolute inset-0" tint="bg-gradient-to-b from-[#f6b984] to-[#a8573a]" />
+                <Toast className="right-[4cqw] top-[8cqw]" delay={2}><Live className="text-[#e5484d]" /><span><b>Only 2 Pool Villas left</b><br /><span className="text-black/50">for 12–15 Dec · 41 people looking</span></span></Toast>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/55" />
                 <div className="relative flex items-center justify-between px-[4cqw] py-[2.4cqw] text-[1.3cqw] text-white">
                     <span className="font-[family-name:var(--font-instrument)] text-[3cqw] italic">Sahra</span>
@@ -328,7 +364,8 @@ export function SiteRestaurant() {
     return (
         <Page className="bg-[#f3ece1] text-[#3b2f24]">
             <div className="relative flex h-[46cqw] shrink-0 flex-col">
-                <Ph id="photo-1555396273-367ea4eb4db5" className="absolute inset-0" tint="bg-gradient-to-br from-[#c9a27c] to-[#7d5236]" />
+                <Slides ids={['photo-1555396273-367ea4eb4db5', 'photo-1414235077428-338989a2e8c0', 'photo-1509042239860-f550ce710b93']} className="absolute inset-0" tint="bg-gradient-to-br from-[#c9a27c] to-[#7d5236]" />
+                <Toast className="right-[4cqw] top-[8cqw]" delay={3}><span className="grid size-[3cqw] place-items-center rounded-full bg-[#b9825a] text-white">✓</span><span><b>Table for 2 booked</b><br /><span className="text-black/50">Tonight · 20:00 · Terrace</span></span></Toast>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/65 to-black/10" />
                 <div className="relative flex items-center justify-between px-[4cqw] py-[2.4cqw] text-[1.25cqw] uppercase tracking-[0.2em] text-white/85">
                     <span className="font-[family-name:var(--font-instrument)] text-[3cqw] normal-case tracking-normal text-white">Olive &amp; Ember</span>
@@ -397,7 +434,8 @@ export function SiteBooking() {
             </div>
             <div className="grid h-[46cqw] shrink-0 grid-cols-[1fr_1.15fr] gap-[3cqw] px-[4cqw] pb-[3cqw]">
                 <div className="relative overflow-hidden rounded-[2cqw]">
-                    <Ph id="photo-1518611012118-696072aa579a" className="absolute inset-0" tint="bg-gradient-to-b from-[#c9c0ff] to-[#f7c9dd]" />
+                    <Ph id="photo-1518611012118-696072aa579a" zoom className="absolute inset-0" tint="bg-gradient-to-b from-[#c9c0ff] to-[#f7c9dd]" />
+                    <Toast className="left-[2cqw] top-[2cqw]" delay={1.5}><Ph id="photo-1438761681033-6461ffad8d80" className="size-[3.4cqw] rounded-full" tint="bg-[#c9c0ff]" /><span><b>Noor just booked</b><br /><span className="text-black/50">Reformer Flow · Wed 07:00</span></span></Toast>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#24204a]/75 to-transparent" />
                     <div className="absolute bottom-[3cqw] left-[3cqw] right-[3cqw] text-white">
                         <p className="text-[4.6cqw] font-bold leading-[1]">Move with<br />intention.</p>
@@ -472,7 +510,7 @@ export function SiteCorporate() {
                     <p className="max-w-[40cqw] text-[1.45cqw] leading-relaxed text-[#0e1b33]/60">We help family businesses and growth companies across the Gulf make their biggest decisions with confidence.</p>
                     <span className="flex gap-[1.2cqw] text-[1.35cqw]"><span className="rounded-[0.6cqw] bg-[#2f6fde] px-[2cqw] py-[1cqw] text-white">Talk to an advisor</span><span className="rounded-[0.6cqw] border border-[#0e1b33]/20 px-[2cqw] py-[1cqw]">Our approach</span></span>
                 </div>
-                <Ph id="photo-1486406146926-c627a92ad1ab" tint="bg-[#0e1b33]" />
+                <Ph id="photo-1486406146926-c627a92ad1ab" zoom tint="bg-[#0e1b33]" />
             </div>
             <div className="flex items-center justify-between border-y border-[#0e1b33]/10 px-[4cqw] py-[2.2cqw] text-[1.6cqw] font-semibold text-[#0e1b33]/35">
                 {['ALMANA', 'Northwind', 'GULFSTONE', 'Meridian', 'QASR', 'Aurelia'].map((l) => <span key={l} className={l === 'Meridian' || l === 'Aurelia' ? 'italic' : 'tracking-[0.15em]'}>{l}</span>)}
@@ -528,14 +566,16 @@ export function SiteAgency() {
                 <div className="absolute -right-[6cqw] top-[2cqw] size-[44cqw] overflow-hidden rounded-full bg-[#111]">
                     <Ph id="photo-1558655146-9f40138edfeb" className="absolute inset-0 opacity-90 grayscale" tint="bg-[#111]" />
                 </div>
-                <span className="absolute right-[34cqw] top-[6cqw] rotate-[-12deg] rounded-full bg-[#f4f0e6] px-[1.8cqw] py-[0.8cqw] text-[1.2cqw] font-bold">Now booking 2027 ✺</span>
+                <span className="absolute right-[34cqw] top-[6cqw] rotate-[-12deg] rounded-full bg-[#f4f0e6] px-[1.8cqw] py-[0.8cqw] text-[1.2cqw] font-bold">Now booking 2027 <span className="landing-spin inline-block [animation-duration:6s]">✺</span></span>
                 <div className="absolute bottom-[3cqw] left-[4cqw]">
                     <p className="text-[9cqw] font-black leading-[0.85] tracking-tight">WE MAKE<br />NOISE.</p>
                     <p className="mt-[2cqw] max-w-[40cqw] text-[1.35cqw] leading-snug">Brand, film and digital for culture-first companies. Dubai × Lisbon.</p>
                 </div>
             </div>
             <div className="overflow-hidden whitespace-nowrap border-y-2 border-[#111] bg-[#f4f0e6] py-[1.2cqw] text-[1.8cqw] font-black">
-                ATLAS COFFEE ✺ NOMAD AIR ✺ KITE STUDIOS ✺ RUN DUBAI ✺ SOUK.CO ✺ MIRA HOTELS ✺ ATLAS COFFEE ✺
+                <div className="landing-marquee flex w-max gap-[2cqw] [animation-duration:18s]">
+                    {[0, 1].map((k) => <span key={k}>ATLAS COFFEE ✺ NOMAD AIR ✺ KITE STUDIOS ✺ RUN DUBAI ✺ SOUK.CO ✺ MIRA HOTELS ✺ </span>)}
+                </div>
             </div>
             <div className="bg-[#111] px-[4cqw] py-[4cqw] text-[#f4f0e6]">
                 <div className="flex items-end justify-between"><p className="text-[3.4cqw] font-black">SELECTED WORK</p><span className="text-[1.2cqw] text-white/50">2024 — 2026 · 34 projects</span></div>
@@ -606,6 +646,12 @@ export function SitePortfolio() {
 export function SiteInteractive() {
     const finishes = [['Midnight', '#3c5fd6', 0], ['Sand', '#e9e4da', 160], ['Graphite', '#1f1f1f', 90], ['Ember', '#d36b4b', 300]] as const
     const [pick, setPick] = useState(0)
+    const touched = useRef(false)
+    useEffect(() => {
+        const t = setInterval(() => { if (!touched.current) setPick((p) => (p + 1) % 4) }, 2800)
+        return () => clearInterval(t)
+    }, [])
+    const choose = (i: number) => { touched.current = true; setPick(i) }
     const [name, swatch, hue] = finishes[pick]
     return (
         <Page className="bg-[#0c0f14] text-white">
@@ -626,7 +672,7 @@ export function SiteInteractive() {
                     <span className="text-white/50">Finish · <span className="text-white">{name}</span></span>
                     <div className="flex gap-[1.2cqw]">
                         {finishes.map(([n, c], i) => (
-                            <button key={n} type="button" aria-label={`${n} finish`} onClick={() => setPick(i)}
+                            <button key={n} type="button" aria-label={`${n} finish`} onClick={() => choose(i)}
                                 className={`size-[4.2cqw] rounded-full transition-transform hover:scale-110 ${i === pick ? 'ring-[0.4cqw] ring-white ring-offset-[0.4cqw] ring-offset-[#0c0f14]' : ''}`}
                                 style={{ background: c }} />
                         ))}
@@ -677,7 +723,8 @@ export function SiteFashion() {
                 <span className="flex items-center gap-[2cqw] text-black/60"><span>Search</span><Heart className="size-[1.8cqw]" /><span>Bag (2)</span></span>
             </div>
             <div className="relative h-[46cqw] shrink-0">
-                <Ph id="photo-1515886657613-9f3515b0c78f" className="absolute inset-0" tint="bg-[#e8dccb]" />
+                <Slides ids={['photo-1515886657613-9f3515b0c78f', 'photo-1469334031218-e382a71b716b', 'photo-1485462537746-965f33f7f6a7']} className="absolute inset-0" tint="bg-[#e8dccb]" />
+                <Toast className="right-[4cqw] top-[3cqw]" delay={2.5}><Ph id="photo-1483985988355-763728e1935b" className="size-[3.6cqw]" tint="bg-[#ece4d8]" /><span><b>Back in stock</b><br /><span className="text-black/50">Silk shayla · Blush</span></span></Toast>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
                 <div className="absolute bottom-[3cqw] left-[4cqw] text-white">
                     <p className="text-[1.25cqw] uppercase tracking-[0.3em]">Resort 2026</p>

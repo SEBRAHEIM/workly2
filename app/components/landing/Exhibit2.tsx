@@ -113,11 +113,11 @@ function StudioMark({ size = 'size-[260px] md:size-[340px]' }: { size?: string }
         <div className={`relative ${size}`}>
             <svg viewBox="0 0 200 200" className="landing-spin absolute inset-0 h-full w-full [animation-duration:30s]">
                 <defs><path id={`${id}-en`} d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0" /></defs>
-                <text fill="#f6e3c3" fontSize="12.5" className="font-[family-name:var(--font-unbounded)] uppercase">
-                    <textPath href={`#${id}-en`} textLength="486" lengthAdjust="spacing">Think · Design · Build · Launch ·</textPath>
+                <text fill="#f6e3c3" fontSize="10.5" className="font-[family-name:var(--font-unbounded)] uppercase">
+                    <textPath href={`#${id}-en`} textLength="486" lengthAdjust="spacing">Websites · Stores · Apps · Made by Workly ·</textPath>
                 </text>
             </svg>
-            <WorklyLogo className="absolute inset-[24%] text-[#d4ff3f]" />
+            <WorklyLogo className="absolute inset-[29%] text-[#d4ff3f]" />
         </div>
     )
 }

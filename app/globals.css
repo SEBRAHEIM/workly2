@@ -182,3 +182,17 @@ a:active,
 @media (prefers-reduced-motion: reduce) {
   .digital-cursor, .page-tick, .mockup-orbit { animation: none !important; }
 }
+
+/* Concept sites: living photography and activity */
+@keyframes mk-zoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+.mk-zoom { animation: mk-zoom 14s ease-in-out infinite alternate; }
+@keyframes mk-slide { 0% { opacity: 0; } 6%, 33% { opacity: 1; } 40%, 100% { opacity: 0; } }
+.mk-slide { animation: mk-slide 15s linear infinite both; }
+.mk-slide:first-child { animation-fill-mode: backwards; }
+@keyframes mk-toast { 0%, 8% { opacity: 0; transform: translateY(40%) scale(.96); } 14%, 52% { opacity: 1; transform: none; } 58%, 100% { opacity: 0; transform: translateY(-20%) scale(.98); } }
+.mk-toast { animation: mk-toast 9s cubic-bezier(.2,.7,.2,1) infinite both; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-zoom, .mk-toast { animation: none; }
+  .mk-slide { animation: none; opacity: 0; } .mk-slide:first-child { opacity: 1; }
+  .mk-toast { opacity: 1; }
+}

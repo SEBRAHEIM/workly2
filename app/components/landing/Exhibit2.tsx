@@ -135,7 +135,7 @@ function StudioMark({ size = 'size-[260px] md:size-[340px]' }: { size?: string }
                     <textPath href={`#${id}-en`} textLength="486" lengthAdjust="spacing">Websites · Stores · Apps · Made by Workly ·</textPath>
                 </text>
             </svg>
-            <WorklyLogo className="absolute inset-[29%] text-[#ffffff]" />
+            <WorklyLogo className="absolute left-[29%] top-[29%] size-[42%] text-[#ffffff]" />
         </div>
     )
 }

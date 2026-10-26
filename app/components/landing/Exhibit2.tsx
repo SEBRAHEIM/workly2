@@ -179,7 +179,6 @@ export function Studio() {
             <div className="relative mx-auto max-w-[1300px] px-4 md:px-10">
                 <div className="flex items-start justify-between">
                     <span className="inline-block bg-[#ffffff] px-4 py-2 text-[13px] font-black uppercase tracking-tight text-[#0b2540] [clip-path:polygon(0_0,82%_0,100%_38%,100%_100%,0_100%)] md:text-base">Workly studio</span>
-                    <span className="text-right text-[10px] uppercase leading-relaxed tracking-[0.2em] text-[#0b2540]/60 md:text-[11px]">What we do<br />07 services</span>
                 </div>
 
                 <div className="mt-14 grid items-center gap-10 md:mt-20 md:grid-cols-[1.25fr_1fr]">

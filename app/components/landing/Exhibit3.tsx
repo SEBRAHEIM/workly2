@@ -107,13 +107,13 @@ function Seal({ color, className = '', glyph }: { color: [string, string, string
 }
 
 const steps = [
-    ['Discover', 'Explore what we build and how we work.'],
-    ['Request', 'Tell us about the website you need.'],
-    ['Consult', 'We review the idea and agree the scope.'],
-    ['Quote', 'A proposal with the work, cost and timeline.'],
-    ['Build', 'We design and develop every page.'],
-    ['Deliver', 'Tested, polished and handed over.'],
-    ['Support', 'Updates and improvements when you need them.'],
+    ['Discover', 'اكتشف', 'Explore what we build and how we work.'],
+    ['Request', 'اطلب', 'Tell us about the website you need.'],
+    ['Consult', 'استشر', 'We review the idea and agree the scope.'],
+    ['Quote', 'عرض السعر', 'A proposal with the work, cost and timeline.'],
+    ['Build', 'نبني', 'We design and develop every page.'],
+    ['Deliver', 'نسلّم', 'Tested, polished and handed over.'],
+    ['Support', 'ندعمك', 'Updates and improvements when you need them.'],
 ]
 
 /* WORLD 6 — Bold collage campaign. Black sand, a yellow bar, postage stamps and wax seals. */
@@ -208,7 +208,7 @@ function HangingSteps() {
                 <svg viewBox="0 0 1000 24" preserveAspectRatio="none" className="h-full w-full"><path d="M0 2 Q500 30 1000 2" fill="none" stroke="#f2efe8" strokeOpacity=".5" strokeWidth="1.5" /></svg>
             </div>
             <ol ref={list} className="flex flex-col md:grid md:grid-cols-7 md:gap-3">
-                {steps.map(([t, d], i) => (
+                {steps.map(([t, ar, d], i) => (
                     <li
                         key={t}
                         className={`relative w-[74%] pt-12 md:w-auto md:pt-10 md:[--ox:50%] ${i % 2 ? 'ml-auto [--ox:30%]' : '[--ox:70%]'} ${i ? '-mt-6 md:mt-0' : ''}`}
@@ -223,7 +223,7 @@ function HangingSteps() {
                                 <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-[#0d0d0d]/40">Step {i + 1}/7</span>
                             </div>
                             <div className="my-3 border-t-2 border-dashed border-[#0d0d0d]/25" />
-                            <p className="font-[family-name:var(--font-anton)] text-2xl uppercase leading-none md:text-xl">{t}</p>
+                            <p className="flex items-baseline justify-between gap-2"><span className="font-[family-name:var(--font-anton)] text-2xl uppercase leading-none md:text-xl">{t}</span><span className="font-[family-name:var(--font-kufi)] text-lg font-bold leading-none text-[#c98a12] md:text-base" dir="rtl" lang="ar">{ar}</span></p>
                             <p className="mt-2 text-[13px] leading-snug text-[#0d0d0d]/70 md:text-[12px]">{d}</p>
                         </div>
                     </li>

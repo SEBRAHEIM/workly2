@@ -63,7 +63,7 @@ function Page({ children, className = '' }: { children: React.ReactNode; classNa
 }
 
 /* Photograph with a tinted fallback so a slow or failed load never leaves a hole */
-function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style, zoom = false }: { id: string; className?: string; tint?: string; style?: React.CSSProperties; zoom?: boolean }) {
+function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style, zoom = false, eager = false }: { id: string; className?: string; tint?: string; style?: React.CSSProperties; zoom?: boolean; eager?: boolean }) {
     // Hidden until it has really loaded (also covers loads that finish before hydration)
     const img = useRef<HTMLImageElement>(null)
     useEffect(() => {
@@ -76,7 +76,7 @@ function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style, zoom = false }: 
             <img
                 src={`https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=70`}
                 alt=""
-                loading="lazy"
+                loading={eager ? 'eager' : 'lazy'}
                 decoding="async"
                 ref={img}
                 onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
@@ -91,7 +91,7 @@ function Ph({ id, className = '', tint = 'bg-[#d9d4cb]', style, zoom = false }: 
 function Slides({ ids, className = '', tint = 'bg-[#d9d4cb]' }: { ids: [string, string, string]; className?: string; tint?: string }) {
     return (
         <div className={`overflow-hidden ${tint} ${className}`}>
-            {ids.map((id, i) => <Ph key={id} id={id} zoom className="mk-slide absolute inset-0" tint="bg-transparent" style={{ animationDelay: `${i * 5}s` }} />)}
+            {ids.map((id, i) => <Ph key={id} id={id} zoom eager className="mk-slide absolute inset-0" tint="bg-transparent" style={{ animationDelay: `${i * 5}s` }} />)}
         </div>
     )
 }

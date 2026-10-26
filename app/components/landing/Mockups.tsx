@@ -37,6 +37,17 @@ function Page({ children, className = '' }: { children: React.ReactNode; classNa
             page.style.transitionDuration = '1.4s'
             page.style.transform = ''
         }
+        // Touch screens have no hover: a tap scrolls through the page, a second tap scrolls back
+        if (window.matchMedia('(hover: none)').matches) {
+            let open = false
+            const tap = () => {
+                open = !open
+                if (open) enter()
+                else leave()
+            }
+            frame.addEventListener('click', tap)
+            return () => frame.removeEventListener('click', tap)
+        }
         frame.addEventListener('mouseenter', enter)
         frame.addEventListener('mouseleave', leave)
         return () => {

@@ -197,7 +197,10 @@ export function YellowTransition() {
         const el = wrap.current
         if (!el) return
         el.style.setProperty('--y', Math.min(1, Math.max(0, (p - 0.05) / 0.6)).toFixed(3))
-        el.style.setProperty('--f', Math.min(1, Math.max(0, (p - 0.68) / 0.3)).toFixed(3))
+        const f = Math.min(1, Math.max(0, (p - 0.62) / 0.34))
+        el.style.setProperty('--f', f.toFixed(3))
+        // Camera push into a plain yellow patch of the ticket, accelerating like a dolly zoom
+        el.style.setProperty('--z', (1 + 70 * f ** 3).toFixed(3))
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
 
@@ -207,7 +210,7 @@ export function YellowTransition() {
                 {/* The ticket */}
                 <div
                     className="relative z-10 w-[min(90vw,1060px)] drop-shadow-[0_30px_40px_rgba(0,0,0,.6)]"
-                    style={{ transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc(.78 + .3 * var(--y, 1)))' }}
+                    style={{ transformOrigin: '77% 46%', transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc((.78 + .3 * var(--y, 1)) * var(--z, 1)))' }}
                 >
                     {/* masking tape */}
                     <span className="absolute -left-4 -top-3 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
@@ -240,8 +243,8 @@ export function YellowTransition() {
                     </div>
                 </div>
 
-                {/* Flood into the yellow contact world */}
-                <div className="pointer-events-none absolute inset-0 z-20 bg-[#f5b52e]" style={{ clipPath: 'circle(calc(var(--f, 0) * 150vmax) at 50% 50%)' }} />
+                {/* Safety net once the zoom has filled the screen, so the hand-off to the contact world is pure yellow */}
+                <div className="pointer-events-none absolute inset-0 z-20 bg-[#f5b52e]" style={{ opacity: 'clamp(0, calc((var(--f, 0) - .9) * 10), 1)' }} />
             </div>
         </section>
     )

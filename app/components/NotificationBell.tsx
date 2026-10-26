@@ -16,7 +16,9 @@ type Notification = {
 }
 
 // Create a stable client outside the component
-const supabase = createClient()
+// Created on first use (in effects/handlers) so prerendering at build time never needs Supabase env vars
+let client: ReturnType<typeof createClient> | null = null
+const getSupabase = () => (client ??= createClient())
 
 export default function NotificationBell({ userId }: { userId: string }) {
     const [notifications, setNotifications] = useState<Notification[]>([])
@@ -30,7 +32,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
         if (!userId) return
         setIsLoading(true)
         try {
-            const { data, error } = await supabase
+            const { data, error } = await getSupabase()
                 .from('notifications')
                 .select('*')
                 .eq('user_id', userId)
@@ -48,13 +50,13 @@ export default function NotificationBell({ userId }: { userId: string }) {
         } finally {
             setIsLoading(false)
         }
-    }, [userId, supabase])
+    }, [userId])
 
     useEffect(() => {
         fetchNotifications()
 
         // Realtime Subscription
-        const channel = supabase
+        const channel = getSupabase()
             .channel(`notifications-${userId}`)
             .on('postgres_changes', {
                 event: 'INSERT',
@@ -69,9 +71,9 @@ export default function NotificationBell({ userId }: { userId: string }) {
             .subscribe()
 
         return () => {
-            supabase.removeChannel(channel)
+            getSupabase().removeChannel(channel)
         }
-    }, [userId, supabase, fetchNotifications])
+    }, [userId, fetchNotifications])
 
     // Close on click outside
     useEffect(() => {
@@ -89,7 +91,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
         setUnreadCount(prev => Math.max(0, prev - 1))
 
-        await supabase.from('notifications').update({ is_read: true }).eq('id', id)
+        await getSupabase().from('notifications').update({ is_read: true }).eq('id', id)
 
         if (link) {
             setIsOpen(false)
@@ -100,7 +102,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
     const markAllRead = async () => {
         setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
         setUnreadCount(0)
-        await supabase.from('notifications').update({ is_read: true }).eq('user_id', userId)
+        await getSupabase().from('notifications').update({ is_read: true }).eq('user_id', userId)
     }
 
     return (

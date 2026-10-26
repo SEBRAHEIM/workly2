@@ -216,3 +216,8 @@ a:active,
   86% { transform: rotate(-1deg); }
   100% { opacity: 1; transform: rotate(var(--r, 0deg)); }
 }
+
+/* Phones: the gallery ring holds nine live sites; freeze their looping animations so the 3D turn stays smooth */
+@media (max-width: 767px) {
+  .gallery-ring *, .gallery-ring *::before, .gallery-ring *::after { animation-play-state: paused !important; }
+}

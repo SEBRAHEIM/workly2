@@ -4,6 +4,7 @@ import { useActionState, useEffect, useId, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight, Check, ChevronDown, Loader2 } from 'lucide-react'
 import { submitInquiry } from '@/app/actions/inquiry'
+import { WorklyLogo } from './Logo'
 
 const types = ['Business website', 'Online store', 'Booking system', 'Web application', 'Portfolio', 'Admin dashboard', 'Maintenance', 'Not sure yet']
 const budgets = ['Under AED 5,000', 'AED 5,000 – 15,000', 'AED 15,000 – 40,000', 'AED 40,000+', 'Not sure yet']
@@ -43,8 +44,8 @@ function Badge() {
                     <textPath href={`#${id}`} textLength="474" lengthAdjust="spacing">Start a project · Start a project ·</textPath>
                 </text>
             </svg>
-            <span className="absolute inset-[30%] grid place-items-center rounded-full bg-[#0d0d0d] text-[#f5b52e] transition-transform duration-500 group-hover:rotate-45">
-                <ArrowUpRight size={28} />
+            <span className="absolute inset-[27%] grid place-items-center rounded-full bg-[#0d0d0d] text-[#f5b52e] transition-transform duration-700 group-hover:rotate-[360deg]">
+                <WorklyLogo className="size-[64%]" />
             </span>
         </a>
     )
@@ -161,9 +162,9 @@ export function Footer() {
                     <Link href="/terms" className="hover:text-[#f5b52e]">Terms</Link>
                 </nav>
             </div>
-            <p className="mt-12 select-none text-center font-[family-name:var(--font-fraunces)] pb-[3vw] text-[25vw] font-light leading-[0.8] tracking-[-0.06em] text-[#f2efe8]" aria-hidden>
-                Work<em>ly</em>
-            </p>
+            <div className="mt-12 flex justify-center pb-10 text-[#f2efe8]">
+                <WorklyLogo reg className="w-[min(78vw,560px)] transition-transform duration-1000 ease-out hover:rotate-[24deg]" />
+            </div>
             <div className="mx-auto flex max-w-[1300px] justify-between border-t border-[#f2efe8]/10 py-5 text-[11px] text-[#f2efe8]/50">
                 <span>© 2026 Workly</span>
                 <span>workly.day</span>

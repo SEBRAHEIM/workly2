@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useScrollVar } from './useScrollVar'
 import { Screen, SiteFashion, SiteHotel, SitePortfolio, SiteRestaurant, SiteStore, showcase } from './Mockups'
+import { WorklyLogo } from './Logo'
 
 const N = showcase.length
 const STEP = 360 / N
@@ -36,8 +37,12 @@ export function Gallery() {
                     One studio.<br /><span className="font-[family-name:var(--font-instrument)] normal-case italic tracking-normal">Endless</span> possibilities.
                 </h2>
 
-                {/* The ring */}
+                {/* The ring, with the Workly mark at its centre */}
                 <div className="relative flex-1 [--w:min(62vw,250px)] [perspective:1100px] md:[--w:400px] md:[perspective:1600px]">
+                    {/* Floor emblem under the ring */}
+                    <div className="pointer-events-none absolute bottom-[2%] left-1/2 -translate-x-1/2 text-white/[.09] [transform:translateX(-50%)_rotateX(68deg)]" aria-hidden>
+                        <WorklyLogo className="landing-spin size-56 [animation-duration:60s] md:size-[26rem]" />
+                    </div>
                     <div
                         className="absolute left-1/2 top-[44%] transition-transform duration-700 ease-out [transform-style:preserve-3d]"
                         style={{ transform: `translate(-50%, -50%) translateZ(calc(var(--w) * -1.7)) rotateY(calc(var(--p, 0) * ${-(N - 1) * STEP}deg + ${-offset * STEP}deg))` }}
@@ -154,7 +159,7 @@ export function Collage() {
                     <Stamp className="left-[16%] top-[74%] w-[50%]" style={fly(-120, 240, 25, 2)}>
                         <Screen className="aspect-[16/9]"><SiteFashion /></Screen>
                     </Stamp>
-                    <Seal className="left-[30%] top-[0%]" color={['#d8e07a', '#9aa52c', '#5f6814']} glyph={<span className="font-[family-name:var(--font-anton)] text-2xl text-[#3d430c] md:text-3xl">W</span>} />
+                    <Seal className="left-[30%] top-[0%]" color={['#d8e07a', '#9aa52c', '#5f6814']} glyph={<WorklyLogo className="size-8 text-[#3d430c] md:size-11" />} />
                     <Seal className="left-[58%] top-[-3%]" color={['#ffb06b', '#e8641f', '#93360a']} glyph={<svg width="22" height="22" viewBox="0 0 24 24" fill="#6b2405"><path d="M12 2l2.6 6.9L22 9.3l-5.7 4.6 2 7.1L12 17l-6.3 4 2-7.1L2 9.3l7.4-.4z" /></svg>} />
                     <Seal className="left-[47%] top-[10%]" color={['#e0605e', '#a31f22', '#5b0d10']} glyph={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4a0a0c" strokeWidth="2.6" strokeLinecap="round"><path d="M5 19L19 5M9 5h10v10" /></svg>} />
                 </div>

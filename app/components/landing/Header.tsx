@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
+import { WorklyLogo } from './Logo'
 
 const links = [
     { href: '#work', label: 'Work' },
@@ -14,14 +15,8 @@ const links = [
 
 function Logo() {
     return (
-        <Link href="/" className="flex items-center gap-1.5 text-[15px] font-semibold tracking-tight text-[#0d0d0d]">
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
-                <rect x="2" y="2" width="9" height="9" rx="2.5" fill="#0d0d0d" />
-                <rect x="13" y="2" width="9" height="9" rx="4.5" fill="#0d0d0d" />
-                <rect x="2" y="13" width="9" height="9" rx="4.5" fill="#0d0d0d" />
-                <rect x="13" y="13" width="9" height="9" rx="2.5" fill="#C8EE7E" />
-            </svg>
-            Workly
+        <Link href="/" aria-label="Workly home" className="group flex items-center text-[#0d0d0d]">
+            <WorklyLogo className="size-9 transition-transform duration-700 ease-out group-hover:rotate-[360deg] md:size-10" />
         </Link>
     )
 }

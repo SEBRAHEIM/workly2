@@ -203,9 +203,8 @@ export function Studio() {
                     ))}
                 </ul>
 
-                <div className="mt-20 flex flex-col items-center gap-6 md:flex-row md:justify-between">
-                    <StudioMark size="size-[180px]" />
-                    <p className="max-w-md text-center text-[clamp(1.2rem,2.6vw,1.9rem)] font-bold uppercase leading-tight tracking-tight md:text-right">
+                <div className="mt-20 flex justify-center">
+                    <p className="max-w-2xl text-center text-[clamp(1.6rem,4vw,3rem)] font-bold uppercase leading-tight tracking-tight">
                         Not one style.<br /><span className="text-[#ffffff]">Every</span> style.
                     </p>
                 </div>

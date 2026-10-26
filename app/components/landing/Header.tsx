@@ -33,9 +33,11 @@ export default function Header({ accountHref }: { accountHref: string | null }) 
                     {links.map((l) => <a key={l.href} href={l.href} className="transition-colors hover:text-[#0d0d0d]">{l.label}</a>)}
                 </nav>
                 <div className="flex items-center gap-1.5">
-                    <Link href={accountHref ?? '/login'} className="hidden rounded-full px-4 py-2 text-[13px] text-[#0d0d0d]/70 transition-colors hover:text-[#0d0d0d] sm:block">
-                        {accountHref ? 'Dashboard' : 'Client login'}
-                    </Link>
+                    {accountHref && (
+                        <Link href={accountHref} className="hidden rounded-full px-4 py-2 text-[13px] text-[#0d0d0d]/70 transition-colors hover:text-[#0d0d0d] sm:block">
+                            Dashboard
+                        </Link>
+                    )}
                     <a href="#contact" className="rounded-full bg-[#0d0d0d] px-4 py-2 text-[13px] text-white transition-transform hover:scale-[1.03] md:px-5 md:py-2.5">Start a project</a>
                     <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid size-9 place-items-center rounded-full text-[#0d0d0d] lg:hidden">
                         {open ? <X size={18} /> : <Menu size={18} />}
@@ -48,9 +50,11 @@ export default function Header({ accountHref }: { accountHref: string | null }) 
                     {links.map((l) => (
                         <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-2xl font-semibold tracking-tight text-[#0d0d0d] hover:bg-black/5">{l.label}</a>
                     ))}
-                    <Link href={accountHref ?? '/login'} className="block rounded-2xl px-4 py-3 text-base text-[#0d0d0d]/60 hover:bg-black/5">
-                        {accountHref ? 'Dashboard' : 'Client login'}
-                    </Link>
+                    {accountHref && (
+                        <Link href={accountHref} className="block rounded-2xl px-4 py-3 text-base text-[#0d0d0d]/60 hover:bg-black/5">
+                            Dashboard
+                        </Link>
+                    )}
                 </div>
             )}
         </header>

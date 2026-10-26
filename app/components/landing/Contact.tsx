@@ -162,7 +162,6 @@ export function Footer() {
                     <a href="#process" className="hover:text-[#f5b52e]">Process</a>
                     <a href="#faq" className="hover:text-[#f5b52e]">FAQ</a>
                     <a href="#contact" className="hover:text-[#f5b52e]">Start a project</a>
-                    <Link href="/login" className="hover:text-[#f5b52e]">Client login</Link>
                     <Link href="/privacy" className="hover:text-[#f5b52e]">Privacy</Link>
                     <Link href="/terms" className="hover:text-[#f5b52e]">Terms</Link>
                 </nav>

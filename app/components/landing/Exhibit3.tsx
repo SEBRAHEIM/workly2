@@ -190,25 +190,69 @@ export function Collage() {
     )
 }
 
-/* Transition 6 → 7: the yellow bar widens until it is the whole page */
+/* Transition 6 → 7: an admission ticket for "your turn" straightens, grows, then floods the page yellow */
 export function YellowTransition() {
     const wrap = useRef<HTMLElement>(null)
     const onProgress = useCallback((p: number) => {
-        wrap.current?.style.setProperty('--y', Math.min(1, Math.max(0, (p - 0.1) / 0.7)).toFixed(3))
+        const el = wrap.current
+        if (!el) return
+        el.style.setProperty('--y', Math.min(1, Math.max(0, (p - 0.05) / 0.6)).toFixed(3))
+        el.style.setProperty('--f', Math.min(1, Math.max(0, (p - 0.68) / 0.3)).toFixed(3))
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
 
+    const strip = 'YOUR TURN ✺ دورك ✺ START A PROJECT ✺ '
+
     return (
-        <section ref={wrap} className="sand relative h-[160vh] bg-[#0d0d0d] motion-reduce:h-auto">
+        <section ref={wrap} className="sand relative h-[200vh] bg-[#0d0d0d] motion-reduce:h-auto">
             <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
+                {/* Two crossing tape strips behind the ticket */}
+                {[[-6, 'text-[#f5b52e]', 'border-[#f5b52e]/40', ''], [5, 'text-transparent [-webkit-text-stroke:1px_#f5b52e]', 'border-[#f5b52e]/20', '[animation-direction:reverse]']].map(([r, txt, bd, dir], k) => (
+                    <div key={k} className={`absolute left-[-10%] w-[120%] overflow-hidden border-y py-2 ${bd}`} style={{ transform: `rotate(${r}deg)`, top: k ? '68%' : '24%' }} aria-hidden>
+                        <div className={`landing-marquee flex w-max whitespace-nowrap font-[family-name:var(--font-anton)] text-[clamp(1.6rem,4vw,3rem)] uppercase leading-none [animation-duration:30s] ${txt} ${dir}`}>
+                            {[0, 1, 2, 3].map((n) => <span key={n} className="pr-4">{strip}{strip}</span>)}
+                        </div>
+                    </div>
+                ))}
+
+                {/* The ticket */}
                 <div
-                    className="grid place-items-center overflow-hidden bg-[#f5b52e] text-[#0d0d0d]"
-                    style={{ width: 'calc(78vw + 22vw * var(--y, 0))', height: 'calc(76px + (100svh - 76px) * var(--y, 0))' }}
+                    className="relative z-10 w-[min(90vw,1060px)] drop-shadow-[0_30px_40px_rgba(0,0,0,.6)]"
+                    style={{ transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc(.78 + .3 * var(--y, 1)))' }}
                 >
-                    <p className="whitespace-nowrap font-[family-name:var(--font-anton)] uppercase leading-[0.85]" style={{ fontSize: 'calc(1.6rem + 12vw * var(--y, 0))' }}>
-                        Your turn.
-                    </p>
+                    {/* masking tape */}
+                    <span className="absolute -left-4 -top-3 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
+                    <span className="absolute -bottom-3 -right-4 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
+
+                    <div className="ticket grid grid-cols-[1fr_auto] bg-[#f5b52e] text-[#0d0d0d]">
+                        <div className="relative overflow-hidden px-6 py-6 md:px-12 md:py-9">
+                            <div className="flex items-center justify-between font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.25em] md:text-xs">
+                                <span>Workly · Admit one</span>
+                                <span className="hidden sm:inline">Nº 0007 / 2026</span>
+                            </div>
+                            <p className="mt-3 font-[family-name:var(--font-anton)] text-[clamp(3.6rem,13vw,10.5rem)] uppercase leading-[0.82]">
+                                Your <span className="text-transparent [-webkit-text-stroke:2px_#0d0d0d] md:[-webkit-text-stroke:3px_#0d0d0d]">turn.</span>
+                            </p>
+                            <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+                                <p className="max-w-xs text-sm leading-snug md:text-base">Good for one custom website, designed and built around your idea.</p>
+                                <p className="font-[family-name:var(--font-kufi)] text-3xl font-bold md:text-5xl" dir="rtl" lang="ar">دورك</p>
+                            </div>
+                            <WorklyLogo className="pointer-events-none absolute -bottom-10 right-28 w-40 rotate-12 text-[#0d0d0d]/[.07] md:right-44 md:w-64" />
+                        </div>
+
+                        {/* Stub: perforation, barcode, rotated label */}
+                        <div className="relative flex w-16 flex-col items-center justify-between border-l-[3px] border-dashed border-[#0d0d0d]/35 py-5 md:w-40 md:py-8">
+                            <span className="absolute -left-[13px] -top-3 size-6 rounded-full bg-[#0d0d0d]" />
+                            <span className="absolute -bottom-3 -left-[13px] size-6 rounded-full bg-[#0d0d0d]" />
+                            <WorklyLogo className="size-9 md:size-16" />
+                            <span className="hidden font-[family-name:var(--font-anton)] text-2xl uppercase md:block">Gate W</span>
+                            <span className="h-24 w-8 md:h-20 md:w-24" style={{ background: 'repeating-linear-gradient(90deg,#0d0d0d 0 2px,transparent 2px 4px,#0d0d0d 4px 7px,transparent 7px 9px,#0d0d0d 9px 10px,transparent 10px 13px)' }} />
+                        </div>
+                    </div>
                 </div>
+
+                {/* Flood into the yellow contact world */}
+                <div className="pointer-events-none absolute inset-0 z-20 bg-[#f5b52e]" style={{ clipPath: 'circle(calc(var(--f, 0) * 150vmax) at 50% 50%)' }} />
             </div>
         </section>
     )

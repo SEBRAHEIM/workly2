@@ -271,6 +271,16 @@ export function YellowTransition() {
     return (
         <section ref={wrap} className="sand relative h-[160vh] bg-[#0d0d0d] motion-reduce:h-auto md:h-[200vh]">
             <div className="sticky top-0 grid h-[100lvh] place-items-center overflow-hidden motion-reduce:relative motion-reduce:h-[100svh]">
+                {/* Lead-in and hint frame the ticket; they fade out as the camera pushes in */}
+                <div className="pointer-events-none absolute inset-x-0 top-[16%] px-4 text-center md:top-[14%]" style={{ opacity: 'calc(1 - var(--f, 0) * 5)' }}>
+                    <p className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.3em] text-[#f2efe8]/45 md:text-xs">Seven steps. One ticket.</p>
+                    <p className="mt-3 font-[family-name:var(--font-anton)] text-[clamp(2rem,6vw,4.5rem)] uppercase leading-[0.9] text-[#f2efe8]">Your idea is <span className="text-[#f5b52e]">next in line.</span></p>
+                </div>
+                <div className="pointer-events-none absolute inset-x-0 bottom-[12%] flex flex-col items-center gap-2 text-[#f2efe8]/50" style={{ opacity: 'calc(1 - var(--f, 0) * 5)' }}>
+                    <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.3em]">Keep scrolling to claim it</span>
+                    <span className="h-8 w-px animate-pulse bg-[#f5b52e]/70" />
+                </div>
+
                 {/* The ticket */}
                 <div
                     ref={ticket}

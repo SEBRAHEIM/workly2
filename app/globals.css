@@ -196,3 +196,10 @@ a:active,
   .mk-slide { animation: none; opacity: 0; } .mk-slide:first-child { opacity: 1; }
   .mk-toast { opacity: 1; }
 }
+
+/* Phones: keep motion smooth by dropping the costliest ambient effects */
+@media (max-width: 767px) {
+  .mk-zoom { animation: none; }
+  .landing [class*="backdrop-blur"] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .grain { display: none; }
+}

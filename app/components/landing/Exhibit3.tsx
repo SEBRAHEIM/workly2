@@ -23,7 +23,7 @@ export function Gallery() {
     const current = showcase[(((scrollIdx + offset) % N) + N) % N]
 
     return (
-        <section ref={wrap} id="gallery" className="relative -mt-12 h-[320vh] rounded-t-[40px] bg-black text-white motion-reduce:h-auto md:-mt-16 md:rounded-t-[64px]">
+        <section ref={wrap} id="gallery" className="relative -mt-12 h-[230vh] rounded-t-[40px] md:h-[320vh] bg-black text-white motion-reduce:h-auto md:-mt-16 md:rounded-t-[64px]">
             <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden rounded-t-[40px] motion-reduce:relative md:rounded-t-[64px]">
                 {/* Spotlight and floor */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_45%_60%_at_50%_0%,rgba(255,255,255,.13),transparent_70%),radial-gradient(ellipse_70%_30%_at_50%_100%,rgba(255,255,255,.06),transparent_70%)]" />
@@ -53,7 +53,7 @@ export function Gallery() {
                                 className="absolute left-1/2 top-1/2 w-[var(--w)] [backface-visibility:hidden]"
                                 style={{ transform: `translate(-50%, -50%) rotateY(${i * STEP}deg) translateZ(calc(var(--w) * 1.7))` }}
                             >
-                                <div className="[-webkit-box-reflect:below_10px_linear-gradient(transparent_55%,rgba(255,255,255,.22))]">
+                                <div className="md:[-webkit-box-reflect:below_10px_linear-gradient(transparent_55%,rgba(255,255,255,.22))]">
                                     <Screen url={url} dark={dark} className="aspect-[16/10] rounded-[12px]" >
                                         <Site />
                                     </Screen>
@@ -199,18 +199,21 @@ export function YellowTransition() {
         el.style.setProperty('--y', Math.min(1, Math.max(0, (p - 0.05) / 0.6)).toFixed(3))
         const f = Math.min(1, Math.max(0, (p - 0.62) / 0.34))
         el.style.setProperty('--f', f.toFixed(3))
+        el.style.setProperty('--tv', f > 0.92 ? 'hidden' : 'visible')
+        // A filter on a heavily scaled layer is very expensive to paint, so drop the shadow once the zoom starts
+        el.style.setProperty('--tf', f > 0 ? 'none' : 'drop-shadow(0 30px 40px rgba(0,0,0,.6))')
         // Camera push into a plain yellow patch of the ticket, accelerating like a dolly zoom
-        el.style.setProperty('--z', (1 + 70 * f ** 3).toFixed(3))
+        el.style.setProperty('--z', (1 + 24 * f ** 3).toFixed(3))
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
 
     return (
-        <section ref={wrap} className="sand relative h-[200vh] bg-[#0d0d0d] motion-reduce:h-auto">
+        <section ref={wrap} className="sand relative h-[160vh] bg-[#0d0d0d] motion-reduce:h-auto md:h-[200vh]">
             <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
                 {/* The ticket */}
                 <div
-                    className="relative z-10 w-[min(90vw,1060px)] drop-shadow-[0_30px_40px_rgba(0,0,0,.6)]"
-                    style={{ transformOrigin: '77% 46%', transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc((.78 + .3 * var(--y, 1)) * var(--z, 1)))' }}
+                    className="relative z-10 w-[min(90vw,1060px)] origin-[62%_32%] will-change-transform md:origin-[77%_46%]"
+                    style={{ visibility: 'var(--tv, visible)' as React.CSSProperties['visibility'], filter: 'var(--tf, drop-shadow(0 30px 40px rgba(0,0,0,.6)))', transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc((.78 + .3 * var(--y, 1)) * var(--z, 1)))' }}
                 >
                     {/* masking tape */}
                     <span className="absolute -left-4 -top-3 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
@@ -244,7 +247,7 @@ export function YellowTransition() {
                 </div>
 
                 {/* Safety net once the zoom has filled the screen, so the hand-off to the contact world is pure yellow */}
-                <div className="pointer-events-none absolute inset-0 z-20 bg-[#f5b52e]" style={{ opacity: 'clamp(0, calc((var(--f, 0) - .9) * 10), 1)' }} />
+                <div className="pointer-events-none absolute inset-0 z-20 bg-[#f5b52e]" style={{ opacity: 'clamp(0, calc((var(--f, 0) - .72) * 6), 1)' }} />
             </div>
         </section>
     )

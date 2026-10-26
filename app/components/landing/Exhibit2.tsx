@@ -83,7 +83,7 @@ export function DotTransition() {
     useScrollVar(wrap, 'sticky', onProgress)
 
     return (
-        <section ref={wrap} className="relative h-[170vh] bg-white motion-reduce:h-auto">
+        <section ref={wrap} className="relative h-[140vh] bg-white motion-reduce:h-auto md:h-[170vh]">
             <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
                 {/* Soft editorial gradient band */}
                 <div className="pointer-events-none absolute inset-x-[-10%] top-[30%] h-[45%] bg-[radial-gradient(ellipse_at_30%_50%,#ffb38a_0%,transparent_55%),radial-gradient(ellipse_at_60%_50%,#ff7eb6_0%,transparent_55%),radial-gradient(ellipse_at_85%_50%,#ffe08a_0%,transparent_55%)] opacity-60 blur-3xl" />

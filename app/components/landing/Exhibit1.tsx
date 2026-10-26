@@ -48,7 +48,7 @@ export function Cinematic() {
     ]
 
     return (
-        <section ref={wrap} id="top" style={{ ['--cw' as string]: 'max(220px, min(76vw, 540px, calc((100svh - var(--st, 64svh) - 32px) / 0.625)))' }} className="cine-wrap relative h-[240vh] bg-[#050505] motion-reduce:h-auto">
+        <section ref={wrap} id="top" style={{ ['--cw' as string]: 'max(220px, min(76vw, 540px, calc((100svh - var(--st, 64svh) - 32px) / 0.625)))' }} className="cine-wrap relative h-[190vh] md:h-[240vh] bg-[#050505] motion-reduce:h-auto">
             <div onPointerMove={move} className="sticky top-0 h-[100svh] overflow-hidden motion-reduce:relative motion-reduce:h-[100svh]">
                 {/* Lighting: a warm key light from above and a cool floor bounce */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-8%,rgba(255,214,170,.20),transparent_65%),radial-gradient(ellipse_60%_35%_at_50%_105%,rgba(120,150,255,.14),transparent_70%)]" />
@@ -174,7 +174,7 @@ export function Digital() {
                 </form>
 
                 {/* Pages panel */}
-                <div className="art-float absolute right-2 top-0 z-20 w-40 rounded-[18px] bg-white/85 p-3 text-[12px] shadow-[0_20px_50px_-20px_rgba(60,40,160,.4)] backdrop-blur [--d:1.2s] md:right-0 md:top-16 md:w-52" style={depth(60)}>
+                <div className="art-float absolute right-2 top-0 z-20 hidden w-40 md:block rounded-[18px] bg-white/85 p-3 text-[12px] shadow-[0_20px_50px_-20px_rgba(60,40,160,.4)] backdrop-blur [--d:1.2s] md:right-0 md:top-16 md:w-52" style={depth(60)}>
                     <p className="mb-2 text-[11px] font-semibold text-[#5b4fd6]">Pages</p>
                     {['Home', 'Classes', 'Book online', 'Members'].map((pg, i) => (
                         <div key={pg} className="flex items-center gap-2 py-1">

@@ -47,16 +47,15 @@ export function Cinematic() {
     ]
 
     return (
-        <section ref={wrap} id="top" className="cine-wrap relative h-[240vh] bg-[#050505] motion-reduce:h-auto">
+        <section ref={wrap} id="top" style={{ ['--cw' as string]: 'max(220px, min(76vw, 540px, calc((100svh - var(--st, 64svh) - 32px) / 0.625)))' }} className="cine-wrap relative h-[240vh] bg-[#050505] motion-reduce:h-auto">
             <div onPointerMove={move} className="sticky top-0 h-[100svh] overflow-hidden motion-reduce:relative motion-reduce:h-[100svh]">
                 {/* Lighting: a warm key light from above and a cool floor bounce */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-8%,rgba(255,214,170,.20),transparent_65%),radial-gradient(ellipse_60%_35%_at_50%_105%,rgba(120,150,255,.14),transparent_70%)]" />
                 <div className="grain pointer-events-none absolute inset-0 opacity-[.07]" />
 
                 {/* Headline */}
-                <div ref={intro} className="relative z-10 flex flex-col items-center px-4 pt-[max(88px,15svh)] text-center text-white md:pt-[max(96px,12svh)]" style={{ transform: 'translateY(calc(var(--a, 0) * -30svh))', opacity: 'calc(1 - var(--a, 0) * 1.4)' }}>
-                    <p className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.35em] text-white/50 md:text-[11px]">Workly · A website studio</p>
-                    <h1 className="mt-5 font-[family-name:var(--font-fraunces)] text-[clamp(2.6rem,min(9.5vw,13svh),8.8rem)] font-light leading-[0.92] tracking-[-0.035em]">
+                <div ref={intro} className="relative z-10 flex flex-col items-center px-4 pt-[max(96px,19svh)] text-center text-white md:pt-[max(96px,12svh)]" style={{ transform: 'translateY(calc(var(--a, 0) * -30svh))', opacity: 'calc(1 - var(--a, 0) * 1.4)' }}>
+                    <h1 className="font-[family-name:var(--font-fraunces)] text-[clamp(2.3rem,min(7vw,9.5svh),6.2rem)] font-light leading-[0.92] tracking-[-0.035em]">
                         Your idea deserves<br />a <em className="font-normal">website.</em>
                     </h1>
                     <p className="mt-5 max-w-md text-sm text-white/60 md:text-base">We design and build websites, online stores and web apps. No two alike.</p>
@@ -73,9 +72,9 @@ export function Cinematic() {
                     {side.map(({ Site, url, dark, x, glow }) => (
                         <div
                             key={url}
-                            className={`absolute left-1/2 top-0 w-[min(46vw,400px)] ${Math.abs(x) === 2 ? 'hidden lg:block' : ''}`}
+                            className={`absolute left-1/2 top-0 w-[calc(var(--cw)*0.74)] ${Math.abs(x) === 2 ? 'hidden lg:block' : ''}`}
                             style={{
-                                transform: `translateX(calc(-50% + ${x * 46}vw * 0.62 + var(--e, 0) * ${x * 70}vw + var(--mx, 0) * ${-x * 14}px)) translateY(calc(${Math.abs(x) * 5}svh + var(--my, 0) * -10px)) rotateY(${-x * 24}deg) scale(${1 - Math.abs(x) * 0.08})`,
+                                transform: `translateX(calc(-50% + var(--cw) * ${x * 0.86} + var(--e, 0) * ${x * 70}vw + var(--mx, 0) * ${-x * 14}px)) translateY(calc(var(--cw) * ${Math.abs(x) * 0.05} + var(--my, 0) * -10px)) rotateY(${-x * 24}deg) scale(${1 - Math.abs(x) * 0.08})`,
                                 opacity: 'calc(1 - var(--e, 0) * 1.6)',
                                 ['--glow' as string]: glow,
                             }}
@@ -92,8 +91,8 @@ export function Cinematic() {
                     className="absolute left-1/2 z-20 overflow-hidden shadow-[0_50px_140px_-30px_rgba(201,192,255,.45)]"
                     style={{
                         top: 'calc(var(--st, 64svh) * (1 - var(--e, 0)))',
-                        width: 'calc(min(64vw, 560px) + (100vw - min(64vw, 560px)) * var(--e, 0))',
-                        height: 'calc(min(64vw, 560px) * 0.62 + (100svh - min(64vw, 560px) * 0.62) * var(--e, 0))',
+                        width: 'calc(var(--cw) + (100vw - var(--cw)) * var(--e, 0))',
+                        height: 'calc(var(--cw) * 0.625 + (100svh - var(--cw) * 0.625) * var(--e, 0))',
                         transform: 'translateX(-50%) translateY(calc(var(--my, 0) * -8px * (1 - var(--e, 0))))',
                         borderRadius: 'calc(16px * (1 - var(--e, 0)))',
                     }}

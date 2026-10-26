@@ -37,15 +37,20 @@ function Choice({ id, name, text, options }: { id: string; name: string; text: s
 function Badge() {
     const id = useId()
     return (
-        <a href="#contact-form" aria-label="Start a project" className="group relative block size-36 md:size-44">
-            <svg viewBox="0 0 200 200" className="landing-spin absolute inset-0 h-full w-full [animation-duration:22s]">
-                <defs><path id={id} d="M100 100 m-76 0 a76 76 0 1 1 152 0 a76 76 0 1 1 -152 0" /></defs>
-                <text fill="#0d0d0d" fontSize="15" className="font-[family-name:var(--font-anton)] uppercase">
-                    <textPath href={`#${id}`} textLength="474" lengthAdjust="spacing">Start a project · Start a project ·</textPath>
+        <a href="#contact-form" aria-label="Start a project" className="group relative block size-40 md:size-48">
+            {/* Clean seal: thin rules, small spaced type, the logo sitting on its own in the middle */}
+            <svg viewBox="0 0 200 200" className="absolute inset-0 h-full w-full" aria-hidden>
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#0d0d0d" strokeWidth="1.2" />
+                <circle cx="100" cy="100" r="66" fill="none" stroke="#0d0d0d" strokeWidth="1.2" />
+            </svg>
+            <svg viewBox="0 0 200 200" className="landing-spin absolute inset-0 h-full w-full [animation-duration:28s] group-hover:[animation-duration:8s]" aria-hidden>
+                <defs><path id={id} d="M100 100 m-77 0 a77 77 0 1 1 154 0 a77 77 0 1 1 -154 0" /></defs>
+                <text fill="#0d0d0d" fontSize="10.5" fontWeight="500" className="font-[family-name:var(--font-geist-mono)] uppercase">
+                    <textPath href={`#${id}`} textLength="480" lengthAdjust="spacing">Start a project ✦ Start a project ✦ Start a project ✦</textPath>
                 </text>
             </svg>
-            <span className="absolute inset-[27%] grid place-items-center rounded-full bg-[#0d0d0d] text-[#f5b52e] transition-transform duration-700 group-hover:rotate-[360deg]">
-                <WorklyLogo className="size-[64%]" />
+            <span className="absolute inset-[30%] grid place-items-center text-[#0d0d0d] transition-transform duration-700 ease-out group-hover:rotate-[20deg] group-hover:scale-110">
+                <WorklyLogo className="size-full" />
             </span>
         </a>
     )

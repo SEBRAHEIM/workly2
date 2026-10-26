@@ -40,11 +40,11 @@ export function Gallery() {
                 {/* The ring, with the Workly mark at its centre */}
                 <div className="relative flex-1 [--w:min(62vw,250px)] [perspective:1100px] md:[--w:400px] md:[perspective:1600px]">
                     {/* Floor emblem under the ring */}
-                    <div className="pointer-events-none absolute bottom-[2%] left-1/2 -translate-x-1/2 text-white/[.09] [transform:translateX(-50%)_rotateX(68deg)]" aria-hidden>
-                        <WorklyLogo className="landing-spin size-56 [animation-duration:60s] md:size-[26rem]" />
+                    <div className="pointer-events-none absolute bottom-[2%] left-1/2 text-white/[.09] [transform:translateX(-50%)_rotateX(68deg)]" aria-hidden>
+                        <WorklyLogo className="size-56 md:landing-spin md:size-[26rem] md:[animation-duration:60s]" />
                     </div>
                     <div
-                        className="absolute left-1/2 top-[44%] transition-transform duration-700 ease-out [transform-style:preserve-3d]"
+                        className="gallery-ring absolute left-1/2 top-[44%] transition-transform duration-700 ease-out [transform-style:preserve-3d]"
                         style={{ transform: `translate(-50%, -50%) translateZ(calc(var(--w) * -1.7)) rotateY(calc(var(--p, 0) * ${-(N - 1) * STEP}deg + ${-offset * STEP}deg))` }}
                     >
                         {showcase.map(({ key, Site, url, dark, glow }, i) => (
@@ -58,7 +58,7 @@ export function Gallery() {
                                         <Site />
                                     </Screen>
                                 </div>
-                                <span className="pointer-events-none absolute -inset-8 -z-10 rounded-full opacity-40 blur-3xl" style={{ background: glow }} />
+                                <span className="pointer-events-none absolute -inset-8 -z-10 hidden rounded-full opacity-40 blur-3xl md:block" style={{ background: glow }} />
                             </div>
                         ))}
                     </div>
@@ -255,36 +255,36 @@ export function YellowTransition() {
             <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
                 {/* The ticket */}
                 <div
-                    className="relative z-10 w-[min(90vw,1060px)] origin-[62%_32%] will-change-transform md:origin-[77%_46%]"
+                    className="relative z-10 w-[min(90vw,1060px)] origin-[72%_22%] will-change-transform md:origin-[74%_22%]"
                     style={{ visibility: 'var(--tv, visible)' as React.CSSProperties['visibility'], filter: 'var(--tf, drop-shadow(0 30px 40px rgba(0,0,0,.6)))', transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc((.78 + .3 * var(--y, 1)) * var(--z, 1)))' }}
                 >
                     {/* masking tape */}
-                    <span className="absolute -left-4 -top-3 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
-                    <span className="absolute -bottom-3 -right-4 z-20 h-8 w-28 -rotate-[28deg] bg-[#f2efe8]/70 md:h-10 md:w-36" />
+                    <span className="absolute -left-3 -top-2 z-20 h-5 w-16 -rotate-[28deg] bg-[#f2efe8]/70 md:h-8 md:w-28" />
+                    <span className="absolute -bottom-2 -right-3 z-20 h-5 w-16 -rotate-[28deg] bg-[#f2efe8]/70 md:h-8 md:w-28" />
 
                     <div className="ticket grid grid-cols-[1fr_auto] bg-[#f5b52e] text-[#0d0d0d]">
-                        <div className="relative overflow-hidden px-6 py-6 md:px-12 md:py-9">
-                            <div className="flex items-center justify-between font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.25em] md:text-xs">
+                        <div className="relative overflow-hidden px-4 py-3 md:px-10 md:py-6">
+                            <div className="flex items-center justify-between font-[family-name:var(--font-geist-mono)] text-[8px] uppercase tracking-[0.25em] md:text-[11px]">
                                 <span>Workly · Admit one</span>
                                 <span className="hidden sm:inline">Nº 0007 / 2026</span>
                             </div>
-                            <p className="mt-3 font-[family-name:var(--font-anton)] text-[clamp(3.6rem,13vw,10.5rem)] uppercase leading-[0.82]">
-                                Your <span className="text-transparent [-webkit-text-stroke:2px_#0d0d0d] md:[-webkit-text-stroke:3px_#0d0d0d]">turn.</span>
+                            <p className="mt-1.5 whitespace-nowrap font-[family-name:var(--font-anton)] text-[clamp(2.4rem,11vw,7.5rem)] uppercase leading-[0.85] md:mt-2">
+                                Your <span className="text-transparent [-webkit-text-stroke:1.5px_#0d0d0d] md:[-webkit-text-stroke:2.5px_#0d0d0d]">turn.</span>
                             </p>
-                            <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
-                                <p className="max-w-xs text-sm leading-snug md:text-base">Good for one custom website, designed and built around your idea.</p>
-                                <p className="font-[family-name:var(--font-kufi)] text-3xl font-bold md:text-5xl" dir="rtl" lang="ar">دورك</p>
+                            <div className="mt-1.5 flex items-end justify-between gap-3 md:mt-3">
+                                <p className="max-w-[15rem] text-[10px] leading-snug md:max-w-xs md:text-sm">Good for one custom website, designed and built around your idea.</p>
+                                <p className="font-[family-name:var(--font-kufi)] text-xl font-bold leading-none md:text-4xl" dir="rtl" lang="ar">دورك</p>
                             </div>
-                            <WorklyLogo className="pointer-events-none absolute -bottom-10 right-28 w-40 rotate-12 text-[#0d0d0d]/[.07] md:right-44 md:w-64" />
+                            <WorklyLogo className="pointer-events-none absolute -bottom-6 right-20 w-24 rotate-12 text-[#0d0d0d]/[.07] md:-bottom-10 md:right-40 md:w-48" />
                         </div>
 
                         {/* Stub: perforation, barcode, rotated label */}
-                        <div className="relative flex w-16 flex-col items-center justify-between border-l-[3px] border-dashed border-[#0d0d0d]/35 py-5 md:w-40 md:py-8">
+                        <div className="relative flex w-12 flex-col items-center justify-between border-l-2 border-dashed border-[#0d0d0d]/35 py-3 md:w-32 md:border-l-[3px] md:py-6">
                             <span className="absolute -left-[13px] -top-3 size-6 rounded-full bg-[#0d0d0d]" />
                             <span className="absolute -bottom-3 -left-[13px] size-6 rounded-full bg-[#0d0d0d]" />
-                            <WorklyLogo className="size-9 md:size-16" />
-                            <span className="hidden font-[family-name:var(--font-anton)] text-2xl uppercase md:block">Gate W</span>
-                            <span className="h-24 w-8 md:h-20 md:w-24" style={{ background: 'repeating-linear-gradient(90deg,#0d0d0d 0 2px,transparent 2px 4px,#0d0d0d 4px 7px,transparent 7px 9px,#0d0d0d 9px 10px,transparent 10px 13px)' }} />
+                            <WorklyLogo className="size-6 md:size-12" />
+                            <span className="hidden font-[family-name:var(--font-anton)] text-xl uppercase md:block">Gate W</span>
+                            <span className="h-10 w-7 md:h-14 md:w-20" style={{ background: 'repeating-linear-gradient(90deg,#0d0d0d 0 2px,transparent 2px 4px,#0d0d0d 4px 7px,transparent 7px 9px,#0d0d0d 9px 10px,transparent 10px 13px)' }} />
                         </div>
                     </div>
                 </div>

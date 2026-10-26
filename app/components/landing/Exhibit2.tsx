@@ -3,6 +3,7 @@
 import { useCallback, useId, useRef, useState } from 'react'
 import { useScrollVar } from './useScrollVar'
 import { Screen, SiteAgency, showcase } from './Mockups'
+import { WorklyLogo } from './Logo'
 
 const ramp = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)))
 
@@ -89,9 +90,12 @@ export function DotTransition() {
                 <p className="relative -translate-y-[10svh] px-4 text-center text-[clamp(3rem,11vw,10rem)] font-semibold leading-[0.88] tracking-[-0.055em] text-[#0e0e0e]">
                     Different<br /><span className="font-[family-name:var(--font-instrument)] font-normal italic">by design</span>
                 </p>
+                <div className="absolute left-1/2 top-[84%] z-10 -translate-x-1/2 -translate-y-1/2 text-[#0e0e0e]" style={{ opacity: 'calc(1 - var(--g, 0) * 3)' }}>
+                    <WorklyLogo className="size-16 md:size-20" />
+                </div>
                 <div
                     className="absolute inset-0 bg-[#0b4a36]"
-                    style={{ clipPath: 'circle(calc(14px + var(--g, 0) * 150vmax) at 50% 84%)' }}
+                    style={{ clipPath: 'circle(calc(var(--g, 0) * 150vmax) at 50% 84%)' }}
                 >
                     <div className="grid h-full place-items-center" style={{ opacity: 'calc(var(--g, 0) * 2 - 1)' }}>
                         <StudioMark />
@@ -113,10 +117,7 @@ function StudioMark({ size = 'size-[260px] md:size-[340px]' }: { size?: string }
                     <textPath href={`#${id}-en`} textLength="486" lengthAdjust="spacing">Think · Design · Build · Launch ·</textPath>
                 </text>
             </svg>
-            <div className="absolute inset-[34%] grid grid-cols-2 gap-1.5">
-                <span className="rounded-tl-full bg-[#f6e3c3]" /><span className="rounded-tr-[30%] bg-[#f6e3c3]" />
-                <span className="rounded-bl-[30%] bg-[#f6e3c3]" /><span className="rounded-br-full bg-[#d4ff3f]" />
-            </div>
+            <WorklyLogo className="absolute inset-[24%] text-[#d4ff3f]" />
         </div>
     )
 }
@@ -155,7 +156,7 @@ export function Studio() {
         <section id="services" className="relative -mt-px scroll-mt-16 overflow-hidden bg-[#0b4a36] pb-28 pt-10 font-[family-name:var(--font-unbounded)] text-[#f6e3c3] md:pb-40">
             <Contours />
             {/* Oversized dark letters behind everything */}
-            <p className="pointer-events-none absolute -left-4 top-24 select-none text-[34vw] font-black leading-none tracking-tighter text-[#0e573f] md:top-10" aria-hidden>WRK</p>
+            <WorklyLogo className="pointer-events-none absolute -right-[18vw] top-20 w-[85vw] max-w-[1100px] rotate-12 text-[#0e573f] md:top-0 md:w-[70vw]" />
 
             <div className="relative mx-auto max-w-[1300px] px-4 md:px-10">
                 <div className="flex items-start justify-between">

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, Check } from 'lucide-react'
 import { useScrollVar } from './useScrollVar'
 import { Screen, SiteAgency, SiteBooking, SiteHotel, SiteLuxury, SiteStore } from './Mockups'
+import { WorklyLogo } from './Logo'
 
 const ramp = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)))
 
@@ -52,6 +53,11 @@ export function Cinematic() {
                 {/* Lighting: a warm key light from above and a cool floor bounce */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-8%,rgba(255,214,170,.20),transparent_65%),radial-gradient(ellipse_60%_35%_at_50%_105%,rgba(120,150,255,.14),transparent_70%)]" />
                 <div className="grain pointer-events-none absolute inset-0 opacity-[.07]" />
+                <div className="pointer-events-none absolute left-1/2 top-[38%] w-[min(120vw,1100px)] -translate-x-1/2 -translate-y-1/2 text-white/[.045]" aria-hidden>
+                    <div className="landing-spin [animation-duration:90s]">
+                        <WorklyLogo className="w-full" />
+                    </div>
+                </div>
 
                 {/* Headline */}
                 <div ref={intro} className="relative z-10 flex flex-col items-center px-4 pt-[max(96px,19svh)] text-center text-white md:pt-[max(96px,12svh)]" style={{ transform: 'translateY(calc(var(--a, 0) * -30svh))', opacity: 'calc(1 - var(--a, 0) * 1.4)' }}>
@@ -183,6 +189,11 @@ export function Digital() {
                     <p className="mb-2 text-[11px] font-semibold text-[#5b4fd6]">Brand</p>
                     <div className="flex gap-1.5">{['#24204a', '#c9c0ff', '#f7c9dd', '#d9f99d', '#ffffff'].map((c) => <span key={c} className="size-7 rounded-full ring-1 ring-black/5" style={{ background: c }} />)}</div>
                     <p className="mt-2 text-2xl font-extrabold tracking-tight">Aa <span className="text-xs font-medium text-[#1b1740]/50">Manrope</span></p>
+                </div>
+
+                {/* Brand sticker: the studio signs its work */}
+                <div className="art-float absolute left-1/2 top-[52%] z-30 hidden translate-x-[calc(min(46vw,340px)-50%)] rotate-[10deg] rounded-full bg-[#1b1740] p-3 text-[#d9f99d] shadow-xl [--d:1.6s] md:block" style={depth(110)}>
+                    <WorklyLogo className="landing-spin size-16 [animation-duration:24s]" />
                 </div>
 
                 {/* Live booking toast */}

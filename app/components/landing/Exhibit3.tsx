@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useScrollVar } from './useScrollVar'
 import { Screen, SiteFashion, SiteHotel, SitePortfolio, SiteRestaurant, SiteStore, showcase } from './Mockups'
@@ -175,18 +175,61 @@ export function Collage() {
                     <h3 className="font-[family-name:var(--font-anton)] text-[clamp(2.6rem,8vw,6rem)] uppercase leading-[0.85]">How it<br /><span className="text-[#f5b52e]">works</span></h3>
                     <p className="font-[family-name:var(--font-kufi)] text-3xl font-bold text-[#f5b52e] md:text-5xl" dir="rtl" lang="ar">كيف نعمل</p>
                 </div>
-                <ol className="-mx-4 mt-8 flex snap-x gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-7 md:overflow-visible md:px-0">
-                    {steps.map(([t, d], i) => (
-                        <li key={t} className={`ticket w-[200px] shrink-0 snap-start bg-[#f2efe8] px-5 py-5 text-[#0d0d0d] transition-transform duration-300 hover:-translate-y-1 md:w-auto ${i % 2 ? 'md:rotate-[1.5deg]' : 'md:-rotate-[1.5deg]'}`}>
-                            <span className="font-[family-name:var(--font-anton)] text-5xl leading-none">{String(i + 1).padStart(2, '0')}</span>
-                            <div className="my-3 border-t-2 border-dashed border-[#0d0d0d]/25" />
-                            <p className="font-[family-name:var(--font-anton)] text-xl uppercase leading-none">{t}</p>
-                            <p className="mt-2 text-[12px] leading-snug text-[#0d0d0d]/70">{d}</p>
-                        </li>
-                    ))}
-                </ol>
+                <HangingSteps />
             </div>
         </section>
+    )
+}
+
+/* The 7 steps hang on strings like tickets on a line. On phones they hang one below the other in a zig-zag
+   chain; each swings down into place as it scrolls into view. */
+function HangingSteps() {
+    const list = useRef<HTMLOListElement>(null)
+    useEffect(() => {
+        const items = list.current?.querySelectorAll('li')
+        if (!items || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        const io = new IntersectionObserver(
+            (entries) => entries.forEach((e) => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('is-in')
+                    io.unobserve(e.target)
+                }
+            }),
+            { rootMargin: '0px 0px -12% 0px' },
+        )
+        items.forEach((li) => { li.classList.add('hang'); io.observe(li) })
+        return () => io.disconnect()
+    }, [])
+
+    return (
+        <div className="relative mt-10">
+            {/* The line they hang from (desktop) */}
+            <div className="absolute inset-x-0 top-0 hidden h-6 md:block" aria-hidden>
+                <svg viewBox="0 0 1000 24" preserveAspectRatio="none" className="h-full w-full"><path d="M0 2 Q500 30 1000 2" fill="none" stroke="#f2efe8" strokeOpacity=".5" strokeWidth="1.5" /></svg>
+            </div>
+            <ol ref={list} className="flex flex-col md:grid md:grid-cols-7 md:gap-3">
+                {steps.map(([t, d], i) => (
+                    <li
+                        key={t}
+                        className={`relative w-[74%] pt-12 md:w-auto md:pt-10 md:[--ox:50%] ${i % 2 ? 'ml-auto [--ox:30%]' : '[--ox:70%]'} ${i ? '-mt-6 md:mt-0' : ''}`}
+                        style={{ ['--r' as string]: `${[-3, 2.5, -2, 3, -2.5, 2, -1.5][i]}deg`, ['--hd' as string]: `${(i % 7) * 0.06}s`, zIndex: steps.length - i }}
+                    >
+                        {/* string + peg */}
+                        <span className={`absolute top-0 h-12 w-px bg-[#f2efe8]/50 md:left-1/2 md:h-10 ${i % 2 ? 'left-[30%]' : 'left-[70%]'}`} />
+                        <span className={`absolute top-9 z-10 h-6 w-3 -translate-x-1/2 rounded-[3px] bg-[#f5b52e] shadow md:left-1/2 md:top-7 ${i % 2 ? 'left-[30%]' : 'left-[70%]'}`} />
+                        <div className="ticket bg-[#f2efe8] px-5 py-5 text-[#0d0d0d] shadow-xl">
+                            <div className="flex items-baseline justify-between">
+                                <span className="font-[family-name:var(--font-anton)] text-5xl leading-none">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-[#0d0d0d]/40">Step {i + 1}/7</span>
+                            </div>
+                            <div className="my-3 border-t-2 border-dashed border-[#0d0d0d]/25" />
+                            <p className="font-[family-name:var(--font-anton)] text-2xl uppercase leading-none md:text-xl">{t}</p>
+                            <p className="mt-2 text-[13px] leading-snug text-[#0d0d0d]/70 md:text-[12px]">{d}</p>
+                        </div>
+                    </li>
+                ))}
+            </ol>
+        </div>
     )
 }
 

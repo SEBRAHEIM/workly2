@@ -203,3 +203,16 @@ a:active,
   .landing [class*="backdrop-blur"] { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .grain { display: none; }
 }
+
+/* Hanging process tickets: rest slightly tilted; swing down into place when scrolled into view */
+.hang { transform-origin: var(--ox, 50%) 0; transform: rotate(var(--r, 0deg)); }
+.hang:not(.is-in) { opacity: 0; transform: translateY(-70px) rotate(-16deg); }
+.hang.is-in { animation: hang-swing 1.6s cubic-bezier(.3,.7,.3,1) var(--hd, 0s) both; }
+@keyframes hang-swing {
+  0% { opacity: 0; transform: translateY(-70px) rotate(-16deg); }
+  35% { opacity: 1; transform: translateY(0) rotate(9deg); }
+  55% { transform: rotate(-5deg); }
+  72% { transform: rotate(3deg); }
+  86% { transform: rotate(-1deg); }
+  100% { opacity: 1; transform: rotate(var(--r, 0deg)); }
+}

@@ -74,32 +74,50 @@ export function Editorial() {
     )
 }
 
-/* Transition 3 → 4: the full stop grows into the green studio world */
+/* Transition 3 → 4: the Workly mark drops a sky-blue circle that swells to fill the screen.
+   Only transform and opacity animate (GPU-composited), so it stays smooth on phones. */
 export function DotTransition() {
     const wrap = useRef<HTMLElement>(null)
     const onProgress = useCallback((p: number) => {
-        wrap.current?.style.setProperty('--g', ramp(p, 0.1, 0.85).toFixed(3))
+        const el = wrap.current
+        if (!el) return
+        const g = ramp(p, 0.12, 0.82)
+        // Scale a 80px disc until its radius reaches the farthest corner of the screen
+        const cover = Math.hypot(window.innerWidth / 2, window.innerHeight * 0.7) / 40 + 1
+        el.style.setProperty('--g', g.toFixed(3))
+        el.style.setProperty('--gs', (g ** 1.7 * cover).toFixed(3))
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
 
     return (
-        <section ref={wrap} className="relative h-[140vh] bg-white motion-reduce:h-auto md:h-[170vh]">
-            <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
-                {/* Soft editorial gradient band */}
-                <div className="pointer-events-none absolute inset-x-[-10%] top-[30%] h-[45%] bg-[radial-gradient(ellipse_at_30%_50%,#ffb38a_0%,transparent_55%),radial-gradient(ellipse_at_60%_50%,#ff7eb6_0%,transparent_55%),radial-gradient(ellipse_at_85%_50%,#ffe08a_0%,transparent_55%)] opacity-60 blur-3xl" />
-                <p className="relative -translate-y-[10svh] px-4 text-center text-[clamp(3rem,11vw,10rem)] font-semibold leading-[0.88] tracking-[-0.055em] text-[#0e0e0e]">
+        <section ref={wrap} className="relative h-[150vh] bg-white motion-reduce:h-auto md:h-[170vh]">
+            {/* lvh: the stage stays full height when Safari's toolbar collapses */}
+            <div className="sticky top-0 h-[100lvh] overflow-hidden motion-reduce:relative motion-reduce:h-[100svh]">
+                {/* Soft editorial glow, painted with gradients only (no blur filter) */}
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_28%_at_30%_48%,rgba(255,179,138,.45),transparent),radial-gradient(55%_26%_at_65%_50%,rgba(255,126,182,.32),transparent),radial-gradient(50%_24%_at_85%_46%,rgba(255,224,138,.4),transparent)]" />
+
+                <p
+                    className="absolute inset-x-0 top-[38%] px-4 text-center text-[clamp(3rem,11vw,10rem)] font-semibold leading-[0.88] tracking-[-0.055em] text-[#0e0e0e] will-change-transform"
+                    style={{ transform: 'translateY(calc(-50% - var(--g, 0) * 6vh)) scale(calc(1 - var(--g, 0) * .1))', opacity: 'calc(1 - var(--g, 0) * 1.6)' }}
+                >
                     Different<br /><span className="font-[family-name:var(--font-instrument)] font-normal italic">by design</span>
                 </p>
-                <div className="absolute left-1/2 top-[84%] z-10 -translate-x-1/2 -translate-y-1/2 text-[#0e0e0e]" style={{ opacity: 'calc(1 - var(--g, 0) * 3)' }}>
+
+                {/* The disc: a plain circle scaled up, far cheaper than animating a clip-path */}
+                <div
+                    className="absolute left-1/2 top-[70%] size-20 rounded-full bg-[#5bbcf0] will-change-transform"
+                    style={{ transform: 'translate(-50%, -50%) scale(var(--gs, 0))' }}
+                />
+
+                <div
+                    className="absolute left-1/2 top-[70%] z-10 text-[#0e0e0e] will-change-transform"
+                    style={{ transform: 'translate(-50%, -50%) rotate(calc(var(--g, 0) * 120deg)) scale(calc(1 + var(--g, 0) * 1.5))', opacity: 'calc(1 - var(--g, 0) * 4)' }}
+                >
                     <WorklyLogo className="size-16 md:size-20" />
                 </div>
-                <div
-                    className="absolute inset-0 bg-[#5bbcf0]"
-                    style={{ clipPath: 'circle(calc(var(--g, 0) * 150vmax) at 50% 84%)' }}
-                >
-                    <div className="grid h-full place-items-center" style={{ opacity: 'calc(var(--g, 0) * 2 - 1)' }}>
-                        <StudioMark />
-                    </div>
+
+                <div className="absolute inset-0 z-10 grid place-items-center" style={{ opacity: 'calc(var(--g, 0) * 2.4 - 1.4)' }}>
+                    <StudioMark />
                 </div>
             </div>
         </section>

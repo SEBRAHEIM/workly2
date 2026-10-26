@@ -236,6 +236,25 @@ function HangingSteps() {
 /* Transition 6 → 7: an admission ticket for "your turn" straightens, grows, then floods the page yellow */
 export function YellowTransition() {
     const wrap = useRef<HTMLElement>(null)
+    const ticket = useRef<HTMLDivElement>(null)
+    const main = useRef<HTMLDivElement>(null)
+    const title = useRef<HTMLSpanElement>(null)
+
+    // Aim the zoom at the empty yellow gap right of the title, measured on this device so it never lands on letters
+    useEffect(() => {
+        const aim = () => {
+            const t = ticket.current, m = main.current, h = title.current
+            if (!t || !m || !h) return
+            const titleRight = h.offsetLeft + h.offsetWidth
+            const x = m.offsetLeft + (titleRight + m.clientWidth) / 2
+            const y = m.offsetTop + h.offsetTop + h.offsetHeight * 0.45
+            t.style.transformOrigin = `${x}px ${y}px`
+        }
+        aim()
+        document.fonts?.ready.then(aim)
+        window.addEventListener('resize', aim)
+        return () => window.removeEventListener('resize', aim)
+    }, [])
     const onProgress = useCallback((p: number) => {
         const el = wrap.current
         if (!el) return
@@ -252,10 +271,11 @@ export function YellowTransition() {
 
     return (
         <section ref={wrap} className="sand relative h-[160vh] bg-[#0d0d0d] motion-reduce:h-auto md:h-[200vh]">
-            <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
+            <div className="sticky top-0 grid h-[100lvh] place-items-center overflow-hidden motion-reduce:relative motion-reduce:h-[100svh]">
                 {/* The ticket */}
                 <div
-                    className="relative z-10 w-[min(90vw,1060px)] origin-[72%_22%] will-change-transform md:origin-[74%_22%]"
+                    ref={ticket}
+                    className="relative z-10 w-[min(90vw,1060px)] will-change-transform"
                     style={{ visibility: 'var(--tv, visible)' as React.CSSProperties['visibility'], filter: 'var(--tf, drop-shadow(0 30px 40px rgba(0,0,0,.6)))', transform: 'rotate(calc(-8deg * (1 - var(--y, 1)))) scale(calc((.78 + .3 * var(--y, 1)) * var(--z, 1)))' }}
                 >
                     {/* masking tape */}
@@ -263,19 +283,19 @@ export function YellowTransition() {
                     <span className="absolute -bottom-2 -right-3 z-20 h-5 w-16 -rotate-[28deg] bg-[#f2efe8]/70 md:h-8 md:w-28" />
 
                     <div className="ticket grid grid-cols-[1fr_auto] bg-[#f5b52e] text-[#0d0d0d]">
-                        <div className="relative overflow-hidden px-4 py-3 md:px-10 md:py-6">
+                        <div ref={main} className="relative overflow-hidden px-4 py-3 md:px-10 md:py-6">
                             <div className="flex items-center justify-between font-[family-name:var(--font-geist-mono)] text-[8px] uppercase tracking-[0.25em] md:text-[11px]">
                                 <span>Workly · Admit one</span>
                                 <span className="hidden sm:inline">Nº 0007 / 2026</span>
                             </div>
                             <p className="mt-1.5 whitespace-nowrap font-[family-name:var(--font-anton)] text-[clamp(2.4rem,11vw,7.5rem)] uppercase leading-[0.85] md:mt-2">
-                                Your <span className="text-transparent [-webkit-text-stroke:1.5px_#0d0d0d] md:[-webkit-text-stroke:2.5px_#0d0d0d]">turn.</span>
+                                <span ref={title} className="inline-block">Your <span className="text-transparent [-webkit-text-stroke:1.5px_#0d0d0d] md:[-webkit-text-stroke:2.5px_#0d0d0d]">turn.</span></span>
                             </p>
                             <div className="mt-1.5 flex items-end justify-between gap-3 md:mt-3">
                                 <p className="max-w-[15rem] text-[10px] leading-snug md:max-w-xs md:text-sm">Good for one custom website, designed and built around your idea.</p>
                                 <p className="font-[family-name:var(--font-kufi)] text-xl font-bold leading-none md:text-4xl" dir="rtl" lang="ar">دورك</p>
                             </div>
-                            <WorklyLogo className="pointer-events-none absolute -bottom-6 right-20 w-24 rotate-12 text-[#0d0d0d]/[.07] md:-bottom-10 md:right-40 md:w-48" />
+                            <div className="pointer-events-none absolute -bottom-6 right-20 md:-bottom-10 md:right-40" style={{ opacity: 'calc(1 - var(--f, 0) * 6)' }}><WorklyLogo className="w-24 rotate-12 text-[#0d0d0d]/[.07] md:w-48" /></div>
                         </div>
 
                         {/* Stub: perforation, barcode, rotated label */}

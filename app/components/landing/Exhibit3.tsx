@@ -201,20 +201,9 @@ export function YellowTransition() {
     }, [])
     useScrollVar(wrap, 'sticky', onProgress)
 
-    const strip = 'YOUR TURN ✺ دورك ✺ START A PROJECT ✺ '
-
     return (
         <section ref={wrap} className="sand relative h-[200vh] bg-[#0d0d0d] motion-reduce:h-auto">
             <div className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden motion-reduce:relative">
-                {/* Two crossing tape strips behind the ticket */}
-                {[[-6, 'text-[#f5b52e]', 'border-[#f5b52e]/40', ''], [5, 'text-transparent [-webkit-text-stroke:1px_#f5b52e]', 'border-[#f5b52e]/20', '[animation-direction:reverse]']].map(([r, txt, bd, dir], k) => (
-                    <div key={k} className={`absolute left-[-10%] w-[120%] overflow-hidden border-y py-2 ${bd}`} style={{ transform: `rotate(${r}deg)`, top: k ? '68%' : '24%' }} aria-hidden>
-                        <div className={`landing-marquee flex w-max whitespace-nowrap font-[family-name:var(--font-anton)] text-[clamp(1.6rem,4vw,3rem)] uppercase leading-none [animation-duration:30s] ${txt} ${dir}`}>
-                            {[0, 1, 2, 3].map((n) => <span key={n} className="pr-4">{strip}{strip}</span>)}
-                        </div>
-                    </div>
-                ))}
-
                 {/* The ticket */}
                 <div
                     className="relative z-10 w-[min(90vw,1060px)] drop-shadow-[0_30px_40px_rgba(0,0,0,.6)]"
